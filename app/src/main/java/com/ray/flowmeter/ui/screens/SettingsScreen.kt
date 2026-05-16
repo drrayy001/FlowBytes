@@ -108,6 +108,7 @@ fun SettingsScreen(
     var showTermsDialog by remember { mutableStateOf(value = false) }
     var showResetTimeDialog by remember { mutableStateOf(false) }
     var showDonateDialog by remember { mutableStateOf(false) }
+    var showHelpFeedbackDialog by remember { mutableStateOf(false) }
     var isDonationSuccess by remember { mutableStateOf(false) }
 
     var showTrafficSettingsDialog by remember { mutableStateOf(false) }
@@ -392,15 +393,7 @@ fun SettingsScreen(
                     icon = Icons.Rounded.SupportAgent,
                     title = stringResource(R.string.settings_help_feedback),
                     subtitle = stringResource(R.string.settings_help_feedback_desc),
-                    onClick = {
-                        val intent = Intent(Intent.ACTION_SENDTO).apply {
-                            data = "mailto:support@flowmeter.com".toUri()
-                            putExtra(Intent.EXTRA_SUBJECT, "Feedback: FlowMeter (v$versionName)")
-                        }
-                        try {
-                            context.startActivity(intent)
-                        } catch (_: Exception) {}
-                    }
+                    onClick = { showHelpFeedbackDialog = true }
                 )
                 SettingsItem(
                     icon = Icons.Rounded.Favorite,
@@ -434,7 +427,7 @@ fun SettingsScreen(
                     title = stringResource(R.string.settings_view_source),
                     subtitle = stringResource(R.string.settings_view_source_desc),
                     onClick = {
-                        val intent = Intent(Intent.ACTION_VIEW, "https://github.com/drrayy001/FlowByes".toUri())
+                        val intent = Intent(Intent.ACTION_VIEW, "https://github.com/drrayy001/FlowBytes".toUri())
                         context.startActivity(intent)
                     }
                 )
@@ -541,6 +534,36 @@ fun SettingsScreen(
                 viewModel.toggleAppBlockingMaster(enabled = true)
                 showVpnDisclosure = false
             }
+        }
+
+        if (showHelpFeedbackDialog) {
+            HelpFeedbackDialog(
+                onDismiss = { showHelpFeedbackDialog = false },
+                onTelegramClick = {
+                    val username = "Rayy_TG"
+                    val telegramAppIntent = Intent(Intent.ACTION_VIEW, "tg://resolve?domain=$username".toUri()).apply {
+                        setPackage("org.telegram.messenger")
+                    }
+                    try {
+                        context.startActivity(telegramAppIntent)
+                    } catch (_: Exception) {
+                        // Fallback to browser if Telegram app is not installed
+                        val browserIntent = Intent(Intent.ACTION_VIEW, "https://t.me/$username".toUri())
+                        try {
+                            context.startActivity(browserIntent)
+                        } catch (__: Exception) {}
+                    }
+                },
+                onEmailClick = {
+                    val intent = Intent(Intent.ACTION_SENDTO).apply {
+                        data = "mailto:drrayy001@gmail.com".toUri()
+                        putExtra(Intent.EXTRA_SUBJECT, "Feedback: FlowBytes (v$versionName)")
+                    }
+                    try {
+                        context.startActivity(intent)
+                    } catch (_: Exception) {}
+                }
+            )
         }
 
         if (showAccentColorDialog) {

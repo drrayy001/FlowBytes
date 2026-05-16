@@ -120,7 +120,11 @@
     <string name="settings_share_app_desc">Recommend FlowBytes to others</string>
     <string name="share_text_body">Check out FlowBytes! Track your data usage accurately: https://play.google.com/store/apps/details?id=%1$s</string>
     <string name="settings_help_feedback">Help &amp; Feedback</string>
-    <string name="settings_help_feedback_desc">Report an issue or suggest a new feature</string>
+    <string name="settings_help_feedback_desc">Contact us via Telegram or Email</string>
+    <string name="option_telegram">Telegram</string>
+    <string name="desc_telegram">Message the developer directly</string>
+    <string name="option_email">Email</string>
+    <string name="desc_email">Send an email to the developer</string>
     <string name="settings_donate">Donate</string>
     <string name="settings_donate_desc">Contribute to keeping FlowBytes ad-free and open source</string>
     <string name="dialog_donate_title">Support FlowBytes</string>

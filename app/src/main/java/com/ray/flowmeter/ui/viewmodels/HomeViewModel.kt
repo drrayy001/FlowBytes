@@ -1,0 +1,287 @@
+package com.ray.flowmeter.ui.viewmodels
+
+import android.app.usage.NetworkStats
+import android.app.usage.NetworkStatsManager
+import android.content.Context
+import android.net.NetworkCapabilities
+import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.ray.flowmeter.data.UserPreferencesRepository
+import com.ray.flowmeter.R
+import com.ray.flowmeter.ui.components.ChartType
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
+
+// ViewModel for the Home screen, managing usage stats and chart data
+class HomeViewModel(
+    private val applicationContext: Context,
+    private val repository: UserPreferencesRepository,
+) : ViewModel() {
+    var downloadReceived by mutableStateOf("0 B")
+    var uploadSent by mutableStateOf("0 B")
+
+    var dailyUsage by mutableStateOf("0 B")
+    var dailyMobileUsage by mutableStateOf("0 B")
+    var dailyWifiUsage by mutableStateOf("0 B")
+    var monthlyUsage by mutableStateOf("0 B")
+    var monthlyMobileUsage by mutableStateOf("0 B")
+    var monthlyWifiUsage by mutableStateOf("0 B")
+
+    var dailyMobileUsageBytes by mutableLongStateOf(0L)
+    var dailyWifiUsageBytes by mutableLongStateOf(0L)
+    var projectedDailyMobileBytes by mutableLongStateOf(0L)
+    var dailyMobileLimitBytes by mutableLongStateOf(0L)
+    var isDataLimitEnabled by mutableStateOf(value = false)
+
+    var weeklyMobileData by mutableStateOf(List(7) { 0f })
+    var weeklyWifiData by mutableStateOf(List(7) { 0f })
+    var weekDays by mutableStateOf(listOf("", "", "", "", "", "", ""))
+    var weeklyDates by mutableStateOf<List<Calendar>>(emptyList())
+    var weeklyYAxisLabels by mutableStateOf(listOf("2 GB", "1.5 GB", "1 GB", "0.5 GB", "0 GB"))
+
+    private var _selectedChartType = mutableStateOf(ChartType.COMBINED)
+    val selectedChartType: State<ChartType> = _selectedChartType
+
+    init {
+        viewModelScope.launch {
+            repository.usageChartType.collectLatest { typeStr ->
+                _selectedChartType.value = try {
+                    ChartType.valueOf(typeStr)
+                } catch (_: Exception) {
+                    ChartType.COMBINED
+                }
+            }
+        }
+
+        updateTotalUsage()
+    }
+
+    fun updateChartType(type: ChartType) {
+        _selectedChartType.value = type
+        viewModelScope.launch {
+            repository.saveUsageChartType(type.name)
+        }
+    }
+
+    // Refresh all usage statistics for the UI
+    fun updateTotalUsage() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val resetHour = repository.resetTimeHour.first()
+            val resetMinute = repository.resetTimeMinute.first()
+
+            val networkStatsManager = applicationContext.getSystemService(Context.NETWORK_STATS_SERVICE) as NetworkStatsManager
+            val calendar = Calendar.getInstance()
+
+            val currentTime = System.currentTimeMillis()
+
+            calendar[Calendar.HOUR_OF_DAY] = resetHour
+            calendar[Calendar.MINUTE] = resetMinute
+            calendar[Calendar.SECOND] = 0
+            calendar[Calendar.MILLISECOND] = 0
+
+            var startTimeDay = calendar.timeInMillis
+            if (currentTime < startTimeDay) {
+                calendar.add(Calendar.DAY_OF_YEAR, -1)
+                startTimeDay = calendar.timeInMillis
+            }
+
+            calendar[Calendar.DAY_OF_MONTH] = 1
+            val startTimeMonth = calendar.timeInMillis
+
+            val dailyBytesArray = getDeviceUsage(networkStatsManager, startTimeDay, currentTime)
+            val dailyBytes = dailyBytesArray[0] + dailyBytesArray[1]
+
+            val mDaily = getSumUsageForTransport(networkStatsManager, NetworkCapabilities.TRANSPORT_CELLULAR, startTimeDay, currentTime)
+            val wDaily = getSumUsageForTransport(networkStatsManager, NetworkCapabilities.TRANSPORT_WIFI, startTimeDay, currentTime)
+
+            val timeElapsedMillis = (currentTime - startTimeDay).coerceAtLeast(1000L)
+            val dayMillis = 24 * 60 * 60 * 1000L
+            val projectedM = ((mDaily.toDouble() / timeElapsedMillis) * dayMillis).toLong()
+
+            val dataLimitEnabled = repository.dataDailyLimitEnabled.first()
+            val dataLimit = repository.dataDailyLimit.first()
+
+            val monthlyBytesArray = getDeviceUsage(networkStatsManager, startTimeMonth, currentTime)
+            val monthlyBytes = monthlyBytesArray[0] + monthlyBytesArray[1]
+
+            val mMonthly = getSumUsageForTransport(networkStatsManager, NetworkCapabilities.TRANSPORT_CELLULAR, startTimeMonth, currentTime)
+            val wMonthly = getSumUsageForTransport(networkStatsManager, NetworkCapabilities.TRANSPORT_WIFI, startTimeMonth, currentTime)
+
+            val rawMobileBytes = mutableListOf<Long>()
+            val rawWifiBytes = mutableListOf<Long>()
+            val daysList = mutableListOf<String>()
+            val datesList = mutableListOf<Calendar>()
+            val dateFormat = SimpleDateFormat("EEE", Locale.getDefault())
+
+            var highestDailyUsage = 0L
+
+            for (i in 6 downTo 0) {
+                val cal = Calendar.getInstance()
+                cal.add(Calendar.DAY_OF_YEAR, -i)
+                datesList.add(cal.clone() as Calendar)
+                cal[Calendar.HOUR_OF_DAY] = resetHour
+                cal[Calendar.MINUTE] = resetMinute
+                cal[Calendar.SECOND] = 0
+                cal[Calendar.MILLISECOND] = 0
+                val startOfDay = cal.timeInMillis
+
+                val endOfDay = startOfDay + (24 * 60 * 60 * 1000L) - 1
+
+                if (i == 0) {
+                    daysList.add(applicationContext.getString(R.string.label_today))
+                } else {
+                    daysList.add(dateFormat.format(cal.time))
+                }
+
+                val mBytes = getSumUsageForTransport(networkStatsManager, NetworkCapabilities.TRANSPORT_CELLULAR, startOfDay, endOfDay)
+                val wBytes = getSumUsageForTransport(networkStatsManager, NetworkCapabilities.TRANSPORT_WIFI, startOfDay, endOfDay)
+
+                rawMobileBytes.add(mBytes)
+                rawWifiBytes.add(wBytes)
+
+                val dayTotal = mBytes + wBytes
+                if (dayTotal > highestDailyUsage) {
+                    highestDailyUsage = dayTotal
+                }
+            }
+
+            val possibleCeilings = listOf(
+                100 * 1024 * 1024L,          // 100 MB
+                250 * 1024 * 1024L,          // 250 MB
+                500 * 1024 * 1024L,          // 500 MB
+                750 * 1024 * 1024L,          // 750 MB
+                1024 * 1024 * 1024L,         // 1 GB
+                1536 * 1024 * 1024L,         // 1.5 GB
+                2 * 1024 * 1024 * 1024L,     // 2 GB
+                3 * 1024 * 1024 * 1024L,     // 3 GB
+                4 * 1024 * 1024 * 1024L,     // 4 GB
+                5 * 1024 * 1024 * 1024L,     // 5 GB
+                6 * 1024 * 1024 * 1024L,     // 6 GB
+                8 * 1024 * 1024 * 1024L,     // 8 GB
+                10 * 1024 * 1024 * 1024L,    // 10 GB
+                12 * 1024 * 1024 * 1024L,    // 12 GB
+                15 * 1024 * 1024 * 1024L,    // 15 GB
+                20 * 1024 * 1024 * 1024L,    // 20 GB
+                25 * 1024 * 1024 * 1024L,    // 25 GB
+                30 * 1024 * 1024 * 1024L,    // 30 GB
+                40 * 1024 * 1024 * 1024L,    // 40 GB
+                50 * 1024 * 1024 * 1024L,    // 50 GB
+                75 * 1024 * 1024 * 1024L,    // 75 GB
+                100 * 1024 * 1024 * 1024L    // 100 GB
+            )
+
+            val minCeiling = 100 * 1024 * 1024L
+            val rawCeiling = highestDailyUsage.coerceAtLeast(minCeiling)
+            val chartCeilingBytes = possibleCeilings.find { it >= rawCeiling }?.toDouble()
+                ?: (rawCeiling * 1.1)
+
+            val mobileList = rawMobileBytes.map {
+                (it.toDouble() / chartCeilingBytes).toFloat().coerceIn(0f, 1f)
+            }
+            val wifiList = rawWifiBytes.map {
+                (it.toDouble() / chartCeilingBytes).toFloat().coerceIn(0f, 1f)
+            }
+
+            val labelsList = listOf(
+                formatDataUsage(chartCeilingBytes.toLong()),
+                formatDataUsage((chartCeilingBytes * 0.75).toLong()),
+                formatDataUsage((chartCeilingBytes * 0.5).toLong()),
+                formatDataUsage((chartCeilingBytes * 0.25).toLong()),
+                "0 B",
+            )
+
+            withContext(Dispatchers.Main) {
+                dailyUsage = formatDataUsage(dailyBytes)
+                dailyMobileUsage = formatDataUsage(mDaily)
+                dailyWifiUsage = formatDataUsage(wDaily)
+                monthlyUsage = formatDataUsage(monthlyBytes)
+                monthlyMobileUsage = formatDataUsage(mMonthly)
+                monthlyWifiUsage = formatDataUsage(wMonthly)
+
+                dailyMobileUsageBytes = mDaily
+                dailyWifiUsageBytes = wDaily
+                projectedDailyMobileBytes = projectedM
+                dailyMobileLimitBytes = dataLimit
+                isDataLimitEnabled = dataLimitEnabled
+
+                downloadReceived = formatDataUsage(dailyBytesArray[0])
+                uploadSent = formatDataUsage(dailyBytesArray[1])
+
+                weeklyMobileData = mobileList
+                weeklyWifiData = wifiList
+                weekDays = daysList
+                weeklyDates = datesList
+                weeklyYAxisLabels = labelsList
+            }
+        }
+    }
+
+    private fun getSumUsageForTransport(manager: NetworkStatsManager, transportType: Int, startTime: Long, endTime: Long): Long {
+        var total = 0L
+        try {
+            val stats = manager.querySummary(transportType, null, startTime, endTime)
+            val bucket = NetworkStats.Bucket()
+            while (stats.hasNextBucket()) {
+                stats.getNextBucket(bucket)
+                total += bucket.rxBytes + bucket.txBytes
+            }
+            stats.close()
+        } catch (_: Exception) {}
+        return total
+    }
+
+    private fun getDeviceUsage(manager: NetworkStatsManager, startTime: Long, endTime: Long): LongArray {
+        var rxTotal = 0L
+        var txTotal = 0L
+        
+        fun sumTransportUsage(transportType: Int) {
+            try {
+                val stats = manager.querySummary(transportType, null, startTime, endTime)
+                val bucket = NetworkStats.Bucket()
+                while (stats.hasNextBucket()) {
+                    stats.getNextBucket(bucket)
+                    rxTotal += bucket.rxBytes
+                    txTotal += bucket.txBytes
+                }
+                stats.close()
+            } catch (_: Exception) {}
+        }
+
+        sumTransportUsage(NetworkCapabilities.TRANSPORT_WIFI)
+        sumTransportUsage(NetworkCapabilities.TRANSPORT_CELLULAR)
+
+        return longArrayOf(rxTotal, txTotal)
+    }
+
+    private fun formatDataUsage(bytes: Long): String {
+        return when {
+            (bytes >= (1024L * 1024L * 1024L)) -> {
+                val gb = bytes / (1024.0 * 1024.0 * 1024.0)
+                if (gb % 1.0 == 0.0) String.format(Locale.getDefault(), "%.0f GB", gb)
+                else String.format(Locale.getDefault(), "%.2f GB", gb)
+            }
+            (bytes >= (1024L * 1024L)) -> {
+                val mb = bytes / (1024.0 * 1024.0)
+                if (mb % 1.0 == 0.0) String.format(Locale.getDefault(), "%.0f MB", mb)
+                else String.format(Locale.getDefault(), "%.2f MB", mb)
+            }
+            (bytes >= 1024L) -> {
+                val kb = bytes / 1024.0
+                if (kb % 1.0 == 0.0) String.format(Locale.getDefault(), "%.0f KB", kb)
+                else String.format(Locale.getDefault(), "%.2f KB", kb)
+            }
+            else -> "$bytes B"
+        }
+    }
+}

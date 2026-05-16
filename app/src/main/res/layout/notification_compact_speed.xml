@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="2dp"
+    android:paddingBottom="2dp">
+
+    <!-- Top Row: Speeds -->
+    <LinearLayout
+        android:id="@+id/layout_speeds"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <!-- 1. Download -->
+        <ImageView
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_arrow_down"
+            app:tint="#FFFFFF"
+            android:contentDescription="@string/desc_download"/>
+        <TextView
+            android:id="@+id/text_down"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginEnd="16dp"/>
+
+        <!-- 2. Upload -->
+        <ImageView
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_arrow_up"
+            app:tint="#FFFFFF"
+            android:contentDescription="@string/desc_upload"/>
+        <TextView
+            android:id="@+id/text_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginEnd="16dp"/>
+
+        <!-- 3. Combined -->
+        <ImageView
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_arrow_combined"
+            app:tint="#FFFFFF"
+            android:contentDescription="@string/desc_combined"/>
+        <TextView
+            android:id="@+id/text_combined"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+    <!-- Usage Section -->
+    <LinearLayout
+        android:id="@+id/layout_usage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="2dp">
+
+        <TextView
+            android:id="@+id/text_usage_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_todays_usage"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="2dp"
+            android:visibility="gone"/>
+
+        <LinearLayout
+            android:id="@+id/layout_usage_stats"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/text_today_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_today_colon"
+                android:textColor="#CCCCCC"
+                android:textSize="13sp"
+                android:layout_marginEnd="6dp"/>
+
+            <!-- Wi-Fi Stats -->
+            <TextView
+                android:id="@+id/text_wifi_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_wifi_colon"
+                android:textColor="#CCCCCC"
+                android:textSize="13sp"
+                android:layout_marginEnd="4dp"
+                android:visibility="gone"/>
+
+            <ImageView
+                android:id="@+id/icon_wifi"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_wifi"
+                app:tint="#FFFFFF"
+                android:contentDescription="@string/desc_wifi"/>
+
+            <TextView
+                android:id="@+id/text_wifi_usage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:textSize="13sp"
+                android:layout_marginStart="4dp"/>
+
+            <TextView
+                android:id="@+id/text_usage_separator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_separator"
+                android:textColor="#888888"
+                android:textSize="13sp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"/>
+
+            <!-- Mobile Data Stats -->
+            <TextView
+                android:id="@+id/text_mobile_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_mobile_colon"
+                android:textColor="#CCCCCC"
+                android:textSize="13sp"
+                android:layout_marginEnd="4dp"
+                android:visibility="gone"/>
+
+            <ImageView
+                android:id="@+id/icon_mobile"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_data"
+                app:tint="#FFFFFF"
+                android:contentDescription="@string/desc_mobile_data"/>
+
+            <TextView
+                android:id="@+id/text_mobile_usage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:textSize="13sp"
+                android:layout_marginStart="4dp"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

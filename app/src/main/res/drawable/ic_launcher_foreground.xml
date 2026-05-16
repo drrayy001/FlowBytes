@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2026 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+  <group android:scaleX="0.693"
+      android:scaleY="0.693"
+      android:translateX="15.885"
+      android:translateY="15.192">
+
+      <!-- Background filled via ic_launcher_background.xml -->
+      <!-- Safe zone is 72dp centered = 18dp inset on each side -->
+
+      <!-- Electric wave path (cyan glow layer - thicker, lower opacity) -->
+      <path
+          android:pathData="M18,62 Q32,36 46,58 Q58,80 74,46 Q82,26 92,44"
+          android:strokeColor="#00E5FF"
+          android:strokeWidth="5"
+          android:strokeLineCap="round"
+          android:strokeLineJoin="round"
+          android:fillColor="@android:color/transparent"
+          android:strokeAlpha="0.3"/>
+
+      <!-- Electric wave path (cyan sharp line) -->
+      <path
+          android:pathData="M18,62 Q32,36 46,58 Q58,80 74,46 Q82,26 92,44"
+          android:strokeColor="#00E5FF"
+          android:strokeWidth="3"
+          android:strokeLineCap="round"
+          android:strokeLineJoin="round"
+          android:fillColor="@android:color/transparent"/>
+
+      <!-- Upload arrow shaft (green) -->
+      <path
+          android:pathData="M38,80 L38,32"
+          android:strokeColor="#00FF9C"
+          android:strokeWidth="3.5"
+          android:strokeLineCap="round"
+          android:fillColor="@android:color/transparent"/>
+
+      <!-- Upload arrow head (green, pointing up) -->
+      <path
+          android:pathData="M30,42 L38,32 L46,42"
+          android:strokeColor="#00FF9C"
+          android:strokeWidth="3.5"
+          android:strokeLineCap="round"
+          android:strokeLineJoin="round"
+          android:fillColor="@android:color/transparent"/>
+
+      <!-- Download arrow shaft (cyan) -->
+      <path
+          android:pathData="M70,32 L70,80"
+          android:strokeColor="#00E5FF"
+          android:strokeWidth="3.5"
+          android:strokeLineCap="round"
+          android:fillColor="@android:color/transparent"/>
+
+      <!-- Download arrow head (cyan, pointing down) -->
+      <path
+          android:pathData="M62,70 L70,80 L78,70"
+          android:strokeColor="#00E5FF"
+          android:strokeWidth="3.5"
+          android:strokeLineCap="round"
+          android:strokeLineJoin="round"
+          android:fillColor="@android:color/transparent"/>
+
+  </group>
+</vector>

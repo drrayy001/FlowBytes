@@ -158,11 +158,12 @@ class AppLimitsViewModel(
 
     var searchQuery by mutableStateOf("")
 
-    var isSubViewOpen by mutableStateOf(value = false)
+    var isPickerOpen by mutableStateOf(false)
+    var editingLimit by mutableStateOf<AppLimit?>(null)
+    var isGeneralLimitOpen by mutableStateOf(false)
 
-    fun setSubViewOpenStatus(isOpen: Boolean) {
-        isSubViewOpen = isOpen
-    }
+    val isSubViewOpen: Boolean
+        get() = isPickerOpen || (editingLimit != null) || isGeneralLimitOpen
 
     val filteredApps: List<AppInfo>
         get() = if (searchQuery.isBlank()) installedApps

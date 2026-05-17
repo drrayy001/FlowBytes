@@ -428,15 +428,3 @@ fun AlertItemBack(alert: AppAlert) {
         }
     }
 }
-
-private fun formatUsage(bytes: Long): String {
-    val gb = 1024L * 1024L * 1024L
-    val mb = 1024L * 1024L
-    val kb = 1024L
-    return when {
-        bytes >= gb -> String.format(Locale.getDefault(), "%.2f GB", bytes.toDouble() / gb)
-        bytes >= mb -> String.format(Locale.getDefault(), "%.1f MB", bytes.toDouble() / mb)
-        bytes >= kb -> String.format(Locale.getDefault(), "%.0f KB", bytes.toDouble() / kb)
-        else -> "$bytes B"
-    }
-}

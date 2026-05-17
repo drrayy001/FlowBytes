@@ -2,6 +2,9 @@ package com.ray.flowmeter.ui.screens
 
 import android.graphics.drawable.Drawable
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
@@ -66,7 +69,7 @@ fun AppLimitsScreen(
     val wifiDailyLimit by viewModel.wifiDailyLimit.collectAsState()
     val dataMonthlyLimit by viewModel.dataMonthlyLimit.collectAsState()
     val wifiMonthlyLimit by viewModel.wifiMonthlyLimit.collectAsState()
-    
+
     val (showTypeSelector, setShowTypeSelector) = remember { mutableStateOf(value = false) }
     val (isGeneralLimitOpen, setIsGeneralLimitOpen) = remember { mutableStateOf(value = false) }
 
@@ -85,11 +88,8 @@ fun AppLimitsScreen(
         targetState = currentView,
         modifier = modifier,
         transitionSpec = {
-            if (targetState != "list") {
-                AppTransitions.ScreenEnter togetherWith AppTransitions.ScreenExit
-            } else {
-                AppTransitions.ScreenPopEnter togetherWith AppTransitions.ScreenPopExit
-            }
+            // Replaced custom sliding animations with None for instant transitions
+            EnterTransition.None togetherWith ExitTransition.None
         },
         label = "AppLimitsNavigation",
     ) { viewState ->
@@ -222,7 +222,7 @@ fun AppLimitsScreen(
                     setInternalTab(index)
                 }
 
-                val allGeneralLimitsConfigured = dataDailyLimitConfigured && dataMonthlyLimitConfigured && 
+                val allGeneralLimitsConfigured = dataDailyLimitConfigured && dataMonthlyLimitConfigured &&
                                                  wifiDailyLimitConfigured && wifiMonthlyLimitConfigured
 
                 Box(modifier = modifier.fillMaxSize()) {
@@ -237,11 +237,7 @@ fun AppLimitsScreen(
                             targetState = selectedTab,
                             modifier = Modifier.weight(1f),
                             transitionSpec = {
-                                if (targetState > initialState) {
-                                    AppTransitions.SlideForwardEnter togetherWith AppTransitions.SlideForwardExit
-                                } else {
-                                    AppTransitions.SlideBackwardEnter togetherWith AppTransitions.SlideBackwardExit
-                                }
+                                EnterTransition.None togetherWith ExitTransition.None
                             },
                             label = "SubTabTransition"
                         ) { page ->
@@ -252,16 +248,16 @@ fun AppLimitsScreen(
                                     onDelete = { limitToDelete = it }
                                 )
                                 1 -> AppLimitsList(
-                                    viewModel = viewModel, 
-                                    onEdit = { editingLimit = it }, 
+                                    viewModel = viewModel,
+                                    onEdit = { editingLimit = it },
                                     onDelete = { limitToDelete = it }
                                 )
                             }
                         }
                     }
-                    
+
                     val showFab = if (selectedTab == 0) !allGeneralLimitsConfigured else true
-                    
+
                     if (showFab) {
                         FloatingActionButton(
                             onClick = {
@@ -308,7 +304,7 @@ fun AppLimitsScreen(
                         confirmButton = {
                             TextButton(
                                 onClick = {
-                                    limitToDelete?.let { 
+                                    limitToDelete?.let {
                                         when(it.packageName) {
                                             "system.wifi.daily" -> {
                                                 viewModel.setWifiDailyLimitEnabled(false)
@@ -366,16 +362,16 @@ fun MinimalPillsRow(
             stringResource(R.string.title_general_limits),
             stringResource(R.string.label_app_limits)
         )
-        
+
         tabs.forEachIndexed { index, label ->
             val selected = selectedTab == index
             val contentColor by animateColorAsState(
-                if (selected) MaterialTheme.colorScheme.onPrimaryContainer 
+                if (selected) MaterialTheme.colorScheme.onPrimaryContainer
                 else MaterialTheme.colorScheme.onSurfaceVariant,
                 label = "TabContentColor"
             )
             val containerColor by animateColorAsState(
-                if (selected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.8f) 
+                if (selected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.8f)
                 else MaterialTheme.colorScheme.surfaceContainerHigh,
                 label = "TabContainerColor"
             )
@@ -384,7 +380,7 @@ fun MinimalPillsRow(
                 modifier = Modifier
                     .clip(RoundedCornerShape(12.dp))
                     .background(containerColor)
-                    .clickable { 
+                    .clickable {
                         onTabChange(index)
                     }
                     .padding(horizontal = 16.dp, vertical = 8.dp),
@@ -421,13 +417,13 @@ fun GeneralLimitsList(
     val wifiDailyLimit by viewModel.wifiDailyLimit.collectAsState()
     val dataMonthlyLimit by viewModel.dataMonthlyLimit.collectAsState()
     val wifiMonthlyLimit by viewModel.wifiMonthlyLimit.collectAsState()
-    
+
     val currentMobileUsage by viewModel.currentMobileUsage.collectAsState()
     val currentWifiUsage by viewModel.currentWifiUsage.collectAsState()
     val currentMonthlyMobileUsage by viewModel.currentMonthlyMobileUsage.collectAsState()
     val currentMonthlyWifiUsage by viewModel.currentMonthlyWifiUsage.collectAsState()
 
-    val anyLimitConfigured = dataDailyLimitConfigured || dataMonthlyLimitConfigured || 
+    val anyLimitConfigured = dataDailyLimitConfigured || dataMonthlyLimitConfigured ||
                              wifiDailyLimitConfigured || wifiMonthlyLimitConfigured
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -514,7 +510,7 @@ fun AppLimitsList(
     Box(modifier = Modifier.fillMaxSize()) {
         if (appLimits.isEmpty()) {
             EmptyLimitsPlaceholder(
-                stringResource(R.string.msg_no_app_limits), 
+                stringResource(R.string.msg_no_app_limits),
                 stringResource(R.string.desc_restrict_app_subtitle)
             )
         } else {
@@ -606,29 +602,29 @@ fun GeneralLimitItem(
                     modifier = Modifier
                         .size(36.dp)
                         .background(
-                            color = if (enabled) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.7f) 
+                            color = if (enabled) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.7f)
                                     else MaterialTheme.colorScheme.surfaceContainerHigh,
                             shape = CircleShape
                         ),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        icon, null, 
-                        tint = if (enabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f), 
+                        icon, null,
+                        tint = if (enabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
                         modifier = Modifier.size(18.dp)
                     )
                 }
                 Spacer(Modifier.width(12.dp))
                 Text(
-                    text = title, 
-                    style = MaterialTheme.typography.titleSmall, 
-                    fontWeight = FontWeight.Bold, 
+                    text = title,
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold,
                     modifier = Modifier.weight(1f),
                     color = if (enabled) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                 )
                 Switch(checked = enabled, onCheckedChange = onToggle, modifier = Modifier.scale(0.7f))
             }
-            
+
             if (enabled) {
                 Spacer(Modifier.height(16.dp))
                 ModernProgressIndicator(
@@ -642,7 +638,7 @@ fun GeneralLimitItem(
             Spacer(Modifier.height(12.dp))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                 TextButton(
-                    onClick = onEdit, 
+                    onClick = onEdit,
                     modifier = Modifier.height(32.dp),
                     contentPadding = PaddingValues(horizontal = 12.dp)
                 ) {
@@ -652,8 +648,8 @@ fun GeneralLimitItem(
                 }
                 Spacer(Modifier.width(4.dp))
                 TextButton(
-                    onClick = onDelete, 
-                    modifier = Modifier.height(32.dp), 
+                    onClick = onDelete,
+                    modifier = Modifier.height(32.dp),
                     colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error),
                     contentPadding = PaddingValues(horizontal = 12.dp)
                 ) {
@@ -704,13 +700,13 @@ fun AppLimitItem(
                         alpha = if (limit.isEnabled) 1f else 0.5f,
                     )
                 } ?: Icon(
-                    Icons.Rounded.Apps, null, 
-                    tint = if (limit.isEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f), 
+                    Icons.Rounded.Apps, null,
+                    tint = if (limit.isEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
                     modifier = Modifier.size(36.dp)
                 )
-                
+
                 Spacer(modifier = Modifier.width(12.dp))
-                
+
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = limit.appName,
@@ -723,8 +719,8 @@ fun AppLimitItem(
                 }
 
                 Switch(
-                    checked = limit.isEnabled, 
-                    onCheckedChange = onToggle, 
+                    checked = limit.isEnabled,
+                    onCheckedChange = onToggle,
                     modifier = Modifier.scale(0.7f)
                 )
             }
@@ -740,7 +736,7 @@ fun AppLimitItem(
                         isOverLimit = (limit.wifiDataLimit > 0) && (limit.currentWifiUsage >= limit.wifiDataLimit)
                     )
                 }
-                
+
                 if ((limit.networkType == "both") || (limit.networkType == "mobile")) {
                     Spacer(modifier = Modifier.height(12.dp))
                     ModernProgressIndicator(
@@ -756,7 +752,7 @@ fun AppLimitItem(
             Spacer(Modifier.height(12.dp))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                 TextButton(
-                    onClick = onEdit, 
+                    onClick = onEdit,
                     modifier = Modifier.height(32.dp),
                     contentPadding = PaddingValues(horizontal = 12.dp)
                 ) {
@@ -766,8 +762,8 @@ fun AppLimitItem(
                 }
                 Spacer(Modifier.width(4.dp))
                 TextButton(
-                    onClick = onDelete, 
-                    modifier = Modifier.height(32.dp), 
+                    onClick = onDelete,
+                    modifier = Modifier.height(32.dp),
                     colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error),
                     contentPadding = PaddingValues(horizontal = 12.dp)
                 ) {
@@ -818,12 +814,12 @@ fun ModernProgressIndicator(
                 fontWeight = FontWeight.Medium
             )
         }
-        
+
         Spacer(modifier = Modifier.height(6.dp))
-        
+
         val barColor = if (isOverLimit) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
         val trackColor = MaterialTheme.colorScheme.surfaceContainerHighest
-        
+
         Canvas(modifier = Modifier
             .fillMaxWidth()
             .height(6.dp)
@@ -1117,11 +1113,11 @@ fun AppLimitEditScreen(
     onBack: () -> Unit,
     onConfirm: (AppLimit) -> Unit
 ) {
-    val (limitInput, setLimitInput) = remember(limit) { 
+    val (limitInput, setLimitInput) = remember(limit) {
         val mb = limit.dataLimit / (1024 * 1024)
         mutableStateOf(if ((limit.dataLimit % (1024 * 1024 * 1024) == 0L) && (limit.dataLimit > 0)) (limit.dataLimit / (1024 * 1024 * 1024)).toString() else mb.toString())
     }
-    val (limitUnit, setLimitUnit) = remember(limit) { 
+    val (limitUnit, setLimitUnit) = remember(limit) {
         mutableStateOf(if (limit.dataLimit >= 1024 * 1024 * 1024 && limit.dataLimit % (1024 * 1024 * 1024) == 0L) "GB" else "MB")
     }
     val (limitType, setLimitType) = remember(limit) { mutableStateOf(limit.limitType) }
@@ -1218,10 +1214,10 @@ fun AppLimitEditScreen(
                 onConfirm = {
                     val value = limitInput.toLongOrNull() ?: 0L
                     val multiplier = if (limitUnit == "GB") 1024L * 1024L * 1024L else 1024L * 1024L
-                    
+
                     val wifiValue = wifiLimitInput.toLongOrNull() ?: 0L
                     val wifiMultiplier = if (wifiLimitUnit == "GB") 1024L * 1024L * 1024L else 1024L * 1024L
-                    
+
                     val mobileValue = mobileLimitInput.toLongOrNull() ?: 0L
                     val mobileMultiplier = if (mobileLimitUnit == "GB") 1024L * 1024L * 1024L else 1024L * 1024L
 
@@ -1334,7 +1330,7 @@ fun ConfigurationContent(
         ) {
             Text(confirmButtonText, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
         }
-        
+
         Spacer(modifier = Modifier.height(16.dp))
     }
 }
@@ -1367,7 +1363,7 @@ fun LimitConfigurationContent(
                 NetworkChip(selected = networkType == "wifi", onClick = { onNetworkTypeChange("wifi") }, label = stringResource(R.string.label_wifi), icon = Icons.Rounded.Wifi)
                 NetworkChip(selected = networkType == "mobile", onClick = { onNetworkTypeChange("mobile") }, label = stringResource(R.string.label_mobile), icon = Icons.Rounded.SignalCellularAlt)
         }
-        
+
         Spacer(modifier = Modifier.height(28.dp))
 
         if (networkType == "both") {
@@ -1379,7 +1375,7 @@ fun LimitConfigurationContent(
                 unit = wifiLimitUnit,
                 onUnitChange = onWifiLimitUnitChange
             )
-            
+
             Spacer(modifier = Modifier.height(28.dp))
 
             Text("Mobile Data Limit", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
@@ -1400,9 +1396,9 @@ fun LimitConfigurationContent(
                 onUnitChange = onLimitUnitChange
             )
         }
-        
+
         Spacer(modifier = Modifier.height(28.dp))
-        
+
         Text("Limit Period", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(8.dp))
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -1438,7 +1434,7 @@ fun LimitInputRow(
                         Icon(Icons.Rounded.ArrowDropDown, contentDescription = null)
                     }
                     DropdownMenu(
-                        expanded = expanded, 
+                        expanded = expanded,
                         onDismissRequest = { expanded = false },
                         modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainer)
                     ) {
@@ -1656,7 +1652,7 @@ fun GeneralLimitConfigScreen(
                 .padding(horizontal = 24.dp, vertical = 12.dp)
         ) {
             Text("Set your device-wide data plans.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            
+
             Spacer(Modifier.height(32.dp))
 
             Text("Network Type", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
@@ -1666,7 +1662,7 @@ fun GeneralLimitConfigScreen(
                 NetworkChip(selected = networkType == "wifi", onClick = { setNetworkType("wifi") }, label = stringResource(R.string.label_wifi), icon = Icons.Rounded.Wifi)
                 NetworkChip(selected = networkType == "mobile", onClick = { setNetworkType("mobile") }, label = stringResource(R.string.label_mobile), icon = Icons.Rounded.SignalCellularAlt)
             }
-            
+
             Spacer(Modifier.height(28.dp))
 
             Text("Limit Period", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
@@ -1735,7 +1731,7 @@ fun GeneralLimitConfigScreen(
             ) {
                 Text(stringResource(R.string.btn_save_config), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             }
-            
+
             Spacer(modifier = Modifier.height(16.dp))
         }
     }

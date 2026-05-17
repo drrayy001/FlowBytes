@@ -46,7 +46,7 @@ fun HomeScreen(
         userScrollEnabled = false
     ) {
         item {
-            StaggeredEntrance(index = 0) {
+            StaggeredEntrance {
                 UsageSummaryCard(
                     title = stringResource(R.string.label_todays_usage),
                     totalUsage = viewModel.dailyUsage,
@@ -64,7 +64,7 @@ fun HomeScreen(
         }
 
         item {
-            StaggeredEntrance(index = 1) {
+            StaggeredEntrance {
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(32.dp),
@@ -137,7 +137,7 @@ fun HomeScreen(
         }
 
         item {
-            StaggeredEntrance(index = 2) {
+            StaggeredEntrance {
                 UsageSummaryCard(
                     title = stringResource(R.string.label_this_month),
                     totalUsage = viewModel.monthlyUsage,
@@ -154,7 +154,7 @@ fun HomeScreen(
 
         if (viewModel.isDataLimitEnabled) {
             item {
-                StaggeredEntrance(index = 3) {
+                StaggeredEntrance {
                     ForecastCard(
                         currentUsage = viewModel.dailyMobileUsageBytes,
                         projectedUsage = viewModel.projectedDailyMobileBytes,

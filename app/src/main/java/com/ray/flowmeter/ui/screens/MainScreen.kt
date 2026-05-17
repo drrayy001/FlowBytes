@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
@@ -134,7 +133,7 @@ fun MainScreen(
     }
 
     val snackbarHostState = remember { SnackbarHostState() }
-    val limitsPagerState = rememberPagerState { 2 }
+    val (limitsTab, setLimitsTab) = remember { mutableIntStateOf(0) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -362,7 +361,8 @@ fun MainScreen(
 
                 3 -> AppLimitsScreen(
                     viewModel = appLimitsViewModel,
-                    externalPagerState = limitsPagerState,
+                    currentTab = limitsTab,
+                    onTabChange = setLimitsTab,
                     modifier = Modifier
                         .fillMaxSize()
                         .nestedScroll(limitsScrollBehavior.nestedScrollConnection),

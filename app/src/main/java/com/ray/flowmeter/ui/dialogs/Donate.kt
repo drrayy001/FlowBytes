@@ -48,8 +48,7 @@ fun DonateDialog(
             AnimatedContent(
                 targetState = isSuccess,
                 transitionSpec = {
-                    (fadeIn(premiumSpring()) + scaleIn(premiumSpring(), initialScale = 0.95f)) togetherWith
-                            (fadeOut(premiumSpring()) + scaleOut(premiumSpring(), targetScale = 0.95f))
+                    fadeIn(premiumSpring()) togetherWith fadeOut(premiumSpring())
                 },
                 label = "DonationState"
             ) { success ->

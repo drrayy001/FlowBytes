@@ -114,7 +114,7 @@ fun OnboardingScreen(
         ) {
             Spacer(modifier = Modifier.height(32.dp))
 
-            StaggeredEntrance(index = 0) {
+            StaggeredEntrance {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -139,7 +139,7 @@ fun OnboardingScreen(
                 }
             }
 
-            StaggeredEntrance(index = 1) {
+            StaggeredEntrance {
                 Text(
                     text = stringResource(R.string.title_welcome),
                     style = MaterialTheme.typography.headlineMedium,
@@ -150,7 +150,7 @@ fun OnboardingScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            StaggeredEntrance(index = 2) {
+            StaggeredEntrance {
                 Text(
                     text = stringResource(R.string.msg_onboarding_desc),
                     style = MaterialTheme.typography.bodyLarge,
@@ -161,7 +161,7 @@ fun OnboardingScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            StaggeredEntrance(index = 3) {
+            StaggeredEntrance {
                 PermissionItem(
                     title = stringResource(R.string.label_usage_access),
                     description = stringResource(R.string.desc_usage_access),
@@ -175,7 +175,7 @@ fun OnboardingScreen(
 
             if (notificationPermissionState != null) {
                 Spacer(modifier = Modifier.height(16.dp))
-                StaggeredEntrance(index = 4) {
+                StaggeredEntrance {
                     PermissionItem(
                         title = stringResource(R.string.label_notifications),
                         description = stringResource(R.string.desc_notifications),
@@ -189,7 +189,7 @@ fun OnboardingScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            StaggeredEntrance(index = 5) {
+            StaggeredEntrance {
                 PermissionItem(
                     title = stringResource(R.string.label_battery_optimization),
                     description = stringResource(R.string.desc_battery_optimization),

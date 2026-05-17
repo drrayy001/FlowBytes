@@ -10,9 +10,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PagerState
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -23,9 +20,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.rememberCoroutineScope
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -56,7 +50,8 @@ import java.util.*
 fun AppLimitsScreen(
     viewModel: AppLimitsViewModel,
     modifier: Modifier = Modifier,
-    externalPagerState: PagerState? = null,
+    currentTab: Int = 0,
+    onTabChange: (Int) -> Unit = {}
 ) {
     val (isPickerOpen, setIsPickerOpen) = remember { mutableStateOf(value = false) }
     var editingLimit by remember { mutableStateOf<AppLimit?>(null) }
@@ -220,9 +215,12 @@ fun AppLimitsScreen(
                 )
             }
             else -> {
-                val internalPagerState = rememberPagerState(pageCount = { 2 })
-                val pagerState = externalPagerState ?: internalPagerState
-                val coroutineScope = rememberCoroutineScope()
+                val (internalTab, setInternalTab) = remember { mutableIntStateOf(0) }
+                val selectedTab = if (currentTab != 0 || viewModel.isSubViewOpen) currentTab else internalTab
+                val updateTab = { index: Int ->
+                    onTabChange(index)
+                    setInternalTab(index)
+                }
 
                 val allGeneralLimitsConfigured = dataDailyLimitConfigured && dataMonthlyLimitConfigured && 
                                                  wifiDailyLimitConfigured && wifiMonthlyLimitConfigured
@@ -230,14 +228,22 @@ fun AppLimitsScreen(
                 Box(modifier = modifier.fillMaxSize()) {
                     Column(modifier = Modifier.fillMaxSize()) {
                         MinimalPillsRow(
-                            pagerState = pagerState,
-                            coroutineScope = coroutineScope,
+                            selectedTab = selectedTab,
+                            onTabChange = updateTab,
                             modifier = Modifier.padding(top = 8.dp, bottom = 12.dp)
                         )
 
-                        HorizontalPager(
-                            state = pagerState,
-                            modifier = Modifier.weight(1f)
+                        AnimatedContent(
+                            targetState = selectedTab,
+                            modifier = Modifier.weight(1f),
+                            transitionSpec = {
+                                if (targetState > initialState) {
+                                    AppTransitions.SlideForwardEnter togetherWith AppTransitions.SlideForwardExit
+                                } else {
+                                    AppTransitions.SlideBackwardEnter togetherWith AppTransitions.SlideBackwardExit
+                                }
+                            },
+                            label = "SubTabTransition"
                         ) { page ->
                             when (page) {
                                 0 -> GeneralLimitsList(
@@ -254,12 +260,12 @@ fun AppLimitsScreen(
                         }
                     }
                     
-                    val showFab = if (pagerState.currentPage == 0) !allGeneralLimitsConfigured else true
+                    val showFab = if (selectedTab == 0) !allGeneralLimitsConfigured else true
                     
                     if (showFab) {
                         FloatingActionButton(
                             onClick = {
-                                if (pagerState.currentPage == 1) {
+                                if (selectedTab == 1) {
                                     viewModel.loadInstalledApps()
                                     setIsPickerOpen(true)
                                 } else {
@@ -345,8 +351,8 @@ fun AppLimitsScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MinimalPillsRow(
-    pagerState: PagerState,
-    coroutineScope: CoroutineScope,
+    selectedTab: Int,
+    onTabChange: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -362,7 +368,7 @@ fun MinimalPillsRow(
         )
         
         tabs.forEachIndexed { index, label ->
-            val selected = pagerState.currentPage == index
+            val selected = selectedTab == index
             val contentColor by animateColorAsState(
                 if (selected) MaterialTheme.colorScheme.onPrimaryContainer 
                 else MaterialTheme.colorScheme.onSurfaceVariant,
@@ -379,7 +385,7 @@ fun MinimalPillsRow(
                     .clip(RoundedCornerShape(12.dp))
                     .background(containerColor)
                     .clickable { 
-                        coroutineScope.launch { pagerState.animateScrollToPage(index) } 
+                        onTabChange(index)
                     }
                     .padding(horizontal = 16.dp, vertical = 8.dp),
                 contentAlignment = Alignment.Center
@@ -518,7 +524,7 @@ fun AppLimitsList(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 items(appLimits.asReversed()) { limit ->
-                    StaggeredEntrance(index = appLimits.indexOf(limit)) {
+                    StaggeredEntrance {
                         AppLimitItem(
                             limit = limit,
                             onToggle = { enabled -> viewModel.updateAppLimit(limit.copy(isEnabled = enabled)) },

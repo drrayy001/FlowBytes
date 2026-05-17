@@ -397,18 +397,18 @@ fun <T> premiumSpring(): SpringSpec<T> = spring(
 )
 
 object AppTransitions {
-    val ScreenEnter: EnterTransition = fadeIn(premiumSpring()) + scaleIn(premiumSpring(), initialScale = 0.9f)
-    val ScreenExit: ExitTransition = fadeOut(premiumSpring()) + scaleOut(premiumSpring(), targetScale = 1.1f)
+    val ScreenEnter: EnterTransition = fadeIn(premiumSpring())
+    val ScreenExit: ExitTransition = fadeOut(premiumSpring())
 
-    val ScreenPopEnter: EnterTransition = fadeIn(premiumSpring()) + scaleIn(premiumSpring(), initialScale = 1.1f)
-    val ScreenPopExit: ExitTransition = fadeOut(premiumSpring()) + scaleOut(premiumSpring(), targetScale = 0.9f)
+    val ScreenPopEnter: EnterTransition = fadeIn(premiumSpring())
+    val ScreenPopExit: ExitTransition = fadeOut(premiumSpring())
 
-    // Premium Directional Transitions
-    val SlideForwardEnter = slideInHorizontally(initialOffsetX = { it }, animationSpec = premiumSpring()) + fadeIn(premiumSpring())
-    val SlideForwardExit = slideOutHorizontally(targetOffsetX = { -it / 3 }, animationSpec = premiumSpring()) + fadeOut(premiumSpring())
+    // Premium Transitions (Pure Crossfade)
+    val SlideForwardEnter = fadeIn(premiumSpring())
+    val SlideForwardExit = fadeOut(premiumSpring())
 
-    val SlideBackwardEnter = slideInHorizontally(initialOffsetX = { -it / 3 }, animationSpec = premiumSpring()) + fadeIn(premiumSpring())
-    val SlideBackwardExit = slideOutHorizontally(targetOffsetX = { it }, animationSpec = premiumSpring()) + fadeOut(premiumSpring())
+    val SlideBackwardEnter = fadeIn(premiumSpring())
+    val SlideBackwardExit = fadeOut(premiumSpring())
 }
 
 fun Modifier.bounceClick(
@@ -441,34 +441,8 @@ fun Modifier.bounceClick(
 
 @Composable
 fun StaggeredEntrance(
-    index: Int,
     content: @Composable () -> Unit,
 ) {
-    var visible by remember { mutableStateOf(value = false) }
-    LaunchedEffect(Unit) {
-        kotlinx.coroutines.delay(index * 40L)
-        visible = true
-    }
-
-    val scale by animateFloatAsState(
-        targetValue = if (visible) 1f else 0.85f,
-        animationSpec = premiumSpring(),
-        label = "scale"
-    )
-    val alpha by animateFloatAsState(
-        targetValue = if (visible) 1f else 0f,
-        animationSpec = spring(stiffness = 200f),
-        label = "alpha"
-    )
-
-    Box(
-        modifier = Modifier
-            .graphicsLayer {
-                this.scaleX = scale
-                this.scaleY = scale
-                this.alpha = alpha
-            }
-    ) {
-        content()
-    }
+    // Simply render content to remove staggered animation
+    content()
 }

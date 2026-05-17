@@ -797,7 +797,7 @@ fun AppUsageScreen(
                             else -> appUsage.totalUsage
                         }
 
-                        StaggeredEntrance(index = index) {
+                        StaggeredEntrance {
                             AppUsageItem(
                                 appUsage = appUsage,
                                 displayUsage = displayUsage,

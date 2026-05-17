@@ -146,7 +146,7 @@ fun SettingsScreen(
             .verticalScroll(scrollState)
     ) {
         // ================== 1. GENERAL ==================
-        StaggeredEntrance(index = 0) {
+        StaggeredEntrance {
             SettingsGroup(title = stringResource(R.string.settings_section_general)) {
                 SettingsItem(
                     icon = Icons.Rounded.DataUsage,
@@ -180,7 +180,7 @@ fun SettingsScreen(
         }
 
         // ================== 2. APPEARANCE ==================
-        StaggeredEntrance(index = 1) {
+        StaggeredEntrance {
             SettingsGroup(title = stringResource(R.string.settings_section_appearance)) {
                 SettingsItem(
                     icon = Icons.Rounded.Palette,
@@ -253,7 +253,7 @@ fun SettingsScreen(
         }
 
         // ================== 3. NOTIFICATIONS ==================
-        StaggeredEntrance(index = 2) {
+        StaggeredEntrance {
             SettingsGroup(title = stringResource(R.string.settings_section_notifications)) {
                 SettingsItem(
                     icon = Icons.Rounded.Notifications,
@@ -313,7 +313,7 @@ fun SettingsScreen(
         }
 
         // ================== 4. MONITORING & SECURITY ==================
-        StaggeredEntrance(index = 3) {
+        StaggeredEntrance {
             SettingsGroup(title = stringResource(R.string.settings_section_alerts)) {
                 SettingsItem(
                     icon = Icons.Rounded.WarningAmber,
@@ -362,7 +362,7 @@ fun SettingsScreen(
         }
 
         // ================== 6. SUPPORT ==================
-        StaggeredEntrance(index = 5) {
+        StaggeredEntrance {
             SettingsGroup(title = stringResource(R.string.settings_section_support)) {
                 SettingsItem(
                     icon = Icons.Rounded.Star,
@@ -405,7 +405,7 @@ fun SettingsScreen(
         }
 
         // ================== 7. ABOUT ==================
-        StaggeredEntrance(index = 6) {
+        StaggeredEntrance {
             SettingsGroup(title = stringResource(R.string.settings_section_about)) {
                 SettingsItem(
                     icon = Icons.Rounded.Shield,

@@ -10,7 +10,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -26,7 +25,6 @@ import com.ray.flowmeter.ui.theme.StaggeredEntrance
 import com.ray.flowmeter.ui.theme.bounceClick
 import com.ray.flowmeter.ui.viewmodels.HomeViewModel
 import java.util.Calendar
-import java.util.Locale
 
 // Main landing screen showing usage summary, weekly activity, and data insights
 @Composable
@@ -151,22 +149,6 @@ fun HomeScreen(
                 )
             }
         }
-
-        if (viewModel.isDataLimitEnabled) {
-            item {
-                StaggeredEntrance {
-                    ForecastCard(
-                        currentUsage = viewModel.dailyMobileUsageBytes,
-                        projectedUsage = viewModel.projectedDailyMobileBytes,
-                        limit = viewModel.dailyMobileLimitBytes
-                    )
-                }
-            }
-        }
-
-        item {
-            Spacer(modifier = Modifier.height(16.dp))
-        }
     }
 }
 
@@ -200,142 +182,6 @@ fun LegendItem(label: String, color: Color, isSelected: Boolean, onClick: () -> 
                 color = if (isSelected) color else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
             )
         }
-    }
-}
-
-// Card showing data usage forecast and progress towards daily limit
-@Composable
-fun ForecastCard(
-    currentUsage: Long,
-    projectedUsage: Long,
-    limit: Long
-) {
-    val progress = (currentUsage.toFloat() / limit).coerceIn(0f, 1f)
-    val projectedProgress = (projectedUsage.toFloat() / limit).coerceIn(0f, 1.2f)
-    val isOverLimit = projectedUsage > limit
-
-    val accentColor = if (isOverLimit) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
-
-    Card(
-        modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
-        shape = RoundedCornerShape(32.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainer
-        ),
-        border = androidx.compose.foundation.BorderStroke(
-            1.5.dp,
-            Brush.linearGradient(
-                listOf(
-                    accentColor.copy(alpha = 0.6f),
-                    accentColor.copy(alpha = 0.2f)
-                )
-            )
-        )
-    ) {
-        Column(modifier = Modifier.padding(20.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Surface(
-                    color = accentColor.copy(alpha = 0.1f),
-                    shape = CircleShape,
-                    modifier = Modifier.size(36.dp)
-                ) {
-                    Box(contentAlignment = Alignment.Center) {
-                        Icon(
-                            if (isOverLimit) AppIcons.ForecastWarning else AppIcons.ForecastSafe,
-                            contentDescription = null,
-                            tint = accentColor,
-                            modifier = Modifier.size(20.dp)
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.width(12.dp))
-                Text(
-                    text = stringResource(R.string.label_usage_insight),
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = accentColor
-                )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                text = if (isOverLimit)
-                    stringResource(R.string.msg_limit_forecast_warning)
-                else stringResource(R.string.msg_limit_forecast_safe),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                fontWeight = FontWeight.Medium
-            )
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(14.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f))
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth(projectedProgress.coerceAtMost(1f))
-                        .fillMaxHeight()
-                        .clip(CircleShape)
-                        .background(
-                            Brush.horizontalGradient(
-                                listOf(
-                                    accentColor.copy(alpha = 0.1f),
-                                    accentColor.copy(alpha = 0.3f)
-                                )
-                            )
-                        )
-                )
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth(progress)
-                        .fillMaxHeight()
-                        .clip(CircleShape)
-                        .background(
-                            Brush.horizontalGradient(
-                                listOf(
-                                    accentColor.copy(alpha = 0.7f),
-                                    accentColor
-                                )
-                            )
-                        )
-                )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Column {
-                    Text(stringResource(R.string.label_projected_upper), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f), fontWeight = FontWeight.Bold, letterSpacing = 0.5.sp)
-                    Text(formatDataSize(projectedUsage), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.ExtraBold)
-                }
-                Column(horizontalAlignment = Alignment.End) {
-                    Text(stringResource(R.string.label_daily_limit_upper), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f), fontWeight = FontWeight.Bold, letterSpacing = 0.5.sp)
-                    Text(formatDataSize(limit), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.ExtraBold)
-                }
-            }
-        }
-    }
-}
-
-// Utility for formatting bytes into human-readable data sizes
-fun formatDataSize(bytes: Long): String {
-    val gb = 1024L * 1024L * 1024L
-    val mb = 1024L * 1024L
-    val kb = 1024L
-    return when {
-        bytes >= gb -> String.format(Locale.getDefault(), "%.2f GB", bytes.toDouble() / gb)
-        bytes >= mb -> String.format(Locale.getDefault(), "%.1f MB", bytes.toDouble() / mb)
-        bytes >= kb -> String.format(Locale.getDefault(), "%.0f KB", bytes.toDouble() / kb)
-        else -> "$bytes B"
     }
 }
 

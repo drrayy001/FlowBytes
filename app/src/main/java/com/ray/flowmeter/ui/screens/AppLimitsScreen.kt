@@ -1,15 +1,11 @@
 package com.ray.flowmeter.ui.screens
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.SizeTransform
-import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.*
 import androidx.compose.animation.core.snap
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -44,19 +40,141 @@ fun AppLimitsScreen(
     onTabChange: (Int) -> Unit = {}
 ) {
     var limitToDelete by remember { mutableStateOf<AppLimit?>(null) }
+    val (showTypeSelector, setShowTypeSelector) = remember { mutableStateOf(value = false) }
 
     val dataDailyLimitConfigured by viewModel.dataDailyLimitConfigured.collectAsState()
     val dataMonthlyLimitConfigured by viewModel.dataMonthlyLimitConfigured.collectAsState()
     val wifiDailyLimitConfigured by viewModel.wifiDailyLimitConfigured.collectAsState()
     val wifiMonthlyLimitConfigured by viewModel.wifiMonthlyLimitConfigured.collectAsState()
 
-    val dataDailyLimit by viewModel.dataDailyLimit.collectAsState()
-    val wifiDailyLimit by viewModel.wifiDailyLimit.collectAsState()
-    val dataMonthlyLimit by viewModel.dataMonthlyLimit.collectAsState()
-    val wifiMonthlyLimit by viewModel.wifiMonthlyLimit.collectAsState()
+    val (internalTab, setInternalTab) = remember { mutableIntStateOf(0) }
+    val selectedTab = if (currentTab != 0) currentTab else internalTab
+    val updateTab = { index: Int ->
+        onTabChange(index)
+        setInternalTab(index)
+    }
 
-    val (showTypeSelector, setShowTypeSelector) = remember { mutableStateOf(value = false) }
+    val allGeneralLimitsConfigured = dataDailyLimitConfigured && dataMonthlyLimitConfigured &&
+            wifiDailyLimitConfigured && wifiMonthlyLimitConfigured
 
+    Box(modifier = modifier) {
+        Column(modifier = Modifier.fillMaxSize()) {
+            MinimalPillsRow(
+                selectedTab = selectedTab,
+                onTabChange = updateTab,
+                modifier = Modifier.padding(top = 8.dp, bottom = 12.dp)
+            )
+
+            AnimatedContent(
+                targetState = selectedTab,
+                modifier = Modifier.weight(1f),
+                transitionSpec = {
+                    EnterTransition.None togetherWith ExitTransition.None using SizeTransform(clip = false) { _, _ -> snap() }
+                },
+                label = "SubTabTransition"
+            ) { page ->
+                when (page) {
+                    0 -> GeneralLimitsList(
+                        viewModel = viewModel,
+                        onEdit = { viewModel.isGeneralLimitOpen = true },
+                        onDelete = { limitToDelete = it }
+                    )
+                    1 -> AppLimitsList(
+                        viewModel = viewModel,
+                        onEdit = { viewModel.editingLimit = it },
+                        onDelete = { limitToDelete = it }
+                    )
+                }
+            }
+        }
+
+        val showFab = if (selectedTab == 0) !allGeneralLimitsConfigured else true
+
+        if (showFab) {
+            FloatingActionButton(
+                onClick = {
+                    if (selectedTab == 1) {
+                        viewModel.loadInstalledApps()
+                        viewModel.isPickerOpen = true
+                    } else {
+                        viewModel.isGeneralLimitOpen = true
+                    }
+                },
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(16.dp),
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+                shape = RoundedCornerShape(20.dp),
+                elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 4.dp)
+            ) {
+                Icon(Icons.Rounded.Add, contentDescription = stringResource(R.string.cd_add_app_limit))
+            }
+        }
+    }
+
+    if (showTypeSelector) {
+        LimitTypeSelectionDialog(
+            onDismiss = { setShowTypeSelector(false) },
+            onAppLimitSelected = {
+                viewModel.loadInstalledApps()
+                viewModel.isPickerOpen = true
+                setShowTypeSelector(false)
+            },
+            onGeneralLimitSelected = {
+                viewModel.isGeneralLimitOpen = true
+                setShowTypeSelector(false)
+            }
+        )
+    }
+
+    if (limitToDelete != null) {
+        AlertDialog(
+            onDismissRequest = { limitToDelete = null },
+            title = { Text(stringResource(R.string.title_delete_limit)) },
+            text = { Text(stringResource(R.string.msg_confirm_delete_limit, limitToDelete?.appName ?: "")) },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        limitToDelete?.let {
+                            when(it.packageName) {
+                                "system.wifi.daily" -> {
+                                    viewModel.setWifiDailyLimitEnabled(false)
+                                    viewModel.setWifiDailyLimitConfigured(false)
+                                }
+                                "system.mobile.daily" -> {
+                                    viewModel.setDataDailyLimitEnabled(false)
+                                    viewModel.setDataDailyLimitConfigured(false)
+                                }
+                                "system.wifi.monthly" -> {
+                                    viewModel.setWifiMonthlyLimitEnabled(false)
+                                    viewModel.setWifiMonthlyLimitConfigured(false)
+                                }
+                                "system.mobile.monthly" -> {
+                                    viewModel.setDataMonthlyLimitEnabled(false)
+                                    viewModel.setDataMonthlyLimitConfigured(false)
+                                }
+                                else -> viewModel.removeAppLimit(it)
+                            }
+                        }
+                        limitToDelete = null
+                    },
+                    colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
+                ) {
+                    Text(stringResource(R.string.btn_delete))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { limitToDelete = null }) {
+                    Text(stringResource(R.string.btn_cancel))
+                }
+            }
+        )
+    }
+}
+
+@Composable
+fun AppLimitsOverlay(viewModel: AppLimitsViewModel) {
     val currentView = when {
         viewModel.isPickerOpen -> "picker"
         viewModel.editingLimit != null -> "edit"
@@ -64,259 +182,154 @@ fun AppLimitsScreen(
         else -> "list"
     }
 
-    AnimatedContent(
-        targetState = currentView,
-        modifier = modifier,
-        transitionSpec = {
-            EnterTransition.None togetherWith ExitTransition.None using SizeTransform(clip = false) { _, _ -> snap() }
-        },
-        label = "AppLimitsNavigation",
-    ) { viewState ->
-        when (viewState) {
-            "picker" -> {
-                AppPickerScreen(
-                    viewModel = viewModel,
-                    onBack = { viewModel.isPickerOpen = false },
-                ) { appInfo, limitBytes, limitType, networkType, wifiLimitBytes, mobileLimitBytes ->
-                    viewModel.addAppLimit(
-                        packageName = appInfo.packageName,
-                        appName = appInfo.name,
-                        limitBytes = limitBytes,
-                        limitType = limitType,
-                        networkType = networkType,
-                        wifiLimitBytes = wifiLimitBytes,
-                        mobileLimitBytes = mobileLimitBytes,
-                    )
-                    viewModel.isPickerOpen = false
-                }
-            }
-            "edit" -> {
-                if (viewModel.editingLimit != null) {
-                    AppLimitEditScreen(
-                        limit = viewModel.editingLimit!!,
-                        onBack = { viewModel.editingLimit = null },
-                    ) { updatedLimit ->
-                        viewModel.updateAppLimit(updatedLimit)
-                        viewModel.editingLimit = null
-                    }
-                }
-            }
-            "general" -> {
-                GeneralLimitConfigScreen(
-                    initialDataDailyLimit = dataDailyLimit,
-                    initialWifiDailyLimit = wifiDailyLimit,
-                    initialDataMonthlyLimit = dataMonthlyLimit,
-                    initialWifiMonthlyLimit = wifiMonthlyLimit,
-                    onBack = { viewModel.isGeneralLimitOpen = false },
-                    onConfirm = { network, period, dataDaily, wifiDaily, dataMonthly, wifiMonthly ->
-                        when(network) {
-                            "mobile" -> {
-                                when (period) {
-                                    "daily" -> {
-                                        viewModel.setDataDailyLimit(dataDaily)
-                                        viewModel.setDataDailyLimitEnabled(enabled = true)
-                                        viewModel.setDataDailyLimitConfigured(configured = true)
-                                    }
-                                    "monthly" -> {
-                                        viewModel.setDataMonthlyLimit(dataMonthly)
-                                        viewModel.setDataMonthlyLimitEnabled(enabled = true)
-                                        viewModel.setDataMonthlyLimitConfigured(configured = true)
-                                    }
-                                    else -> { // both
-                                        viewModel.setDataDailyLimit(dataDaily)
-                                        viewModel.setDataDailyLimitEnabled(enabled = true)
-                                        viewModel.setDataDailyLimitConfigured(configured = true)
-                                        viewModel.setDataMonthlyLimit(dataMonthly)
-                                        viewModel.setDataMonthlyLimitEnabled(enabled = true)
-                                        viewModel.setDataMonthlyLimitConfigured(configured = true)
-                                    }
-                                }
-                            }
-                            "wifi" -> {
-                                when (period) {
-                                    "daily" -> {
-                                        viewModel.setWifiDailyLimit(wifiDaily)
-                                        viewModel.setWifiDailyLimitEnabled(enabled = true)
-                                        viewModel.setWifiDailyLimitConfigured(configured = true)
-                                    }
-                                    "monthly" -> {
-                                        viewModel.setWifiMonthlyLimit(wifiMonthly)
-                                        viewModel.setWifiMonthlyLimitEnabled(enabled = true)
-                                        viewModel.setWifiMonthlyLimitConfigured(configured = true)
-                                    }
-                                    else -> { // both
-                                        viewModel.setWifiDailyLimit(wifiDaily)
-                                        viewModel.setWifiDailyLimitEnabled(enabled = true)
-                                        viewModel.setWifiDailyLimitConfigured(configured = true)
-                                        viewModel.setWifiMonthlyLimit(wifiMonthly)
-                                        viewModel.setWifiMonthlyLimitEnabled(enabled = true)
-                                        viewModel.setWifiMonthlyLimitConfigured(configured = true)
-                                    }
-                                }
-                            }
-                            "both" -> {
-                                when (period) {
-                                    "daily" -> {
-                                        viewModel.setDataDailyLimit(dataDaily)
-                                        viewModel.setDataDailyLimitEnabled(enabled = true)
-                                        viewModel.setDataDailyLimitConfigured(configured = true)
-                                        viewModel.setWifiDailyLimit(wifiDaily)
-                                        viewModel.setWifiDailyLimitEnabled(enabled = true)
-                                        viewModel.setWifiDailyLimitConfigured(configured = true)
-                                    }
-                                    "monthly" -> {
-                                        viewModel.setDataMonthlyLimit(dataMonthly)
-                                        viewModel.setDataMonthlyLimitEnabled(enabled = true)
-                                        viewModel.setDataMonthlyLimitConfigured(configured = true)
-                                        viewModel.setWifiMonthlyLimit(wifiMonthly)
-                                        viewModel.setWifiMonthlyLimitEnabled(enabled = true)
-                                        viewModel.setWifiMonthlyLimitConfigured(configured = true)
-                                    }
-                                    else -> { // both
-                                        viewModel.setDataDailyLimit(dataDaily)
-                                        viewModel.setDataDailyLimitEnabled(enabled = true)
-                                        viewModel.setDataDailyLimitConfigured(configured = true)
-                                        viewModel.setDataMonthlyLimit(dataMonthly)
-                                        viewModel.setDataMonthlyLimitEnabled(enabled = true)
-                                        viewModel.setDataMonthlyLimitConfigured(configured = true)
-                                        viewModel.setWifiDailyLimit(wifiDaily)
-                                        viewModel.setWifiDailyLimitEnabled(enabled = true)
-                                        viewModel.setWifiDailyLimitConfigured(configured = true)
-                                        viewModel.setWifiMonthlyLimit(wifiMonthly)
-                                        viewModel.setWifiMonthlyLimitEnabled(enabled = true)
-                                        viewModel.setWifiMonthlyLimitConfigured(configured = true)
-                                    }
-                                }
-                            }
+    val dataDailyLimit by viewModel.dataDailyLimit.collectAsState()
+    val wifiDailyLimit by viewModel.wifiDailyLimit.collectAsState()
+    val dataMonthlyLimit by viewModel.dataMonthlyLimit.collectAsState()
+    val wifiMonthlyLimit by viewModel.wifiMonthlyLimit.collectAsState()
+
+    AnimatedVisibility(
+        visible = currentView != "list",
+        enter = fadeIn(animationSpec = androidx.compose.animation.core.tween(300)),
+        exit = fadeOut(animationSpec = androidx.compose.animation.core.tween(300))
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null
+                ) {}
+        ) {
+            AnimatedContent(
+                targetState = currentView,
+                transitionSpec = {
+                    fadeIn(animationSpec = androidx.compose.animation.core.tween(300)) togetherWith
+                            fadeOut(animationSpec = androidx.compose.animation.core.tween(300)) using SizeTransform(clip = false) { _, _ -> snap() }
+                },
+                label = "OverlayContent"
+            ) { viewState ->
+                when (viewState) {
+                    "picker" -> {
+                        AppPickerScreen(
+                            viewModel = viewModel,
+                            onBack = { viewModel.isPickerOpen = false },
+                        ) { appInfo, limitBytes, limitType, networkType, wifiLimitBytes, mobileLimitBytes ->
+                            viewModel.addAppLimit(
+                                packageName = appInfo.packageName,
+                                appName = appInfo.name,
+                                limitBytes = limitBytes,
+                                limitType = limitType,
+                                networkType = networkType,
+                                wifiLimitBytes = wifiLimitBytes,
+                                mobileLimitBytes = mobileLimitBytes,
+                            )
+                            viewModel.isPickerOpen = false
                         }
-                        viewModel.isGeneralLimitOpen = false
                     }
-                )
-            }
-            else -> {
-                val (internalTab, setInternalTab) = remember { mutableIntStateOf(0) }
-                val selectedTab = if (currentTab != 0) currentTab else internalTab
-                val updateTab = { index: Int ->
-                    onTabChange(index)
-                    setInternalTab(index)
-                }
-
-                val allGeneralLimitsConfigured = dataDailyLimitConfigured && dataMonthlyLimitConfigured &&
-                        wifiDailyLimitConfigured && wifiMonthlyLimitConfigured
-
-                Box(modifier = modifier.fillMaxSize()) {
-                    Column(modifier = Modifier.fillMaxSize()) {
-                        MinimalPillsRow(
-                            selectedTab = selectedTab,
-                            onTabChange = updateTab,
-                            modifier = Modifier.padding(top = 8.dp, bottom = 12.dp)
-                        )
-
-                        AnimatedContent(
-                            targetState = selectedTab,
-                            modifier = Modifier.weight(1f),
-                            transitionSpec = {
-                                EnterTransition.None togetherWith ExitTransition.None using SizeTransform(clip = false) { _, _ -> snap() }
-                            },
-                            label = "SubTabTransition"
-                        ) { page ->
-                            when (page) {
-                                0 -> GeneralLimitsList(
-                                    viewModel = viewModel,
-                                    onEdit = { viewModel.isGeneralLimitOpen = true },
-                                    onDelete = { limitToDelete = it }
-                                )
-                                1 -> AppLimitsList(
-                                    viewModel = viewModel,
-                                    onEdit = { viewModel.editingLimit = it },
-                                    onDelete = { limitToDelete = it }
-                                )
+                    "edit" -> {
+                        if (viewModel.editingLimit != null) {
+                            AppLimitEditScreen(
+                                limit = viewModel.editingLimit!!,
+                                onBack = { viewModel.editingLimit = null },
+                            ) { updatedLimit ->
+                                viewModel.updateAppLimit(updatedLimit)
+                                viewModel.editingLimit = null
                             }
                         }
                     }
-
-                    val showFab = if (selectedTab == 0) !allGeneralLimitsConfigured else true
-
-                    if (showFab) {
-                        FloatingActionButton(
-                            onClick = {
-                                if (selectedTab == 1) {
-                                    viewModel.loadInstalledApps()
-                                    viewModel.isPickerOpen = true
-                                } else {
-                                    viewModel.isGeneralLimitOpen = true
-                                }
-                            },
-                            modifier = Modifier
-                                .align(Alignment.BottomEnd)
-                                .padding(16.dp),
-                            containerColor = MaterialTheme.colorScheme.primary,
-                            contentColor = MaterialTheme.colorScheme.onPrimary,
-                            shape = RoundedCornerShape(20.dp),
-                            elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 4.dp)
-                        ) {
-                            Icon(Icons.Rounded.Add, contentDescription = stringResource(R.string.cd_add_app_limit))
-                        }
-                    }
-                }
-
-                if (showTypeSelector) {
-                    LimitTypeSelectionDialog(
-                        onDismiss = { setShowTypeSelector(false) },
-                        onAppLimitSelected = {
-                            viewModel.loadInstalledApps()
-                            viewModel.isPickerOpen = true
-                            setShowTypeSelector(false)
-                        },
-                        onGeneralLimitSelected = {
-                            viewModel.isGeneralLimitOpen = true
-                            setShowTypeSelector(false)
-                        }
-                    )
-                }
-
-                if (limitToDelete != null) {
-                    AlertDialog(
-                        onDismissRequest = { limitToDelete = null },
-                        title = { Text(stringResource(R.string.title_delete_limit)) },
-                        text = { Text(stringResource(R.string.msg_confirm_delete_limit, limitToDelete?.appName ?: "")) },
-                        confirmButton = {
-                            TextButton(
-                                onClick = {
-                                    limitToDelete?.let {
-                                        when(it.packageName) {
-                                            "system.wifi.daily" -> {
-                                                viewModel.setWifiDailyLimitEnabled(false)
-                                                viewModel.setWifiDailyLimitConfigured(false)
+                    "general" -> {
+                        GeneralLimitConfigScreen(
+                            initialDataDailyLimit = dataDailyLimit,
+                            initialWifiDailyLimit = wifiDailyLimit,
+                            initialDataMonthlyLimit = dataMonthlyLimit,
+                            initialWifiMonthlyLimit = wifiMonthlyLimit,
+                            onBack = { viewModel.isGeneralLimitOpen = false },
+                            onConfirm = { network, period, dataDaily, wifiDaily, dataMonthly, wifiMonthly ->
+                                when(network) {
+                                    "mobile" -> {
+                                        when (period) {
+                                            "daily" -> {
+                                                viewModel.setDataDailyLimit(dataDaily)
+                                                viewModel.setDataDailyLimitEnabled(enabled = true)
+                                                viewModel.setDataDailyLimitConfigured(configured = true)
                                             }
-                                            "system.mobile.daily" -> {
-                                                viewModel.setDataDailyLimitEnabled(false)
-                                                viewModel.setDataDailyLimitConfigured(false)
+                                            "monthly" -> {
+                                                viewModel.setDataMonthlyLimit(dataMonthly)
+                                                viewModel.setDataMonthlyLimitEnabled(enabled = true)
+                                                viewModel.setDataMonthlyLimitConfigured(configured = true)
                                             }
-                                            "system.wifi.monthly" -> {
-                                                viewModel.setWifiMonthlyLimitEnabled(false)
-                                                viewModel.setWifiMonthlyLimitConfigured(false)
+                                            else -> {
+                                                viewModel.setDataDailyLimit(dataDaily)
+                                                viewModel.setDataDailyLimitEnabled(enabled = true)
+                                                viewModel.setDataDailyLimitConfigured(configured = true)
+                                                viewModel.setDataMonthlyLimit(dataMonthly)
+                                                viewModel.setDataMonthlyLimitEnabled(enabled = true)
+                                                viewModel.setDataMonthlyLimitConfigured(configured = true)
                                             }
-                                            "system.mobile.monthly" -> {
-                                                viewModel.setDataMonthlyLimitEnabled(false)
-                                                viewModel.setDataMonthlyLimitConfigured(false)
-                                            }
-                                            else -> viewModel.removeAppLimit(it)
                                         }
                                     }
-                                    limitToDelete = null
-                                },
-                                colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
-                            ) {
-                                Text(stringResource(R.string.btn_delete))
+                                    "wifi" -> {
+                                        when (period) {
+                                            "daily" -> {
+                                                viewModel.setWifiDailyLimit(wifiDaily)
+                                                viewModel.setWifiDailyLimitEnabled(enabled = true)
+                                                viewModel.setWifiDailyLimitConfigured(configured = true)
+                                            }
+                                            "monthly" -> {
+                                                viewModel.setWifiMonthlyLimit(wifiMonthly)
+                                                viewModel.setWifiMonthlyLimitEnabled(enabled = true)
+                                                viewModel.setWifiMonthlyLimitConfigured(configured = true)
+                                            }
+                                            else -> {
+                                                viewModel.setWifiDailyLimit(wifiDaily)
+                                                viewModel.setWifiDailyLimitEnabled(enabled = true)
+                                                viewModel.setWifiDailyLimitConfigured(configured = true)
+                                                viewModel.setWifiMonthlyLimit(wifiMonthly)
+                                                viewModel.setWifiMonthlyLimitEnabled(enabled = true)
+                                                viewModel.setWifiMonthlyLimitConfigured(configured = true)
+                                            }
+                                        }
+                                    }
+                                    "both" -> {
+                                        when (period) {
+                                            "daily" -> {
+                                                viewModel.setDataDailyLimit(dataDaily)
+                                                viewModel.setDataDailyLimitEnabled(enabled = true)
+                                                viewModel.setDataDailyLimitConfigured(configured = true)
+                                                viewModel.setWifiDailyLimit(wifiDaily)
+                                                viewModel.setWifiDailyLimitEnabled(enabled = true)
+                                                viewModel.setWifiDailyLimitConfigured(configured = true)
+                                            }
+                                            "monthly" -> {
+                                                viewModel.setDataMonthlyLimit(dataMonthly)
+                                                viewModel.setDataMonthlyLimitEnabled(enabled = true)
+                                                viewModel.setDataMonthlyLimitConfigured(configured = true)
+                                                viewModel.setWifiMonthlyLimit(wifiMonthly)
+                                                viewModel.setWifiMonthlyLimitEnabled(enabled = true)
+                                                viewModel.setWifiMonthlyLimitConfigured(configured = true)
+                                            }
+                                            else -> {
+                                                viewModel.setDataDailyLimit(dataDaily)
+                                                viewModel.setDataDailyLimitEnabled(enabled = true)
+                                                viewModel.setDataDailyLimitConfigured(configured = true)
+                                                viewModel.setDataMonthlyLimit(dataMonthly)
+                                                viewModel.setDataMonthlyLimitEnabled(enabled = true)
+                                                viewModel.setDataMonthlyLimitConfigured(configured = true)
+                                                viewModel.setWifiDailyLimit(wifiDaily)
+                                                viewModel.setWifiDailyLimitEnabled(enabled = true)
+                                                viewModel.setWifiDailyLimitConfigured(configured = true)
+                                                viewModel.setWifiMonthlyLimit(wifiMonthly)
+                                                viewModel.setWifiMonthlyLimitEnabled(enabled = true)
+                                                viewModel.setWifiMonthlyLimitConfigured(configured = true)
+                                            }
+                                        }
+                                    }
+                                }
+                                viewModel.isGeneralLimitOpen = false
                             }
-                        },
-                        dismissButton = {
-                            TextButton(onClick = { limitToDelete = null }) {
-                                Text(stringResource(R.string.btn_cancel))
-                            }
-                        }
-                    )
+                        )
+                    }
                 }
             }
         }

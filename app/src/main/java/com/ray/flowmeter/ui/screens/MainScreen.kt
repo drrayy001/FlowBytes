@@ -25,7 +25,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.repeatOnLifecycle
 import com.ray.flowmeter.R
-import com.ray.flowmeter.ui.theme.AppTransitions
+import com.ray.flowmeter.ui.theme.premiumSpring
 import androidx.compose.ui.platform.LocalContext
 import com.ray.flowmeter.ui.dialogs.MuteAppDialog
 import com.ray.flowmeter.ui.viewmodels.AlertsViewModel
@@ -49,10 +49,6 @@ fun MainScreen(
 ) {
     val (currentTab, setCurrentTab) = remember { mutableIntStateOf(initialTab) }
 
-    // Check if Limits tab has a sub-view open (Picker or Edit)
-    val isLimitsSubViewOpen = (currentTab == 3) && appLimitsViewModel.isSubViewOpen
-
-    // Each tab gets its own scroll state so the top bar doesn't carry over between tabs
     val homeTopBarState = rememberTopAppBarState()
     val usageTopBarState = rememberTopAppBarState()
     val alertsTopBarState = rememberTopAppBarState()
@@ -76,7 +72,6 @@ fun MainScreen(
         }
     }
 
-    // Reset the top bar offset when switching tabs so the color resets immediately
     LaunchedEffect(currentTab) {
         homeTopBarState.heightOffset = 0f
         homeTopBarState.contentOffset = 0f
@@ -90,7 +85,6 @@ fun MainScreen(
         settingsTopBarState.contentOffset = 0f
     }
 
-    // Lifecycle observer for data refresh
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
@@ -105,11 +99,10 @@ fun MainScreen(
         }
     }
 
-    // Periodic refresh while the app is in foreground
     LaunchedEffect(lifecycleOwner) {
         lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
             while (isActive) {
-                delay(15000) // Refresh every 15 seconds
+                delay(15000)
                 homeViewModel.updateTotalUsage()
             }
         }
@@ -119,7 +112,6 @@ fun MainScreen(
         homeViewModel.updateTotalUsage()
     }
 
-    // Back press returns to Home tab if on another tab
     BackHandler(enabled = (currentTab != 0)) {
         setCurrentTab(0)
     }
@@ -135,12 +127,11 @@ fun MainScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val (limitsTab, setLimitsTab) = remember { mutableIntStateOf(0) }
 
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        snackbarHost = { SnackbarHost(snackbarHostState) },
-        topBar = {
-            if (!isLimitsSubViewOpen) {
-                // Calculate the scrolled container color based on scroll behavior
+    Box(modifier = Modifier.fillMaxSize()) {
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            snackbarHost = { SnackbarHost(snackbarHostState) },
+            topBar = {
                 val containerColor by animateColorAsState(
                     targetValue = if (scrollBehavior.state.contentOffset < -1f) {
                         MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp)
@@ -156,7 +147,6 @@ fun MainScreen(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Column(modifier = Modifier.windowInsetsPadding(WindowInsets.statusBars)) {
-                        // Keyed so the title text updates immediately on tab switch
                         key(currentTab) {
                             Box(
                                 modifier = Modifier
@@ -181,53 +171,51 @@ fun MainScreen(
                         }
                     }
                 }
-            }
-        },
-        floatingActionButton = {
-            if (currentTab == 2) {
-                val alerts by alertsViewModel.alerts.collectAsState()
-                if (alerts.isNotEmpty()) {
-                    val (showClearDialog, setShowClearDialog) = remember { mutableStateOf(value = false) }
+            },
+            floatingActionButton = {
+                if (currentTab == 2) {
+                    val alerts by alertsViewModel.alerts.collectAsState()
+                    if (alerts.isNotEmpty()) {
+                        val (showClearDialog, setShowClearDialog) = remember { mutableStateOf(value = false) }
 
-                    FloatingActionButton(
-                        onClick = { setShowClearDialog(true) },
-                        modifier = Modifier.offset(x = (-16).dp, y = (-16).dp),
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                    ) {
-                        Icon(
-                            Icons.Rounded.Delete,
-                            contentDescription = stringResource(R.string.btn_clear_history),
-                        )
-                    }
+                        FloatingActionButton(
+                            onClick = { setShowClearDialog(true) },
+                            modifier = Modifier.offset(x = (-16).dp, y = (-16).dp),
+                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                        ) {
+                            Icon(
+                                Icons.Rounded.Delete,
+                                contentDescription = stringResource(R.string.btn_clear_history),
+                            )
+                        }
 
-                    if (showClearDialog) {
-                        AlertDialog(
-                            onDismissRequest = { setShowClearDialog(false) },
-                            title = { Text(stringResource(R.string.btn_clear_history)) },
-                            text = { Text(stringResource(R.string.msg_confirm_clear_history)) },
-                            confirmButton = {
-                                TextButton(
-                                    onClick = {
-                                        alertsViewModel.clearHistory()
-                                        setShowClearDialog(false)
+                        if (showClearDialog) {
+                            AlertDialog(
+                                onDismissRequest = { setShowClearDialog(false) },
+                                title = { Text(stringResource(R.string.btn_clear_history)) },
+                                text = { Text(stringResource(R.string.msg_confirm_clear_history)) },
+                                confirmButton = {
+                                    TextButton(
+                                        onClick = {
+                                            alertsViewModel.clearHistory()
+                                            setShowClearDialog(false)
+                                        }
+                                    ) {
+                                        Text(stringResource(R.string.btn_ok))
                                     }
-                                ) {
-                                    Text(stringResource(R.string.btn_ok))
+                                },
+                                dismissButton = {
+                                    TextButton(onClick = { setShowClearDialog(false) }) {
+                                        Text(stringResource(R.string.btn_cancel))
+                                    }
                                 }
-                            },
-                            dismissButton = {
-                                TextButton(onClick = { setShowClearDialog(false) }) {
-                                    Text(stringResource(R.string.btn_cancel))
-                                }
-                            }
-                        )
+                            )
+                        }
                     }
                 }
-            }
-        },
-        bottomBar = {
-            if (!isLimitsSubViewOpen) {
+            },
+            bottomBar = {
                 NavigationBar {
                     NavigationBarItem(
                         icon = {
@@ -255,7 +243,6 @@ fun MainScreen(
                         label = { Text(stringResource(R.string.label_usage)) },
                         selected = currentTab == 1,
                         onClick = {
-                            // Only reload if we're not already on this tab
                             if (currentTab != 1) {
                                 setCurrentTab(1)
                                 appUsageViewModel.refreshData(isManual = false)
@@ -297,85 +284,88 @@ fun MainScreen(
                     )
                 }
             }
-        }
-    ) { innerPadding ->
-        val contentPadding = if (isLimitsSubViewOpen) {
-            PaddingValues(bottom = innerPadding.calculateBottomPadding())
-        } else {
-            innerPadding
-        }
+        ) { innerPadding ->
 
-        AnimatedContent(
-            targetState = currentTab,
-            modifier = Modifier
-                .padding(contentPadding)
-                .background(MaterialTheme.colorScheme.background),
-            transitionSpec = {
-                if (targetState > initialState) {
-                    AppTransitions.SlideForwardEnter togetherWith AppTransitions.SlideForwardExit
-                } else {
-                    AppTransitions.SlideBackwardEnter togetherWith AppTransitions.SlideBackwardExit
-                }
-            },
-            label = "TabTransition"
-        ) { targetTab ->
-            when (targetTab) {
-                0 -> HomeScreen(
-                    viewModel = homeViewModel,
-                    onNavigateToUsage = { date ->
-                        setCurrentTab(1)
-                        appUsageViewModel.updateDateFilter(
-                            year = date[Calendar.YEAR],
-                            month = date[Calendar.MONTH],
-                            dayOfMonth = date[Calendar.DAY_OF_MONTH],
+            AnimatedContent(
+                targetState = currentTab,
+                modifier = Modifier.background(MaterialTheme.colorScheme.background),
+                transitionSpec = {
+                    if (targetState > initialState) {
+                        (slideIntoContainer(
+                            towards = AnimatedContentTransitionScope.SlideDirection.Left,
+                            animationSpec = premiumSpring(),
+                            initialOffset = { it / 3 }
+                        ) + fadeIn(animationSpec = premiumSpring())).togetherWith(
+                            slideOutOfContainer(
+                                towards = AnimatedContentTransitionScope.SlideDirection.Left,
+                                animationSpec = premiumSpring(),
+                                targetOffset = { it / 3 }
+                            ) + fadeOut(animationSpec = premiumSpring())
                         )
-                    },
-                    onNavigateToTodayUsage = {
-                        setCurrentTab(1)
-                        appUsageViewModel.setTimeFilter("day")
-                        appUsageViewModel.refreshData(isManual = false)
-                    },
-                    onNavigateToMonthUsage = {
-                        setCurrentTab(1)
-                        appUsageViewModel.setTimeFilter("month")
-                        appUsageViewModel.updateToThisMonth()
-                    },
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .nestedScroll(homeScrollBehavior.nestedScrollConnection)
-                )
+                    } else {
+                        (slideIntoContainer(
+                            towards = AnimatedContentTransitionScope.SlideDirection.Right,
+                            animationSpec = premiumSpring(),
+                            initialOffset = { it / 3 }
+                        ) + fadeIn(animationSpec = premiumSpring())).togetherWith(
+                            slideOutOfContainer(
+                                towards = AnimatedContentTransitionScope.SlideDirection.Right,
+                                animationSpec = premiumSpring(),
+                                targetOffset = { it / 3 }
+                            ) + fadeOut(animationSpec = premiumSpring())
+                        )
+                    }.using(
+                        SizeTransform(clip = false)
+                    )
+                },
+                label = "TabTransition"
+            ) { targetTab ->
+                when (targetTab) {
+                    0 -> HomeScreen(
+                        viewModel = homeViewModel,
+                        onNavigateToUsage = { date ->
+                            setCurrentTab(1)
+                            appUsageViewModel.updateDateFilter(date[Calendar.YEAR], date[Calendar.MONTH], date[Calendar.DAY_OF_MONTH])
+                        },
+                        onNavigateToTodayUsage = {
+                            setCurrentTab(1)
+                            appUsageViewModel.setTimeFilter("day")
+                            appUsageViewModel.refreshData(isManual = false)
+                        },
+                        onNavigateToMonthUsage = {
+                            setCurrentTab(1)
+                            appUsageViewModel.setTimeFilter("month")
+                            appUsageViewModel.updateToThisMonth()
+                        },
+                        modifier = Modifier.fillMaxSize().padding(innerPadding).nestedScroll(homeScrollBehavior.nestedScrollConnection)
+                    )
 
-                1 -> AppUsageScreen(
-                    viewModel = appUsageViewModel,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .nestedScroll(usageScrollBehavior.nestedScrollConnection)
-                )
+                    1 -> AppUsageScreen(
+                        viewModel = appUsageViewModel,
+                        modifier = Modifier.fillMaxSize().padding(innerPadding).nestedScroll(usageScrollBehavior.nestedScrollConnection)
+                    )
 
-                2 -> AlertsScreen(
-                    viewModel = alertsViewModel,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .nestedScroll(alertsScrollBehavior.nestedScrollConnection)
-                )
+                    2 -> AlertsScreen(
+                        viewModel = alertsViewModel,
+                        modifier = Modifier.fillMaxSize().padding(innerPadding).nestedScroll(alertsScrollBehavior.nestedScrollConnection)
+                    )
 
-                3 -> AppLimitsScreen(
-                    viewModel = appLimitsViewModel,
-                    currentTab = limitsTab,
-                    onTabChange = setLimitsTab,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .nestedScroll(limitsScrollBehavior.nestedScrollConnection),
-                )
+                    3 -> AppLimitsScreen(
+                        viewModel = appLimitsViewModel,
+                        currentTab = limitsTab,
+                        onTabChange = setLimitsTab,
+                        modifier = Modifier.fillMaxSize().padding(innerPadding).nestedScroll(limitsScrollBehavior.nestedScrollConnection)
+                    )
 
-                4 -> SettingsScreen(
-                    viewModel = settingsViewModel,
-                    snackbarHostState = snackbarHostState,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .nestedScroll(settingsScrollBehavior.nestedScrollConnection)
-                )
+                    4 -> SettingsScreen(
+                        viewModel = settingsViewModel,
+                        snackbarHostState = snackbarHostState,
+                        modifier = Modifier.fillMaxSize().padding(innerPadding).nestedScroll(settingsScrollBehavior.nestedScrollConnection)
+                    )
+                }
             }
         }
+
+        AppLimitsOverlay(appLimitsViewModel)
     }
 }

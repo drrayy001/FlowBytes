@@ -10,7 +10,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Typography
@@ -19,12 +18,9 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
@@ -302,12 +298,10 @@ fun FlowMeterTheme(
         else -> LightColorScheme
     }
 
-    // Apply custom accent if not using Material You
     if (!useMaterialYou && (accentColor != null)) {
         colorScheme = deriveCustomColorScheme(Color(accentColor), isDark)
     }
 
-    // Apply Amoled if enabled and in dark mode
     if (isDark && useAmoled) {
         colorScheme = colorScheme.toAmoled()
     }
@@ -317,11 +311,11 @@ fun FlowMeterTheme(
         SideEffect {
             val window = (view.context as? Activity)?.window
             window?.let {
-        WindowCompat.getInsetsController(it, view).apply {
-            isAppearanceLightStatusBars = !isDark
-            isAppearanceLightNavigationBars = !isDark
-        }
-    }
+                WindowCompat.getInsetsController(it, view).apply {
+                    isAppearanceLightStatusBars = !isDark
+                    isAppearanceLightNavigationBars = !isDark
+                }
+            }
         }
     }
 
@@ -352,7 +346,6 @@ private fun deriveCustomColorScheme(accent: Color, isDark: Boolean): ColorScheme
     val hue = hsv[0]
     val sat = hsv[1]
 
-    // Create harmonious secondary and tertiary
     val secondary = Color(AndroidColor.HSVToColor(floatArrayOf(hue, sat * 0.4f, if (isDark) 0.8f else 0.4f)))
     val tertiary = Color(AndroidColor.HSVToColor(floatArrayOf((hue + 60) % 360, sat * 0.6f, if (isDark) 0.8f else 0.5f)))
 
@@ -402,13 +395,6 @@ object AppTransitions {
 
     val ScreenPopEnter: EnterTransition = fadeIn(premiumSpring())
     val ScreenPopExit: ExitTransition = fadeOut(premiumSpring())
-
-    // Premium Transitions (Pure Crossfade)
-    val SlideForwardEnter = fadeIn(premiumSpring())
-    val SlideForwardExit = fadeOut(premiumSpring())
-
-    val SlideBackwardEnter = fadeIn(premiumSpring())
-    val SlideBackwardExit = fadeOut(premiumSpring())
 }
 
 fun Modifier.bounceClick(
@@ -443,6 +429,5 @@ fun Modifier.bounceClick(
 fun StaggeredEntrance(
     content: @Composable () -> Unit,
 ) {
-    // Simply render content to remove staggered animation
     content()
 }

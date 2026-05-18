@@ -28,6 +28,7 @@ import com.ray.flowmeter.service.NetworkMonitoringService
 import com.ray.flowmeter.ui.dialogs.ChangelogDialog
 import com.ray.flowmeter.ui.screens.MainScreen
 import com.ray.flowmeter.ui.screens.OnboardingScreen
+import com.ray.flowmeter.ui.screens.Destination
 import com.ray.flowmeter.ui.theme.FlowMeterTheme
 import com.ray.flowmeter.ui.viewmodels.AlertsViewModel
 import com.ray.flowmeter.ui.viewmodels.AppLimitsViewModel
@@ -218,10 +219,10 @@ class MainActivity : ComponentActivity() {
                         val navigateToAlerts = currentIntent?.getBooleanExtra(NetworkMonitoringService.EXTRA_NAVIGATE_TO_ALERTS, false) ?: false
                         val navigateToLimits = currentIntent?.getBooleanExtra(NetworkMonitoringService.EXTRA_NAVIGATE_TO_LIMITS, false) ?: false
                         
-                        val initialTab = when {
-                            navigateToLimits -> 3
-                            navigateToAlerts -> 2
-                            else -> 0
+                        val initialDestination = when {
+                            navigateToLimits -> Destination.Limits
+                            navigateToAlerts -> Destination.Alerts
+                            else -> Destination.Home
                         }
 
                         val muteAppName = currentIntent?.getStringExtra(NetworkMonitoringService.EXTRA_MUTE_APP_NAME)
@@ -247,7 +248,7 @@ class MainActivity : ComponentActivity() {
                             alertsViewModel = alertsViewModel,
                             appLimitsViewModel = appLimitsViewModel,
                             settingsViewModel = settingsViewModel,
-                            initialTab = initialTab,
+                            initialDestination = initialDestination,
                         )
 
                         if (showChangelog) {

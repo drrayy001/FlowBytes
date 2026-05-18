@@ -96,7 +96,7 @@
 
     <!-- Settings: Alerts & Limits -->
     <string name="settings_section_alerts">Alerts &amp; Limits</string>
-    <string name="settings_data_alerts">Data Alerts</string>
+    <string name="settings_data_alerts">High Data Alerts</string>
     <string name="settings_data_alerts_desc">Get notified when apps consume excessive background data</string>
     <string name="settings_mobile_limit">Mobile Data Limit</string>
     <string name="settings_wifi_limit">Wi-Fi Data Limit</string>
@@ -163,12 +163,12 @@
     <string name="msg_confirm_clear_history">Are you sure you want to permanently clear your alert history?</string>
 
     <!-- New Strings extracted from Code -->
-    <string name="msg_enable_detection_hint">Enable data alerts to see your history here.</string>
+    <string name="msg_enable_detection_hint">Enable high data alerts to see your history here.</string>
     <string name="label_advanced_settings">Advanced Settings</string>
     <string name="label_trigger_speed">Trigger Speed</string>
     <string name="label_total_data">Total Data</string>
     <string name="title_mute_app">Mute %s</string>
-    <string name="desc_mute_app">Stop receiving data alerts for this application.</string>
+    <string name="desc_mute_app">Stop receiving high data alerts for this application.</string>
     <string name="btn_mute">Mute</string>
     <string name="title_whats_new">What\'s New</string>
     <string name="desc_whats_new">Check out the latest features and improvements.</string>
@@ -248,13 +248,13 @@
     <string name="status_not_supported">Speed monitoring is not supported on this device</string>
     <string name="channel_speed_monitor_name">Speed Monitor</string>
     <string name="channel_speed_monitor_desc">Real-time network speed indicators</string>
-    <string name="channel_usage_alerts_name">Data Alerts</string>
+    <string name="channel_usage_alerts_name">High Data Alerts</string>
     <string name="channel_usage_alerts_desc">Notifications for data limit thresholds</string>
     <string name="notification_high_usage_app_msg">%1$s is consuming significant data: %2$s (%3$s used).</string>
     <string name="notification_high_usage_generic_msg">High background data usage detected: %s</string>
     <string name="notification_high_usage_title">High Data Usage</string>
-    <string name="notification_summary_title">Data Alerts</string>
-    <string name="notification_summary_msg">Tap to view your data alerts history.</string>
+    <string name="notification_summary_title">High Data Alerts</string>
+    <string name="notification_summary_msg">Tap to view your high data alerts history.</string>
     <string name="notification_summary_text">FlowBytes Alerts</string>
     <string name="notification_app_limit_msg">%1$s has reached its data limit of %2$s.</string>
     <string name="notification_app_limit_title">%s Limit Reached</string>

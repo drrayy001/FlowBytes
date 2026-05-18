@@ -77,7 +77,7 @@ fun HomeScreen(
                     Column(modifier = Modifier.padding(20.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Surface(
-                                color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.7f),
+                                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
                                 shape = CircleShape,
                                 modifier = Modifier.size(36.dp)
                             ) {

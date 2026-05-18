@@ -34,7 +34,7 @@ FlowBytes will be available for download soon! Check back for official releases.
 
 *   **Real-time Speed Monitoring:** Displays live download and upload speeds in the status bar, persistent notification, and a dedicated **Quick Settings Tile**.
 *   **App Blocking:** Advanced network control using Android's **VPN Service** to automatically restrict internet access for applications that reach their limit.
-*   **Data Alerts:** Detects sustained high-traffic spikes and background data leaks with customizable speed and duration thresholds.
+*   **High Data Alerts:** Detects sustained high-traffic spikes and background data leaks with customizable speed and duration thresholds.
 *   **Weekly Activity Charts:** Visualize your data consumption with high-precision charts supporting **Soft-Scaling** and filtering by Combined, Wi-Fi, or Mobile data.
 *   **Usage Insight & Forecast:** Get projected data consumption forecasts based on your current habits to stay ahead of your daily limits.
 *   **Comprehensive Data Plans:** Set flexible **Daily and Monthly System Plans** globally or configure granular **App Limits** for specific applications.
@@ -89,7 +89,7 @@ FlowBytes is built using modern Android standards with a focus on performance an
     *   Enable **Material You** in Settings for system-matched colors.
     *   Toggle **AMOLED Mode** for deep blacks on supported screens.
     *   Adjust **Icon Size** for your preferred status bar visibility.
-5.  **Fine-tune Alerts:** Adjust **Data Alerts** (High Traffic Detection) thresholds in Settings to match your data plan's sensitivity.
+5.  **Fine-tune Alerts:** Adjust **High Data Alerts** (High Traffic Detection) thresholds in Settings to match your data plan's sensitivity.
 
 ---
 

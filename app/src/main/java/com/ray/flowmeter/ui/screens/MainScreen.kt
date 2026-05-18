@@ -2,9 +2,14 @@ package com.ray.flowmeter.ui.screens
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material.icons.rounded.*
@@ -13,11 +18,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -26,7 +29,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.serialization.Serializable
 import com.ray.flowmeter.R
-import com.ray.flowmeter.ui.theme.premiumSpring
+import com.ray.flowmeter.ui.theme.StaggeredEntrance
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.material3.adaptive.layout.calculatePaneScaffoldDirective
@@ -48,12 +51,16 @@ import java.util.Calendar
 sealed interface Destination {
     @Serializable
     data object Home : Destination
+
     @Serializable
     data object Usage : Destination
+
     @Serializable
     data object Alerts : Destination
+
     @Serializable
     data object Limits : Destination
+
     @Serializable
     data object Settings : Destination
 }
@@ -68,83 +75,20 @@ fun MainScreen(
     settingsViewModel: SettingsViewModel,
     initialDestination: Destination = Destination.Home,
 ) {
-    val backStack = remember { mutableStateListOf<Destination>(initialDestination) }
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val homeScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val usageScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val alertsScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val limitsScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val settingsScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+
+    val backStack = remember { mutableStateListOf(initialDestination) }
     val currentDestination = backStack.last()
 
-    val homeTopBarState = rememberTopAppBarState()
-    val usageTopBarState = rememberTopAppBarState()
-    val alertsTopBarState = rememberTopAppBarState()
-    val limitsTopBarState = rememberTopAppBarState()
-    val settingsTopBarState = rememberTopAppBarState()
-    val homeScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(homeTopBarState)
-    val usageScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(usageTopBarState)
-    val alertsScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(alertsTopBarState)
-    val limitsScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(limitsTopBarState)
-    val settingsScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(settingsTopBarState)
-
-    val context = LocalContext.current
-    val muteRequestAppName = alertsViewModel.muteRequestAppName
-
-    muteRequestAppName?.let {
-        MuteAppDialog(
-            appName = it,
-            onDismiss = { alertsViewModel.clearMuteRequest() },
-        ) { durationMs ->
-            alertsViewModel.muteApp(context, it, durationMs)
-        }
-    }
-
-    LaunchedEffect(currentDestination) {
-        homeTopBarState.heightOffset = 0f
-        homeTopBarState.contentOffset = 0f
-        usageTopBarState.heightOffset = 0f
-        usageTopBarState.contentOffset = 0f
-        alertsTopBarState.heightOffset = 0f
-        alertsTopBarState.contentOffset = 0f
-        limitsTopBarState.heightOffset = 0f
-        limitsTopBarState.contentOffset = 0f
-        settingsTopBarState.heightOffset = 0f
-        settingsTopBarState.contentOffset = 0f
-    }
-
-    val lifecycleOwner = LocalLifecycleOwner.current
-    DisposableEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_RESUME) {
-                homeViewModel.updateTotalUsage()
-                appUsageViewModel.refreshData(isManual = false)
-            }
-        }
-        lifecycleOwner.lifecycle.addObserver(observer)
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
-        }
-    }
-
-    LaunchedEffect(lifecycleOwner) {
-        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            while (isActive) {
-                delay(15000)
-                homeViewModel.updateTotalUsage()
-            }
-        }
-    }
-
-    LaunchedEffect(Unit) {
-        homeViewModel.updateTotalUsage()
-    }
-
     BackHandler(enabled = (currentDestination != Destination.Home)) {
-        backStack.clear()
-        backStack.add(Destination.Home)
-    }
-
-    val scrollBehavior = when (currentDestination) {
-        Destination.Home -> homeScrollBehavior
-        Destination.Usage -> usageScrollBehavior
-        Destination.Alerts -> alertsScrollBehavior
-        Destination.Limits -> limitsScrollBehavior
-        else -> settingsScrollBehavior
+        if (backStack.size > 1) {
+            backStack.removeAt(backStack.size - 1)
+        }
     }
 
     val snackbarHostState = remember { SnackbarHostState() }
@@ -167,7 +111,7 @@ fun MainScreen(
 
                 Surface(
                     color = containerColor,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
                     Column(modifier = Modifier.windowInsetsPadding(WindowInsets.statusBars)) {
                         key(currentDestination) {
@@ -253,15 +197,14 @@ fun MainScreen(
                             if (currentDestination != Destination.Home) {
                                 backStack.clear()
                                 backStack.add(Destination.Home)
-                                homeViewModel.updateTotalUsage()
                             }
                         }
                     )
                     NavigationBarItem(
                         icon = {
                             Icon(
-                                imageVector = if (currentDestination == Destination.Usage) Icons.Filled.Leaderboard else Icons.Outlined.Leaderboard,
-                                contentDescription = stringResource(R.string.label_usage)
+                                imageVector = if (currentDestination == Destination.Usage) Icons.Filled.BarChart else Icons.Outlined.BarChart,
+                                contentDescription = stringResource(R.string.title_app_usage)
                             )
                         },
                         label = { Text(stringResource(R.string.label_usage)) },
@@ -270,7 +213,6 @@ fun MainScreen(
                             if (currentDestination != Destination.Usage) {
                                 backStack.clear()
                                 backStack.add(Destination.Usage)
-                                appUsageViewModel.refreshData(isManual = false)
                             }
                         }
                     )
@@ -278,7 +220,7 @@ fun MainScreen(
                         icon = {
                             Icon(
                                 imageVector = if (currentDestination == Destination.Alerts) Icons.Filled.Notifications else Icons.Outlined.Notifications,
-                                contentDescription = stringResource(R.string.label_alerts)
+                                contentDescription = stringResource(R.string.title_alerts)
                             )
                         },
                         label = { Text(stringResource(R.string.label_alerts)) },
@@ -293,8 +235,8 @@ fun MainScreen(
                     NavigationBarItem(
                         icon = {
                             Icon(
-                                imageVector = if (currentDestination == Destination.Limits) Icons.Filled.WatchLater else Icons.Outlined.Alarm,
-                                contentDescription = stringResource(R.string.label_plans)
+                                imageVector = if (currentDestination == Destination.Limits) Icons.Filled.Timer else Icons.Outlined.Timer,
+                                contentDescription = stringResource(R.string.title_limits)
                             )
                         },
                         label = { Text(stringResource(R.string.label_plans)) },
@@ -396,5 +338,111 @@ fun MainScreen(
         }
 
         AppLimitsOverlay(appLimitsViewModel)
+
+        val isViewingSystemApps = appUsageViewModel.isViewingSystemApps
+        val filteredSystemAppList by appUsageViewModel.filteredSystemAppUsageList.collectAsState()
+        val systemListState = rememberLazyListState()
+        val locale = LocalConfiguration.current.locales[0]
+
+        AnimatedVisibility(
+            visible = isViewingSystemApps,
+            enter = fadeIn(animationSpec = tween(300)),
+            exit = fadeOut(animationSpec = tween(300))
+        ) {
+            BackHandler {
+                appUsageViewModel.isViewingSystemApps = false
+            }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
+            ) {
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    topBar = {
+                        TopAppBar(
+                            title = {
+                                Text(
+                                    text = stringResource(R.string.title_system_data_usage),
+                                    fontWeight = FontWeight.Black
+                                )
+                            },
+                            navigationIcon = {
+                                IconButton(onClick = { appUsageViewModel.isViewingSystemApps = false }) {
+                                    Icon(
+                                        imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+                                        contentDescription = stringResource(R.string.cd_back)
+                                    )
+                                }
+                            },
+                            colors = TopAppBarDefaults.topAppBarColors(
+                                containerColor = MaterialTheme.colorScheme.surface
+                            )
+                        )
+                    }
+                ) { padding ->
+                    val networkFilter by appUsageViewModel.networkFilter.collectAsState()
+
+                    val maxUsageBytes = if (filteredSystemAppList.isNotEmpty()) {
+                        filteredSystemAppList.maxOf {
+                            when (networkFilter) {
+                                "mobile" -> it.cellUsage
+                                "wifi" -> it.wifiUsage
+                                else -> it.totalUsage
+                            }
+                        }.coerceAtLeast(1L)
+                    } else {
+                        1L
+                    }
+
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(padding)
+                            .background(MaterialTheme.colorScheme.background),
+                        state = systemListState,
+                        contentPadding = PaddingValues(bottom = 16.dp)
+                    ) {
+                        if (filteredSystemAppList.isEmpty()) {
+                            item {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(32.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(
+                                        text = stringResource(R.string.msg_no_usage_data),
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                            }
+                        } else {
+                            itemsIndexed(
+                                items = filteredSystemAppList,
+                                key = { _, it -> it.packageName }
+                            ) { _, appUsage ->
+                                val displayUsage = when (networkFilter) {
+                                    "mobile" -> appUsage.cellUsage
+                                    "wifi" -> appUsage.wifiUsage
+                                    else -> appUsage.totalUsage
+                                }
+
+                                StaggeredEntrance {
+                                    AppUsageItem(
+                                        appUsage = appUsage,
+                                        displayUsage = displayUsage,
+                                        maxUsageBytes = maxUsageBytes,
+                                        locale = locale,
+                                        modifier = Modifier.animateItem()
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

@@ -101,6 +101,8 @@ class AppUsageViewModel(
     var selectedDateString by mutableStateOf("")
     var currentViewDate: Calendar by mutableStateOf(Calendar.getInstance())
 
+    var isViewingSystemApps by mutableStateOf(false)
+
     private var loadJob: Job? = null
 
     init {
@@ -326,6 +328,7 @@ class AppUsageViewModel(
         val appName: String,
         val icon: ImageBitmap?,
         val isSystem: Boolean,
+        val isProcess: Boolean = false,
     )
 
     private fun resolveUidToInfo(uid: Int, packageManager: PackageManager): ResolvedInfo {
@@ -338,26 +341,25 @@ class AppUsageViewModel(
             null
         }
 
-        var isSystem = uid < 10000
-
         when (uid) {
-            -2, -4 -> return ResolvedInfo("removed_$uid", "Removed Apps", null, true)
-            -3, -5 -> return ResolvedInfo("tethering_$uid", "Tethering", null, true)
-            0 -> return ResolvedInfo("root_0", "Root", systemIcon, true)
-            1000 -> return ResolvedInfo("android.system_$uid", "Android System", systemIcon, true)
-            1051, 1052 -> return ResolvedInfo("android.dns_$uid", "DNS Resolver", systemIcon, true)
-            1020 -> return ResolvedInfo("android.mdns_$uid", "mDNS Responder", systemIcon, true)
-            1013 -> return ResolvedInfo("android.media_$uid", "Media Service", systemIcon, true)
-            1061, 2904 -> return ResolvedInfo("android.ota_$uid", "System Update", systemIcon, true)
+            -2, -4 -> return ResolvedInfo("removed_$uid", "Removed Apps", null, true, true)
+            -3, -5 -> return ResolvedInfo("tethering_$uid", "Tethering", null, true, true)
+            0 -> return ResolvedInfo("root_0", "Root", systemIcon, true, true)
+            1000 -> return ResolvedInfo("android.system_$uid", "Android System", systemIcon, true, true)
+            1051, 1052 -> return ResolvedInfo("android.dns_$uid", "DNS Resolver", systemIcon, true, true)
+            1020 -> return ResolvedInfo("android.mdns_$uid", "mDNS Responder", systemIcon, true, true)
+            1013 -> return ResolvedInfo("android.media_$uid", "Media Service", systemIcon, true, true)
+            1061, 2904 -> return ResolvedInfo("android.ota_$uid", "System Update", systemIcon, true, true)
         }
 
         val packages = packageManager.getPackagesForUid(uid)
         if (packages.isNullOrEmpty()) {
             val systemName = packageManager.getNameForUid(uid) ?: "System process ($uid)"
             val icon = if (uid < 10000) systemIcon else null
-            return ResolvedInfo("uid_$uid", systemName, icon, true)
+            return ResolvedInfo("uid_$uid", systemName, icon, true, true)
         }
 
+        var isSystem = uid < 10000
         // Check if any package is a system app
         for (pkg in packages) {
             try {
@@ -408,7 +410,8 @@ class AppUsageViewModel(
 
         val allUids = (wifiDownMap.keys + wifiUpMap.keys + cellDownMap.keys + cellUpMap.keys).toSet()
 
-        val systemList = mutableListOf<AppUsageInfo>()
+        val systemApps = mutableListOf<AppUsageInfo>()
+        val systemProcesses = mutableListOf<AppUsageInfo>()
         val userList = mutableListOf<AppUsageInfo>()
 
         allUids.forEach { uid ->
@@ -444,41 +447,73 @@ class AppUsageViewModel(
                 )
                 
                 if (info.isSystem) {
-                    systemList.add(appUsage)
+                    if (info.isProcess) {
+                        systemProcesses.add(appUsage)
+                    } else {
+                        systemApps.add(appUsage)
+                    }
                 } else {
                     userList.add(appUsage)
                 }
             }
         }
 
-        if (systemList.isNotEmpty()) {
-            val totalSystemUsage = systemList.sumOf { it.totalUsage }
-            if (totalSystemUsage > 0) {
+        val finalSystemList = mutableListOf<AppUsageInfo>()
+        finalSystemList.addAll(systemApps)
+
+        if (systemProcesses.isNotEmpty()) {
+            val totalProcessUsage = systemProcesses.sumOf { it.totalUsage }
+            if (totalProcessUsage > 0) {
                 val systemIcon = try {
                     val appInfo = packageManager.getApplicationInfo("android", 0)
                     packageManager.getApplicationIcon(appInfo).toBitmap().asImageBitmap()
                 } catch (_: Exception) { null }
 
-                val systemGroup = AppUsageInfo(
-                    packageName = "system_group",
-                    appName = applicationContext.getString(R.string.label_system_apps),
+                val processGroup = AppUsageInfo(
+                    packageName = "system_processes_group",
+                    appName = applicationContext.getString(R.string.label_system_processes),
                     iconBitmap = systemIcon,
-                    totalUsage = totalSystemUsage,
-                    downUsage = systemList.sumOf { it.downUsage },
-                    upUsage = systemList.sumOf { it.upUsage },
-                    wifiUsage = systemList.sumOf { it.wifiUsage },
-                    cellUsage = systemList.sumOf { it.cellUsage },
-                    wifiDown = systemList.sumOf { it.wifiDown },
-                    wifiUp = systemList.sumOf { it.wifiUp },
-                    cellDown = systemList.sumOf { it.cellDown },
-                    cellUp = systemList.sumOf { it.cellUp },
-                    isSystemGroup = true,
+                    totalUsage = totalProcessUsage,
+                    downUsage = systemProcesses.sumOf { it.downUsage },
+                    upUsage = systemProcesses.sumOf { it.upUsage },
+                    wifiUsage = systemProcesses.sumOf { it.wifiUsage },
+                    cellUsage = systemProcesses.sumOf { it.cellUsage },
+                    wifiDown = systemProcesses.sumOf { it.wifiDown },
+                    wifiUp = systemProcesses.sumOf { it.wifiUp },
+                    cellDown = systemProcesses.sumOf { it.cellDown },
+                    cellUp = systemProcesses.sumOf { it.cellUp },
+                    isSystemGroup = false, // Individual item in the system list, not a nested group
                 )
-                userList.add(systemGroup)
+                finalSystemList.add(processGroup)
             }
         }
 
-        _systemAppUsageList.value = systemList
+        _systemAppUsageList.value = finalSystemList
+
+        val totalSystemUsage = finalSystemList.sumOf { it.totalUsage }
+        if (totalSystemUsage > 0) {
+            val systemIcon = try {
+                val appInfo = packageManager.getApplicationInfo("android", 0)
+                packageManager.getApplicationIcon(appInfo).toBitmap().asImageBitmap()
+            } catch (_: Exception) { null }
+
+            val systemGroup = AppUsageInfo(
+                packageName = "system_group",
+                appName = applicationContext.getString(R.string.label_system_apps),
+                iconBitmap = systemIcon,
+                totalUsage = totalSystemUsage,
+                downUsage = finalSystemList.sumOf { it.downUsage },
+                upUsage = finalSystemList.sumOf { it.upUsage },
+                wifiUsage = finalSystemList.sumOf { it.wifiUsage },
+                cellUsage = finalSystemList.sumOf { it.cellUsage },
+                wifiDown = finalSystemList.sumOf { it.wifiDown },
+                wifiUp = finalSystemList.sumOf { it.wifiUp },
+                cellDown = finalSystemList.sumOf { it.cellDown },
+                cellUp = finalSystemList.sumOf { it.cellUp },
+                isSystemGroup = true,
+            )
+            userList.add(systemGroup)
+        }
 
         val sumWifiDown = wifiDownMap.values.sum()
         val sumWifiUp = wifiUpMap.values.sum()

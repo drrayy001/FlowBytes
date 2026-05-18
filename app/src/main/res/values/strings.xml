@@ -71,6 +71,7 @@
     <string name="label_mobile_colon">Mobile:</string>
     <string name="label_system_apps">System apps</string>
     <string name="title_system_data_usage">System data usage</string>
+    <string name="label_system_processes">System processes</string>
 
     <!-- Settings: General -->
     <string name="settings_section_general">General</string>

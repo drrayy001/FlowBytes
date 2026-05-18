@@ -127,8 +127,17 @@ class AppUsageViewModel(
                 }
                 "custom" -> {
                     start = repository.usageCustomStart.first() ?: (now - 86400000L)
-                    end = repository.usageCustomEnd.first() ?: now
-                    selectedDateString = formatRange(start, end)
+                    val rawEnd = repository.usageCustomEnd.first() ?: now
+                    
+                    // Correct inclusive end for custom range stored in preferences
+                    val endCal = Calendar.getInstance().apply { timeInMillis = rawEnd }
+                    endCal.set(Calendar.HOUR_OF_DAY, 23)
+                    endCal.set(Calendar.MINUTE, 59)
+                    endCal.set(Calendar.SECOND, 59)
+                    endCal.set(Calendar.MILLISECOND, 999)
+                    end = if (endCal.timeInMillis > now) now else endCal.timeInMillis
+                    
+                    selectedDateString = formatRange(start, rawEnd)
                 }
                 else -> {
                     val cal = Calendar.getInstance()
@@ -170,7 +179,8 @@ class AppUsageViewModel(
     fun refreshData(isManual: Boolean = true) {
         viewModelScope.launch {
             if (isManual) isRefreshing = true
-            val filter = timeFilter.value
+            
+            val filter = repository.usageTimeFilter.first()
             val now = System.currentTimeMillis()
             val start: Long
             val end: Long
@@ -179,13 +189,26 @@ class AppUsageViewModel(
                 "month" -> {
                     val cal = (currentViewDate.clone() as Calendar)
                     cal.set(Calendar.DAY_OF_MONTH, 1)
+                    cal.set(Calendar.HOUR_OF_DAY, 0)
+                    cal.set(Calendar.MINUTE, 0)
+                    cal.set(Calendar.SECOND, 0)
+                    cal.set(Calendar.MILLISECOND, 0)
                     start = cal.timeInMillis
                     cal.add(Calendar.MONTH, 1)
+                    cal.set(Calendar.MILLISECOND, -1) // End of month
                     end = if (cal.timeInMillis > now) now else cal.timeInMillis
                 }
                 "custom" -> {
                     start = repository.usageCustomStart.first() ?: (now - 86400000L)
-                    end = repository.usageCustomEnd.first() ?: now
+                    val rawEnd = repository.usageCustomEnd.first() ?: now
+                    
+                    // Inclusive end of day for custom range
+                    val endCal = Calendar.getInstance().apply { timeInMillis = rawEnd }
+                    endCal.set(Calendar.HOUR_OF_DAY, 23)
+                    endCal.set(Calendar.MINUTE, 59)
+                    endCal.set(Calendar.SECOND, 59)
+                    endCal.set(Calendar.MILLISECOND, 999)
+                    end = if (endCal.timeInMillis > now) now else endCal.timeInMillis
                 }
                 else -> {
                     val cal = (currentViewDate.clone() as Calendar)
@@ -194,8 +217,10 @@ class AppUsageViewModel(
                     cal.set(Calendar.SECOND, 0)
                     cal.set(Calendar.MILLISECOND, 0)
                     start = cal.timeInMillis
+                    
                     val endCal = (cal.clone() as Calendar)
                     endCal.add(Calendar.DAY_OF_YEAR, 1)
+                    endCal.set(Calendar.MILLISECOND, -1) // End of day
                     end = if (endCal.timeInMillis > now) now else endCal.timeInMillis
                 }
             }
@@ -211,6 +236,7 @@ class AppUsageViewModel(
         loadJob?.cancel()
         loadJob = viewModelScope.launch {
             isLoading = true
+            val now = System.currentTimeMillis()
             val cal = Calendar.getInstance()
             cal.timeInMillis = millis
             cal.set(Calendar.HOUR_OF_DAY, 0)
@@ -230,28 +256,49 @@ class AppUsageViewModel(
             }
 
             val start = cal.timeInMillis
-            cal.add(Calendar.DAY_OF_YEAR, 1)
-            val end = if (cal.timeInMillis > System.currentTimeMillis()) System.currentTimeMillis() else cal.timeInMillis
+            val endCal = (cal.clone() as Calendar)
+            endCal.add(Calendar.DAY_OF_YEAR, 1)
+            endCal.set(Calendar.MILLISECOND, -1) // Inclusive end of the chosen day
+            val end = if (endCal.timeInMillis > now) now else endCal.timeInMillis
 
             _appUsageList.value = getAppUsageList(start, end)
             isLoading = false
         }
     }
 
-    private fun updateCustomRangeFilterInternal(start: Long, end: Long) {
+    private fun updateCustomRangeFilterInternal(startMillis: Long, endMillis: Long) {
         loadJob?.cancel()
         loadJob = viewModelScope.launch {
             isLoading = true
-            repository.saveUsageCustomRange(start, end)
-            selectedDateString = formatRange(start, end)
-            _appUsageList.value = getAppUsageList(start, end)
+            val now = System.currentTimeMillis()
+            
+            repository.saveUsageCustomRange(startMillis, endMillis)
+            selectedDateString = formatRange(startMillis, endMillis)
+            
+            // Fix: Normalize endMillis to the END of that day (23:59:59.999)
+            val endCal = Calendar.getInstance().apply { timeInMillis = endMillis }
+            endCal.set(Calendar.HOUR_OF_DAY, 23)
+            endCal.set(Calendar.MINUTE, 59)
+            endCal.set(Calendar.SECOND, 59)
+            endCal.set(Calendar.MILLISECOND, 999)
+            val finalEnd = if (endCal.timeInMillis > now) now else endCal.timeInMillis
+            
+            // Normalize startMillis to START of day
+            val startCal = Calendar.getInstance().apply { timeInMillis = startMillis }
+            startCal.set(Calendar.HOUR_OF_DAY, 0)
+            startCal.set(Calendar.MINUTE, 0)
+            startCal.set(Calendar.SECOND, 0)
+            startCal.set(Calendar.MILLISECOND, 0)
+            
+            _appUsageList.value = getAppUsageList(startCal.timeInMillis, finalEnd)
             isLoading = false
         }
     }
 
     fun updateDateFilter(year: Int, month: Int, day: Int) {
         val cal = Calendar.getInstance()
-        cal.set(year, month, day)
+        cal.set(year, month, day, 0, 0, 0)
+        cal.set(Calendar.MILLISECOND, 0)
         loadAppUsageForDateInternal(cal.timeInMillis)
     }
 
@@ -265,6 +312,8 @@ class AppUsageViewModel(
             cal.set(Calendar.MILLISECOND, 0)
             currentViewDate = cal
             selectedDateString = ""
+            
+            repository.saveUsageTimeFilter("month")
             refreshData(isManual = false)
         }
     }
@@ -283,21 +332,21 @@ class AppUsageViewModel(
                 SimpleDateFormat("MMMM yyyy", Locale.getDefault()).format(cal.time)
             }
 
-            setTimeFilter("month")
+            repository.saveUsageTimeFilter("month")
             refreshData(isManual = false)
         }
     }
 
     fun updateCustomRangeFilter(start: Long, end: Long) {
         viewModelScope.launch {
-            setTimeFilter("custom")
+            repository.saveUsageTimeFilter("custom")
             updateCustomRangeFilterInternal(start, end)
         }
     }
 
     fun loadAppUsageForDate(millis: Long) {
         viewModelScope.launch {
-            setTimeFilter("day")
+            repository.saveUsageTimeFilter("day")
             loadAppUsageForDateInternal(millis)
         }
     }

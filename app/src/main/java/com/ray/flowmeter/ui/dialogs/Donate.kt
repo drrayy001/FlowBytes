@@ -177,7 +177,7 @@ private fun DonateContent(
         ) {
             Box(contentAlignment = Alignment.Center) {
                 Text(
-                    text = "${stringResource(R.string.settings_donate)} ${selectedAmount.second}",
+                    text = stringResource(R.string.settings_donate),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )

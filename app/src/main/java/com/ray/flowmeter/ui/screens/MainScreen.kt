@@ -86,9 +86,8 @@ fun MainScreen(
     val currentDestination = backStack.last()
 
     BackHandler(enabled = (currentDestination != Destination.Home)) {
-        if (backStack.size > 1) {
-            backStack.removeAt(backStack.size - 1)
-        }
+        backStack.clear()
+        backStack.add(Destination.Home)
     }
 
     val snackbarHostState = remember { SnackbarHostState() }

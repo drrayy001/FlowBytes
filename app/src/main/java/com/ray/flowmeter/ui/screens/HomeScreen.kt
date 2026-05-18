@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ray.flowmeter.R
@@ -249,7 +250,7 @@ fun UsageSummaryContent(
                 Spacer(modifier = Modifier.width(12.dp))
                 Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
             }
-            Text(totalUsage, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.ExtraBold, color = accentColor)
+            Text(totalUsage, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.ExtraBold, color = accentColor)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -318,33 +319,55 @@ fun UsageSummaryContent(
 
 // Smaller usage item detail (e.g., Download, Upload) with icon
 @Composable
-fun UsageSubItem(label: String, value: String, icon: ImageVector, color: Color) {
+fun UsageSubItem(
+    label: String,
+    value: String,
+    icon: ImageVector,
+    color: Color,
+    horizontalAlignment: Alignment.Horizontal = Alignment.Start
+) {
     Row(
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = if (horizontalAlignment == Alignment.End) Arrangement.End else Arrangement.Start
     ) {
-        Box(
-            modifier = Modifier
-                .size(32.dp)
-                .background(color.copy(alpha = 0.1f), CircleShape),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(icon, contentDescription = null, tint = color, modifier = Modifier.size(14.dp))
+        if (horizontalAlignment == Alignment.Start) {
+            UsageSubItemIcon(icon, color)
+            Spacer(modifier = Modifier.width(10.dp))
         }
-        Spacer(modifier = Modifier.width(10.dp))
-        Column {
+
+        Column(horizontalAlignment = horizontalAlignment) {
             Text(
                 text = label.uppercase(),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
                 fontWeight = FontWeight.ExtraBold,
-                letterSpacing = 0.5.sp
+                letterSpacing = 0.5.sp,
+                textAlign = if (horizontalAlignment == Alignment.End) TextAlign.End else TextAlign.Start
             )
             Text(
                 text = value,
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
+                textAlign = if (horizontalAlignment == Alignment.End) TextAlign.End else TextAlign.Start
             )
         }
+
+        if (horizontalAlignment == Alignment.End) {
+            Spacer(modifier = Modifier.width(10.dp))
+            UsageSubItemIcon(icon, color)
+        }
+    }
+}
+
+@Composable
+private fun UsageSubItemIcon(icon: ImageVector, color: Color) {
+    Box(
+        modifier = Modifier
+            .size(32.dp)
+            .background(color.copy(alpha = 0.1f), CircleShape),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(icon, contentDescription = null, tint = color, modifier = Modifier.size(14.dp))
     }
 }

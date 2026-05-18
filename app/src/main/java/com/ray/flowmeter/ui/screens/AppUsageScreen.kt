@@ -5,6 +5,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
@@ -22,7 +23,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -47,6 +47,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ray.flowmeter.R
+import com.ray.flowmeter.ui.components.AppIcons
 import com.ray.flowmeter.ui.viewmodels.AppUsageInfo
 import com.ray.flowmeter.ui.dialogs.UnifiedPickerContainer
 import com.ray.flowmeter.ui.dialogs.UnifiedPickerHeader
@@ -641,7 +642,7 @@ fun AppUsageScreen(
                                 horizontalArrangement = Arrangement.SpaceEvenly,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                            UsageSummaryCircle(
+                                UsageSummaryCircle(
                                     usage = displayGlobalDown,
                                     icon = R.drawable.ic_arrow_down,
                                     color = MaterialTheme.colorScheme.primary,
@@ -800,20 +801,22 @@ fun AppUsageScreen(
                             else -> appUsage.totalUsage
                         }
 
-                        StaggeredEntrance {
-                            AppUsageItem(
-                                appUsage = appUsage,
-                                displayUsage = displayUsage,
-                                maxUsageBytes = maxUsageBytes,
-                                locale = locale,
-                                modifier = Modifier.animateItem(),
-                                onClick = {
-                                    if (appUsage.isSystemGroup) {
-                                        viewModel.isViewingSystemApps = true
-                                    }
-                                }
-                            )
+                StaggeredEntrance {
+                    AppUsageItem(
+                        appUsage = appUsage,
+                        displayUsage = displayUsage,
+                        maxUsageBytes = maxUsageBytes,
+                        locale = locale,
+                        modifier = Modifier
+                            .animateItem()
+                            .padding(horizontal = 16.dp, vertical = 4.dp),
+                        onClick = {
+                            if (appUsage.isSystemGroup) {
+                                viewModel.isViewingSystemApps = true
+                            }
                         }
+                    )
+                }
                     }
                 }
             }
@@ -884,18 +887,27 @@ fun AppUsageItem(
 ) {
     var expanded by remember { mutableStateOf(false) }
     val progress = if (maxUsageBytes > 0) (displayUsage.toFloat() / maxUsageBytes.toFloat()).coerceIn(0f, 1f) else 0f
+    
+    val rotationState by animateFloatAsState(
+        targetValue = if (expanded) 90f else 0f,
+        animationSpec = premiumSpring(),
+        label = "rotation"
+    )
 
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 6.dp)
             .animateContentSize()
             .bounceClick { 
                 if (appUsage.isSystemGroup) onClick()
                 else expanded = !expanded 
             },
-        shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
+        shape = RoundedCornerShape(32.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
+        border = BorderStroke(
+            1.dp,
+            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)
+        )
     ) {
         Column(modifier = Modifier
             .fillMaxWidth()
@@ -923,7 +935,7 @@ fun AppUsageItem(
                         )
                     }
                 }
-                Spacer(modifier = Modifier.width(16.dp))
+                Spacer(modifier = Modifier.width(12.dp))
                 Column(modifier = Modifier.weight(1f)) {
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                         Text(
@@ -936,12 +948,24 @@ fun AppUsageItem(
                             modifier = Modifier.weight(1f)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = formatUsage(displayUsage, locale), 
-                            style = MaterialTheme.typography.titleSmall, 
-                            fontWeight = FontWeight.ExtraBold, 
-                            color = MaterialTheme.colorScheme.primary
-                        )
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = formatUsage(displayUsage, locale), 
+                                style = MaterialTheme.typography.titleSmall,
+                                fontWeight = FontWeight.ExtraBold, 
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                            if (!appUsage.isSystemGroup) {
+                                Icon(
+                                    imageVector = Icons.Default.ChevronRight,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
+                                    modifier = Modifier
+                                        .size(20.dp)
+                                        .graphicsLayer { rotationZ = rotationState }
+                                )
+                            }
+                        }
                     }
                     Spacer(modifier = Modifier.height(10.dp))
                     val barPrimaryColor = MaterialTheme.colorScheme.primary
@@ -961,19 +985,57 @@ fun AppUsageItem(
                 }
             }
             AnimatedVisibility(visible = expanded && !appUsage.isSystemGroup, enter = fadeIn(premiumSpring()) + expandVertically(premiumSpring()), exit = fadeOut(premiumSpring()) + shrinkVertically(premiumSpring())) {
-                Column(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp)
-                    .background(MaterialTheme.colorScheme.surfaceContainerHigh, RoundedCornerShape(20.dp))
-                    .padding(16.dp)) {
-                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                        UsageInfoItem(label = stringResource(R.string.label_download), value = formatUsage(appUsage.downUsage, locale))
-                        UsageInfoItem(label = stringResource(R.string.label_upload), value = formatUsage(appUsage.upUsage, locale), alignment = Alignment.End)
-                    }
-                    Spacer(modifier = Modifier.height(12.dp)); HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)); Spacer(modifier = Modifier.height(12.dp))
-                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                        UsageInfoItem(label = stringResource(R.string.label_wifi_usage), value = formatUsage(appUsage.wifiUsage, locale))
-                        UsageInfoItem(label = stringResource(R.string.label_mobile_usage), value = formatUsage(appUsage.cellUsage, locale), alignment = Alignment.End)
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        // Left side: Down and Wifi
+                        Column(
+                            horizontalAlignment = Alignment.Start,
+                            verticalArrangement = Arrangement.spacedBy(16.dp),
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            UsageSubItem(
+                                label = stringResource(R.string.label_download),
+                                value = formatUsage(appUsage.downUsage, locale),
+                                icon = AppIcons.Download,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                            UsageSubItem(
+                                label = stringResource(R.string.label_wifi_usage),
+                                value = formatUsage(appUsage.wifiUsage, locale),
+                                icon = AppIcons.Wifi,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+
+                        // Right side: Up and Mobile
+                        Column(
+                            horizontalAlignment = Alignment.End,
+                            verticalArrangement = Arrangement.spacedBy(16.dp),
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            UsageSubItem(
+                                label = stringResource(R.string.label_upload),
+                                value = formatUsage(appUsage.upUsage, locale),
+                                icon = AppIcons.Upload,
+                                color = MaterialTheme.colorScheme.secondary,
+                                horizontalAlignment = Alignment.End
+                            )
+                            UsageSubItem(
+                                label = stringResource(R.string.label_mobile_usage),
+                                value = formatUsage(appUsage.cellUsage, locale),
+                                icon = AppIcons.Mobile,
+                                color = MaterialTheme.colorScheme.secondary,
+                                horizontalAlignment = Alignment.End
+                            )
+                        }
                     }
                 }
             }
@@ -981,29 +1043,6 @@ fun AppUsageItem(
     }
 }
 
-@Composable
-fun UsageInfoItem(
-    label: String,
-    value: String,
-    alignment: Alignment.Horizontal = Alignment.Start
-) {
-    Column(horizontalAlignment = alignment) {
-        Text(
-            text = label.uppercase(),
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            fontWeight = FontWeight.Bold,
-            textAlign = if (alignment == Alignment.End) TextAlign.End else TextAlign.Start
-        )
-        Text(
-            text = value,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurface,
-            fontWeight = FontWeight.Medium,
-            textAlign = if (alignment == Alignment.End) TextAlign.End else TextAlign.Start
-        )
-    }
-}
 
 @Composable
 fun UsageSummaryCircle(usage: Long, icon: Int, color: Color, modifier: Modifier = Modifier, isSmall: Boolean = false) {

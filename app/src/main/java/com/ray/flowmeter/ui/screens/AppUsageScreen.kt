@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -66,7 +67,7 @@ fun AppUsageScreen(
     modifier: Modifier = Modifier,
 ) {
     val locale = LocalConfiguration.current.locales[0]
-    
+
     val filteredAppList by viewModel.filteredAppUsageList.collectAsState()
     val listState = rememberLazyListState()
 
@@ -395,7 +396,6 @@ fun AppUsageScreen(
                     }
                 }
             }
-
             Spacer(modifier = Modifier.height(16.dp))
         }
     }
@@ -571,195 +571,157 @@ fun AppUsageScreen(
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(MaterialTheme.colorScheme.surface),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                            .background(MaterialTheme.colorScheme.surface)
+                            .padding(bottom = 16.dp)
                     ) {
-                        Column(
+                        // Date Navigation Header with integrated Date text
+                        Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(start = 20.dp, end = 20.dp, bottom = 20.dp, top = 0.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
+                                .padding(horizontal = 16.dp, vertical = 12.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                AppUsageFilterChip(
-                                    selectedText = timeFilter,
-                                    expanded = showTimeDropdown,
-                                    onExpandedChange = setShowTimeDropdown,
-                                    options = timeOptions,
-                                ) { filter ->
-                                    val storeValue = when (filter) {
-                                        monthFilterLabel -> "month"
-                                        customFilterLabel -> "custom"
-                                        else -> "day"
-                                    }
-                                    viewModel.setTimeFilter(storeValue)
-                                    if (filter != customFilterLabel) {
-                                        if (filter == monthFilterLabel) {
-                                            viewModel.updateToThisMonth()
-                                        } else {
-                                            viewModel.loadAppUsageForDate(System.currentTimeMillis())
-                                        }
-                                    } else {
-                                        setShowDateRangePicker(true)
-                                    }
-                                }
-
-                                AppUsageFilterChip(
-                                    selectedText = networkFilter,
-                                    expanded = showNetworkDropdown,
-                                    onExpandedChange = setShowNetworkDropdown,
-                                    options = networkOptions,
-                                ) { filter ->
-                                    val storeValue = when (filter) {
-                                        mobileOnlyFilterLabel -> "mobile"
-                                        wifiOnlyFilterLabel -> "wifi"
-                                        else -> "all"
-                                    }
-                                    viewModel.setNetworkFilter(storeValue)
-                                }
-                            }
-
-                            Spacer(modifier = Modifier.height(24.dp))
-
-                            val displayGlobalDown = when (networkFilter) {
-                                mobileOnlyFilterLabel -> viewModel.globalCellDown
-                                wifiOnlyFilterLabel -> viewModel.globalWifiDown
-                                else -> viewModel.globalCellDown + viewModel.globalWifiDown
-                            }
-                            val displayGlobalUp = when (networkFilter) {
-                                mobileOnlyFilterLabel -> viewModel.globalCellUp
-                                wifiOnlyFilterLabel -> viewModel.globalWifiDown
-                                else -> viewModel.globalCellUp + viewModel.globalWifiUp
-                            }
-                            val displayGlobalTotal = displayGlobalDown + displayGlobalUp
-
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceEvenly,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                UsageSummaryCircle(
-                                    usage = displayGlobalDown,
-                                    icon = R.drawable.ic_arrow_down,
-                                    color = MaterialTheme.colorScheme.primary,
-                                    isSmall = true
-                                )
-
-                                UsageTotalCircle(
-                                    totalUsage = displayGlobalTotal,
-                                    primaryColor = MaterialTheme.colorScheme.primary,
-                                    secondaryColor = MaterialTheme.colorScheme.secondary
-                                )
-
-                                UsageSummaryCircle(
-                                    usage = displayGlobalUp,
-                                    icon = R.drawable.ic_arrow_up,
-                                    color = MaterialTheme.colorScheme.secondary,
-                                    isSmall = true
-                                )
-                            }
-
-                            Spacer(modifier = Modifier.height(24.dp))
-
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                if (timeFilter != customFilterLabel) {
-                                    Box(
-                                        modifier = Modifier
-                                            .minimumInteractiveComponentSize()
-                                            .size(48.dp)
-                                            .bounceClick {
-                                                viewModel.moveDate(backwards = true)
-                                            },
-                                        contentAlignment = Alignment.Center
-                                    ) {
-                                        Icon(
-                                            Icons.Default.ChevronLeft,
-                                            contentDescription = null,
-                                            tint = MaterialTheme.colorScheme.primary
-                                        )
-                                    }
-                                }
-
-                                val displayedDateText = viewModel.selectedDateString.ifBlank {
-                                    if (timeFilter == monthFilterLabel) {
-                                        val now = Calendar.getInstance()
-                                        if (
-                                            (currentViewDate[Calendar.YEAR] == now[Calendar.YEAR]) &&
-                                            (currentViewDate[Calendar.MONTH] == now[Calendar.MONTH])
-                                        ) {
-                                            stringResource(R.string.label_this_month)
-                                        } else {
-                                            SimpleDateFormat("MMMM yyyy", locale)
-                                                .format(currentViewDate.time)
-                                        }
-                                    } else {
-                                        stringResource(R.string.label_today)
-                                    }
-                                }
-
-                                Surface(
-                                    modifier = Modifier.bounceClick {
-                                        when (timeFilter) {
-                                            monthFilterLabel -> setShowMonthPicker(true)
-                                            customFilterLabel -> setShowDateRangePicker(true)
-                                            else -> setShowDatePicker(true)
-                                        }
-                                    },
-                                    shape = RoundedCornerShape(12.dp),
-                                    color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.7f)
-                                ) {
-                                    Text(
-                                        text = displayedDateText,
-                                        style = MaterialTheme.typography.labelLarge,
-                                        color = MaterialTheme.colorScheme.onPrimaryContainer,
-                                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-                                        fontWeight = FontWeight.Bold
+                            if (timeFilter != customFilterLabel) {
+                                IconButton(onClick = { viewModel.moveDate(backwards = true) }) {
+                                    Icon(
+                                        Icons.Default.ChevronLeft,
+                                        contentDescription = "Previous Date",
+                                        tint = MaterialTheme.colorScheme.primary
                                     )
                                 }
+                            } else {
+                                Spacer(modifier = Modifier.size(48.dp))
+                            }
 
-                                if (timeFilter != customFilterLabel) {
+                            val displayedDateText = viewModel.selectedDateString.ifBlank {
+                                if (timeFilter == monthFilterLabel) {
                                     val now = Calendar.getInstance()
-                                    val isForwardDisabled = if (timeFilter == monthFilterLabel) {
-                                        (currentViewDate[Calendar.YEAR] >= now[Calendar.YEAR]) &&
-                                                (currentViewDate[Calendar.MONTH] >= now[Calendar.MONTH])
-                                    } else {
-                                        (currentViewDate[Calendar.YEAR] >= now[Calendar.YEAR]) &&
-                                                (currentViewDate[Calendar.DAY_OF_YEAR] >= now[Calendar.DAY_OF_YEAR])
-                                    }
-
-                                    Box(
-                                        modifier = Modifier
-                                            .minimumInteractiveComponentSize()
-                                            .size(48.dp)
-                                            .bounceClick(enabled = !isForwardDisabled) {
-                                                viewModel.moveDate(backwards = false)
-                                            },
-                                        contentAlignment = Alignment.Center
+                                    if (
+                                        (currentViewDate[Calendar.YEAR] == now[Calendar.YEAR]) &&
+                                        (currentViewDate[Calendar.MONTH] == now[Calendar.MONTH])
                                     ) {
-                                        Icon(
-                                            Icons.Default.ChevronRight,
-                                            contentDescription = null,
-                                            tint = if (isForwardDisabled) {
-                                                MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)
-                                            } else {
-                                                MaterialTheme.colorScheme.primary
-                                            }
-                                        )
+                                        stringResource(R.string.label_this_month)
+                                    } else {
+                                        SimpleDateFormat("MMMM yyyy", locale)
+                                            .format(currentViewDate.time)
+                                    }
+                                } else {
+                                    stringResource(R.string.label_today)
+                                }
+                            }
+
+                            Text(
+                                text = displayedDateText,
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onSurface,
+                                modifier = Modifier.bounceClick {
+                                    when (timeFilter) {
+                                        monthFilterLabel -> setShowMonthPicker(true)
+                                        customFilterLabel -> setShowDateRangePicker(true)
+                                        else -> setShowDatePicker(true)
                                     }
                                 }
+                            )
+
+                            if (timeFilter != customFilterLabel) {
+                                val now = Calendar.getInstance()
+                                val isForwardDisabled = if (timeFilter == monthFilterLabel) {
+                                    (currentViewDate[Calendar.YEAR] >= now[Calendar.YEAR]) &&
+                                            (currentViewDate[Calendar.MONTH] >= now[Calendar.MONTH])
+                                } else {
+                                    (currentViewDate[Calendar.YEAR] >= now[Calendar.YEAR]) &&
+                                            (currentViewDate[Calendar.DAY_OF_YEAR] >= now[Calendar.DAY_OF_YEAR])
+                                }
+
+                                IconButton(
+                                    onClick = { viewModel.moveDate(backwards = false) },
+                                    enabled = !isForwardDisabled
+                                ) {
+                                    Icon(
+                                        Icons.Default.ChevronRight,
+                                        contentDescription = "Next Date",
+                                        tint = if (isForwardDisabled) {
+                                            MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)
+                                        } else {
+                                            MaterialTheme.colorScheme.primary
+                                        }
+                                    )
+                                }
+                            } else {
+                                Spacer(modifier = Modifier.size(48.dp))
                             }
                         }
 
-                        HorizontalDivider(
-                            color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
+                        // Filter Buttons Row directly under the header
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp, vertical = 4.dp),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            AppUsageFilterChip(
+                                selectedText = timeFilter,
+                                expanded = showTimeDropdown,
+                                onExpandedChange = setShowTimeDropdown,
+                                options = timeOptions,
+                                modifier = Modifier.weight(1f)
+                            ) { filter ->
+                                val storeValue = when (filter) {
+                                    monthFilterLabel -> "month"
+                                    customFilterLabel -> "custom"
+                                    else -> "day"
+                                }
+                                viewModel.setTimeFilter(storeValue)
+                                if (filter != customFilterLabel) {
+                                    if (filter == monthFilterLabel) {
+                                        viewModel.updateToThisMonth()
+                                    } else {
+                                        viewModel.loadAppUsageForDate(System.currentTimeMillis())
+                                    }
+                                } else {
+                                    setShowDateRangePicker(true)
+                                }
+                            }
+
+                            AppUsageFilterChip(
+                                selectedText = networkFilter,
+                                expanded = showNetworkDropdown,
+                                onExpandedChange = setShowNetworkDropdown,
+                                options = networkOptions,
+                                modifier = Modifier.weight(1f)
+                            ) { filter ->
+                                val storeValue = when (filter) {
+                                    mobileOnlyFilterLabel -> "mobile"
+                                    wifiOnlyFilterLabel -> "wifi"
+                                    else -> "all"
+                                }
+                                viewModel.setNetworkFilter(storeValue)
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        // Redesigned Data summary replacing the circles
+                        val displayGlobalDown = when (networkFilter) {
+                            mobileOnlyFilterLabel -> viewModel.globalCellDown
+                            wifiOnlyFilterLabel -> viewModel.globalWifiDown
+                            else -> viewModel.globalCellDown + viewModel.globalWifiDown
+                        }
+                        val displayGlobalUp = when (networkFilter) {
+                            mobileOnlyFilterLabel -> viewModel.globalCellUp
+                            wifiOnlyFilterLabel -> viewModel.globalWifiDown
+                            else -> viewModel.globalCellUp + viewModel.globalWifiUp
+                        }
+                        val displayGlobalTotal = displayGlobalDown + displayGlobalUp
+
+                        ModernUsageSummary(
+                            totalUsage = displayGlobalTotal,
+                            downUsage = displayGlobalDown,
+                            upUsage = displayGlobalUp,
+                            locale = locale
                         )
                     }
                 }
@@ -786,12 +748,13 @@ fun AppUsageScreen(
                         ) {
                             Text(
                                 text = stringResource(R.string.msg_no_usage_data),
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                style = MaterialTheme.typography.bodyLarge
                             )
                         }
                     }
                 } else {
-            itemsIndexed(
+                    itemsIndexed(
                         items = filteredAppList,
                         key = { _, it -> it.packageName }
                     ) { index, appUsage ->
@@ -801,22 +764,22 @@ fun AppUsageScreen(
                             else -> appUsage.totalUsage
                         }
 
-                StaggeredEntrance {
-                    AppUsageItem(
-                        appUsage = appUsage,
-                        displayUsage = displayUsage,
-                        maxUsageBytes = maxUsageBytes,
-                        locale = locale,
-                        modifier = Modifier
-                            .animateItem()
-                            .padding(horizontal = 16.dp, vertical = 4.dp),
-                        onClick = {
-                            if (appUsage.isSystemGroup) {
-                                viewModel.isViewingSystemApps = true
-                            }
+                        StaggeredEntrance {
+                            AppUsageItem(
+                                appUsage = appUsage,
+                                displayUsage = displayUsage,
+                                maxUsageBytes = maxUsageBytes,
+                                locale = locale,
+                                modifier = Modifier
+                                    .animateItem()
+                                    .padding(horizontal = 16.dp, vertical = 6.dp),
+                                onClick = {
+                                    if (appUsage.isSystemGroup) {
+                                        viewModel.isViewingSystemApps = true
+                                    }
+                                }
+                            )
                         }
-                    )
-                }
                     }
                 }
             }
@@ -825,32 +788,170 @@ fun AppUsageScreen(
 }
 
 @Composable
+fun ModernUsageSummary(
+    totalUsage: Long,
+    downUsage: Long,
+    upUsage: Long,
+    locale: Locale,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        shape = RoundedCornerShape(24.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Total Usage",
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            val totalParts = formatUsage(totalUsage, locale).split(" ")
+            Row(verticalAlignment = Alignment.Bottom) {
+                Text(
+                    text = totalParts[0],
+                    style = MaterialTheme.typography.displayMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = totalParts.getOrNull(1) ?: "",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(bottom = 6.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                ModernUsageSubItem(
+                    usage = downUsage,
+                    icon = R.drawable.ic_arrow_down,
+                    label = "Download",
+                    color = MaterialTheme.colorScheme.primary,
+                    locale = locale
+                )
+
+                Divider(
+                    modifier = Modifier
+                        .height(40.dp)
+                        .width(1.dp),
+                    color = MaterialTheme.colorScheme.outlineVariant
+                )
+
+                ModernUsageSubItem(
+                    usage = upUsage,
+                    icon = R.drawable.ic_arrow_up,
+                    label = "Upload",
+                    color = MaterialTheme.colorScheme.secondary,
+                    locale = locale
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun ModernUsageSubItem(
+    usage: Long,
+    icon: Int,
+    label: String,
+    color: Color,
+    locale: Locale
+) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Box(
+            modifier = Modifier
+                .size(36.dp)
+                .background(color.copy(alpha = 0.1f), CircleShape),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                painter = painterResource(id = icon),
+                contentDescription = label,
+                tint = color,
+                modifier = Modifier.size(18.dp)
+            )
+        }
+        Spacer(modifier = Modifier.width(12.dp))
+        Column {
+            val parts = formatUsage(usage, locale).split(" ")
+            Row(verticalAlignment = Alignment.Bottom) {
+                Text(
+                    text = parts[0],
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Spacer(modifier = Modifier.width(2.dp))
+                Text(
+                    text = parts.getOrNull(1) ?: "",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            Text(
+                text = label,
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
 fun AppUsageFilterChip(
     selectedText: String,
     expanded: Boolean,
     onExpandedChange: (Boolean) -> Unit,
     options: List<String>,
+    modifier: Modifier = Modifier,
     onOptionSelected: (String) -> Unit,
 ) {
     var itemWidth by remember { mutableStateOf(0.dp) }
     val density = LocalDensity.current
 
-    Box {
+    Box(modifier = modifier) {
         FilterChip(
             selected = true,
             onClick = { onExpandedChange(true) },
-            label = { Text(text = selectedText, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold) },
+            label = {
+                Text(
+                    text = selectedText,
+                    style = MaterialTheme.typography.labelMedium,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center
+                )
+            },
             trailingIcon = { Icon(imageVector = Icons.Default.ArrowDropDown, contentDescription = null, modifier = Modifier.size(18.dp)) },
             shape = RoundedCornerShape(12.dp),
             colors = FilterChipDefaults.filterChipColors(
-                selectedContainerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.7f),
-                selectedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                selectedTrailingIconColor = MaterialTheme.colorScheme.onPrimaryContainer
+                selectedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                selectedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                selectedTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant
             ),
             border = null,
-            modifier = Modifier.onGloballyPositioned { coordinates ->
-                itemWidth = with(density) { coordinates.size.width.toDp() }
-            }
+            modifier = Modifier
+                .fillMaxWidth()
+                .onGloballyPositioned { coordinates ->
+                    itemWidth = with(density) { coordinates.size.width.toDp() }
+                }
         )
 
         DropdownMenu(
@@ -862,12 +963,12 @@ fun AppUsageFilterChip(
         ) {
             options.forEach { option ->
                 DropdownMenuItem(
-                    text = { 
+                    text = {
                         Text(
-                            text = option, 
+                            text = option,
                             color = if (option == selectedText) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.fillMaxWidth()
-                        ) 
+                        )
                     },
                     onClick = { onOptionSelected(option); onExpandedChange(false) }
                 )
@@ -887,9 +988,9 @@ fun AppUsageItem(
 ) {
     var expanded by remember { mutableStateOf(false) }
     val progress = if (maxUsageBytes > 0) (displayUsage.toFloat() / maxUsageBytes.toFloat()).coerceIn(0f, 1f) else 0f
-    
+
     val rotationState by animateFloatAsState(
-        targetValue = if (expanded) 90f else 0f,
+        targetValue = if (expanded) 180f else 0f,
         animationSpec = premiumSpring(),
         label = "rotation"
     )
@@ -898,23 +999,20 @@ fun AppUsageItem(
         modifier = modifier
             .fillMaxWidth()
             .animateContentSize()
-            .bounceClick { 
+            .bounceClick {
                 if (appUsage.isSystemGroup) onClick()
-                else expanded = !expanded 
+                else expanded = !expanded
             },
-        shape = RoundedCornerShape(32.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
-        border = BorderStroke(
-            1.dp,
-            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)
-        )
+        shape = RoundedCornerShape(24.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)) {
             Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                 if (appUsage.iconBitmap != null) {
-                    Image(bitmap = appUsage.iconBitmap, contentDescription = null, modifier = Modifier.size(44.dp))
+                    Image(bitmap = appUsage.iconBitmap, contentDescription = null, modifier = Modifier.size(48.dp))
                 } else {
                     val fallbackIcon = when {
                         appUsage.packageName.startsWith("removed") -> Icons.Default.Delete
@@ -923,7 +1021,7 @@ fun AppUsageItem(
                     }
                     Box(
                         modifier = Modifier
-                            .size(44.dp)
+                            .size(48.dp)
                             .background(MaterialTheme.colorScheme.surfaceVariant, CircleShape),
                         contentAlignment = Alignment.Center
                     ) {
@@ -935,14 +1033,14 @@ fun AppUsageItem(
                         )
                     }
                 }
-                Spacer(modifier = Modifier.width(12.dp))
+                Spacer(modifier = Modifier.width(16.dp))
                 Column(modifier = Modifier.weight(1f)) {
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                         Text(
-                            text = appUsage.appName, 
-                            style = MaterialTheme.typography.titleMedium, 
-                            fontWeight = FontWeight.Bold, 
-                            color = MaterialTheme.colorScheme.onSurface, 
+                            text = appUsage.appName,
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.onSurface,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             modifier = Modifier.weight(1f)
@@ -950,92 +1048,81 @@ fun AppUsageItem(
                         Spacer(modifier = Modifier.width(8.dp))
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
-                                text = formatUsage(displayUsage, locale), 
-                                style = MaterialTheme.typography.titleSmall,
-                                fontWeight = FontWeight.ExtraBold, 
+                                text = formatUsage(displayUsage, locale),
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.primary
                             )
                             if (!appUsage.isSystemGroup) {
                                 Icon(
-                                    imageVector = Icons.Default.ChevronRight,
+                                    imageVector = Icons.Default.ExpandMore,
                                     contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                     modifier = Modifier
-                                        .size(20.dp)
+                                        .size(24.dp)
                                         .graphicsLayer { rotationZ = rotationState }
                                 )
                             }
                         }
                     }
-                    Spacer(modifier = Modifier.height(10.dp))
-                    val barPrimaryColor = MaterialTheme.colorScheme.primary
-                    val barSecondaryColor = MaterialTheme.colorScheme.secondary
-                    Canvas(modifier = Modifier
-                        .fillMaxWidth()
-                        .height(8.dp)) {
-                        drawLine(color = barPrimaryColor.copy(alpha = 0.15f), start = Offset(0f, size.height / 2), end = Offset(size.width, size.height / 2), strokeWidth = size.height, cap = StrokeCap.Round)
-                        if (progress > 0f) {
-                            val progressWidth = size.width * progress
-                            drawLine(color = barPrimaryColor, start = Offset(0f, size.height / 2), end = Offset(progressWidth, size.height / 2), strokeWidth = size.height, cap = StrokeCap.Round)
-                            if (progress > 0.05f) {
-                                drawLine(color = barSecondaryColor, start = Offset(maxOf(0f, progressWidth - 20f), size.height / 2), end = Offset(progressWidth, size.height / 2), strokeWidth = size.height, cap = StrokeCap.Round)
-                            }
-                        }
-                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    // Modern linear progress indicator
+                    LinearProgressIndicator(
+                        progress = { progress },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(6.dp)
+                            .clip(RoundedCornerShape(3.dp)),
+                        color = MaterialTheme.colorScheme.primary,
+                        trackColor = MaterialTheme.colorScheme.primaryContainer,
+                        strokeCap = StrokeCap.Round
+                    )
                 }
             }
+
             AnimatedVisibility(visible = expanded && !appUsage.isSystemGroup, enter = fadeIn(premiumSpring()) + expandVertically(premiumSpring()), exit = fadeOut(premiumSpring()) + shrinkVertically(premiumSpring())) {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Spacer(modifier = Modifier.height(16.dp))
-                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
+                    Divider(color = MaterialTheme.colorScheme.surfaceVariant)
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
+                        horizontalArrangement = Arrangement.SpaceAround
                     ) {
-                        // Left side: Down and Wifi
-                        Column(
-                            horizontalAlignment = Alignment.Start,
-                            verticalArrangement = Arrangement.spacedBy(16.dp),
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            UsageSubItem(
-                                label = stringResource(R.string.label_download),
-                                value = formatUsage(appUsage.downUsage, locale),
-                                icon = AppIcons.Download,
-                                color = MaterialTheme.colorScheme.primary
-                            )
-                            UsageSubItem(
-                                label = stringResource(R.string.label_wifi_usage),
-                                value = formatUsage(appUsage.wifiUsage, locale),
-                                icon = AppIcons.Wifi,
-                                color = MaterialTheme.colorScheme.primary
-                            )
-                        }
+                        UsageDetailItem(
+                            label = stringResource(R.string.label_download),
+                            value = formatUsage(appUsage.downUsage, locale),
+                            icon = AppIcons.Download,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                        UsageDetailItem(
+                            label = stringResource(R.string.label_upload),
+                            value = formatUsage(appUsage.upUsage, locale),
+                            icon = AppIcons.Upload,
+                            color = MaterialTheme.colorScheme.secondary
+                        )
+                    }
 
-                        // Right side: Up and Mobile
-                        Column(
-                            horizontalAlignment = Alignment.End,
-                            verticalArrangement = Arrangement.spacedBy(16.dp),
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            UsageSubItem(
-                                label = stringResource(R.string.label_upload),
-                                value = formatUsage(appUsage.upUsage, locale),
-                                icon = AppIcons.Upload,
-                                color = MaterialTheme.colorScheme.secondary,
-                                horizontalAlignment = Alignment.End
-                            )
-                            UsageSubItem(
-                                label = stringResource(R.string.label_mobile_usage),
-                                value = formatUsage(appUsage.cellUsage, locale),
-                                icon = AppIcons.Mobile,
-                                color = MaterialTheme.colorScheme.secondary,
-                                horizontalAlignment = Alignment.End
-                            )
-                        }
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceAround
+                    ) {
+                        UsageDetailItem(
+                            label = stringResource(R.string.label_wifi_usage),
+                            value = formatUsage(appUsage.wifiUsage, locale),
+                            icon = AppIcons.Wifi,
+                            color = MaterialTheme.colorScheme.tertiary
+                        )
+                        UsageDetailItem(
+                            label = stringResource(R.string.label_mobile_usage),
+                            value = formatUsage(appUsage.cellUsage, locale),
+                            icon = AppIcons.Mobile,
+                            color = MaterialTheme.colorScheme.tertiary
+                        )
                     }
                 }
             }
@@ -1044,56 +1131,34 @@ fun AppUsageItem(
 }
 
 
-@Composable
-fun UsageSummaryCircle(usage: Long, icon: Int, color: Color, modifier: Modifier = Modifier, isSmall: Boolean = false) {
-    val locale = LocalConfiguration.current.locales[0]
-    Surface(
-        modifier = modifier.size(if (isSmall) 76.dp else 86.dp),
-        shape = CircleShape,
-        color = MaterialTheme.colorScheme.surfaceContainerHigh,
-        tonalElevation = 2.dp,
-        border = BorderStroke(1.dp, color.copy(alpha = 0.15f))
-    ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-            Icon(painter = painterResource(id = icon), contentDescription = null, tint = color, modifier = Modifier.size(if (isSmall) {
-                12.dp
-            } else {
-                16.dp
-            }))
-            Spacer(modifier = Modifier.height(2.dp))
-            val parts = formatUsage(usage, locale).split(" ")
-            Text(text = parts[0], style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.onSurface, fontSize = if (isSmall) 14.sp else 16.sp, maxLines = 1)
-            Text(text = parts.getOrNull(1) ?: "", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Bold, fontSize = if (isSmall) 8.sp else 10.sp)
-        }
-    }
-}
 
 @Composable
-fun UsageTotalCircle(totalUsage: Long, primaryColor: Color, secondaryColor: Color, modifier: Modifier = Modifier) {
-    val locale = LocalConfiguration.current.locales[0]
-    Box(modifier = modifier.size(115.dp), contentAlignment = Alignment.Center) {
-        Surface(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(6.dp),
-            shape = CircleShape,
-            color = MaterialTheme.colorScheme.surface,
-            tonalElevation = 4.dp,
-            shadowElevation = 2.dp
-        ) { }
-        Canvas(modifier = Modifier
-            .fillMaxSize()
-            .padding(12.dp)) {
-            drawArc(color = primaryColor.copy(alpha = 0.1f), startAngle = 0f, sweepAngle = 360f, useCenter = false, style = Stroke(width = 6.dp.toPx(), cap = StrokeCap.Round))
-            drawArc(color = primaryColor, startAngle = -90f, sweepAngle = 260f, useCenter = false, style = Stroke(width = 6.dp.toPx(), cap = StrokeCap.Round))
-            drawArc(color = secondaryColor, startAngle = 170f, sweepAngle = 70f, useCenter = false, style = Stroke(width = 6.dp.toPx(), cap = StrokeCap.Round))
-        }
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            val parts = formatUsage(totalUsage, locale).split(" ")
-            Text(text = parts[0], style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Black, color = MaterialTheme.colorScheme.onSurface, fontSize = 20.sp, maxLines = 1)
-            Text(text = parts.getOrNull(1) ?: "", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Bold, fontSize = 12.sp)
-            Spacer(modifier = Modifier.height(1.dp))
-            Text(text = "TOTAL", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Black, color = primaryColor, fontSize = 8.sp, letterSpacing = 1.sp)
+fun UsageDetailItem(
+    label: String,
+    value: String,
+    icon: ImageVector,
+    color: Color
+) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = color,
+            modifier = Modifier.size(20.dp)
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Column {
+            Text(
+                text = value,
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Text(
+                text = label,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
     }
 }

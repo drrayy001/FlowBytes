@@ -69,6 +69,8 @@
     <string name="label_mobile_usage">Mobile</string>
     <string name="label_wifi_colon">Wi-Fi:</string>
     <string name="label_mobile_colon">Mobile:</string>
+    <string name="label_system_apps">System apps</string>
+    <string name="title_system_data_usage">System data usage</string>
 
     <!-- Settings: General -->
     <string name="settings_section_general">General</string>
@@ -129,12 +131,12 @@
     <string name="settings_donate_desc">Contribute to keeping FlowBytes ad-free and open source</string>
     <string name="dialog_donate_title">Support FlowBytes</string>
     <string name="dialog_donate_desc">If you find FlowBytes useful, consider supporting its development. Every contribution helps!</string>
-    <string name="label_donate_amount_1">$1.00</string>
-    <string name="label_donate_amount_2_5">$2.50</string>
-    <string name="label_donate_amount_6">$6.00</string>
-    <string name="desc_donate_1">Support the developer with a coffee.</string>
-    <string name="desc_donate_2_5">Fuel further development with a small contribution.</string>
-    <string name="desc_donate_6">Treat the developer to a nice lunch.</string>
+    <string name="label_donate_amount_1">Small Tip</string>
+    <string name="label_donate_amount_2_5">Project Supporter</string>
+    <string name="label_donate_amount_6">Project Patron</string>
+    <string name="desc_donate_1">A simple way to show your appreciation and support the project\'s maintenance.</string>
+    <string name="desc_donate_2_5">Helps fund the ongoing development of new features and performance improvements.</string>
+    <string name="desc_donate_6">A significant contribution to help keep FlowBytes open-source, ad-free, and independent.</string>
     <string name="title_pick_amount">Select Amount</string>
     <string name="btn_donate">Donate</string>
     <string name="msg_donation_success_title">Thank You!</string>

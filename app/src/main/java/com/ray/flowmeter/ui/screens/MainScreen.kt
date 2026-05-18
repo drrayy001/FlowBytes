@@ -17,6 +17,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
@@ -82,6 +83,8 @@ fun MainScreen(
     val limitsScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val settingsScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
+    var showUsageFilters by remember { mutableStateOf(false) }
+
     val backStack = remember { mutableStateListOf(initialDestination) }
     val currentDestination = backStack.last()
 
@@ -114,12 +117,13 @@ fun MainScreen(
                 ) {
                     Column(modifier = Modifier.windowInsetsPadding(WindowInsets.statusBars)) {
                         key(currentDestination) {
-                            Box(
+                            Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(56.dp)
                                     .padding(horizontal = 20.dp),
-                                contentAlignment = Alignment.CenterStart
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Text(
                                     text = when (currentDestination) {
@@ -133,6 +137,21 @@ fun MainScreen(
                                     fontWeight = FontWeight.Black,
                                     letterSpacing = (-0.5).sp
                                 )
+
+                                if (currentDestination == Destination.Usage) {
+                                    IconButton(
+                                        onClick = { showUsageFilters = !showUsageFilters },
+                                        colors = IconButtonDefaults.iconButtonColors(
+                                            containerColor = Color.Transparent
+                                        )
+                                    ) {
+                                        Icon(
+                                            imageVector = com.ray.flowmeter.ui.components.AppIcons.Filter,
+                                            contentDescription = "Toggle Filters",
+                                            tint = if (showUsageFilters) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    }
+                                }
                             }
                         }
                     }
@@ -304,6 +323,7 @@ fun MainScreen(
                         Destination.Usage -> NavEntry(key) {
                             AppUsageScreen(
                                 viewModel = appUsageViewModel,
+                                showFilters = showUsageFilters,
                                 modifier = Modifier.fillMaxSize().padding(innerPadding).nestedScroll(usageScrollBehavior.nestedScrollConnection)
                             )
                         }

@@ -317,7 +317,6 @@ fun UsageSummaryContent(
     }
 }
 
-// Smaller usage item detail (e.g., Download, Upload) with icon
 @Composable
 fun UsageSubItem(
     label: String,

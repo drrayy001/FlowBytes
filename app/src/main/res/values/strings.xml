@@ -40,6 +40,7 @@
     <string name="label_wifi">Wi-Fi</string>
     <string name="label_combined">Combined</string>
     <string name="label_todays_usage">Today\'s usage</string>
+    <string name="label_usage_summary">Usage Summary</string>
     <string name="label_usage_insight">Usage insight</string>
     <string name="msg_limit_forecast_warning">You\'re approaching your daily limit. Consider reducing data usage.</string>
     <string name="msg_limit_forecast_safe">Your data usage is well within your daily limit.</string>

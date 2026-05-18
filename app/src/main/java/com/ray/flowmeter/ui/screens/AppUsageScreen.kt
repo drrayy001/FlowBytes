@@ -1,11 +1,8 @@
 package com.ray.flowmeter.ui.screens
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.Crossfade
+import androidx.compose.animation.*
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
@@ -13,7 +10,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -31,14 +27,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
@@ -64,6 +58,7 @@ import java.util.Locale
 @Composable
 fun AppUsageScreen(
     viewModel: AppUsageViewModel,
+    showFilters: Boolean,
     modifier: Modifier = Modifier,
 ) {
     val locale = LocalConfiguration.current.locales[0]
@@ -108,6 +103,10 @@ fun AppUsageScreen(
     val (showDatePicker, setShowDatePicker) = remember { mutableStateOf(false) }
     val (showMonthPicker, setShowMonthPicker) = remember { mutableStateOf(false) }
     val (showDateRangePicker, setShowDateRangePicker) = remember { mutableStateOf(false) }
+
+    val contentKey = remember(currentViewDate.timeInMillis, savedTimeFilter, savedNetworkFilter) {
+        "${currentViewDate.timeInMillis}_${savedTimeFilter}_${savedNetworkFilter}"
+    }
 
     LaunchedEffect(filteredAppList) {
         listState.scrollToItem(0)
@@ -562,223 +561,241 @@ fun AppUsageScreen(
                 }
             }
         ) {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                state = listState,
-                contentPadding = PaddingValues(bottom = 16.dp)
-            ) {
-                item {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(MaterialTheme.colorScheme.surface)
-                            .padding(bottom = 16.dp)
-                    ) {
-                        // Date Navigation Header with integrated Date text
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp, vertical = 12.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            if (timeFilter != customFilterLabel) {
-                                IconButton(onClick = { viewModel.moveDate(backwards = true) }) {
-                                    Icon(
-                                        Icons.Default.ChevronLeft,
-                                        contentDescription = "Previous Date",
-                                        tint = MaterialTheme.colorScheme.primary
-                                    )
-                                }
-                            } else {
-                                Spacer(modifier = Modifier.size(48.dp))
-                            }
-
-                            val displayedDateText = viewModel.selectedDateString.ifBlank {
-                                if (timeFilter == monthFilterLabel) {
-                                    val now = Calendar.getInstance()
-                                    if (
-                                        (currentViewDate[Calendar.YEAR] == now[Calendar.YEAR]) &&
-                                        (currentViewDate[Calendar.MONTH] == now[Calendar.MONTH])
-                                    ) {
-                                        stringResource(R.string.label_this_month)
-                                    } else {
-                                        SimpleDateFormat("MMMM yyyy", locale)
-                                            .format(currentViewDate.time)
-                                    }
-                                } else {
-                                    stringResource(R.string.label_today)
-                                }
-                            }
-
-                            Text(
-                                text = displayedDateText,
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.onSurface,
-                                modifier = Modifier.bounceClick {
-                                    when (timeFilter) {
-                                        monthFilterLabel -> setShowMonthPicker(true)
-                                        customFilterLabel -> setShowDateRangePicker(true)
-                                        else -> setShowDatePicker(true)
-                                    }
-                                }
-                            )
-
-                            if (timeFilter != customFilterLabel) {
-                                val now = Calendar.getInstance()
-                                val isForwardDisabled = if (timeFilter == monthFilterLabel) {
-                                    (currentViewDate[Calendar.YEAR] >= now[Calendar.YEAR]) &&
-                                            (currentViewDate[Calendar.MONTH] >= now[Calendar.MONTH])
-                                } else {
-                                    (currentViewDate[Calendar.YEAR] >= now[Calendar.YEAR]) &&
-                                            (currentViewDate[Calendar.DAY_OF_YEAR] >= now[Calendar.DAY_OF_YEAR])
-                                }
-
-                                IconButton(
-                                    onClick = { viewModel.moveDate(backwards = false) },
-                                    enabled = !isForwardDisabled
-                                ) {
-                                    Icon(
-                                        Icons.Default.ChevronRight,
-                                        contentDescription = "Next Date",
-                                        tint = if (isForwardDisabled) {
-                                            MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)
-                                        } else {
-                                            MaterialTheme.colorScheme.primary
-                                        }
-                                    )
-                                }
-                            } else {
-                                Spacer(modifier = Modifier.size(48.dp))
-                            }
-                        }
-
-                        // Filter Buttons Row directly under the header
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp, vertical = 4.dp),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            AppUsageFilterChip(
-                                selectedText = timeFilter,
-                                expanded = showTimeDropdown,
-                                onExpandedChange = setShowTimeDropdown,
-                                options = timeOptions,
-                                modifier = Modifier.weight(1f)
-                            ) { filter ->
-                                val storeValue = when (filter) {
-                                    monthFilterLabel -> "month"
-                                    customFilterLabel -> "custom"
-                                    else -> "day"
-                                }
-                                viewModel.setTimeFilter(storeValue)
-                                if (filter != customFilterLabel) {
-                                    if (filter == monthFilterLabel) {
-                                        viewModel.updateToThisMonth()
-                                    } else {
-                                        viewModel.loadAppUsageForDate(System.currentTimeMillis())
-                                    }
-                                } else {
-                                    setShowDateRangePicker(true)
-                                }
-                            }
-
-                            AppUsageFilterChip(
-                                selectedText = networkFilter,
-                                expanded = showNetworkDropdown,
-                                onExpandedChange = setShowNetworkDropdown,
-                                options = networkOptions,
-                                modifier = Modifier.weight(1f)
-                            ) { filter ->
-                                val storeValue = when (filter) {
-                                    mobileOnlyFilterLabel -> "mobile"
-                                    wifiOnlyFilterLabel -> "wifi"
-                                    else -> "all"
-                                }
-                                viewModel.setNetworkFilter(storeValue)
-                            }
-                        }
-
-                        Spacer(modifier = Modifier.height(16.dp))
-
-                        // Redesigned Data summary replacing the circles
-                        val displayGlobalDown = when (networkFilter) {
-                            mobileOnlyFilterLabel -> viewModel.globalCellDown
-                            wifiOnlyFilterLabel -> viewModel.globalWifiDown
-                            else -> viewModel.globalCellDown + viewModel.globalWifiDown
-                        }
-                        val displayGlobalUp = when (networkFilter) {
-                            mobileOnlyFilterLabel -> viewModel.globalCellUp
-                            wifiOnlyFilterLabel -> viewModel.globalWifiDown
-                            else -> viewModel.globalCellUp + viewModel.globalWifiUp
-                        }
-                        val displayGlobalTotal = displayGlobalDown + displayGlobalUp
-
-                        ModernUsageSummary(
-                            totalUsage = displayGlobalTotal,
-                            downUsage = displayGlobalDown,
-                            upUsage = displayGlobalUp,
-                            locale = locale
-                        )
-                    }
-                }
-
-                val maxUsageBytes = if (filteredAppList.isNotEmpty()) {
-                    filteredAppList.maxOf {
-                        when (networkFilter) {
-                            mobileOnlyFilterLabel -> it.cellUsage
-                            wifiOnlyFilterLabel -> it.wifiUsage
-                            else -> it.totalUsage
-                        }
-                    }.coerceAtLeast(1L)
-                } else {
-                    1L
-                }
-
-                if (filteredAppList.isEmpty() && !viewModel.isLoading) {
+            AnimatedContent(
+                targetState = contentKey,
+                transitionSpec = {
+                    (fadeIn(animationSpec = tween(200)) + scaleIn(initialScale = 0.98f))
+                        .togetherWith(fadeOut(animationSpec = tween(150)))
+                        .using(SizeTransform(clip = true))
+                },
+                label = "AppUsageContentTransition",
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clipToBounds()
+            ) { _ ->
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    state = listState,
+                    contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
                     item {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(32.dp),
-                            contentAlignment = Alignment.Center
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
-                            Text(
-                                text = stringResource(R.string.msg_no_usage_data),
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                style = MaterialTheme.typography.bodyLarge
+                            // Filters at the top - now scrolls with the rest of the content
+                            AnimatedVisibility(
+                                visible = showFilters,
+                                enter = expandVertically(animationSpec = premiumSpring()) + fadeIn(),
+                                exit = shrinkVertically(animationSpec = premiumSpring()) + fadeOut()
+                            ) {
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(bottom = 4.dp),
+                                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                                ) {
+                                    // Filter Buttons Row
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        AppUsageFilterChip(
+                                            selectedText = timeFilter,
+                                            expanded = showTimeDropdown,
+                                            onExpandedChange = setShowTimeDropdown,
+                                            options = timeOptions,
+                                            modifier = Modifier.weight(1f)
+                                        ) { filter ->
+                                            val storeValue = when (filter) {
+                                                monthFilterLabel -> "month"
+                                                customFilterLabel -> "custom"
+                                                else -> "day"
+                                            }
+                                            viewModel.setTimeFilter(storeValue)
+                                            if (filter != customFilterLabel) {
+                                                if (filter == monthFilterLabel) {
+                                                    viewModel.updateToThisMonth()
+                                                } else {
+                                                    viewModel.loadAppUsageForDate(System.currentTimeMillis())
+                                                }
+                                            } else {
+                                                setShowDateRangePicker(true)
+                                            }
+                                        }
+
+                                        AppUsageFilterChip(
+                                            selectedText = networkFilter,
+                                            expanded = showNetworkDropdown,
+                                            onExpandedChange = setShowNetworkDropdown,
+                                            options = networkOptions,
+                                            modifier = Modifier.weight(1f)
+                                        ) { filter ->
+                                            val storeValue = when (filter) {
+                                                mobileOnlyFilterLabel -> "mobile"
+                                                wifiOnlyFilterLabel -> "wifi"
+                                                else -> "all"
+                                            }
+                                            viewModel.setNetworkFilter(storeValue)
+                                        }
+                                    }
+
+                                    // Date Navigation Header
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        if (timeFilter != customFilterLabel) {
+                                            IconButton(onClick = { viewModel.moveDate(backwards = true) }) {
+                                                Icon(
+                                                    Icons.Default.ChevronLeft,
+                                                    contentDescription = "Previous Date",
+                                                    tint = MaterialTheme.colorScheme.primary
+                                                )
+                                            }
+                                        } else {
+                                            Spacer(modifier = Modifier.size(48.dp))
+                                        }
+
+                                        val displayedDateText = viewModel.selectedDateString.ifBlank {
+                                            if (timeFilter == monthFilterLabel) {
+                                                val now = Calendar.getInstance()
+                                                if (
+                                                    (currentViewDate[Calendar.YEAR] == now[Calendar.YEAR]) &&
+                                                    (currentViewDate[Calendar.MONTH] == now[Calendar.MONTH])
+                                                ) {
+                                                    stringResource(R.string.label_this_month)
+                                                } else {
+                                                    SimpleDateFormat("MMMM yyyy", locale)
+                                                        .format(currentViewDate.time)
+                                                }
+                                            } else {
+                                                stringResource(R.string.label_today)
+                                            }
+                                        }
+
+                                        Text(
+                                            text = displayedDateText,
+                                            style = MaterialTheme.typography.titleMedium,
+                                            fontWeight = FontWeight.Bold,
+                                            color = MaterialTheme.colorScheme.onSurface,
+                                            modifier = Modifier.bounceClick {
+                                                when (timeFilter) {
+                                                    monthFilterLabel -> setShowMonthPicker(true)
+                                                    customFilterLabel -> setShowDateRangePicker(true)
+                                                    else -> setShowDatePicker(true)
+                                                }
+                                            }
+                                        )
+
+                                        if (timeFilter != customFilterLabel) {
+                                            val now = Calendar.getInstance()
+                                            val isForwardDisabled = if (timeFilter == monthFilterLabel) {
+                                                (currentViewDate[Calendar.YEAR] >= now[Calendar.YEAR]) &&
+                                                        (currentViewDate[Calendar.MONTH] >= now[Calendar.MONTH])
+                                            } else {
+                                                (currentViewDate[Calendar.YEAR] >= now[Calendar.YEAR]) &&
+                                                        (currentViewDate[Calendar.DAY_OF_YEAR] >= now[Calendar.DAY_OF_YEAR])
+                                            }
+
+                                            IconButton(
+                                                onClick = { viewModel.moveDate(backwards = false) },
+                                                enabled = !isForwardDisabled
+                                            ) {
+                                                Icon(
+                                                    Icons.Default.ChevronRight,
+                                                    contentDescription = "Next Date",
+                                                    tint = if (isForwardDisabled) {
+                                                        MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)
+                                                    } else {
+                                                        MaterialTheme.colorScheme.primary
+                                                    }
+                                                )
+                                            }
+                                        } else {
+                                            Spacer(modifier = Modifier.size(48.dp))
+                                        }
+                                    }
+                                }
+                            }
+
+                            // Redesigned Data summary replacing the circles
+                            val displayGlobalDown = when (networkFilter) {
+                                mobileOnlyFilterLabel -> viewModel.globalCellDown
+                                wifiOnlyFilterLabel -> viewModel.globalWifiDown
+                                else -> viewModel.globalCellDown + viewModel.globalWifiDown
+                            }
+                            val displayGlobalUp = when (networkFilter) {
+                                mobileOnlyFilterLabel -> viewModel.globalCellUp
+                                wifiOnlyFilterLabel -> viewModel.globalWifiDown
+                                else -> viewModel.globalCellUp + viewModel.globalWifiUp
+                            }
+                            val displayGlobalTotal = displayGlobalDown + displayGlobalUp
+
+                            ModernUsageSummary(
+                                totalUsage = displayGlobalTotal,
+                                downUsage = displayGlobalDown,
+                                upUsage = displayGlobalUp,
+                                locale = locale,
+                                modifier = Modifier.padding(horizontal = 0.dp)
                             )
                         }
                     }
-                } else {
-                    itemsIndexed(
-                        items = filteredAppList,
-                        key = { _, it -> it.packageName }
-                    ) { index, appUsage ->
-                        val displayUsage = when (networkFilter) {
-                            mobileOnlyFilterLabel -> appUsage.cellUsage
-                            wifiOnlyFilterLabel -> appUsage.wifiUsage
-                            else -> appUsage.totalUsage
-                        }
 
-                        StaggeredEntrance {
-                            AppUsageItem(
-                                appUsage = appUsage,
-                                displayUsage = displayUsage,
-                                maxUsageBytes = maxUsageBytes,
-                                locale = locale,
+                    val maxUsageBytes = if (filteredAppList.isNotEmpty()) {
+                        filteredAppList.maxOf {
+                            when (networkFilter) {
+                                mobileOnlyFilterLabel -> it.cellUsage
+                                wifiOnlyFilterLabel -> it.wifiUsage
+                                else -> it.totalUsage
+                            }
+                        }.coerceAtLeast(1L)
+                    } else {
+                        1L
+                    }
+
+                    if (filteredAppList.isEmpty() && !viewModel.isLoading) {
+                        item {
+                            Box(
                                 modifier = Modifier
-                                    .animateItem()
-                                    .padding(horizontal = 16.dp, vertical = 6.dp),
-                                onClick = {
-                                    if (appUsage.isSystemGroup) {
-                                        viewModel.isViewingSystemApps = true
+                                    .fillMaxWidth()
+                                    .padding(32.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.msg_no_usage_data),
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    style = MaterialTheme.typography.bodyLarge
+                                )
+                            }
+                        }
+                    } else {
+                        itemsIndexed(
+                            items = filteredAppList,
+                            key = { _, it -> it.packageName }
+                        ) { _, appUsage ->
+                            val displayUsage = when (networkFilter) {
+                                mobileOnlyFilterLabel -> appUsage.cellUsage
+                                wifiOnlyFilterLabel -> appUsage.wifiUsage
+                                else -> appUsage.totalUsage
+                            }
+
+                            StaggeredEntrance {
+                                AppUsageItem(
+                                    appUsage = appUsage,
+                                    displayUsage = displayUsage,
+                                    maxUsageBytes = maxUsageBytes,
+                                    locale = locale,
+                                    onClick = {
+                                        if (appUsage.isSystemGroup) {
+                                            viewModel.isViewingSystemApps = true
+                                        }
                                     }
-                                }
-                            )
+                                )
+                            }
                         }
                     }
                 }
@@ -795,71 +812,107 @@ fun ModernUsageSummary(
     locale: Locale,
     modifier: Modifier = Modifier
 ) {
+    val downloadColor = MaterialTheme.colorScheme.primary
+    val uploadColor = MaterialTheme.colorScheme.tertiary // Distinguishable from download
+    
+    val totalParts = formatUsage(totalUsage, locale).split(" ")
+    val downRatio = if (totalUsage > 0) downUsage.toFloat() / totalUsage.toFloat() else 0.5f
+    
     Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+        modifier = modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(32.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        border = BorderStroke(
+            1.dp,
+            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)
+        )
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp),
+            modifier = Modifier.padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Total Usage",
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                text = stringResource(R.string.label_usage_summary).uppercase(),
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                fontWeight = FontWeight.ExtraBold,
+                letterSpacing = 1.sp
             )
-            Spacer(modifier = Modifier.height(4.dp))
-            val totalParts = formatUsage(totalUsage, locale).split(" ")
+            
+            Spacer(modifier = Modifier.height(12.dp))
+            
             Row(verticalAlignment = Alignment.Bottom) {
                 Text(
                     text = totalParts[0],
                     style = MaterialTheme.typography.displayMedium,
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.Black,
                     color = MaterialTheme.colorScheme.onSurface
                 )
-                Spacer(modifier = Modifier.width(4.dp))
+                Spacer(modifier = Modifier.width(6.dp))
                 Text(
                     text = totalParts.getOrNull(1) ?: "",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Medium,
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(bottom = 6.dp)
+                    modifier = Modifier.padding(bottom = 8.dp)
                 )
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
+            
+            Spacer(modifier = Modifier.height(20.dp))
+            
+            // Visual Ratio Bar (Infographic style)
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(10.dp)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
+            ) {
+                Row(modifier = Modifier.fillMaxSize()) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .weight(downRatio.coerceAtLeast(0.01f))
+                            .background(downloadColor)
+                    )
+                    Box(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .weight((1f - downRatio).coerceAtLeast(0.01f))
+                            .background(uploadColor)
+                    )
+                }
+            }
+            
+            Spacer(modifier = Modifier.height(24.dp))
+            
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 ModernUsageSubItem(
-                    usage = downUsage,
-                    icon = R.drawable.ic_arrow_down,
-                    label = "Download",
-                    color = MaterialTheme.colorScheme.primary,
-                    locale = locale
+                    label = stringResource(R.string.label_download),
+                    value = formatUsage(downUsage, locale),
+                    icon = AppIcons.Download,
+                    color = downloadColor
                 )
-
-                Divider(
+                
+                Box(
                     modifier = Modifier
-                        .height(40.dp)
-                        .width(1.dp),
-                    color = MaterialTheme.colorScheme.outlineVariant
+                        .height(32.dp)
+                        .width(1.dp)
+                        .background(MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
                 )
-
+                
                 ModernUsageSubItem(
-                    usage = upUsage,
-                    icon = R.drawable.ic_arrow_up,
-                    label = "Upload",
-                    color = MaterialTheme.colorScheme.secondary,
-                    locale = locale
+                    label = stringResource(R.string.label_upload),
+                    value = formatUsage(upUsage, locale),
+                    icon = AppIcons.Upload,
+                    color = uploadColor
                 )
             }
         }
@@ -868,47 +921,40 @@ fun ModernUsageSummary(
 
 @Composable
 fun ModernUsageSubItem(
-    usage: Long,
-    icon: Int,
     label: String,
-    color: Color,
-    locale: Locale
+    value: String,
+    icon: ImageVector,
+    color: Color
 ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Box(
             modifier = Modifier
-                .size(36.dp)
-                .background(color.copy(alpha = 0.1f), CircleShape),
+                .size(32.dp)
+                .background(color.copy(alpha = 0.12f), CircleShape),
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                painter = painterResource(id = icon),
-                contentDescription = label,
-                tint = color,
-                modifier = Modifier.size(18.dp)
+                imageVector = icon, 
+                contentDescription = null, 
+                tint = color, 
+                modifier = Modifier.size(14.dp)
             )
         }
-        Spacer(modifier = Modifier.width(12.dp))
+        Spacer(modifier = Modifier.width(10.dp))
+
         Column {
-            val parts = formatUsage(usage, locale).split(" ")
-            Row(verticalAlignment = Alignment.Bottom) {
-                Text(
-                    text = parts[0],
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Spacer(modifier = Modifier.width(2.dp))
-                Text(
-                    text = parts.getOrNull(1) ?: "",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
             Text(
-                text = label,
+                text = label.uppercase(),
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
+                fontWeight = FontWeight.ExtraBold,
+                letterSpacing = 0.5.sp
+            )
+            Text(
+                text = value,
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
     }
@@ -928,31 +974,47 @@ fun AppUsageFilterChip(
     val density = LocalDensity.current
 
     Box(modifier = modifier) {
-        FilterChip(
-            selected = true,
+        val containerColor by animateColorAsState(
+            targetValue = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.8f),
+            label = "ChipContainerColor"
+        )
+        val contentColor by animateColorAsState(
+            targetValue = MaterialTheme.colorScheme.onPrimaryContainer,
+            label = "ChipContentColor"
+        )
+
+        Surface(
             onClick = { onExpandedChange(true) },
-            label = {
-                Text(
-                    text = selectedText,
-                    style = MaterialTheme.typography.labelMedium,
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center
-                )
-            },
-            trailingIcon = { Icon(imageVector = Icons.Default.ArrowDropDown, contentDescription = null, modifier = Modifier.size(18.dp)) },
             shape = RoundedCornerShape(12.dp),
-            colors = FilterChipDefaults.filterChipColors(
-                selectedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                selectedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                selectedTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant
-            ),
-            border = null,
+            color = containerColor,
             modifier = Modifier
                 .fillMaxWidth()
                 .onGloballyPositioned { coordinates ->
                     itemWidth = with(density) { coordinates.size.width.toDp() }
                 }
-        )
+        ) {
+            Row(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = selectedText,
+                    style = MaterialTheme.typography.labelLarge,
+                    fontWeight = FontWeight.Medium,
+                    color = contentColor,
+                    modifier = Modifier.weight(1f),
+                    textAlign = TextAlign.Center
+                )
+                Icon(
+                    imageVector = Icons.Default.ArrowDropDown,
+                    contentDescription = null,
+                    modifier = Modifier.size(18.dp),
+                    tint = contentColor
+                )
+            }
+        }
 
         DropdownMenu(
             expanded = expanded,
@@ -962,11 +1024,13 @@ fun AppUsageFilterChip(
                 .background(MaterialTheme.colorScheme.surfaceContainerHigh)
         ) {
             options.forEach { option ->
+                val isSelected = option == selectedText
                 DropdownMenuItem(
                     text = {
                         Text(
                             text = option,
-                            color = if (option == selectedText) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
+                            color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
+                            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
                             modifier = Modifier.fillMaxWidth()
                         )
                     },
@@ -989,12 +1053,6 @@ fun AppUsageItem(
     var expanded by remember { mutableStateOf(false) }
     val progress = if (maxUsageBytes > 0) (displayUsage.toFloat() / maxUsageBytes.toFloat()).coerceIn(0f, 1f) else 0f
 
-    val rotationState by animateFloatAsState(
-        targetValue = if (expanded) 180f else 0f,
-        animationSpec = premiumSpring(),
-        label = "rotation"
-    )
-
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -1004,15 +1062,21 @@ fun AppUsageItem(
                 else expanded = !expanded
             },
         shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainer
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        border = BorderStroke(
+            1.dp,
+            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)
+        )
     ) {
         Column(modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)) {
             Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                 if (appUsage.iconBitmap != null) {
-                    Image(bitmap = appUsage.iconBitmap, contentDescription = null, modifier = Modifier.size(48.dp))
+                    Image(bitmap = appUsage.iconBitmap, contentDescription = null, modifier = Modifier.size(44.dp))
                 } else {
                     val fallbackIcon = when {
                         appUsage.packageName.startsWith("removed") -> Icons.Default.Delete
@@ -1021,7 +1085,7 @@ fun AppUsageItem(
                     }
                     Box(
                         modifier = Modifier
-                            .size(48.dp)
+                            .size(44.dp)
                             .background(MaterialTheme.colorScheme.surfaceVariant, CircleShape),
                         contentAlignment = Alignment.Center
                     ) {
@@ -1029,62 +1093,53 @@ fun AppUsageItem(
                             imageVector = fallbackIcon,
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.size(24.dp)
+                            modifier = Modifier.size(22.dp)
                         )
                     }
                 }
                 Spacer(modifier = Modifier.width(16.dp))
-                Column(modifier = Modifier.weight(1f)) {
-                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            text = appUsage.appName,
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.SemiBold,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.weight(1f)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(
-                                text = formatUsage(displayUsage, locale),
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.primary
-                            )
-                            if (!appUsage.isSystemGroup) {
-                                Icon(
-                                    imageVector = Icons.Default.ExpandMore,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    modifier = Modifier
-                                        .size(24.dp)
-                                        .graphicsLayer { rotationZ = rotationState }
-                                )
-                            }
-                        }
-                    }
-                    Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = appUsage.appName,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f)
+                )
+                
+                Spacer(modifier = Modifier.width(12.dp))
 
-                    // Modern linear progress indicator
-                    LinearProgressIndicator(
-                        progress = { progress },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(6.dp)
-                            .clip(RoundedCornerShape(3.dp)),
-                        color = MaterialTheme.colorScheme.primary,
-                        trackColor = MaterialTheme.colorScheme.primaryContainer,
-                        strokeCap = StrokeCap.Round
-                    )
-                }
+                Text(
+                    text = formatUsage(displayUsage, locale),
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            
+            Spacer(modifier = Modifier.height(10.dp))
+
+            // Custom Solid Progress Pill - FULL WIDTH OF CARD CONTENT
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(6.dp)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f))
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .fillMaxWidth(progress)
+                        .background(MaterialTheme.colorScheme.primary)
+                )
             }
 
             AnimatedVisibility(visible = expanded && !appUsage.isSystemGroup, enter = fadeIn(premiumSpring()) + expandVertically(premiumSpring()), exit = fadeOut(premiumSpring()) + shrinkVertically(premiumSpring())) {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Spacer(modifier = Modifier.height(16.dp))
-                    Divider(color = MaterialTheme.colorScheme.surfaceVariant)
+                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Row(

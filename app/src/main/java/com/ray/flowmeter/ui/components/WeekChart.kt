@@ -11,6 +11,7 @@ import androidx.compose.material.icons.rounded.BarChart
 import androidx.compose.material.icons.rounded.CalendarMonth
 import androidx.compose.material.icons.rounded.DataUsage
 import androidx.compose.material.icons.rounded.ArrowDownward
+import androidx.compose.material.icons.rounded.FilterList
 import androidx.compose.material.icons.rounded.SignalCellularAlt
 import androidx.compose.material.icons.rounded.Today
 import androidx.compose.material.icons.rounded.ArrowUpward
@@ -49,6 +50,9 @@ object AppIcons {
     val ChartMain = Icons.Rounded.BarChart
     val ForecastSafe = Icons.Rounded.AutoGraph
     val ForecastWarning = Icons.Rounded.WarningAmber
+
+    // UI Controls
+    val Filter = Icons.Rounded.FilterList
 }
 
 enum class ChartType {

@@ -34,10 +34,11 @@ class AlertsViewModel(
         else allAlerts.filter { it.alertType == category }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
-    fun refreshData() {
+    fun refreshData(isManual: Boolean = true) {
+        if (!isManual) return
         viewModelScope.launch {
             _isRefreshing.value = true
-            delay(800)
+            delay(500)
             _isRefreshing.value = false
         }
     }

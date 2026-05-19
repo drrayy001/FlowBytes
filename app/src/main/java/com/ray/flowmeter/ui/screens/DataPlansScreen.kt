@@ -47,8 +47,14 @@ fun AppLimitsScreen(
     val wifiDailyLimitConfigured by viewModel.wifiDailyLimitConfigured.collectAsState()
     val wifiMonthlyLimitConfigured by viewModel.wifiMonthlyLimitConfigured.collectAsState()
 
-    val (internalTab, setInternalTab) = remember { mutableIntStateOf(0) }
-    val selectedTab = if (currentTab != 0) currentTab else internalTab
+    val (internalTab, setInternalTab) = remember { mutableIntStateOf(currentTab) }
+    
+    // Sync internal state with external state when navigating back
+    LaunchedEffect(currentTab) {
+        setInternalTab(currentTab)
+    }
+
+    val selectedTab = internalTab
     val updateTab = { index: Int ->
         onTabChange(index)
         setInternalTab(index)

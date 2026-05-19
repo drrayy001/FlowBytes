@@ -96,6 +96,16 @@ fun MainScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val (limitsTab, setLimitsTab) = remember { mutableIntStateOf(0) }
 
+    // Update data when switching tabs
+    LaunchedEffect(currentDestination) {
+        when (currentDestination) {
+            Destination.Home -> homeViewModel.updateTotalUsage()
+            Destination.Usage -> appUsageViewModel.refreshData(isManual = false)
+            Destination.Alerts -> alertsViewModel.refreshData(isManual = false)
+            else -> {}
+        }
+    }
+
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
             modifier = Modifier.fillMaxSize(),

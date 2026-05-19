@@ -177,8 +177,10 @@ class AppUsageViewModel(
     }
 
     fun refreshData(isManual: Boolean = true) {
-        viewModelScope.launch {
+        loadJob?.cancel()
+        loadJob = viewModelScope.launch {
             if (isManual) isRefreshing = true
+            else if (_appUsageList.value.isEmpty()) isLoading = true
             
             val filter = repository.usageTimeFilter.first()
             val now = System.currentTimeMillis()
@@ -228,6 +230,8 @@ class AppUsageViewModel(
             if (isManual) {
                 delay(500)
                 isRefreshing = false
+            } else {
+                isLoading = false
             }
         }
     }

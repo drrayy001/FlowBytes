@@ -15,6 +15,7 @@ import com.ray.flowmeter.data.UserPreferencesRepository
 import com.ray.flowmeter.R
 import com.ray.flowmeter.ui.components.ChartType
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -74,9 +75,12 @@ class HomeViewModel(
         }
     }
 
+    private var updateJob: Job? = null
+
     // Refresh all usage statistics for the UI
     fun updateTotalUsage() {
-        viewModelScope.launch(Dispatchers.IO) {
+        updateJob?.cancel()
+        updateJob = viewModelScope.launch(Dispatchers.IO) {
             val resetHour = repository.resetTimeHour.first()
             val resetMinute = repository.resetTimeMinute.first()
 

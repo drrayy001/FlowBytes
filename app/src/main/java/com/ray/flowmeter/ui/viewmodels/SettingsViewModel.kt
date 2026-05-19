@@ -20,7 +20,13 @@ object ThemeMode {
     const val DARK = "Dark"
 }
 
-class SettingsViewModel(private val repository: UserPreferencesRepository) : ViewModel() {
+class SettingsViewModel(
+    private val repository: UserPreferencesRepository,
+    initialTheme: String = ThemeMode.SYSTEM,
+    initialMaterialYou: Boolean = true,
+    initialAmoled: Boolean = false,
+    initialAccent: Long? = null
+) : ViewModel() {
 
     init {
         viewModelScope.launch {
@@ -47,16 +53,16 @@ class SettingsViewModel(private val repository: UserPreferencesRepository) : Vie
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
     val accentColor: StateFlow<Long?> = repository.accentColor
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), initialAccent)
 
     val themeMode: StateFlow<String> = repository.themeMode
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), "System")
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), initialTheme)
 
     val useMaterialYou: StateFlow<Boolean> = repository.useMaterialYou
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), initialValue = true)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), initialValue = initialMaterialYou)
 
     val useAmoled: StateFlow<Boolean> = repository.useAmoled
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), initialValue = false)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), initialValue = initialAmoled)
 
     val showNotification: StateFlow<Boolean> = repository.showNotification
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), initialValue = true)

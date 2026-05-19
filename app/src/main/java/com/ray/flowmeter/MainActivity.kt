@@ -36,6 +36,8 @@ import com.ray.flowmeter.ui.viewmodels.AppUsageViewModel
 import com.ray.flowmeter.ui.viewmodels.HomeViewModel
 import com.ray.flowmeter.ui.viewmodels.OnboardingViewModel
 import com.ray.flowmeter.ui.viewmodels.SettingsViewModel
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 
 class MainActivity : ComponentActivity() {
 
@@ -79,6 +81,12 @@ class MainActivity : ComponentActivity() {
         val alertRepository = AlertRepository(database.appAlertDao())
         val appLimitRepository = AppLimitRepository(database.appLimitDao())
 
+        // Pre-load theme settings to avoid dark theme flash on startup
+        val initialTheme = runBlocking { repository.themeMode.first() }
+        val initialMaterialYou = runBlocking { repository.useMaterialYou.first() }
+        val initialAmoled = runBlocking { repository.useAmoled.first() }
+        val initialAccent = runBlocking { repository.accentColor.first() }
+
         val onboardingViewModel = ViewModelProvider(
             this,
             object : ViewModelProvider.Factory {
@@ -94,7 +102,13 @@ class MainActivity : ComponentActivity() {
             object : ViewModelProvider.Factory {
                 override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
                     @Suppress("UNCHECKED_CAST")
-                    return SettingsViewModel(repository) as T
+                    return SettingsViewModel(
+                        repository = repository,
+                        initialTheme = initialTheme,
+                        initialMaterialYou = initialMaterialYou,
+                        initialAmoled = initialAmoled,
+                        initialAccent = initialAccent
+                    ) as T
                 }
             },
         )[SettingsViewModel::class.java]
@@ -142,6 +156,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val onboardingCompleted by repository.onboardingCompleted.collectAsState(null)
             val lastVersionCode by repository.lastVersionCode.collectAsState(-1)
+            
             val themeMode by settingsViewModel.themeMode.collectAsState()
             val useMaterialYou by settingsViewModel.useMaterialYou.collectAsState()
             val useAmoled by settingsViewModel.useAmoled.collectAsState()

@@ -46,10 +46,10 @@ val OnSecondaryLight = Color(0xFFFFFFFF)
 val SecondaryContainerLight = Color(0xFFD8E2FF)
 val OnSecondaryContainerLight = Color(0xFF0F1B32)
 
-val TertiaryLight = Color(0xFF76517B)
+val TertiaryLight = Color(0xFF006495)
 val OnTertiaryLight = Color(0xFFFFFFFF)
-val TertiaryContainerLight = Color(0xFFFED7FF)
-val OnTertiaryContainerLight = Color(0xFF2D0E34)
+val TertiaryContainerLight = Color(0xFFCBE6FF)
+val OnTertiaryContainerLight = Color(0xFF001E30)
 
 val ErrorLight = Color(0xFFBA1A1A)
 val OnErrorLight = Color(0xFFFFFFFF)
@@ -75,10 +75,10 @@ val OnSecondaryDark = Color(0xFF253048)
 val SecondaryContainerDark = Color(0xFF3B475F)
 val OnSecondaryContainerDark = Color(0xFFD8E2FF)
 
-val TertiaryDark = Color(0xFFE5B8E8)
-val OnTertiaryDark = Color(0xFF44244A)
-val TertiaryContainerDark = Color(0xFF5D3A62)
-val OnTertiaryContainerDark = Color(0xFFFED7FF)
+val TertiaryDark = Color(0xFF8FCDFF)
+val OnTertiaryDark = Color(0xFF00344E)
+val TertiaryContainerDark = Color(0xFF004B6F)
+val OnTertiaryContainerDark = Color(0xFFCBE6FF)
 
 val ErrorDark = Color(0xFFFFB4AB)
 val OnErrorDark = Color(0xFF690005)
@@ -347,7 +347,7 @@ private fun deriveCustomColorScheme(accent: Color, isDark: Boolean): ColorScheme
     val sat = hsv[1]
 
     val secondary = Color(AndroidColor.HSVToColor(floatArrayOf(hue, sat * 0.4f, if (isDark) 0.8f else 0.4f)))
-    val tertiary = Color(AndroidColor.HSVToColor(floatArrayOf((hue + 60) % 360, sat * 0.6f, if (isDark) 0.8f else 0.5f)))
+    val tertiary = Color(AndroidColor.HSVToColor(floatArrayOf((hue + 340) % 360, sat * 0.6f, if (isDark) 0.8f else 0.5f)))
 
     val base = if (isDark) DarkColorScheme else LightColorScheme
 
@@ -363,7 +363,7 @@ private fun deriveCustomColorScheme(accent: Color, isDark: Boolean): ColorScheme
             onSecondaryContainer = Color.White,
             tertiary = tertiary,
             onTertiary = Color.Black,
-            tertiaryContainer = Color(AndroidColor.HSVToColor(floatArrayOf((hue + 60) % 360, sat * 0.4f, 0.2f))),
+            tertiaryContainer = Color(AndroidColor.HSVToColor(floatArrayOf((hue + 340) % 360, sat * 0.4f, 0.2f))),
             onTertiaryContainer = Color.White,
         )
     } else {
@@ -378,8 +378,8 @@ private fun deriveCustomColorScheme(accent: Color, isDark: Boolean): ColorScheme
             onSecondaryContainer = Color(AndroidColor.HSVToColor(floatArrayOf(hue, sat * 0.6f, 0.2f))),
             tertiary = tertiary,
             onTertiary = Color.White,
-            tertiaryContainer = Color(AndroidColor.HSVToColor(floatArrayOf((hue + 60) % 360, sat * 0.15f, 0.95f))),
-            onTertiaryContainer = Color(AndroidColor.HSVToColor(floatArrayOf((hue + 60) % 360, sat, 0.3f))),
+            tertiaryContainer = Color(AndroidColor.HSVToColor(floatArrayOf((hue + 340) % 360, sat * 0.15f, 0.95f))),
+            onTertiaryContainer = Color(AndroidColor.HSVToColor(floatArrayOf((hue + 340) % 360, sat, 0.3f))),
         )
     }
 }

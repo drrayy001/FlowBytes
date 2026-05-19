@@ -1061,22 +1061,22 @@ fun AppUsageItem(
                 if (appUsage.isSystemGroup) onClick()
                 else expanded = !expanded
             },
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainerLow
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         border = BorderStroke(
             1.dp,
-            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)
+            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
         )
     ) {
         Column(modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)) {
+            .padding(12.dp)) {
             Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                 if (appUsage.iconBitmap != null) {
-                    Image(bitmap = appUsage.iconBitmap, contentDescription = null, modifier = Modifier.size(44.dp))
+                    Image(bitmap = appUsage.iconBitmap, contentDescription = null, modifier = Modifier.size(40.dp))
                 } else {
                     val fallbackIcon = when {
                         appUsage.packageName.startsWith("removed") -> Icons.Default.Delete
@@ -1085,7 +1085,7 @@ fun AppUsageItem(
                     }
                     Box(
                         modifier = Modifier
-                            .size(44.dp)
+                            .size(40.dp)
                             .background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f), CircleShape),
                         contentAlignment = Alignment.Center
                     ) {
@@ -1093,92 +1093,126 @@ fun AppUsageItem(
                             imageVector = fallbackIcon,
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.size(22.dp)
+                            modifier = Modifier.size(20.dp)
                         )
                     }
                 }
-                Spacer(modifier = Modifier.width(16.dp))
-                Text(
-                    text = appUsage.appName,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.weight(1f)
-                )
-                
                 Spacer(modifier = Modifier.width(12.dp))
+                
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = appUsage.appName,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    // Progress Pill - Indented under app name
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth(0.85f)
+                            .height(6.dp)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f))
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .fillMaxWidth(progress)
+                                .background(MaterialTheme.colorScheme.primary)
+                        )
+                    }
+                }
+                
+                Spacer(modifier = Modifier.width(8.dp))
 
                 Text(
                     text = formatUsage(displayUsage, locale),
                     style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.Black,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-            
-            Spacer(modifier = Modifier.height(10.dp))
 
-            // Custom Solid Progress Pill - FULL WIDTH OF CARD CONTENT
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(6.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f))
+            AnimatedVisibility(
+                visible = expanded && !appUsage.isSystemGroup,
+                enter = fadeIn(premiumSpring()) + expandVertically(premiumSpring()),
+                exit = fadeOut(premiumSpring()) + shrinkVertically(premiumSpring())
             ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .fillMaxWidth(progress)
-                        .background(MaterialTheme.colorScheme.primary)
-                )
-            }
-
-            AnimatedVisibility(visible = expanded && !appUsage.isSystemGroup, enter = fadeIn(premiumSpring()) + expandVertically(premiumSpring()), exit = fadeOut(premiumSpring()) + shrinkVertically(premiumSpring())) {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Spacer(modifier = Modifier.height(16.dp))
                     HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceAround
-                    ) {
-                        UsageDetailItem(
-                            label = stringResource(R.string.label_download),
-                            value = formatUsage(appUsage.downUsage, locale),
-                            icon = AppIcons.Download,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                        UsageDetailItem(
-                            label = stringResource(R.string.label_upload),
-                            value = formatUsage(appUsage.upUsage, locale),
-                            icon = AppIcons.Upload,
-                            color = MaterialTheme.colorScheme.secondary
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(16.dp))
+                    val downloadColor = MaterialTheme.colorScheme.primary
+                    val uploadColor = MaterialTheme.colorScheme.tertiary
+                    val wifiColor = MaterialTheme.colorScheme.secondary
+                    val mobileColor = uploadColor
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceAround
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        UsageDetailItem(
-                            label = stringResource(R.string.label_wifi_usage),
-                            value = formatUsage(appUsage.wifiUsage, locale),
-                            icon = AppIcons.Wifi,
-                            color = MaterialTheme.colorScheme.tertiary
+                        // Left Column: Download & Wi-Fi
+                        Column(
+                            modifier = Modifier.weight(1f),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Column(horizontalAlignment = Alignment.Start) {
+                                ModernUsageSubItem(
+                                    label = stringResource(R.string.label_download),
+                                    value = formatUsage(appUsage.downUsage, locale),
+                                    icon = AppIcons.Download,
+                                    color = downloadColor
+                                )
+                                Spacer(modifier = Modifier.height(20.dp))
+                                ModernUsageSubItem(
+                                    label = stringResource(R.string.label_wifi_usage),
+                                    value = formatUsage(appUsage.wifiUsage, locale),
+                                    icon = AppIcons.Wifi,
+                                    color = wifiColor
+                                )
+                            }
+                        }
+
+                        // Central Vertical Divider
+                        Box(
+                            modifier = Modifier
+                                .height(64.dp)
+                                .width(1.dp)
+                                .background(MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                         )
-                        UsageDetailItem(
-                            label = stringResource(R.string.label_mobile_usage),
-                            value = formatUsage(appUsage.cellUsage, locale),
-                            icon = AppIcons.Mobile,
-                            color = MaterialTheme.colorScheme.tertiary
-                        )
+
+                        // Right Column: Upload & Mobile
+                        Column(
+                            modifier = Modifier.weight(1f),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Column(horizontalAlignment = Alignment.Start) {
+                                ModernUsageSubItem(
+                                    label = stringResource(R.string.label_upload),
+                                    value = formatUsage(appUsage.upUsage, locale),
+                                    icon = AppIcons.Upload,
+                                    color = uploadColor
+                                )
+                                Spacer(modifier = Modifier.height(20.dp))
+                                ModernUsageSubItem(
+                                    label = stringResource(R.string.label_mobile_usage),
+                                    value = formatUsage(appUsage.cellUsage, locale),
+                                    icon = AppIcons.Mobile,
+                                    color = mobileColor
+                                )
+                            }
+                        }
                     }
+                    
+                    Spacer(modifier = Modifier.height(8.dp))
+                    
+                    Spacer(modifier = Modifier.height(4.dp))
                 }
             }
         }
@@ -1187,36 +1221,7 @@ fun AppUsageItem(
 
 
 
-@Composable
-fun UsageDetailItem(
-    label: String,
-    value: String,
-    icon: ImageVector,
-    color: Color
-) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            tint = color,
-            modifier = Modifier.size(20.dp)
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        Column {
-            Text(
-                text = value,
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-            Text(
-                text = label,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-    }
-}
+
 
 private fun formatUsage(bytes: Long, locale: Locale): String {
     return when {

@@ -195,9 +195,9 @@ fun PeriodChip(selected: Boolean, onClick: () -> Unit, label: String) {
         shape = RoundedCornerShape(12.dp),
         leadingIcon = if (selected) { { Icon(Icons.Rounded.Check, null, modifier = Modifier.size(16.dp)) } } else null,
         colors = FilterChipDefaults.filterChipColors(
-            selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-            selectedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer,
-            selectedLeadingIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            selectedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+            selectedLabelColor = MaterialTheme.colorScheme.onSecondaryContainer,
+            selectedLeadingIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
             labelColor = MaterialTheme.colorScheme.onSurfaceVariant,
             iconColor = MaterialTheme.colorScheme.primary
         ),
@@ -220,9 +220,9 @@ fun NetworkChip(selected: Boolean, onClick: () -> Unit, label: String, icon: and
         shape = RoundedCornerShape(12.dp),
         leadingIcon = { Icon(icon, null, modifier = Modifier.size(16.dp)) },
         colors = FilterChipDefaults.filterChipColors(
-            selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-            selectedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer,
-            selectedLeadingIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            selectedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+            selectedLabelColor = MaterialTheme.colorScheme.onSecondaryContainer,
+            selectedLeadingIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
             labelColor = MaterialTheme.colorScheme.onSurfaceVariant,
             iconColor = MaterialTheme.colorScheme.primary
         ),

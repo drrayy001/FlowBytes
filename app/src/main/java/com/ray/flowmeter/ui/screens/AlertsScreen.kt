@@ -127,12 +127,12 @@ fun AlertsScreen(
                     items(categories) { (id, label) ->
                         val selected = selectedCategory == id
                         val contentColor by animateColorAsState(
-                            if (selected) MaterialTheme.colorScheme.onPrimaryContainer 
+                            if (selected) MaterialTheme.colorScheme.onSecondaryContainer 
                             else MaterialTheme.colorScheme.onSurfaceVariant,
                             label = "TabContentColor"
                         )
                         val containerColor by animateColorAsState(
-                            if (selected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.8f) 
+                            if (selected) MaterialTheme.colorScheme.secondaryContainer
                             else MaterialTheme.colorScheme.surfaceContainerHigh,
                             label = "TabContainerColor"
                         )

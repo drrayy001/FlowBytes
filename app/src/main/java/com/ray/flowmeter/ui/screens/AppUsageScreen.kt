@@ -975,11 +975,11 @@ fun AppUsageFilterChip(
 
     Box(modifier = modifier) {
         val containerColor by animateColorAsState(
-            targetValue = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.8f),
+            targetValue = MaterialTheme.colorScheme.secondaryContainer,
             label = "ChipContainerColor"
         )
         val contentColor by animateColorAsState(
-            targetValue = MaterialTheme.colorScheme.onPrimaryContainer,
+            targetValue = MaterialTheme.colorScheme.onSecondaryContainer,
             label = "ChipContentColor"
         )
 

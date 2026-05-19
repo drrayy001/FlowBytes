@@ -68,7 +68,7 @@ fun HomeScreen(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(32.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceContainer
+                        containerColor = MaterialTheme.colorScheme.surfaceContainerLow
                     ),
                     border = androidx.compose.foundation.BorderStroke(
                         1.dp,
@@ -78,7 +78,7 @@ fun HomeScreen(
                     Column(modifier = Modifier.padding(20.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Surface(
-                                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
+                                color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f),
                                 shape = CircleShape,
                                 modifier = Modifier.size(36.dp)
                             ) {
@@ -210,7 +210,7 @@ fun UsageSummaryCard(
             .then(if (onClick != null) Modifier.bounceClick(onClick = onClick) else Modifier),
         shape = shape,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainer
+            containerColor = MaterialTheme.colorScheme.surfaceContainerLow
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         border = androidx.compose.foundation.BorderStroke(
@@ -239,7 +239,7 @@ fun UsageSummaryContent(
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Surface(
-                    color = accentColor.copy(alpha = 0.12f),
+                    color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f),
                     shape = CircleShape,
                     modifier = Modifier.size(40.dp)
                 ) {
@@ -364,7 +364,7 @@ private fun UsageSubItemIcon(icon: ImageVector, color: Color) {
     Box(
         modifier = Modifier
             .size(32.dp)
-            .background(color.copy(alpha = 0.1f), CircleShape),
+            .background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f), CircleShape),
         contentAlignment = Alignment.Center
     ) {
         Icon(icon, contentDescription = null, tint = color, modifier = Modifier.size(14.dp))

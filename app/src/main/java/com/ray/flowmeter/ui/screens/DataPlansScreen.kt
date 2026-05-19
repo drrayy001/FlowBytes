@@ -551,8 +551,7 @@ fun GeneralLimitItem(
                     modifier = Modifier
                         .size(36.dp)
                         .background(
-                            color = if (enabled) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.7f)
-                            else MaterialTheme.colorScheme.surfaceContainerHigh,
+                            color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f),
                             shape = CircleShape
                         ),
                     contentAlignment = Alignment.Center

@@ -300,7 +300,7 @@ fun AlertItemFront(alert: AppAlert) {
                     else -> Icons.Rounded.Category
                 }
                 Box(
-                    modifier = Modifier.size(44.dp).background(MaterialTheme.colorScheme.surfaceVariant, CircleShape),
+                    modifier = Modifier.size(44.dp).background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f), CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
@@ -362,7 +362,7 @@ fun AlertItemBack(alert: AppAlert) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surfaceContainerHigh, RoundedCornerShape(20.dp))
+            .background(MaterialTheme.colorScheme.surfaceContainer, RoundedCornerShape(20.dp))
             .padding(16.dp)
     ) {
         Row(

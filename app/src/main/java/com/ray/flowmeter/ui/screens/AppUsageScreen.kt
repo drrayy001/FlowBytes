@@ -822,7 +822,7 @@ fun ModernUsageSummary(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(32.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+            containerColor = MaterialTheme.colorScheme.surfaceContainerLow
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         border = BorderStroke(
@@ -930,7 +930,7 @@ fun ModernUsageSubItem(
         Box(
             modifier = Modifier
                 .size(32.dp)
-                .background(color.copy(alpha = 0.12f), CircleShape),
+                .background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f), CircleShape),
             contentAlignment = Alignment.Center
         ) {
             Icon(
@@ -1063,7 +1063,7 @@ fun AppUsageItem(
             },
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainer
+            containerColor = MaterialTheme.colorScheme.surfaceContainerLow
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         border = BorderStroke(
@@ -1086,7 +1086,7 @@ fun AppUsageItem(
                     Box(
                         modifier = Modifier
                             .size(44.dp)
-                            .background(MaterialTheme.colorScheme.surfaceVariant, CircleShape),
+                            .background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f), CircleShape),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(

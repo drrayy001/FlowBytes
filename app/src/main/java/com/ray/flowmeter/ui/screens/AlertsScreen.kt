@@ -234,10 +234,17 @@ private fun AlertItem(alert: AppAlert) {
         modifier = Modifier
             .fillMaxWidth()
             .bounceClick { expanded = !expanded },
-        shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        border = BorderStroke(
+            1.dp,
+            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
+        )
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = Modifier.padding(12.dp)) {
             AlertItemFront(alert)
 
             AnimatedVisibility(
@@ -291,7 +298,7 @@ fun AlertItemFront(alert: AppAlert) {
                 Image(
                     bitmap = appIcon.toBitmap().asImageBitmap(),
                     contentDescription = null,
-                    modifier = Modifier.size(44.dp),
+                    modifier = Modifier.size(40.dp),
                     contentScale = ContentScale.Fit
                 )
             } else {
@@ -300,20 +307,20 @@ fun AlertItemFront(alert: AppAlert) {
                     else -> Icons.Rounded.Category
                 }
                 Box(
-                    modifier = Modifier.size(44.dp).background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f), CircleShape),
+                    modifier = Modifier.size(40.dp).background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f), CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         icon,
                         null,
                         tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(20.dp)
                     )
                 }
             }
         }
 
-        Spacer(modifier = Modifier.width(16.dp))
+        Spacer(modifier = Modifier.width(12.dp))
 
         Column(modifier = Modifier.weight(1f)) {
             Row(

@@ -2,6 +2,7 @@ package com.ray.flowmeter.ui.screens
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.snap
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,11 +20,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
@@ -31,6 +34,7 @@ import com.ray.flowmeter.R
 import com.ray.flowmeter.data.AppLimit
 import com.ray.flowmeter.ui.theme.StaggeredEntrance
 import com.ray.flowmeter.ui.viewmodels.AppLimitsViewModel
+import java.util.Locale
 
 @Composable
 fun AppLimitsScreen(
@@ -545,48 +549,100 @@ fun GeneralLimitItem(
     val progress = if (limit > 0) (currentUsage.toFloat() / limit).coerceIn(0f, 1f) else 0f
     val isOverLimitValue = enabled && (limit > 0) && (currentUsage >= limit)
 
-    Surface(
+    Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(24.dp),
-        color = if (enabled) MaterialTheme.colorScheme.surfaceContainerLow else MaterialTheme.colorScheme.surfaceContainerLowest,
-        tonalElevation = 1.dp
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = if (enabled) MaterialTheme.colorScheme.surfaceContainerLow else MaterialTheme.colorScheme.surfaceContainerLowest
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        border = BorderStroke(
+            1.dp,
+            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
+        )
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = Modifier.padding(12.dp)) {
+            val barColor = when {
+                title.contains("Wi-Fi", ignoreCase = true) -> MaterialTheme.colorScheme.secondary
+                title.contains("Mobile", ignoreCase = true) -> MaterialTheme.colorScheme.tertiary
+                else -> MaterialTheme.colorScheme.primary
+            }
+
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box(
                     modifier = Modifier
-                        .size(36.dp)
+                        .size(40.dp)
                         .background(
-                            color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f),
+                            color = barColor.copy(alpha = 0.15f),
                             shape = CircleShape
                         ),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         icon, null,
-                        tint = if (enabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
+                        tint = if (enabled) barColor else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
                         modifier = Modifier.size(18.dp)
                     )
                 }
                 Spacer(Modifier.width(12.dp))
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.weight(1f),
-                    color = if (enabled) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
-                )
+                
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = if (enabled) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    
+                    if (enabled) {
+                        Spacer(modifier = Modifier.height(4.dp))
+                        // Progress Pill - Exactly as App Usage Screen
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth(0.85f)
+                                .height(6.dp)
+                                .clip(CircleShape)
+                                .background(barColor.copy(alpha = 0.1f))
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxHeight()
+                                    .fillMaxWidth(progress)
+                                    .background(if (isOverLimitValue) MaterialTheme.colorScheme.error else barColor)
+                            )
+                        }
+                    }
+                }
+
+                if (enabled) {
+                    Text(
+                        text = formatUsage(currentUsage),
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Black,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Spacer(Modifier.width(8.dp))
+                }
+
                 Switch(checked = enabled, onCheckedChange = onToggle, modifier = Modifier.scale(0.7f))
             }
 
             if (enabled) {
-                Spacer(Modifier.height(16.dp))
-                ModernProgressIndicator(
-                    current = currentUsage,
-                    limit = limit,
-                    progress = progress,
-                    isOverLimit = isOverLimitValue,
-                )
+                Spacer(Modifier.height(8.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(start = 52.dp, end = 4.dp),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Limit: ${formatUsage(limit)} • ${(progress * 100).toInt()}%",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = if (isOverLimitValue) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
             }
 
             Spacer(Modifier.height(12.dp))
@@ -635,20 +691,29 @@ fun AppLimitItem(
     val wifiProgress = if (limit.wifiDataLimit > 0) (limit.currentWifiUsage.toFloat() / limit.wifiDataLimit).coerceIn(0f, 1f) else 0f
     val mobileProgress = if (limit.mobileDataLimit > 0) (limit.currentMobileUsage.toFloat() / limit.mobileDataLimit).coerceIn(0f, 1f) else 0f
 
-    Surface(
+    val wifiColor = MaterialTheme.colorScheme.secondary
+    val mobileColor = MaterialTheme.colorScheme.tertiary
+
+    Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(24.dp),
-        color = if (limit.isEnabled) MaterialTheme.colorScheme.surfaceContainerLow else MaterialTheme.colorScheme.surfaceContainerLowest,
-        tonalElevation = 1.dp,
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = if (limit.isEnabled) MaterialTheme.colorScheme.surfaceContainerLow else MaterialTheme.colorScheme.surfaceContainerLowest
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        border = BorderStroke(
+            1.dp,
+            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
+        )
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = Modifier.padding(12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 appIcon?.let {
                     Image(
                         bitmap = it.toBitmap().asImageBitmap(),
                         contentDescription = null,
                         modifier = Modifier
-                            .size(36.dp)
+                            .size(40.dp)
                             .clip(RoundedCornerShape(8.dp)),
                         contentScale = ContentScale.Fit,
                         alpha = if (limit.isEnabled) 1f else 0.5f,
@@ -656,7 +721,7 @@ fun AppLimitItem(
                 } ?: Icon(
                     Icons.Rounded.Apps, null,
                     tint = if (limit.isEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
-                    modifier = Modifier.size(36.dp)
+                    modifier = Modifier.size(40.dp)
                 )
 
                 Spacer(modifier = Modifier.width(12.dp))
@@ -670,6 +735,61 @@ fun AppLimitItem(
                         overflow = TextOverflow.Ellipsis,
                         color = if (limit.isEnabled) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                     )
+                    
+                    if (limit.isEnabled) {
+                        if ((limit.networkType == "both") || (limit.networkType == "wifi")) {
+                            Spacer(modifier = Modifier.height(4.dp))
+                            // Progress Pill - Exactly as App Usage Screen
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth(0.85f)
+                                    .height(6.dp)
+                                    .clip(CircleShape)
+                                    .background(wifiColor.copy(alpha = 0.1f))
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxHeight()
+                                        .fillMaxWidth(wifiProgress)
+                                        .background(if (limit.wifiDataLimit > 0 && limit.currentWifiUsage >= limit.wifiDataLimit) MaterialTheme.colorScheme.error else wifiColor)
+                                )
+                            }
+                        }
+
+                        if ((limit.networkType == "both") || (limit.networkType == "mobile")) {
+                            Spacer(modifier = Modifier.height(if (limit.networkType == "both") 6.dp else 4.dp))
+                            // Progress Pill - Exactly as App Usage Screen
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth(0.85f)
+                                    .height(6.dp)
+                                    .clip(CircleShape)
+                                    .background(mobileColor.copy(alpha = 0.1f))
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxHeight()
+                                        .fillMaxWidth(mobileProgress)
+                                        .background(if (limit.mobileDataLimit > 0 && limit.currentMobileUsage >= limit.mobileDataLimit) MaterialTheme.colorScheme.error else mobileColor)
+                                )
+                            }
+                        }
+                    }
+                }
+
+                if (limit.isEnabled) {
+                    val totalUsage = when (limit.networkType) {
+                        "wifi" -> limit.currentWifiUsage
+                        "mobile" -> limit.currentMobileUsage
+                        else -> limit.currentWifiUsage + limit.currentMobileUsage
+                    }
+                    Text(
+                        text = formatUsage(totalUsage),
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Black,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Spacer(Modifier.width(8.dp))
                 }
 
                 Switch(
@@ -680,26 +800,20 @@ fun AppLimitItem(
             }
 
             if (limit.isEnabled) {
-                if ((limit.networkType == "both") || (limit.networkType == "wifi")) {
-                    Spacer(modifier = Modifier.height(16.dp))
-                    ModernProgressIndicator(
-                        label = "Wi-Fi",
-                        current = limit.currentWifiUsage,
-                        limit = limit.wifiDataLimit,
-                        progress = wifiProgress,
-                        isOverLimit = (limit.wifiDataLimit > 0) && (limit.currentWifiUsage >= limit.wifiDataLimit)
-                    )
-                }
-
-                if ((limit.networkType == "both") || (limit.networkType == "mobile")) {
-                    Spacer(modifier = Modifier.height(12.dp))
-                    ModernProgressIndicator(
-                        label = "Mobile",
-                        current = limit.currentMobileUsage,
-                        limit = limit.mobileDataLimit,
-                        progress = mobileProgress,
-                        isOverLimit = (limit.mobileDataLimit > 0) && (limit.currentMobileUsage >= limit.mobileDataLimit)
-                    )
+                Spacer(modifier = Modifier.height(8.dp))
+                Column(modifier = Modifier.fillMaxWidth().padding(start = 52.dp, end = 4.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    if (limit.networkType == "both" || limit.networkType == "wifi") {
+                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                            Text("Wi-Fi ${(wifiProgress * 100).toInt()}%", style = MaterialTheme.typography.labelSmall, color = wifiColor, fontWeight = FontWeight.Black)
+                            Text("Limit: ${formatUsage(limit.wifiDataLimit)}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                    }
+                    if (limit.networkType == "both" || limit.networkType == "mobile") {
+                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                            Text("Mobile ${(mobileProgress * 100).toInt()}%", style = MaterialTheme.typography.labelSmall, color = mobileColor, fontWeight = FontWeight.Black)
+                            Text("Limit: ${formatUsage(limit.mobileDataLimit)}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                    }
                 }
             }
 

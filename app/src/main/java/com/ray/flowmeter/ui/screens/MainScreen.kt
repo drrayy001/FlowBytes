@@ -431,7 +431,8 @@ fun MainScreen(
                             .padding(padding)
                             .background(MaterialTheme.colorScheme.background),
                         state = systemListState,
-                        contentPadding = PaddingValues(bottom = 16.dp)
+                        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         if (filteredSystemAppList.isEmpty()) {
                             item {

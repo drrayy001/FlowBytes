@@ -31,7 +31,8 @@ fun ModernProgressIndicator(
     current: Long,
     limit: Long,
     progress: Float,
-    isOverLimit: Boolean
+    isOverLimit: Boolean,
+    color: Color = MaterialTheme.colorScheme.primary
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(
@@ -45,7 +46,7 @@ fun ModernProgressIndicator(
                         text = label,
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.Black,
-                        color = if (isOverLimit) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
+                        color = if (isOverLimit) MaterialTheme.colorScheme.error else color
                     )
                     Spacer(Modifier.width(8.dp))
                 }
@@ -53,7 +54,7 @@ fun ModernProgressIndicator(
                     text = "${(progress * 100).toInt()}%",
                     style = MaterialTheme.typography.labelSmall,
                     fontWeight = FontWeight.Black,
-                    color = if (isOverLimit) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
+                    color = if (isOverLimit) MaterialTheme.colorScheme.error else color
                 )
             }
             Text(
@@ -66,7 +67,7 @@ fun ModernProgressIndicator(
 
         Spacer(modifier = Modifier.height(6.dp))
 
-        val barColor = if (isOverLimit) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
+        val barColor = if (isOverLimit) MaterialTheme.colorScheme.error else color
         val trackColor = MaterialTheme.colorScheme.surfaceContainerHighest
 
         Canvas(modifier = Modifier

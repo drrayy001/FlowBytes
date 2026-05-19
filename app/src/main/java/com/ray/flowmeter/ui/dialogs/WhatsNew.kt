@@ -73,28 +73,28 @@ fun ChangelogDialog(
                 )
 
                 ChangelogTextItem(
-                    title = "Redesigned App UI",
-                    description = "Experience a completely overhauled interface with Material 3 dynamic colors and smoother transitions for a modern look."
+                    title = "Status Bar Indicators",
+                    description = "Personalize your monitoring experience with customizable icon sizes (Small, Medium, Large) for the real-time speed indicator."
                 )
 
                 ChangelogTextItem(
-                    title = "Per-app Data Limits",
-                    description = "Take control of your data by setting individual usage thresholds for specific apps, helping you avoid overages."
+                    title = "Smart Alert History",
+                    description = "Stay informed with an organized alert history, now categorized into High Traffic, App Limits, and System Data Plans."
                 )
 
                 ChangelogTextItem(
-                    title = "Customizable Notifications",
-                    description = "Tailor the monitor notification to your needs. Choose between displaying real-time speeds, daily usage summary, or both."
+                    title = "Application Muting",
+                    description = "Too many alerts? You can now temporarily silence high-data notifications for specific apps for a cleaner experience."
                 )
 
                 ChangelogTextItem(
-                    title = "Android 15 Compatibility",
-                    description = "Fully optimized for the latest Android 15 release, ensuring the monitoring service starts reliably even after a device reboot."
+                    title = "Privacy-First App Blocking",
+                    description = "Refined local VPN-based app blocking that keeps your data 100% on-device while providing robust usage control."
                 )
 
                 ChangelogTextItem(
-                    title = "Reliable Background Monitoring",
-                    description = "Migrated background startup logic to WorkManager to comply with modern system restrictions and prevent background crashes."
+                    title = "Advanced Detection Tuning",
+                    description = "Fine-tune how high traffic is detected with new settings for speed thresholds, cooldown periods, and reset conditions."
                 )
 
                 Spacer(modifier = Modifier.height(32.dp))

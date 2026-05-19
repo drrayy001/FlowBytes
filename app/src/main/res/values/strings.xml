@@ -262,6 +262,6 @@
     <string name="notification_summary_text">FlowBytes Alerts</string>
     <string name="notification_app_limit_msg">%1$s has reached its data limit of %2$s.</string>
     <string name="notification_app_limit_title">%s Limit Reached</string>
-    <string name="msg_reached_limit">You have reached the %1$s limit for %2$s. Total usage: %3$s</string>
+    <string name="msg_reached_limit">You have reached the %1$s limit for %2$s.</string>
     <string name="btn_silence">Silence</string>
 </resources>

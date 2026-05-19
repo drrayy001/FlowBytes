@@ -34,6 +34,8 @@ import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.navigation3.ui.NavDisplay
 import androidx.navigation3.runtime.NavEntry
+import com.ray.flowmeter.ui.dialogs.MuteAppDialog
+import androidx.compose.ui.platform.LocalContext
 import com.ray.flowmeter.ui.viewmodels.AlertsViewModel
 import com.ray.flowmeter.ui.viewmodels.AppLimitsViewModel
 import com.ray.flowmeter.ui.viewmodels.AppUsageViewModel
@@ -368,6 +370,18 @@ fun MainScreen(
         }
 
         AppLimitsOverlay(appLimitsViewModel)
+
+        val context = LocalContext.current
+        val muteAppName = alertsViewModel.muteRequestAppName
+        if (muteAppName != null) {
+            MuteAppDialog(
+                appName = muteAppName,
+                onDismiss = { alertsViewModel.clearMuteRequest() },
+                onConfirm = { durationMs ->
+                    alertsViewModel.muteApp(context, muteAppName, durationMs)
+                }
+            )
+        }
 
         val isViewingSystemApps = appUsageViewModel.isViewingSystemApps
         val filteredSystemAppList by appUsageViewModel.filteredSystemAppUsageList.collectAsState()

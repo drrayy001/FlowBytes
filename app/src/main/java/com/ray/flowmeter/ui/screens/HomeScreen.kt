@@ -42,7 +42,7 @@ fun HomeScreen(
         modifier = modifier.fillMaxSize(),
         contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
-        userScrollEnabled = false
+        userScrollEnabled = true
     ) {
         item {
             StaggeredEntrance {

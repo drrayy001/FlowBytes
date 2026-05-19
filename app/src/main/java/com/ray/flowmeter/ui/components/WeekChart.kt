@@ -180,7 +180,7 @@ fun WeeklyBarChart(
                         modifier = Modifier
                             .fillMaxHeight()
                             .weight(1f)
-                            .clip(RoundedCornerShape(8.dp))
+                            .clip(RoundedCornerShape(12.dp))
                             .bounceClick {
                                 dates.getOrNull(index)?.let { onDayClick(it) }
                             }
@@ -188,23 +188,19 @@ fun WeeklyBarChart(
                         Box(
                             modifier = Modifier
                                 .weight(1f)
-                                .padding(bottom = 14.dp),
+                                .padding(bottom = 12.dp, start = 4.dp, end = 4.dp),
                             contentAlignment = Alignment.BottomCenter
                         ) {
-                            val barWidth = 32.dp
-                            val barShape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp, bottomStart = 4.dp, bottomEnd = 4.dp)
+                            val barWidth = 26.dp
+                            val barShape = RoundedCornerShape(16.dp)
 
+                            // Background Track (Shadow/Inner glow effect)
                             Box(
                                 modifier = Modifier
                                     .width(barWidth)
                                     .fillMaxHeight()
                                     .clip(barShape)
-                                    .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.02f))
-                                    .border(
-                                        width = 1.dp,
-                                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.02f),
-                                        shape = barShape
-                                    )
+                                    .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.04f))
                             )
 
                             val mRaw = mobileData.getOrNull(index) ?: 0f
@@ -219,10 +215,8 @@ fun WeeklyBarChart(
                             val heightProgress = rawVal * animationProgress.value
 
                             if (heightProgress > 0f || (rawVal > 0f && animationProgress.value > 0.01f)) {
-                                // Apply a "Soft Power" scale (0.75) for better visual detail of low values
-                                // while maintaining general correlation with the linear axis.
                                 val visualProgress = if (rawVal > 0f) {
-                                    (rawVal.toDouble().pow(0.75)).toFloat().coerceIn(0.08f, 1f)
+                                    (rawVal.toDouble().pow(0.75)).toFloat().coerceIn(0.1f, 1f)
                                 } else 0f
                                 
                                 val finalHeight = (visualProgress * animationProgress.value).coerceIn(0f, 1f)
@@ -235,28 +229,41 @@ fun WeeklyBarChart(
                                             .clip(barShape)
                                             .background(
                                                 Brush.verticalGradient(
-                                                    listOf(
-                                                        selectedColor.copy(alpha = 0.7f),
+                                                    colors = listOf(
+                                                        selectedColor.copy(alpha = 0.6f),
+                                                        selectedColor,
                                                         selectedColor
                                                     )
                                                 )
                                             )
-                                    )
+                                    ) {
+                                        // Subtle Shine/Highlight at the top
+                                        Box(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .height(10.dp)
+                                                .background(
+                                                    Brush.verticalGradient(
+                                                        listOf(Color.White.copy(alpha = 0.3f), Color.Transparent)
+                                                    )
+                                                )
+                                        )
+                                    }
                                 }
                             }
                         }
 
                         if (isToday) {
                             Surface(
-                                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
+                                color = MaterialTheme.colorScheme.primary,
                                 shape = RoundedCornerShape(8.dp),
                                 modifier = Modifier.padding(bottom = 10.dp)
                             ) {
                                 Text(
                                     text = day,
                                     style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp),
-                                    fontWeight = FontWeight.ExtraBold,
-                                    color = MaterialTheme.colorScheme.primary,
+                                    fontWeight = FontWeight.Black,
+                                    color = MaterialTheme.colorScheme.onPrimary,
                                     modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                                 )
                             }
@@ -264,8 +271,8 @@ fun WeeklyBarChart(
                             Text(
                                 text = day,
                                 style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp),
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                                fontWeight = FontWeight.ExtraBold,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
                                 modifier = Modifier.padding(bottom = 12.dp)
                             )
                         }

@@ -231,7 +231,7 @@ fun MainScreen(
                     NavigationBarItem(
                         icon = {
                             Icon(
-                                imageVector = if (currentDestination == Destination.Usage) Icons.Filled.BarChart else Icons.Outlined.BarChart,
+                                imageVector = if (currentDestination == Destination.Usage) Icons.Filled.Assessment else Icons.Outlined.Assessment,
                                 contentDescription = stringResource(R.string.title_app_usage)
                             )
                         },
@@ -312,18 +312,19 @@ fun MainScreen(
                                 onNavigateToUsage = { date ->
                                     backStack.clear()
                                     backStack.add(Destination.Usage)
-                                    appUsageViewModel.updateDateFilter(date[Calendar.YEAR], date[Calendar.MONTH], date[Calendar.DAY_OF_MONTH])
+                                    appUsageViewModel.isViewingSystemApps = false
+                                    appUsageViewModel.loadAppUsageForDate(date.timeInMillis)
                                 },
                                 onNavigateToTodayUsage = {
                                     backStack.clear()
                                     backStack.add(Destination.Usage)
-                                    appUsageViewModel.setTimeFilter("day")
-                                    appUsageViewModel.refreshData(isManual = false)
+                                    appUsageViewModel.isViewingSystemApps = false
+                                    appUsageViewModel.loadAppUsageForDate(System.currentTimeMillis())
                                 },
                                 onNavigateToMonthUsage = {
                                     backStack.clear()
                                     backStack.add(Destination.Usage)
-                                    appUsageViewModel.setTimeFilter("month")
+                                    appUsageViewModel.isViewingSystemApps = false
                                     appUsageViewModel.updateToThisMonth()
                                 },
                                 modifier = Modifier.fillMaxSize().padding(innerPadding).nestedScroll(homeScrollBehavior.nestedScrollConnection)

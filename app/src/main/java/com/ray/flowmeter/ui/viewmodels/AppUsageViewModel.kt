@@ -19,6 +19,7 @@ import com.ray.flowmeter.data.UserPreferencesRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
@@ -384,16 +385,7 @@ class AppUsageViewModel(
         val isProcess: Boolean = false,
     )
 
-    private fun resolveUidToInfo(uid: Int, packageManager: PackageManager): ResolvedInfo {
-        val systemIcon = try {
-            val appInfo = packageManager.getApplicationInfo("android", 0)
-            iconCache.getOrPut("android") {
-                packageManager.getApplicationIcon(appInfo).toBitmap().asImageBitmap()
-            }
-        } catch (_: Exception) {
-            null
-        }
-
+    private fun resolveUidToInfo(uid: Int, packageManager: PackageManager, systemIcon: ImageBitmap?): ResolvedInfo {
         when (uid) {
             -2, -4 -> return ResolvedInfo("removed_$uid", "Removed Apps", null, true, true)
             -3, -5 -> return ResolvedInfo("tethering_$uid", "Tethering", null, true, true)
@@ -428,9 +420,13 @@ class AppUsageViewModel(
             val info = try {
                 val appInfo = packageManager.getApplicationInfo(pkg, 0)
                 val name = packageManager.getApplicationLabel(appInfo).toString()
-                val icon = iconCache.getOrPut(pkg) {
-                    packageManager.getApplicationIcon(appInfo).toBitmap().asImageBitmap()
+                
+                val icon = synchronized(iconCache) {
+                    iconCache.getOrPut(pkg) {
+                        packageManager.getApplicationIcon(appInfo).toBitmap().asImageBitmap()
+                    }
                 }
+
                 ResolvedInfo("${pkg}_$uid", name, icon, isSystem)
             } catch (_: Exception) {
                 null
@@ -463,6 +459,25 @@ class AppUsageViewModel(
 
         val allUids = (wifiDownMap.keys + wifiUpMap.keys + cellDownMap.keys + cellUpMap.keys).toSet()
 
+        // Optimize: Resolve system icon once outside the loop
+        val systemIcon = try {
+            val appInfo = packageManager.getApplicationInfo("android", 0)
+            synchronized(iconCache) {
+                iconCache.getOrPut("android") {
+                    packageManager.getApplicationIcon(appInfo).toBitmap().asImageBitmap()
+                }
+            }
+        } catch (_: Exception) {
+            null
+        }
+
+        // Optimize: Parallelize UID resolution to speed up list generation, especially for large datasets (Monthly)
+        val resolvedInfos = coroutineScope {
+            allUids.map { uid ->
+                async { uid to resolveUidToInfo(uid, packageManager, systemIcon) }
+            }.awaitAll().toMap()
+        }
+
         val systemApps = mutableListOf<AppUsageInfo>()
         val systemProcesses = mutableListOf<AppUsageInfo>()
         val userList = mutableListOf<AppUsageInfo>()
@@ -481,7 +496,7 @@ class AppUsageViewModel(
             val absoluteTotal = totalWifi + totalCell
 
             if (absoluteTotal > 0) {
-                val info = resolveUidToInfo(uid, packageManager)
+                val info = resolvedInfos[uid] ?: return@forEach
 
                 val appUsage = AppUsageInfo(
                     packageName = info.packageName,

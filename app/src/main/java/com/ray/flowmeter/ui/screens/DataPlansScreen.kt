@@ -33,6 +33,7 @@ import androidx.core.graphics.drawable.toBitmap
 import com.ray.flowmeter.R
 import com.ray.flowmeter.data.AppLimit
 import com.ray.flowmeter.ui.theme.StaggeredEntrance
+import com.ray.flowmeter.ui.theme.bounceClick
 import com.ray.flowmeter.ui.viewmodels.AppLimitsViewModel
 import java.util.Locale
 
@@ -546,11 +547,21 @@ fun GeneralLimitItem(
     onDelete: () -> Unit,
     enabled: Boolean,
 ) {
+    var expanded by remember { mutableStateOf(false) }
     val progress = if (limit > 0) (currentUsage.toFloat() / limit).coerceIn(0f, 1f) else 0f
     val isOverLimitValue = enabled && (limit > 0) && (currentUsage >= limit)
+    
+    val accentColor = when {
+        title.contains("Wi-Fi", ignoreCase = true) -> MaterialTheme.colorScheme.secondary
+        title.contains("Mobile", ignoreCase = true) -> MaterialTheme.colorScheme.tertiary
+        else -> MaterialTheme.colorScheme.primary
+    }
 
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .animateContentSize()
+            .bounceClick { expanded = !expanded },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (enabled) MaterialTheme.colorScheme.surfaceContainerLow else MaterialTheme.colorScheme.surfaceContainerLowest
@@ -561,35 +572,30 @@ fun GeneralLimitItem(
             MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
         )
     ) {
-        Column(modifier = Modifier.padding(12.dp)) {
-            val barColor = when {
-                title.contains("Wi-Fi", ignoreCase = true) -> MaterialTheme.colorScheme.secondary
-                title.contains("Mobile", ignoreCase = true) -> MaterialTheme.colorScheme.tertiary
-                else -> MaterialTheme.colorScheme.primary
-            }
-
-            Row(verticalAlignment = Alignment.CenterVertically) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Row(verticalAlignment = Alignment.Top) {
                 Box(
                     modifier = Modifier
                         .size(40.dp)
                         .background(
-                            color = barColor.copy(alpha = 0.15f),
+                            color = accentColor.copy(alpha = 0.12f),
                             shape = CircleShape
                         ),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         icon, null,
-                        tint = if (enabled) barColor else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
-                        modifier = Modifier.size(18.dp)
+                        tint = if (enabled) accentColor else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
+                        modifier = Modifier.size(20.dp)
                     )
                 }
+                
                 Spacer(Modifier.width(12.dp))
                 
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = title,
-                        style = MaterialTheme.typography.titleSmall,
+                        style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                         color = if (enabled) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                         maxLines = 1,
@@ -597,75 +603,81 @@ fun GeneralLimitItem(
                     )
                     
                     if (enabled) {
-                        Spacer(modifier = Modifier.height(4.dp))
-                        // Progress Pill - Exactly as App Usage Screen
+                        Spacer(modifier = Modifier.height(6.dp))
                         Box(
                             modifier = Modifier
-                                .fillMaxWidth(0.85f)
+                                .fillMaxWidth(0.95f)
                                 .height(6.dp)
                                 .clip(CircleShape)
-                                .background(barColor.copy(alpha = 0.1f))
+                                .background(accentColor.copy(alpha = 0.08f))
                         ) {
                             Box(
                                 modifier = Modifier
                                     .fillMaxHeight()
                                     .fillMaxWidth(progress)
-                                    .background(if (isOverLimitValue) MaterialTheme.colorScheme.error else barColor)
+                                    .background(if (isOverLimitValue) MaterialTheme.colorScheme.error else accentColor)
+                            )
+                        }
+                        Row(
+                            modifier = Modifier.fillMaxWidth(0.95f).padding(top = 4.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "${(progress * 100).toInt()}%",
+                                style = MaterialTheme.typography.labelSmall,
+                                fontWeight = FontWeight.Black,
+                                color = if (isOverLimitValue) MaterialTheme.colorScheme.error else accentColor
+                            )
+                            Text(
+                                text = "${formatUsage(currentUsage)} / ${formatUsage(limit)}",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                fontWeight = FontWeight.Bold
                             )
                         }
                     }
                 }
 
-                if (enabled) {
-                    Text(
-                        text = formatUsage(currentUsage),
-                        style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.Black,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Spacer(Modifier.width(8.dp))
-                }
-
-                Switch(checked = enabled, onCheckedChange = onToggle, modifier = Modifier.scale(0.7f))
+                Switch(
+                    checked = enabled,
+                    onCheckedChange = onToggle,
+                    modifier = Modifier.scale(0.7f).padding(top = 2.dp)
+                )
             }
 
-            if (enabled) {
-                Spacer(Modifier.height(8.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(start = 52.dp, end = 4.dp),
-                    horizontalArrangement = Arrangement.End,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "Limit: ${formatUsage(limit)} • ${(progress * 100).toInt()}%",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = if (isOverLimitValue) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
-                        fontWeight = FontWeight.Medium
-                    )
-                }
-            }
-
-            Spacer(Modifier.height(12.dp))
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                TextButton(
-                    onClick = onEdit,
-                    modifier = Modifier.height(32.dp),
-                    contentPadding = PaddingValues(horizontal = 12.dp)
-                ) {
-                    Icon(Icons.Rounded.Edit, null, modifier = Modifier.size(14.dp))
-                    Spacer(Modifier.width(6.dp))
-                    Text(stringResource(R.string.btn_edit), style = MaterialTheme.typography.labelLarge)
-                }
-                Spacer(Modifier.width(4.dp))
-                TextButton(
-                    onClick = onDelete,
-                    modifier = Modifier.height(32.dp),
-                    colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error),
-                    contentPadding = PaddingValues(horizontal = 12.dp)
-                ) {
-                    Icon(Icons.Rounded.Delete, null, modifier = Modifier.size(14.dp))
-                    Spacer(Modifier.width(6.dp))
-                    Text(stringResource(R.string.btn_delete), style = MaterialTheme.typography.labelLarge)
+            AnimatedVisibility(
+                visible = expanded,
+                enter = fadeIn() + expandVertically(),
+                exit = fadeOut() + shrinkVertically()
+            ) {
+                Column {
+                    Spacer(Modifier.height(8.dp))
+                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
+                    Spacer(Modifier.height(12.dp))
+                    
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                        TextButton(
+                            onClick = onEdit,
+                            modifier = Modifier.height(32.dp),
+                            contentPadding = PaddingValues(horizontal = 12.dp)
+                        ) {
+                            Icon(Icons.Rounded.Edit, null, modifier = Modifier.size(14.dp))
+                            Spacer(Modifier.width(6.dp))
+                            Text(stringResource(R.string.btn_edit), style = MaterialTheme.typography.labelLarge)
+                        }
+                        Spacer(Modifier.width(4.dp))
+                        TextButton(
+                            onClick = onDelete,
+                            modifier = Modifier.height(32.dp),
+                            colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error),
+                            contentPadding = PaddingValues(horizontal = 12.dp)
+                        ) {
+                            Icon(Icons.Rounded.Delete, null, modifier = Modifier.size(14.dp))
+                            Spacer(Modifier.width(6.dp))
+                            Text(stringResource(R.string.btn_delete), style = MaterialTheme.typography.labelLarge)
+                        }
+                    }
                 }
             }
         }
@@ -679,6 +691,7 @@ fun AppLimitItem(
     onDelete: () -> Unit,
     onEdit: () -> Unit,
 ) {
+    var expanded by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val appIcon = remember(limit.packageName) {
         try {
@@ -695,7 +708,10 @@ fun AppLimitItem(
     val mobileColor = MaterialTheme.colorScheme.tertiary
 
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .animateContentSize()
+            .bounceClick { expanded = !expanded },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (limit.isEnabled) MaterialTheme.colorScheme.surfaceContainerLow else MaterialTheme.colorScheme.surfaceContainerLowest
@@ -706,11 +722,11 @@ fun AppLimitItem(
             MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
         )
     ) {
-        Column(modifier = Modifier.padding(12.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                appIcon?.let {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Row(verticalAlignment = Alignment.Top) {
+                if (appIcon != null) {
                     Image(
-                        bitmap = it.toBitmap().asImageBitmap(),
+                        bitmap = appIcon.toBitmap().asImageBitmap(),
                         contentDescription = null,
                         modifier = Modifier
                             .size(40.dp)
@@ -718,18 +734,20 @@ fun AppLimitItem(
                         contentScale = ContentScale.Fit,
                         alpha = if (limit.isEnabled) 1f else 0.5f,
                     )
-                } ?: Icon(
-                    Icons.Rounded.Apps, null,
-                    tint = if (limit.isEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
-                    modifier = Modifier.size(40.dp)
-                )
+                } else {
+                    Icon(
+                        Icons.Rounded.Apps, null,
+                        tint = if (limit.isEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
+                        modifier = Modifier.size(40.dp)
+                    )
+                }
 
                 Spacer(modifier = Modifier.width(12.dp))
 
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = limit.appName,
-                        style = MaterialTheme.typography.titleSmall,
+                        style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
@@ -738,14 +756,13 @@ fun AppLimitItem(
                     
                     if (limit.isEnabled) {
                         if ((limit.networkType == "both") || (limit.networkType == "wifi")) {
-                            Spacer(modifier = Modifier.height(4.dp))
-                            // Progress Pill - Exactly as App Usage Screen
+                            Spacer(modifier = Modifier.height(10.dp))
                             Box(
                                 modifier = Modifier
-                                    .fillMaxWidth(0.85f)
+                                    .fillMaxWidth(0.95f)
                                     .height(6.dp)
                                     .clip(CircleShape)
-                                    .background(wifiColor.copy(alpha = 0.1f))
+                                    .background(wifiColor.copy(alpha = 0.08f))
                             ) {
                                 Box(
                                     modifier = Modifier
@@ -754,17 +771,24 @@ fun AppLimitItem(
                                         .background(if (limit.wifiDataLimit > 0 && limit.currentWifiUsage >= limit.wifiDataLimit) MaterialTheme.colorScheme.error else wifiColor)
                                 )
                             }
+                            Row(
+                                modifier = Modifier.fillMaxWidth(0.95f).padding(top = 4.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text("${(wifiProgress * 100).toInt()}%", style = MaterialTheme.typography.labelSmall, color = wifiColor, fontWeight = FontWeight.Black)
+                                Text("${formatUsage(limit.currentWifiUsage)} / ${formatUsage(limit.wifiDataLimit)}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Bold)
+                            }
                         }
 
                         if ((limit.networkType == "both") || (limit.networkType == "mobile")) {
-                            Spacer(modifier = Modifier.height(if (limit.networkType == "both") 6.dp else 4.dp))
-                            // Progress Pill - Exactly as App Usage Screen
+                            Spacer(modifier = Modifier.height(if (limit.networkType == "both") 16.dp else 10.dp))
                             Box(
                                 modifier = Modifier
-                                    .fillMaxWidth(0.85f)
+                                    .fillMaxWidth(0.95f)
                                     .height(6.dp)
                                     .clip(CircleShape)
-                                    .background(mobileColor.copy(alpha = 0.1f))
+                                    .background(mobileColor.copy(alpha = 0.08f))
                             ) {
                                 Box(
                                     modifier = Modifier
@@ -773,71 +797,57 @@ fun AppLimitItem(
                                         .background(if (limit.mobileDataLimit > 0 && limit.currentMobileUsage >= limit.mobileDataLimit) MaterialTheme.colorScheme.error else mobileColor)
                                 )
                             }
+                            Row(
+                                modifier = Modifier.fillMaxWidth(0.95f).padding(top = 4.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text("${(mobileProgress * 100).toInt()}%", style = MaterialTheme.typography.labelSmall, color = mobileColor, fontWeight = FontWeight.Black)
+                                Text("${formatUsage(limit.currentMobileUsage)} / ${formatUsage(limit.mobileDataLimit)}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Bold)
+                            }
                         }
                     }
-                }
-
-                if (limit.isEnabled) {
-                    val totalUsage = when (limit.networkType) {
-                        "wifi" -> limit.currentWifiUsage
-                        "mobile" -> limit.currentMobileUsage
-                        else -> limit.currentWifiUsage + limit.currentMobileUsage
-                    }
-                    Text(
-                        text = formatUsage(totalUsage),
-                        style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.Black,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Spacer(Modifier.width(8.dp))
                 }
 
                 Switch(
                     checked = limit.isEnabled,
                     onCheckedChange = onToggle,
-                    modifier = Modifier.scale(0.7f)
+                    modifier = Modifier.scale(0.7f).padding(top = 2.dp)
                 )
             }
 
-            if (limit.isEnabled) {
-                Spacer(modifier = Modifier.height(8.dp))
-                Column(modifier = Modifier.fillMaxWidth().padding(start = 52.dp, end = 4.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    if (limit.networkType == "both" || limit.networkType == "wifi") {
-                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                            Text("Wi-Fi ${(wifiProgress * 100).toInt()}%", style = MaterialTheme.typography.labelSmall, color = wifiColor, fontWeight = FontWeight.Black)
-                            Text("Limit: ${formatUsage(limit.wifiDataLimit)}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            AnimatedVisibility(
+                visible = expanded,
+                enter = fadeIn() + expandVertically(),
+                exit = fadeOut() + shrinkVertically()
+            ) {
+                Column {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
+                    Spacer(Modifier.height(12.dp))
+                    
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                        TextButton(
+                            onClick = onEdit,
+                            modifier = Modifier.height(32.dp),
+                            contentPadding = PaddingValues(horizontal = 12.dp)
+                        ) {
+                            Icon(Icons.Rounded.Edit, null, modifier = Modifier.size(14.dp))
+                            Spacer(Modifier.width(6.dp))
+                            Text(stringResource(R.string.btn_edit), style = MaterialTheme.typography.labelLarge)
+                        }
+                        Spacer(Modifier.width(4.dp))
+                        TextButton(
+                            onClick = onDelete,
+                            modifier = Modifier.height(32.dp),
+                            colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error),
+                            contentPadding = PaddingValues(horizontal = 12.dp)
+                        ) {
+                            Icon(Icons.Rounded.Delete, null, modifier = Modifier.size(14.dp))
+                            Spacer(Modifier.width(6.dp))
+                            Text(stringResource(R.string.btn_delete), style = MaterialTheme.typography.labelLarge)
                         }
                     }
-                    if (limit.networkType == "both" || limit.networkType == "mobile") {
-                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                            Text("Mobile ${(mobileProgress * 100).toInt()}%", style = MaterialTheme.typography.labelSmall, color = mobileColor, fontWeight = FontWeight.Black)
-                            Text("Limit: ${formatUsage(limit.mobileDataLimit)}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        }
-                    }
-                }
-            }
-
-            Spacer(Modifier.height(12.dp))
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                TextButton(
-                    onClick = onEdit,
-                    modifier = Modifier.height(32.dp),
-                    contentPadding = PaddingValues(horizontal = 12.dp)
-                ) {
-                    Icon(Icons.Rounded.Edit, null, modifier = Modifier.size(14.dp))
-                    Spacer(Modifier.width(6.dp))
-                    Text(stringResource(R.string.btn_edit), style = MaterialTheme.typography.labelLarge)
-                }
-                Spacer(Modifier.width(4.dp))
-                TextButton(
-                    onClick = onDelete,
-                    modifier = Modifier.height(32.dp),
-                    colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error),
-                    contentPadding = PaddingValues(horizontal = 12.dp)
-                ) {
-                    Icon(Icons.Rounded.Delete, null, modifier = Modifier.size(14.dp))
-                    Spacer(Modifier.width(6.dp))
-                    Text(stringResource(R.string.btn_delete), style = MaterialTheme.typography.labelLarge)
                 }
             }
         }

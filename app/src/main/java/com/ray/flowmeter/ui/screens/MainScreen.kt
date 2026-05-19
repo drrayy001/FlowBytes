@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.filled.*
@@ -175,9 +176,11 @@ fun MainScreen(
 
                         FloatingActionButton(
                             onClick = { setShowClearDialog(true) },
-                            modifier = Modifier.offset(x = (-16).dp, y = (-16).dp),
-                            containerColor = MaterialTheme.colorScheme.primaryContainer,
-                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                            modifier = Modifier.padding(16.dp),
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.onPrimary,
+                            shape = RoundedCornerShape(20.dp),
+                            elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 4.dp)
                         ) {
                             Icon(
                                 Icons.Rounded.Delete,

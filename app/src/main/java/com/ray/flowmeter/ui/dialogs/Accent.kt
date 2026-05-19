@@ -39,8 +39,31 @@ fun AccentColorDialog(
     onSelect: (Long?) -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    var pickedColor by remember { mutableStateOf(currentColor?.let { Color(it) } ?: Color(0xFF0056D2)) }
+    
+    // Use HSV for more precise color control
+    val initialHsv = remember(currentColor) {
+        val hsv = FloatArray(3)
+        android.graphics.Color.colorToHSV(currentColor?.toInt() ?: 0xFF0056D2.toInt(), hsv)
+        hsv
+    }
+    
+    var hue by remember { mutableFloatStateOf(initialHsv[0]) }
+    var saturation by remember { mutableFloatStateOf(initialHsv[1]) }
+    var value by remember { mutableFloatStateOf(initialHsv[2]) }
+    
+    val pickedColor = remember(hue, saturation, value) {
+        Color(android.graphics.Color.HSVToColor(floatArrayOf(hue, saturation, value)))
+    }
+    
     var hexText by remember { mutableStateOf(pickedColor.toHexString()) }
+    
+    // Sync hex text when color changes from wheel/slider/presets
+    LaunchedEffect(pickedColor) {
+        val newHex = pickedColor.toHexString()
+        if (hexText.uppercase() != newHex.uppercase()) {
+            hexText = newHex
+        }
+    }
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
@@ -63,15 +86,50 @@ fun AccentColorDialog(
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.ExtraBold,
                     color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp),
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 20.dp),
                     textAlign = TextAlign.Center
                 )
+
+                // Presets
+                val presets = listOf(
+                    Color(0xFF0056D2), // Default Blue
+                    Color(0xFFD32F2F), // Red
+                    Color(0xFF388E3C), // Green
+                    Color(0xFFFBC02D), // Yellow
+                    Color(0xFF7B1FA2), // Purple
+                    Color(0xFFE64A19), // Orange
+                    Color(0xFF00796B), // Teal
+                )
+                
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 24.dp),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    presets.forEach { presetColor ->
+                        Surface(
+                            modifier = Modifier
+                                .size(32.dp)
+                                .bounceClick {
+                                    val hsv = FloatArray(3)
+                                    android.graphics.Color.colorToHSV(presetColor.toArgb(), hsv)
+                                    hue = hsv[0]
+                                    saturation = hsv[1]
+                                    value = hsv[2]
+                                },
+                            shape = CircleShape,
+                            color = presetColor,
+                            border = if (pickedColor == presetColor) BorderStroke(2.dp, MaterialTheme.colorScheme.onSurface) else null
+                        ) {}
+                    }
+                }
 
                 // Centered Color Preview and Hex above the Color Wheel
                 Surface(
                     color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
                     shape = RoundedCornerShape(24.dp),
-                    modifier = Modifier.padding(bottom = 28.dp)
+                    modifier = Modifier.padding(bottom = 24.dp)
                 ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -93,32 +151,67 @@ fun AccentColorDialog(
                                 val formatted = if (it.startsWith("#")) it else "#$it"
                                 if (formatted.length <= 7) {
                                     hexText = formatted.uppercase()
-                                    formatted.toColor()?.let { color -> pickedColor = color }
+                                    formatted.toColor()?.let { color ->
+                                        val hsv = FloatArray(3)
+                                        android.graphics.Color.colorToHSV(color.toArgb(), hsv)
+                                        hue = hsv[0]
+                                        saturation = hsv[1]
+                                        value = hsv[2]
+                                    }
                                 }
                             },
-                            textStyle = MaterialTheme.typography.titleLarge.copy(
+                            textStyle = MaterialTheme.typography.bodyLarge.copy(
                                 fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.onSurface,
-                                letterSpacing = 1.sp
+                                letterSpacing = 1.sp,
+                                textAlign = TextAlign.Center
                             ),
                             singleLine = true,
                             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Characters),
-                            modifier = Modifier.width(100.dp)
+                            modifier = Modifier.width(80.dp)
                         )
                     }
                 }
 
-                // Adjusted size for better visual proportion
-                ColorWheel(
-                    selectedColor = pickedColor,
-                    modifier = Modifier
-                        .size(220.dp)
-                        .padding(bottom = 28.dp),
-                    onColorChanged = {
-                        pickedColor = it
-                        hexText = it.toHexString()
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 28.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    // Adjusted size for better visual proportion
+                    ColorWheel(
+                        hue = hue,
+                        saturation = saturation,
+                        modifier = Modifier.size(200.dp),
+                        onColorChanged = { h, s ->
+                            hue = h
+                            saturation = s
+                        }
+                    )
+                    
+                    Spacer(modifier = Modifier.width(24.dp))
+                    
+                    // Brightness Slider
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.height(200.dp)
+                    ) {
+                        Text(
+                            "B",
+                            style = MaterialTheme.typography.labelMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        BrightnessSlider(
+                            value = value,
+                            hue = hue,
+                            saturation = saturation,
+                            onValueChange = { value = it },
+                            modifier = Modifier.weight(1f).width(40.dp)
+                        )
                     }
-                )
+                }
 
                 Surface(
                     modifier = Modifier
@@ -140,25 +233,6 @@ fun AccentColorDialog(
                         )
                     }
                 }
-
-                Surface(
-                    modifier = Modifier
-                        .padding(top = 12.dp)
-                        .bounceClick {
-                            onSelect(null)
-                            onDismiss()
-                        },
-                    shape = RoundedCornerShape(16.dp),
-                    color = Color.Transparent,
-                    contentColor = MaterialTheme.colorScheme.primary
-                ) {
-                    Text(
-                        text = stringResource(R.string.btn_reset_default),
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                }
             }
         }
     }
@@ -166,9 +240,10 @@ fun AccentColorDialog(
 
 @Composable
 fun ColorWheel(
-    selectedColor: Color,
+    hue: Float,
+    saturation: Float,
     modifier: Modifier = Modifier,
-    onColorChanged: (Color) -> Unit
+    onColorChanged: (Float, Float) -> Unit
 ) {
     var center by remember { mutableStateOf(Offset.Zero) }
     var radius by remember { mutableFloatStateOf(0f) }
@@ -184,16 +259,16 @@ fun ColorWheel(
             .pointerInput(center, radius) {
                 if (radius <= 0) return@pointerInput
                 detectDragGestures { change, _ ->
-                    val color = getColorAtPoint(change.position, center, radius)
-                    onColorChanged(color)
+                    val (h, s) = getHueSatAtPoint(change.position, center, radius)
+                    onColorChanged(h, s)
                     change.consume()
                 }
             }
             .pointerInput(center, radius) {
                 if (radius <= 0) return@pointerInput
                 detectTapGestures { position ->
-                    val color = getColorAtPoint(position, center, radius)
-                    onColorChanged(color)
+                    val (h, s) = getHueSatAtPoint(position, center, radius)
+                    onColorChanged(h, s)
                 }
             }
     ) {
@@ -218,11 +293,6 @@ fun ColorWheel(
         )
 
         // Selector
-        val hsv = FloatArray(3)
-        android.graphics.Color.colorToHSV(selectedColor.toArgb(), hsv)
-        val hue = hsv[0]
-        val saturation = hsv[1]
-
         val angle = (hue.toDouble() * PI / 180.0)
         val selectorRadius = saturation * radius
         val x = center.x + cos(angle).toFloat() * selectorRadius
@@ -230,14 +300,70 @@ fun ColorWheel(
 
         drawCircle(
             color = Color.White,
-            radius = 12.dp.toPx(),
+            radius = 10.dp.toPx(),
             center = Offset(x, y),
-            style = Stroke(width = 4.dp.toPx())
+            style = Stroke(width = 3.dp.toPx())
+        )
+        drawCircle(
+            color = Color.Black.copy(alpha = 0.2f),
+            radius = 11.dp.toPx(),
+            center = Offset(x, y),
+            style = Stroke(width = 1.dp.toPx())
         )
     }
 }
 
-private fun getColorAtPoint(position: Offset, center: Offset, radius: Float): Color {
+@Composable
+fun BrightnessSlider(
+    value: Float,
+    hue: Float,
+    saturation: Float,
+    onValueChange: (Float) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var height by remember { mutableFloatStateOf(0f) }
+
+    Canvas(
+        modifier = modifier
+            .fillMaxHeight()
+            .onSizeChanged { height = it.height.toFloat() }
+            .pointerInput(Unit) {
+                detectTapGestures { offset ->
+                    onValueChange((1f - (offset.y / height)).coerceIn(0f, 1f))
+                }
+            }
+            .pointerInput(Unit) {
+                detectDragGestures { change, _ ->
+                    onValueChange((1f - (change.position.y / height)).coerceIn(0f, 1f))
+                    change.consume()
+                }
+            }
+    ) {
+        val strokeWidth = size.width
+        val cornerRadius = strokeWidth / 2
+
+        // Background Gradient
+        val colorTop = Color(android.graphics.Color.HSVToColor(floatArrayOf(hue, saturation, 1f)))
+        val colorBottom = Color(android.graphics.Color.HSVToColor(floatArrayOf(hue, saturation, 0f)))
+        
+        drawRoundRect(
+            brush = Brush.verticalGradient(listOf(colorTop, colorBottom)),
+            size = size,
+            cornerRadius = androidx.compose.ui.geometry.CornerRadius(cornerRadius, cornerRadius)
+        )
+
+        // Selector
+        val selectorY = (1f - value) * height
+        drawCircle(
+            color = Color.White,
+            radius = (strokeWidth / 2) - 2.dp.toPx(),
+            center = Offset(size.width / 2, selectorY),
+            style = Stroke(width = 3.dp.toPx())
+        )
+    }
+}
+
+private fun getHueSatAtPoint(position: Offset, center: Offset, radius: Float): Pair<Float, Float> {
     val dx = position.x - center.x
     val dy = position.y - center.y
     val distance = sqrt(dx * dx + dy * dy).coerceAtMost(radius)
@@ -247,9 +373,7 @@ private fun getColorAtPoint(position: Offset, center: Offset, radius: Float): Co
     if (hue < 0) hue += 360f
 
     val saturation = distance / radius
-
-    val hsv = floatArrayOf(hue, saturation, 1f)
-    return Color(android.graphics.Color.HSVToColor(hsv))
+    return hue to saturation
 }
 
 private fun Color.toHexString(): String {

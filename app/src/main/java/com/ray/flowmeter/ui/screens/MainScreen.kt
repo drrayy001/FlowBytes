@@ -67,17 +67,23 @@ fun MainScreen(
     settingsViewModel: SettingsViewModel,
     initialDestination: Destination = Destination.Home,
 ) {
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val homeScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val usageScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val alertsScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val limitsScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val settingsScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-
-    var showUsageFilters by remember { mutableStateOf(false) }
+    val systemAppsScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     val backStack = remember { mutableStateListOf(initialDestination) }
     val currentDestination = backStack.last()
+
+    val currentScrollBehavior = when (currentDestination) {
+        Destination.Home -> homeScrollBehavior
+        Destination.Usage -> usageScrollBehavior
+        Destination.Alerts -> alertsScrollBehavior
+        Destination.Limits -> limitsScrollBehavior
+        Destination.Settings -> settingsScrollBehavior
+    }
 
     BackHandler(enabled = (currentDestination != Destination.Home)) {
         backStack.clear()
@@ -86,6 +92,7 @@ fun MainScreen(
 
     val snackbarHostState = remember { SnackbarHostState() }
     val (limitsTab, setLimitsTab) = remember { mutableIntStateOf(0) }
+    var showUsageFilters by remember { mutableStateOf(false) }
 
     // Update data when switching tabs
     LaunchedEffect(currentDestination) {
@@ -103,7 +110,7 @@ fun MainScreen(
             snackbarHost = { SnackbarHost(snackbarHostState) },
             topBar = {
                 val containerColor by animateColorAsState(
-                    targetValue = if (scrollBehavior.state.contentOffset < -1f) {
+                    targetValue = if (currentScrollBehavior.state.contentOffset < -1f) {
                         MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp)
                     } else {
                         MaterialTheme.colorScheme.surface
@@ -380,6 +387,7 @@ fun MainScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(MaterialTheme.colorScheme.background)
+                    .nestedScroll(systemAppsScrollBehavior.nestedScrollConnection)
             ) {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
@@ -399,8 +407,10 @@ fun MainScreen(
                                     )
                                 }
                             },
+                            scrollBehavior = systemAppsScrollBehavior,
                             colors = TopAppBarDefaults.topAppBarColors(
-                                containerColor = MaterialTheme.colorScheme.surface
+                                containerColor = MaterialTheme.colorScheme.surface,
+                                scrolledContainerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp)
                             )
                         )
                     }

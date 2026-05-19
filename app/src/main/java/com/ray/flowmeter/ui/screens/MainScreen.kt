@@ -25,30 +25,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.serialization.Serializable
 import com.ray.flowmeter.R
 import com.ray.flowmeter.ui.theme.StaggeredEntrance
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.material3.adaptive.layout.calculatePaneScaffoldDirective
 import androidx.compose.material3.adaptive.navigation3.rememberListDetailSceneStrategy
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.navigation3.ui.NavDisplay
 import androidx.navigation3.runtime.NavEntry
-import com.ray.flowmeter.ui.dialogs.MuteAppDialog
 import com.ray.flowmeter.ui.viewmodels.AlertsViewModel
 import com.ray.flowmeter.ui.viewmodels.AppLimitsViewModel
 import com.ray.flowmeter.ui.viewmodels.AppUsageViewModel
 import com.ray.flowmeter.ui.viewmodels.HomeViewModel
 import com.ray.flowmeter.ui.viewmodels.SettingsViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
-import java.util.Calendar
-
 @Serializable
 sealed interface Destination {
     @Serializable
@@ -299,7 +289,7 @@ fun MainScreen(
             }
         ) { innerPadding ->
 
-            val windowAdaptiveInfo = currentWindowAdaptiveInfo()
+            val windowAdaptiveInfo = currentWindowAdaptiveInfoV2()
             val directive = calculatePaneScaffoldDirective(windowAdaptiveInfo)
             val listDetailStrategy = rememberListDetailSceneStrategy<Destination>(directive = directive)
 

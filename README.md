@@ -23,12 +23,15 @@
 
 ## 📥 Download
 
-FlowBytes will be available for download soon! Check back for official releases.
+Stay in control of your data by downloading FlowBytes from your preferred source:
 
-*   **[Download APK from GitHub Releases](https://github.com/drrayy001/FlowBytes/releases)** *(Coming soon)*
-*   **[Get it on Google Play](https://play.google.com/apps/testing/com.ray.flowmeter)** *(Coming soon)*
+<p align="center">
 
----
+<a href="https://github.com/drrayy001/FlowBytes/releases/latest"><img src="https://raw.githubusercontent.com/machiav3lli/oandbackupx/master/badge_github.png" alt="Get it on GitHub" height="80" border="0"></a>
+<a href="https://play.google.com/store/apps/details?id=com.ray.flowmeter">
+<img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play" height="80">
+</a>
+</p>
 
 ## 🚀 Key Features
 
@@ -85,7 +88,7 @@ FlowBytes is built using modern Android standards with a focus on performance an
 3.  **Configure Data Plans:**
     *   Go to **Data Plans** to set global **System Plans** (Daily/Monthly).
     *   Add specific applications to **App Limits** for granular control and automatic **App Blocking**.
-4.  **Personalize Appearance:** 
+4.  **Personalize Appearance:**
     *   Enable **Material You** in Settings for system-matched colors.
     *   Toggle **AMOLED Mode** for deep blacks on supported screens.
     *   Adjust **Icon Size** for your preferred status bar visibility.

@@ -20,13 +20,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
@@ -35,7 +33,6 @@ import com.ray.flowmeter.data.AppLimit
 import com.ray.flowmeter.ui.theme.StaggeredEntrance
 import com.ray.flowmeter.ui.theme.bounceClick
 import com.ray.flowmeter.ui.viewmodels.AppLimitsViewModel
-import java.util.Locale
 
 @Composable
 fun AppLimitsScreen(
@@ -508,6 +505,7 @@ fun AppLimitsList(
     onDelete: (AppLimit) -> Unit
 ) {
     val appLimits by viewModel.appLimits.collectAsState()
+    val appBlockingMasterEnabled by viewModel.appBlockingMasterEnabled.collectAsState()
 
     Box(modifier = Modifier.fillMaxSize()) {
         if (appLimits.isEmpty()) {
@@ -528,6 +526,7 @@ fun AppLimitsList(
                             onToggle = { enabled -> viewModel.updateAppLimit(limit.copy(isEnabled = enabled)) },
                             onDelete = { onDelete(limit) },
                             onEdit = { onEdit(limit) },
+                            appBlockingMasterEnabled = appBlockingMasterEnabled
                         )
                     }
                 }
@@ -593,14 +592,28 @@ fun GeneralLimitItem(
                 Spacer(Modifier.width(12.dp))
                 
                 Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = title,
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = if (enabled) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = title,
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = if (enabled) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.weight(1f, fill = false)
+                        )
+                        if (isOverLimitValue) {
+                            Spacer(Modifier.width(8.dp))
+                            StatusIcon(
+                                icon = Icons.Rounded.Error,
+                                color = MaterialTheme.colorScheme.error,
+                                contentDescription = stringResource(R.string.badge_limit_reached)
+                            )
+                        }
+                    }
                     
                     if (enabled) {
                         Spacer(modifier = Modifier.height(6.dp))
@@ -652,9 +665,9 @@ fun GeneralLimitItem(
                 exit = fadeOut() + shrinkVertically()
             ) {
                 Column {
-                    Spacer(Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
                     HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
-                    Spacer(Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(12.dp))
                     
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                         TextButton(
@@ -690,6 +703,7 @@ fun AppLimitItem(
     onToggle: (Boolean) -> Unit,
     onDelete: () -> Unit,
     onEdit: () -> Unit,
+    appBlockingMasterEnabled: Boolean = false
 ) {
     var expanded by remember { mutableStateOf(false) }
     val context = LocalContext.current
@@ -722,6 +736,10 @@ fun AppLimitItem(
             MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
         )
     ) {
+        val isWifiOver = limit.isEnabled && limit.wifiDataLimit > 0 && limit.currentWifiUsage >= limit.wifiDataLimit
+        val isMobileOver = limit.isEnabled && limit.mobileDataLimit > 0 && limit.currentMobileUsage >= limit.mobileDataLimit
+        val isBlocked = appBlockingMasterEnabled && limit.isEnabled && (limit.isBlocked || limit.isWifiBlocked || limit.isMobileBlocked)
+
         Column(modifier = Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.Top) {
                 if (appIcon != null) {
@@ -745,14 +763,36 @@ fun AppLimitItem(
                 Spacer(modifier = Modifier.width(12.dp))
 
                 Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = limit.appName,
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        color = if (limit.isEnabled) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = limit.appName,
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            color = if (limit.isEnabled) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                            modifier = Modifier.weight(1f, fill = false)
+                        )
+                        if (isWifiOver || isMobileOver) {
+                            Spacer(Modifier.width(8.dp))
+                            StatusIcon(
+                                icon = Icons.Rounded.Error,
+                                color = MaterialTheme.colorScheme.error,
+                                contentDescription = stringResource(R.string.badge_limit_reached)
+                            )
+                        }
+                        if (isBlocked) {
+                            Spacer(Modifier.width(6.dp))
+                            StatusIcon(
+                                icon = Icons.Rounded.Block,
+                                color = MaterialTheme.colorScheme.error,
+                                contentDescription = stringResource(R.string.badge_blocked)
+                            )
+                        }
+                    }
                     
                     if (limit.isEnabled) {
                         if ((limit.networkType == "both") || (limit.networkType == "wifi")) {
@@ -824,7 +864,7 @@ fun AppLimitItem(
                 Column {
                     Spacer(modifier = Modifier.height(8.dp))
                     HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
-                    Spacer(Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(12.dp))
                     
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                         TextButton(

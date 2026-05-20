@@ -244,17 +244,29 @@ private fun AlertItem(alert: AppAlert) {
             MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
         )
     ) {
-        Column(modifier = Modifier.padding(12.dp)) {
-            AlertItemFront(alert)
+        Box(modifier = Modifier.fillMaxWidth()) {
+            if (alert.isMuted) {
+                StatusIcon(
+                    icon = Icons.Rounded.NotificationsOff,
+                    color = MaterialTheme.colorScheme.secondary,
+                    contentDescription = stringResource(R.string.badge_silenced),
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(12.dp)
+                )
+            }
+            Column(modifier = Modifier.padding(12.dp)) {
+                AlertItemFront(alert)
 
-            AnimatedVisibility(
-                visible = expanded,
-                enter = fadeIn(premiumSpring()) + expandVertically(premiumSpring()),
-                exit = fadeOut(premiumSpring()) + shrinkVertically(premiumSpring())
-            ) {
-                Column {
-                    Spacer(modifier = Modifier.height(16.dp))
-                    AlertItemBack(alert)
+                AnimatedVisibility(
+                    visible = expanded,
+                    enter = fadeIn(premiumSpring()) + expandVertically(premiumSpring()),
+                    exit = fadeOut(premiumSpring()) + shrinkVertically(premiumSpring())
+                ) {
+                    Column {
+                        Spacer(modifier = Modifier.height(16.dp))
+                        AlertItemBack(alert)
+                    }
                 }
             }
         }
@@ -334,7 +346,8 @@ fun AlertItemFront(alert: AppAlert) {
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f, fill = false)
                 )
                 Text(
                     text = timeString,

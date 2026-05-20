@@ -264,4 +264,9 @@
     <string name="notification_app_limit_title">%s Limit Reached</string>
     <string name="msg_reached_limit">You have reached the %1$s limit for %2$s.</string>
     <string name="btn_silence">Silence</string>
+
+    <!-- Badges -->
+    <string name="badge_limit_reached">Limit Reached</string>
+    <string name="badge_blocked">Blocked</string>
+    <string name="badge_silenced">Silenced</string>
 </resources>

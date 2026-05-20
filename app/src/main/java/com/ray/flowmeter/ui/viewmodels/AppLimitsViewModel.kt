@@ -66,6 +66,9 @@ class AppLimitsViewModel(
     val wifiMonthlyLimit: StateFlow<Long> = preferencesRepository.wifiMonthlyLimit
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 107_374_182_400L)
 
+    val appBlockingMasterEnabled: StateFlow<Boolean> = preferencesRepository.appBlockingMasterEnabled
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), initialValue = false)
+
     private val _currentMobileUsage = MutableStateFlow(0L)
     val currentMobileUsage: StateFlow<Long> = _currentMobileUsage.asStateFlow()
 

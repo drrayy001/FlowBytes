@@ -208,9 +208,7 @@ class MainActivity : ComponentActivity() {
                     if (onboardingCompleted == true) {
                         val (currentIntent, setCurrentIntent) = remember { mutableStateOf(intent) }
                         
-                        // Observe new intents
                         LaunchedEffect(Unit) {
-                            // This will be triggered when the activity is recreated
                         }
                         
                         // Handler for incoming intents
@@ -218,8 +216,6 @@ class MainActivity : ComponentActivity() {
                         DisposableEffect(lifecycleOwner) {
                             val observer = LifecycleEventObserver { _, event ->
                                 if (event == Lifecycle.Event.ON_RESUME) {
-                                    // Use a temporary variable to check if it's the SAME intent
-                                    // to avoid potential update loops
                                     if (currentIntent != intent) {
                                         setCurrentIntent(intent)
                                     }
@@ -253,6 +249,13 @@ class MainActivity : ComponentActivity() {
                                     }
                                 }
                                 alertsViewModel.onMuteRequested(muteAppName)
+                                
+                                intent.removeExtra(NetworkMonitoringService.EXTRA_MUTE_APP_NAME)
+                                intent.removeExtra(NetworkMonitoringService.EXTRA_DISMISS_NOTIFICATION_ID)
+                                if (intent.action == NetworkMonitoringService.ACTION_IGNORE_APP) {
+                                    intent.action = null
+                                }
+
                                 setCurrentIntent(null)
                             }
                         }

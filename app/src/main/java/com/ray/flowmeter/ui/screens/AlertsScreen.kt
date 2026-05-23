@@ -267,7 +267,7 @@ private fun AlertItem(alert: AppAlert) {
 @Composable
 fun AlertItemFront(alert: AppAlert) {
     val context = LocalContext.current
-    val dateFormat = remember { SimpleDateFormat("MMM dd, HH:mm", Locale.getDefault()) }
+    val dateFormat = remember { SimpleDateFormat("HH:mm", Locale.getDefault()) }
     val timeString = dateFormat.format(Date(alert.timestamp))
 
     // Mapping old names to new descriptive names for existing data
@@ -339,46 +339,37 @@ fun AlertItemFront(alert: AppAlert) {
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.weight(1f, fill = false)
                 )
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    if (alert.isMuted) {
-                        StatusIcon(
-                            icon = Icons.Rounded.NotificationsOff,
-                            color = MaterialTheme.colorScheme.secondary,
-                            contentDescription = stringResource(R.string.badge_silenced),
-                            modifier = Modifier.padding(end = 4.dp)
-                        )
-                    }
-                    Text(
-                        text = timeString,
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.outline,
-                        fontWeight = FontWeight.Medium
-                    )
-                }
+                Text(
+                    text = timeString,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.outline,
+                    fontWeight = FontWeight.Medium
+                )
             }
             
-            // Only show category/type if it's HIGH_TRAFFIC or an actual App Limit (not system-wide)
-            if (alert.alertType == "HIGH_TRAFFIC") {
-                Text(
-                    text = stringResource(R.string.label_high_traffic_detected),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Bold,
-                )
-            } else if ((alert.alertType == "APP_LIMIT") || ((alert.packageName != null) && !displayAppName.contains("Limit"))) {
-                 Text(
-                    text = stringResource(R.string.label_app_limit_reached),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Bold,
-                )
+            val categoryText = when(alert.alertType) {
+                "HIGH_TRAFFIC" -> stringResource(R.string.label_high_traffic)
+                "APP_LIMIT" -> stringResource(R.string.label_app_limit_reached)
+                "DAILY_LIMIT" -> stringResource(R.string.label_daily_limit_reached)
+                "MONTHLY_LIMIT" -> stringResource(R.string.label_monthly_limit_reached)
+                else -> alert.alertType
             }
+
+            Text(
+                text = categoryText,
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.primary,
+                fontWeight = FontWeight.Bold,
+            )
         }
     }
 }
 
 @Composable
 fun AlertItemBack(alert: AppAlert) {
+    val dateFormat = remember { SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()) }
+    val dateString = dateFormat.format(Date(alert.timestamp))
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -425,26 +416,43 @@ fun AlertItemBack(alert: AppAlert) {
                 )
             }
         }
-        
-        if (alert.isMuted) {
-            Spacer(modifier = Modifier.height(12.dp))
-            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
-            Spacer(modifier = Modifier.height(12.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    imageVector = Icons.Rounded.NotificationsOff,
-                    contentDescription = null,
-                    modifier = Modifier.size(16.dp),
-                    tint = MaterialTheme.colorScheme.outline
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = "Alert Muted",
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.outline,
-                    fontWeight = FontWeight.Bold
-                )
+
+        Spacer(modifier = Modifier.height(12.dp))
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+        Spacer(modifier = Modifier.height(12.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            if (alert.isMuted) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Rounded.NotificationsOff,
+                        contentDescription = null,
+                        modifier = Modifier.size(16.dp),
+                        tint = MaterialTheme.colorScheme.outline
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "Alert Muted",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.outline,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            } else {
+                // Placeholder to keep the date aligned to the right
+                Spacer(modifier = Modifier.weight(1f))
             }
+
+            Text(
+                text = dateString,
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.outline,
+                fontWeight = FontWeight.Medium
+            )
         }
     }
 }

@@ -33,11 +33,13 @@ fun MuteAppDialog(
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
-        dragHandle = null,
+        dragHandle = { BottomSheetDefaults.DragHandle() },
         containerColor = MaterialTheme.colorScheme.surface,
         shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)
     ) {
-        MuteAppContent(appName, onConfirm)
+        AnimatedDialogContent(onBack = onDismiss) {
+            MuteAppContent(appName, onConfirm)
+        }
     }
 }
 

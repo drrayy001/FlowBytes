@@ -245,16 +245,6 @@ private fun AlertItem(alert: AppAlert) {
         )
     ) {
         Box(modifier = Modifier.fillMaxWidth()) {
-            if (alert.isMuted) {
-                StatusIcon(
-                    icon = Icons.Rounded.NotificationsOff,
-                    color = MaterialTheme.colorScheme.secondary,
-                    contentDescription = stringResource(R.string.badge_silenced),
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(12.dp)
-                )
-            }
             Column(modifier = Modifier.padding(12.dp)) {
                 AlertItemFront(alert)
 
@@ -349,12 +339,22 @@ fun AlertItemFront(alert: AppAlert) {
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.weight(1f, fill = false)
                 )
-                Text(
-                    text = timeString,
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.outline,
-                    fontWeight = FontWeight.Medium
-                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    if (alert.isMuted) {
+                        StatusIcon(
+                            icon = Icons.Rounded.NotificationsOff,
+                            color = MaterialTheme.colorScheme.secondary,
+                            contentDescription = stringResource(R.string.badge_silenced),
+                            modifier = Modifier.padding(end = 4.dp)
+                        )
+                    }
+                    Text(
+                        text = timeString,
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.outline,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
             }
             
             // Only show category/type if it's HIGH_TRAFFIC or an actual App Limit (not system-wide)
@@ -439,7 +439,7 @@ fun AlertItemBack(alert: AppAlert) {
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Alerts Muted",
+                    text = "Alert Muted",
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.outline,
                     fontWeight = FontWeight.Bold

@@ -73,6 +73,10 @@
     <string name="label_system_apps">System apps</string>
     <string name="title_system_data_usage">System data usage</string>
     <string name="label_system_processes">System processes</string>
+    <string name="label_tethering">Tethering &amp; Hotspot</string>
+    <string name="label_removed_apps">Removed apps</string>
+    <string name="label_unattributed">System / Unattributed</string>
+    <string name="label_unknown_app">Unknown App</string>
 
     <!-- Settings: General -->
     <string name="settings_section_general">General</string>
@@ -262,7 +266,7 @@
     <string name="notification_summary_text">FlowBytes Alerts</string>
     <string name="notification_app_limit_msg">%1$s has reached its data limit of %2$s.</string>
     <string name="notification_app_limit_title">%s Limit Reached</string>
-    <string name="msg_reached_limit">You have reached the %1$s limit for %2$s.</string>
+    <string name="msg_reached_limit">You have reached the %1$s %2$s limit (%3$s consumed).</string>
     <string name="btn_silence">Silence</string>
 
     <!-- Badges -->

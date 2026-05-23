@@ -28,7 +28,8 @@ fun ThemeDialog(
         dragHandle = { BottomSheetDefaults.DragHandle() },
         containerColor = MaterialTheme.colorScheme.surfaceContainer,
         shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
-        properties = ModalBottomSheetProperties(shouldDismissOnBackPress = false)    ) {
+        properties = ModalBottomSheetProperties(shouldDismissOnBackPress = false)
+    ) {
         AnimatedDialogContent(onBack = onDismiss) {
             Column(
                 modifier = Modifier

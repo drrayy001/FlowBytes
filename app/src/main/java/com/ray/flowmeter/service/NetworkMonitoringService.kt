@@ -789,19 +789,17 @@ class NetworkMonitoringService : Service() {
                     serviceScope.launch {
                         val trafficInfo = withContext(Dispatchers.IO) {
                             findHighTrafficAppFromSnapshot()
+                        } ?: return@launch
+
+                        val appName = trafficInfo.appName
+                        val muteExpiry = ignoredApps[appName]
+
+                        if (muteExpiry != null && System.currentTimeMillis() < muteExpiry) {
+                            return@launch
                         }
 
-                        if (trafficInfo != null) {
-                            val appName = trafficInfo.appName
-                            val muteExpiry = ignoredApps[appName]
-
-                            if (muteExpiry != null && System.currentTimeMillis() < muteExpiry) {
-                                return@launch
-                            }
-
-                            if (muteExpiry != null && System.currentTimeMillis() >= muteExpiry) {
-                                ignoredApps.remove(appName)
-                            }
+                        if (muteExpiry != null && System.currentTimeMillis() >= muteExpiry) {
+                            ignoredApps.remove(appName)
                         }
 
                         sendTrafficAlert(totalSpeed, trafficInfo)
@@ -885,45 +883,48 @@ class NetworkMonitoringService : Service() {
         if (topUid != -1) {
             val pm = packageManager
             val packages = pm.getPackagesForUid(topUid)
-            val appName = if (!packages.isNullOrEmpty()) {
-                try {
-                    val info = pm.getApplicationInfo(packages[0], 0)
-                    pm.getApplicationLabel(info).toString()
-                } catch (_: Exception) {
-                    "Unknown App"
+            
+            if (!packages.isNullOrEmpty()) {
+                for (pkg in packages) {
+                    try {
+                        val info = pm.getApplicationInfo(pkg, 0)
+                        // Match the logic in AppLimitsViewModel to only show "selectable" apps
+                        val isSelectable = ((info.flags and android.content.pm.ApplicationInfo.FLAG_SYSTEM) == 0) || 
+                                           ((info.flags and android.content.pm.ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0)
+                        
+                        if (isSelectable) {
+                            return AppTrafficInfo(
+                                appName = pm.getApplicationLabel(info).toString(),
+                                packageName = pkg,
+                                rxBytes = topRx,
+                                txBytes = topTx
+                            )
+                        }
+                    } catch (_: Exception) {}
                 }
-            } else {
-                "Unknown App"
             }
-
-            return AppTrafficInfo(
-                appName = appName,
-                packageName = packages?.getOrNull(0),
-                rxBytes = topRx,
-                txBytes = topTx
-            )
         }
         return null
     }
 
     data class AppTrafficInfo(
         val appName: String,
-        val packageName: String?,
+        val packageName: String,
         val rxBytes: Long,
         val txBytes: Long
     )
 
-    private fun sendTrafficAlert(speed: Long, trafficInfo: AppTrafficInfo?) {
+    private fun sendTrafficAlert(speed: Long, trafficInfo: AppTrafficInfo) {
         val manager = getSystemService(NotificationManager::class.java)
         
         serviceScope.launch(Dispatchers.IO) {
             alertRepository.insert(
                 AppAlert(
                     timestamp = System.currentTimeMillis(),
-                    appName = trafficInfo?.appName,
-                    packageName = trafficInfo?.packageName,
-                    rxBytes = trafficInfo?.rxBytes ?: 0L,
-                    txBytes = trafficInfo?.txBytes ?: 0L,
+                    appName = trafficInfo.appName,
+                    packageName = trafficInfo.packageName,
+                    rxBytes = trafficInfo.rxBytes,
+                    txBytes = trafficInfo.txBytes,
                     speed = speed,
                     alertType = "HIGH_TRAFFIC",
                 )
@@ -935,7 +936,7 @@ class NetworkMonitoringService : Service() {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         
-        val requestCode = trafficInfo?.appName?.hashCode() ?: TRAFFIC_ALERT_ID
+        val requestCode = trafficInfo.appName.hashCode()
         val pendingIntent = PendingIntent.getActivity(
             this,
             requestCode,
@@ -943,11 +944,7 @@ class NetworkMonitoringService : Service() {
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
-        val contentText = if (trafficInfo != null) {
-            getString(R.string.notification_high_usage_app_msg, trafficInfo.appName, formatSpeed(speed), formatDataUsage(trafficInfo.rxBytes + trafficInfo.txBytes))
-        } else {
-            getString(R.string.notification_high_usage_generic_msg, formatSpeed(speed))
-        }
+        val contentText = getString(R.string.notification_high_usage_app_msg, trafficInfo.appName, formatSpeed(speed), formatDataUsage(trafficInfo.rxBytes + trafficInfo.txBytes))
 
         val titleText = getString(R.string.notification_high_usage_title)
 
@@ -962,37 +959,29 @@ class NetworkMonitoringService : Service() {
             .setGroup(ALERT_GROUP_KEY)
             .setContentIntent(pendingIntent)
 
-        if (trafficInfo != null) {
-            val notificationId = TRAFFIC_ALERT_ID + trafficInfo.appName.hashCode()
-            
-            val ignoreIntent = Intent(this, MainActivity::class.java).apply {
-                action = ACTION_IGNORE_APP
-                putExtra(EXTRA_APP_NAME, trafficInfo.appName)
-                putExtra(EXTRA_MUTE_APP_NAME, trafficInfo.appName)
-                putExtra(EXTRA_NAVIGATE_TO_ALERTS, true)
-                putExtra(EXTRA_DISMISS_NOTIFICATION_ID, notificationId)
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP
-            }
-
-            val ignorePendingIntent = PendingIntent.getActivity(
-                this,
-                trafficInfo.appName.hashCode(),
-                ignoreIntent,
-                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-            )
-
-            builder.addAction(
-                0,
-                getString(R.string.btn_silence),
-                ignorePendingIntent
-            )
+        val notificationId = TRAFFIC_ALERT_ID + trafficInfo.appName.hashCode()
+        
+        val ignoreIntent = Intent(this, MainActivity::class.java).apply {
+            action = ACTION_IGNORE_APP
+            putExtra(EXTRA_APP_NAME, trafficInfo.appName)
+            putExtra(EXTRA_MUTE_APP_NAME, trafficInfo.appName)
+            putExtra(EXTRA_NAVIGATE_TO_ALERTS, true)
+            putExtra(EXTRA_DISMISS_NOTIFICATION_ID, notificationId)
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP
         }
 
-        val notificationId = if (trafficInfo != null) {
-            TRAFFIC_ALERT_ID + trafficInfo.appName.hashCode()
-        } else {
-            TRAFFIC_ALERT_ID
-        }
+        val ignorePendingIntent = PendingIntent.getActivity(
+            this,
+            trafficInfo.appName.hashCode(),
+            ignoreIntent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        builder.addAction(
+            0,
+            getString(R.string.btn_silence),
+            ignorePendingIntent
+        )
 
         manager.notify(notificationId, builder.build())
         sendSummaryNotification()

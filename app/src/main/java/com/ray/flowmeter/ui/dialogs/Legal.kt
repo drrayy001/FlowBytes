@@ -100,7 +100,7 @@ fun LegalDialog(
 object LegalContent {
     val PRIVACY_POLICY: String
         get() = """
-            Privacy Policy for FlowMeter 
+            Privacy Policy for FlowBytes
             Last Updated: ${SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault()).format(Date())}
 
             1. Overview

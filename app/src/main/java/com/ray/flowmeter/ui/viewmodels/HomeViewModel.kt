@@ -65,7 +65,12 @@ class HomeViewModel(
             }
         }
 
-        updateTotalUsage()
+        viewModelScope.launch {
+            repository.resetTimeHour.collect { updateTotalUsage() }
+        }
+        viewModelScope.launch {
+            repository.resetTimeMinute.collect { updateTotalUsage() }
+        }
     }
 
     fun updateChartType(type: ChartType) {
@@ -100,8 +105,11 @@ class HomeViewModel(
                 startTimeDay = calendar.timeInMillis
             }
 
-            calendar[Calendar.DAY_OF_MONTH] = 1
-            val startTimeMonth = calendar.timeInMillis
+            // Correct Monthly Start Time based on Reset Time
+            val monthCalendar = (calendar.clone() as Calendar)
+            monthCalendar[Calendar.DAY_OF_MONTH] = 1
+            // calendar already has resetHour/resetMinute and potentially subtracted day if needed
+            val startTimeMonth = monthCalendar.timeInMillis
 
             val dailyBytesArray = getDeviceUsage(networkStatsManager, startTimeDay, currentTime)
             val dailyBytes = dailyBytesArray[0] + dailyBytesArray[1]
@@ -133,14 +141,28 @@ class HomeViewModel(
             for (i in 6 downTo 0) {
                 val cal = Calendar.getInstance()
                 cal.add(Calendar.DAY_OF_YEAR, -i)
-                datesList.add(cal.clone() as Calendar)
+                
                 cal[Calendar.HOUR_OF_DAY] = resetHour
                 cal[Calendar.MINUTE] = resetMinute
                 cal[Calendar.SECOND] = 0
                 cal[Calendar.MILLISECOND] = 0
-                val startOfDay = cal.timeInMillis
+                
+                // If it's currently before today's reset time, then "today" started yesterday
+                // and "N days ago" also shifted.
+                val baseTodayStart = Calendar.getInstance().apply {
+                    set(Calendar.HOUR_OF_DAY, resetHour)
+                    set(Calendar.MINUTE, resetMinute)
+                    set(Calendar.SECOND, 0)
+                    set(Calendar.MILLISECOND, 0)
+                }.timeInMillis
+                
+                if (currentTime < baseTodayStart) {
+                    cal.add(Calendar.DAY_OF_YEAR, -1)
+                }
 
-                val endOfDay = startOfDay + (24 * 60 * 60 * 1000L) - 1
+                datesList.add(cal.clone() as Calendar)
+                val startOfDay = cal.timeInMillis
+                val endOfDay = if (i == 0) currentTime else startOfDay + (24 * 60 * 60 * 1000L) - 1
 
                 if (i == 0) {
                     daysList.add(applicationContext.getString(R.string.label_today))

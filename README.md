@@ -50,7 +50,7 @@ Stay in control of your data by downloading FlowBytes from your preferred source
 ## 📸 Screenshots
 
 <p align="center">
-  <i>Screenshots coming soon!</i>
+  <img src="images/screenshot.png" width="300" alt="FlowBytes Screenshot">
 </p>
 
 ---

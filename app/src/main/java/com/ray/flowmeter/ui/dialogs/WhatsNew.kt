@@ -73,28 +73,23 @@ fun ChangelogDialog(
                 )
 
                 ChangelogTextItem(
-                    title = "Status Bar Indicators",
-                    description = "Personalize your monitoring experience with customizable icon sizes (Small, Medium, Large) for the real-time speed indicator."
+                    title = "Refined Alert Cards",
+                    description = "Improved alert card elements for better visual clarity and interaction."
                 )
 
                 ChangelogTextItem(
-                    title = "Smart Alert History",
-                    description = "Stay informed with an organized alert history, now categorized into High Traffic, App Limits, and System Data Plans."
+                    title = "Notification Fixes",
+                    description = "Fixed the reset timer and silence button on notifications to ensure reliable control."
                 )
 
                 ChangelogTextItem(
-                    title = "Application Muting",
-                    description = "Too many alerts? You can now temporarily silence high-data notifications for specific apps for a cleaner experience."
+                    title = "UI Tweaks",
+                    description = "Applied various UI adjustments and refinements across the application."
                 )
 
                 ChangelogTextItem(
-                    title = "Privacy-First App Blocking",
-                    description = "Refined local VPN-based app blocking that keeps your data 100% on-device while providing robust usage control."
-                )
-
-                ChangelogTextItem(
-                    title = "Advanced Detection Tuning",
-                    description = "Fine-tune how high traffic is detected with new settings for speed thresholds, cooldown periods, and reset conditions."
+                    title = "General Improvements",
+                    description = "Includes other minor improvements and bug fixes for a smoother experience."
                 )
 
                 Spacer(modifier = Modifier.height(32.dp))

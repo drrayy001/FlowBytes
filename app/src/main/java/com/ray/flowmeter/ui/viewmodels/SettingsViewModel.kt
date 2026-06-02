@@ -82,6 +82,9 @@ class SettingsViewModel(
     val resetTimeMinute: StateFlow<Int> = repository.resetTimeMinute
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0)
 
+    val monthlyResetDay: StateFlow<Int> = repository.monthlyResetDay
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 1)
+
     val showOnlyWhenConnected: StateFlow<Boolean> = repository.showOnlyWhenConnected
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), initialValue = false)
 
@@ -161,6 +164,10 @@ class SettingsViewModel(
 
     fun setResetTime(hour: Int, minute: Int) {
         viewModelScope.launch { repository.setResetTime(hour, minute) }
+    }
+
+    fun setMonthlyResetDay(day: Int) {
+        viewModelScope.launch { repository.setMonthlyResetDay(day) }
     }
 
     fun setShowOnlyWhenConnected(enabled: Boolean) {

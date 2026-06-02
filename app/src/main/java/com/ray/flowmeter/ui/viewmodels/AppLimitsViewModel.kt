@@ -83,7 +83,15 @@ class AppLimitsViewModel(
 
     private var usageJob: Job? = null
 
+    private var monthlyResetDay = 1
+
     init {
+        viewModelScope.launch {
+            preferencesRepository.monthlyResetDay.collect {
+                monthlyResetDay = it
+                updateUsage()
+            }
+        }
         startUsageTracking()
     }
 
@@ -121,7 +129,8 @@ class AppLimitsViewModel(
         fun getStartTime(period: String): Long {
             calendar.timeInMillis = endTime
             if (period == "monthly") {
-                calendar[Calendar.DAY_OF_MONTH] = 1
+                val clampedDay = monthlyResetDay.coerceAtMost(calendar.getActualMaximum(Calendar.DAY_OF_MONTH))
+                calendar[Calendar.DAY_OF_MONTH] = clampedDay
             }
             calendar[Calendar.HOUR_OF_DAY] = resetHour
             calendar[Calendar.MINUTE] = resetMinute
@@ -129,8 +138,13 @@ class AppLimitsViewModel(
             calendar[Calendar.MILLISECOND] = 0
 
             if (endTime < calendar.timeInMillis) {
-                if (period == "monthly") calendar.add(Calendar.MONTH, -1)
-                else calendar.add(Calendar.DAY_OF_YEAR, -1)
+                if (period == "monthly") {
+                    calendar.add(Calendar.MONTH, -1)
+                    val prevMaxDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
+                    calendar[Calendar.DAY_OF_MONTH] = monthlyResetDay.coerceAtMost(prevMaxDay)
+                } else {
+                    calendar.add(Calendar.DAY_OF_YEAR, -1)
+                }
             }
             return calendar.timeInMillis
         }

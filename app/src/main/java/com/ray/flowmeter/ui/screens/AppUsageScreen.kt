@@ -730,7 +730,7 @@ fun AppUsageScreen(
                             }
                             val displayGlobalUp = when (networkFilter) {
                                 mobileOnlyFilterLabel -> viewModel.globalCellUp
-                                wifiOnlyFilterLabel -> viewModel.globalWifiDown
+                                wifiOnlyFilterLabel -> viewModel.globalWifiUp
                                 else -> viewModel.globalCellUp + viewModel.globalWifiUp
                             }
                             val displayGlobalTotal = displayGlobalDown + displayGlobalUp

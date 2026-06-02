@@ -44,6 +44,7 @@ class HomeViewModel(
     var projectedDailyMobileBytes by mutableLongStateOf(0L)
     var dailyMobileLimitBytes by mutableLongStateOf(0L)
     var isDataLimitEnabled by mutableStateOf(value = false)
+    private var monthlyResetDay = 1
 
     var weeklyMobileData by mutableStateOf(List(7) { 0f })
     var weeklyWifiData by mutableStateOf(List(7) { 0f })
@@ -70,6 +71,12 @@ class HomeViewModel(
         }
         viewModelScope.launch {
             repository.resetTimeMinute.collect { updateTotalUsage() }
+        }
+        viewModelScope.launch {
+            repository.monthlyResetDay.collect {
+                monthlyResetDay = it
+                updateTotalUsage()
+            }
         }
     }
 
@@ -105,10 +112,15 @@ class HomeViewModel(
                 startTimeDay = calendar.timeInMillis
             }
 
-            // Correct Monthly Start Time based on Reset Time
+            // Correct Monthly Start Time based on Reset Time and Custom Reset Day
             val monthCalendar = (calendar.clone() as Calendar)
-            monthCalendar[Calendar.DAY_OF_MONTH] = 1
-            // calendar already has resetHour/resetMinute and potentially subtracted day if needed
+            val clampedDay = monthlyResetDay.coerceAtMost(monthCalendar.getActualMaximum(Calendar.DAY_OF_MONTH))
+            monthCalendar[Calendar.DAY_OF_MONTH] = clampedDay
+            if (currentTime < monthCalendar.timeInMillis) {
+                monthCalendar.add(Calendar.MONTH, -1)
+                val prevMaxDay = monthCalendar.getActualMaximum(Calendar.DAY_OF_MONTH)
+                monthCalendar[Calendar.DAY_OF_MONTH] = monthlyResetDay.coerceAtMost(prevMaxDay)
+            }
             val startTimeMonth = monthCalendar.timeInMillis
 
             val dailyBytesArray = getDeviceUsage(networkStatsManager, startTimeDay, currentTime)

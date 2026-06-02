@@ -51,6 +51,7 @@ class AppUsageViewModel(
 ) : ViewModel() {
 
     private val _appUsageList = MutableStateFlow<List<AppUsageInfo>>(emptyList())
+    private var monthlyResetDay = 1
 
     private val _systemAppUsageList = MutableStateFlow<List<AppUsageInfo>>(emptyList())
 
@@ -111,8 +112,11 @@ class AppUsageViewModel(
             combine(
                 repository.resetTimeHour,
                 repository.resetTimeMinute,
-                repository.usageTimeFilter
-            ) { h, m, f -> Triple(h, m, f) }.collect { (resetHour, resetMinute, savedTime) ->
+                repository.usageTimeFilter,
+                repository.monthlyResetDay
+            ) { h, m, f, r -> Triple(h, m, f) to r }.collect { (triple, resetDay) ->
+                val (resetHour, resetMinute, savedTime) = triple
+                monthlyResetDay = resetDay
                 val start: Long
                 val end: Long
                 val now = System.currentTimeMillis()
@@ -120,7 +124,8 @@ class AppUsageViewModel(
                 when (savedTime) {
                     "month" -> {
                         val cal = Calendar.getInstance()
-                        cal.set(Calendar.DAY_OF_MONTH, 1)
+                        val clampedDay = monthlyResetDay.coerceAtMost(cal.getActualMaximum(Calendar.DAY_OF_MONTH))
+                        cal.set(Calendar.DAY_OF_MONTH, clampedDay)
                         cal.set(Calendar.HOUR_OF_DAY, resetHour)
                         cal.set(Calendar.MINUTE, resetMinute)
                         cal.set(Calendar.SECOND, 0)
@@ -128,6 +133,8 @@ class AppUsageViewModel(
                         
                         if (now < cal.timeInMillis) {
                             cal.add(Calendar.MONTH, -1)
+                            val prevMaxDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH)
+                            cal.set(Calendar.DAY_OF_MONTH, monthlyResetDay.coerceAtMost(prevMaxDay))
                         }
                         
                         start = cal.timeInMillis
@@ -209,13 +216,23 @@ class AppUsageViewModel(
             when (filter) {
                 "month" -> {
                     val cal = (currentViewDate.clone() as Calendar)
-                    cal.set(Calendar.DAY_OF_MONTH, 1)
+                    val clampedDay = monthlyResetDay.coerceAtMost(cal.getActualMaximum(Calendar.DAY_OF_MONTH))
+                    cal.set(Calendar.DAY_OF_MONTH, clampedDay)
                     cal.set(Calendar.HOUR_OF_DAY, resetHour)
                     cal.set(Calendar.MINUTE, resetMinute)
                     cal.set(Calendar.SECOND, 0)
                     cal.set(Calendar.MILLISECOND, 0)
+                    
+                    if (now < cal.timeInMillis) {
+                        cal.add(Calendar.MONTH, -1)
+                        val prevMaxDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH)
+                        cal.set(Calendar.DAY_OF_MONTH, monthlyResetDay.coerceAtMost(prevMaxDay))
+                    }
                     start = cal.timeInMillis
+                    
                     cal.add(Calendar.MONTH, 1)
+                    val nextMaxDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH)
+                    cal.set(Calendar.DAY_OF_MONTH, monthlyResetDay.coerceAtMost(nextMaxDay))
                     cal.set(Calendar.MILLISECOND, -1) // End of month
                     end = if (cal.timeInMillis > now) now else cal.timeInMillis
                 }
@@ -350,7 +367,8 @@ class AppUsageViewModel(
             val now = System.currentTimeMillis()
 
             val cal = Calendar.getInstance()
-            cal.set(Calendar.DAY_OF_MONTH, 1)
+            val clampedDay = monthlyResetDay.coerceAtMost(cal.getActualMaximum(Calendar.DAY_OF_MONTH))
+            cal.set(Calendar.DAY_OF_MONTH, clampedDay)
             cal.set(Calendar.HOUR_OF_DAY, resetHour)
             cal.set(Calendar.MINUTE, resetMinute)
             cal.set(Calendar.SECOND, 0)
@@ -358,6 +376,8 @@ class AppUsageViewModel(
             
             if (now < cal.timeInMillis) {
                 cal.add(Calendar.MONTH, -1)
+                val prevMaxDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH)
+                cal.set(Calendar.DAY_OF_MONTH, monthlyResetDay.coerceAtMost(prevMaxDay))
             }
             
             currentViewDate = cal
@@ -375,18 +395,27 @@ class AppUsageViewModel(
             val now = System.currentTimeMillis()
 
             val cal = Calendar.getInstance()
-            cal.set(year, month, 1, resetHour, resetMinute, 0)
+            cal.set(Calendar.YEAR, year)
+            cal.set(Calendar.MONTH, month)
+            val clampedDay = monthlyResetDay.coerceAtMost(cal.getActualMaximum(Calendar.DAY_OF_MONTH))
+            cal.set(Calendar.DAY_OF_MONTH, clampedDay)
+            cal.set(Calendar.HOUR_OF_DAY, resetHour)
+            cal.set(Calendar.MINUTE, resetMinute)
+            cal.set(Calendar.SECOND, 0)
             cal.set(Calendar.MILLISECOND, 0)
             currentViewDate = (cal.clone() as Calendar)
 
             val thisMonthStart = Calendar.getInstance()
-            thisMonthStart.set(Calendar.DAY_OF_MONTH, 1)
+            val clampedDayThis = monthlyResetDay.coerceAtMost(thisMonthStart.getActualMaximum(Calendar.DAY_OF_MONTH))
+            thisMonthStart.set(Calendar.DAY_OF_MONTH, clampedDayThis)
             thisMonthStart.set(Calendar.HOUR_OF_DAY, resetHour)
             thisMonthStart.set(Calendar.MINUTE, resetMinute)
             thisMonthStart.set(Calendar.SECOND, 0)
             thisMonthStart.set(Calendar.MILLISECOND, 0)
             if (now < thisMonthStart.timeInMillis) {
                 thisMonthStart.add(Calendar.MONTH, -1)
+                val prevMaxDay = thisMonthStart.getActualMaximum(Calendar.DAY_OF_MONTH)
+                thisMonthStart.set(Calendar.DAY_OF_MONTH, monthlyResetDay.coerceAtMost(prevMaxDay))
             }
 
             selectedDateString = if (

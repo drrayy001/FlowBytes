@@ -85,6 +85,10 @@
     <string name="settings_reset_time">Reset Time</string>
     <string name="settings_reset_time_desc">Time of day to start a new tracking cycle</string>
     <string name="dialog_reset_time_title">Set Reset Time</string>
+    <string name="settings_monthly_reset_day">Monthly Reset Day</string>
+    <string name="settings_monthly_reset_day_desc">Billing cycle resets on day %d of the month</string>
+    <string name="dialog_reset_day_title">Select Reset Day of Month</string>
+    <string name="msg_reset_day_explanation">All monthly data usage and limit notifications will start counting from this day of the month.</string>
 
     <!-- Settings: Notifications & Status Bar -->
     <string name="settings_section_notifications">Notifications &amp; Status Bar</string>

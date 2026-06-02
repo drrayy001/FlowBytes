@@ -55,6 +55,7 @@ fun SettingsScreen(
 
     val resetTimeHour by viewModel.resetTimeHour.collectAsState()
     val resetTimeMinute by viewModel.resetTimeMinute.collectAsState()
+    val monthlyResetDay by viewModel.monthlyResetDay.collectAsState()
 
     val accentColor by viewModel.accentColor.collectAsState()
 
@@ -107,6 +108,7 @@ fun SettingsScreen(
     var showPrivacyDialog by remember { mutableStateOf(value = false) }
     var showTermsDialog by remember { mutableStateOf(value = false) }
     var showResetTimeDialog by remember { mutableStateOf(false) }
+    var showResetDayDialog by remember { mutableStateOf(false) }
     var showDonateDialog by remember { mutableStateOf(false) }
     var showHelpFeedbackDialog by remember { mutableStateOf(false) }
     var isDonationSuccess by remember { mutableStateOf(false) }
@@ -175,6 +177,12 @@ fun SettingsScreen(
                             .uppercase(Locale.ENGLISH)
                     })",
                     onClick = { showResetTimeDialog = true }
+                )
+                SettingsItem(
+                    icon = Icons.Rounded.CalendarMonth,
+                    title = stringResource(R.string.settings_monthly_reset_day),
+                    subtitle = stringResource(R.string.settings_monthly_reset_day_desc, monthlyResetDay),
+                    onClick = { showResetDayDialog = true }
                 )
             }
         }
@@ -494,6 +502,16 @@ fun SettingsScreen(
             ) { hour, minute, _ ->
                 viewModel.setResetTime(hour, minute)
                 showResetTimeDialog = false
+            }
+        }
+
+        if (showResetDayDialog) {
+            ResetDayDialog(
+                currentDay = monthlyResetDay,
+                onDismiss = { showResetDayDialog = false },
+            ) { day ->
+                viewModel.setMonthlyResetDay(day)
+                showResetDayDialog = false
             }
         }
 

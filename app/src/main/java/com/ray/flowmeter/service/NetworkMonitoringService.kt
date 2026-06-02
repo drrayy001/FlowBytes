@@ -117,6 +117,7 @@ class NetworkMonitoringService : Service() {
     private var highPriority = true
     private var resetHour = 0
     private var resetMinute = 0
+    private var monthlyResetDay = 1
     private var showOnlyWhenConnected = false
     private var highTrafficDetectionEnabled = false
 
@@ -180,6 +181,7 @@ class NetworkMonitoringService : Service() {
         }
         serviceScope.launch { repository.resetTimeHour.collect { resetHour = it } }
         serviceScope.launch { repository.resetTimeMinute.collect { resetMinute = it } }
+        serviceScope.launch { repository.monthlyResetDay.collect { monthlyResetDay = it } }
         serviceScope.launch { 
             var isFirst = true
             repository.showOnlyWhenConnected.collect { 
@@ -305,7 +307,8 @@ class NetworkMonitoringService : Service() {
             fun getStartTime(period: String): Long {
                 calendar.timeInMillis = currentTime
                 if (period == "monthly") {
-                    calendar[Calendar.DAY_OF_MONTH] = 1
+                    val clampedDay = monthlyResetDay.coerceAtMost(calendar.getActualMaximum(Calendar.DAY_OF_MONTH))
+                    calendar[Calendar.DAY_OF_MONTH] = clampedDay
                 }
                 calendar[Calendar.HOUR_OF_DAY] = resetHour
                 calendar[Calendar.MINUTE] = resetMinute
@@ -315,8 +318,13 @@ class NetworkMonitoringService : Service() {
                 var startTime = calendar.timeInMillis
 
                 if (currentTime < startTime) {
-                    if (period == "monthly") calendar.add(Calendar.MONTH, -1)
-                    else calendar.add(Calendar.DAY_OF_YEAR, -1)
+                    if (period == "monthly") {
+                        calendar.add(Calendar.MONTH, -1)
+                        val prevMaxDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
+                        calendar[Calendar.DAY_OF_MONTH] = monthlyResetDay.coerceAtMost(prevMaxDay)
+                    } else {
+                        calendar.add(Calendar.DAY_OF_YEAR, -1)
+                    }
                     startTime = calendar.timeInMillis
                 }
                 return startTime
@@ -1079,7 +1087,8 @@ class NetworkMonitoringService : Service() {
 
                 calendar.timeInMillis = currentTime
                 if (limit.limitType == "monthly") {
-                    calendar[Calendar.DAY_OF_MONTH] = 1
+                    val clampedDay = monthlyResetDay.coerceAtMost(calendar.getActualMaximum(Calendar.DAY_OF_MONTH))
+                    calendar[Calendar.DAY_OF_MONTH] = clampedDay
                 }
                 calendar[Calendar.HOUR_OF_DAY] = resetHour
                 calendar[Calendar.MINUTE] = resetMinute
@@ -1090,6 +1099,8 @@ class NetworkMonitoringService : Service() {
                 if (currentTime < startTime) {
                     if (limit.limitType == "monthly") {
                         calendar.add(Calendar.MONTH, -1)
+                        val prevMaxDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
+                        calendar[Calendar.DAY_OF_MONTH] = monthlyResetDay.coerceAtMost(prevMaxDay)
                     } else {
                         calendar.add(Calendar.DAY_OF_YEAR, -1)
                     }

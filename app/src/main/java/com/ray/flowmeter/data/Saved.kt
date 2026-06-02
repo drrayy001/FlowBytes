@@ -213,6 +213,7 @@ class UserPreferencesRepository(private val context: Context) {
         val VPN_DISCLOSURE_ACCEPTED = booleanPreferencesKey("vpn_disclosure_accepted")
         val USAGE_CHART_TYPE = stringPreferencesKey("usage_chart_type")
         val ALERTS_CATEGORY = stringPreferencesKey("alerts_category")
+        val MONTHLY_RESET_DAY = intPreferencesKey("monthly_reset_day")
     }
 
     private val preferencesFlow = context.dataStore.data
@@ -342,6 +343,11 @@ class UserPreferencesRepository(private val context: Context) {
     val resetTimeMinute: Flow<Int> = preferencesFlow
         .map { preferences ->
             preferences[PreferencesKeys.RESET_TIME_MINUTE] ?: 0
+        }.distinctUntilChanged()
+
+    val monthlyResetDay: Flow<Int> = preferencesFlow
+        .map { preferences ->
+            preferences[PreferencesKeys.MONTHLY_RESET_DAY] ?: 1
         }.distinctUntilChanged()
 
     val showOnlyWhenConnected: Flow<Boolean> = preferencesFlow
@@ -564,6 +570,12 @@ class UserPreferencesRepository(private val context: Context) {
         context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.RESET_TIME_HOUR] = hour
             preferences[PreferencesKeys.RESET_TIME_MINUTE] = minute
+        }
+    }
+
+    suspend fun setMonthlyResetDay(day: Int) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.MONTHLY_RESET_DAY] = day.coerceIn(1, 31)
         }
     }
 

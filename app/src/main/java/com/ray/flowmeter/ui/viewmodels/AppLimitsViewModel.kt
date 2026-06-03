@@ -66,6 +66,36 @@ class AppLimitsViewModel(
     val wifiMonthlyLimit: StateFlow<Long> = preferencesRepository.wifiMonthlyLimit
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 107_374_182_400L)
 
+    val dataCustomLimitConfigured: StateFlow<Boolean> = preferencesRepository.dataCustomLimitConfigured
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), initialValue = false)
+
+    val wifiCustomLimitConfigured: StateFlow<Boolean> = preferencesRepository.wifiCustomLimitConfigured
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), initialValue = false)
+
+    val dataCustomLimitEnabled: StateFlow<Boolean> = preferencesRepository.dataCustomLimitEnabled
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), initialValue = false)
+
+    val wifiCustomLimitEnabled: StateFlow<Boolean> = preferencesRepository.wifiCustomLimitEnabled
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), initialValue = false)
+
+    val dataCustomLimit: StateFlow<Long> = preferencesRepository.dataCustomLimit
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0L)
+
+    val wifiCustomLimit: StateFlow<Long> = preferencesRepository.wifiCustomLimit
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0L)
+
+    val dataCustomLimitStart: StateFlow<Long> = preferencesRepository.dataCustomLimitStart
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0L)
+
+    val dataCustomLimitEnd: StateFlow<Long> = preferencesRepository.dataCustomLimitEnd
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0L)
+
+    val wifiCustomLimitStart: StateFlow<Long> = preferencesRepository.wifiCustomLimitStart
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0L)
+
+    val wifiCustomLimitEnd: StateFlow<Long> = preferencesRepository.wifiCustomLimitEnd
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0L)
+
     val appBlockingMasterEnabled: StateFlow<Boolean> = preferencesRepository.appBlockingMasterEnabled
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), initialValue = false)
 
@@ -80,6 +110,12 @@ class AppLimitsViewModel(
 
     private val _currentMonthlyWifiUsage = MutableStateFlow(0L)
     val currentMonthlyWifiUsage: StateFlow<Long> = _currentMonthlyWifiUsage.asStateFlow()
+
+    private val _currentCustomMobileUsage = MutableStateFlow(0L)
+    val currentCustomMobileUsage: StateFlow<Long> = _currentCustomMobileUsage.asStateFlow()
+
+    private val _currentCustomWifiUsage = MutableStateFlow(0L)
+    val currentCustomWifiUsage: StateFlow<Long> = _currentCustomWifiUsage.asStateFlow()
 
     private var usageJob: Job? = null
 
@@ -108,20 +144,40 @@ class AppLimitsViewModel(
     private suspend fun updateUsage() {
         val resetHour = preferencesRepository.resetTimeHour.first()
         val resetMinute = preferencesRepository.resetTimeMinute.first()
+        val dataCustomStart = preferencesRepository.dataCustomLimitStart.first()
+        val dataCustomEnd = preferencesRepository.dataCustomLimitEnd.first()
+        val wifiCustomStart = preferencesRepository.wifiCustomLimitStart.first()
+        val wifiCustomEnd = preferencesRepository.wifiCustomLimitEnd.first()
         
         val usage = withContext(Dispatchers.IO) {
-            getDeviceUsage(resetHour, resetMinute)
+            getDeviceUsage(resetHour, resetMinute, dataCustomStart, dataCustomEnd, wifiCustomStart, wifiCustomEnd)
         }
         
         _currentMobileUsage.value = usage.dailyMobile
         _currentWifiUsage.value = usage.dailyWifi
         _currentMonthlyMobileUsage.value = usage.monthlyMobile
         _currentMonthlyWifiUsage.value = usage.monthlyWifi
+        _currentCustomMobileUsage.value = usage.customMobile
+        _currentCustomWifiUsage.value = usage.customWifi
     }
 
-    data class DeviceUsage(val dailyMobile: Long, val dailyWifi: Long, val monthlyMobile: Long, val monthlyWifi: Long)
+    data class DeviceUsage(
+        val dailyMobile: Long,
+        val dailyWifi: Long,
+        val monthlyMobile: Long,
+        val monthlyWifi: Long,
+        val customMobile: Long,
+        val customWifi: Long
+    )
 
-    private fun getDeviceUsage(resetHour: Int, resetMinute: Int): DeviceUsage {
+    private fun getDeviceUsage(
+        resetHour: Int,
+        resetMinute: Int,
+        dataCustomStart: Long,
+        dataCustomEnd: Long,
+        wifiCustomStart: Long,
+        wifiCustomEnd: Long
+    ): DeviceUsage {
         val nsm = applicationContext.getSystemService(NetworkStatsManager::class.java)
         val calendar = Calendar.getInstance()
         val endTime = System.currentTimeMillis()
@@ -159,11 +215,24 @@ class AppLimitsViewModel(
             }
         }
 
+        fun sumCustomUsage(transport: Int, start: Long, end: Long): Long {
+            return try {
+                val queryEnd = end.coerceAtMost(endTime)
+                val queryStart = start.coerceAtMost(queryEnd)
+                val stats = nsm.querySummaryForDevice(transport, null, queryStart, queryEnd)
+                stats.rxBytes + stats.txBytes
+            } catch (_: Exception) {
+                0L
+            }
+        }
+
         return DeviceUsage(
             dailyMobile = sumUsage(NetworkCapabilities.TRANSPORT_CELLULAR, "daily"),
             dailyWifi = sumUsage(NetworkCapabilities.TRANSPORT_WIFI, "daily"),
             monthlyMobile = sumUsage(NetworkCapabilities.TRANSPORT_CELLULAR, "monthly"),
             monthlyWifi = sumUsage(NetworkCapabilities.TRANSPORT_WIFI, "monthly"),
+            customMobile = sumCustomUsage(NetworkCapabilities.TRANSPORT_CELLULAR, dataCustomStart, dataCustomEnd),
+            customWifi = sumCustomUsage(NetworkCapabilities.TRANSPORT_WIFI, wifiCustomStart, wifiCustomEnd),
         )
     }
 
@@ -307,6 +376,38 @@ class AppLimitsViewModel(
 
     fun setWifiMonthlyLimit(limitBytes: Long) {
         viewModelScope.launch { preferencesRepository.setWifiMonthlyLimit(limitBytes) }
+    }
+
+    fun setDataCustomLimitConfigured(configured: Boolean) {
+        viewModelScope.launch { preferencesRepository.setDataCustomLimitConfigured(configured) }
+    }
+
+    fun setWifiCustomLimitConfigured(configured: Boolean) {
+        viewModelScope.launch { preferencesRepository.setWifiCustomLimitConfigured(configured) }
+    }
+
+    fun setDataCustomLimitEnabled(enabled: Boolean) {
+        viewModelScope.launch { preferencesRepository.setDataCustomLimitEnabled(enabled) }
+    }
+
+    fun setWifiCustomLimitEnabled(enabled: Boolean) {
+        viewModelScope.launch { preferencesRepository.setWifiCustomLimitEnabled(enabled) }
+    }
+
+    fun setDataCustomLimit(limitBytes: Long) {
+        viewModelScope.launch { preferencesRepository.setDataCustomLimit(limitBytes) }
+    }
+
+    fun setWifiCustomLimit(limitBytes: Long) {
+        viewModelScope.launch { preferencesRepository.setWifiCustomLimit(limitBytes) }
+    }
+
+    fun setDataCustomLimitRange(start: Long, end: Long) {
+        viewModelScope.launch { preferencesRepository.setDataCustomLimitRange(start, end) }
+    }
+
+    fun setWifiCustomLimitRange(start: Long, end: Long) {
+        viewModelScope.launch { preferencesRepository.setWifiCustomLimitRange(start, end) }
     }
 
     data class AppInfo(

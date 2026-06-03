@@ -48,6 +48,8 @@ fun AppLimitsScreen(
     val dataMonthlyLimitConfigured by viewModel.dataMonthlyLimitConfigured.collectAsState()
     val wifiDailyLimitConfigured by viewModel.wifiDailyLimitConfigured.collectAsState()
     val wifiMonthlyLimitConfigured by viewModel.wifiMonthlyLimitConfigured.collectAsState()
+    val dataCustomLimitConfigured by viewModel.dataCustomLimitConfigured.collectAsState()
+    val wifiCustomLimitConfigured by viewModel.wifiCustomLimitConfigured.collectAsState()
 
     val (internalTab, setInternalTab) = remember { mutableIntStateOf(currentTab) }
     
@@ -63,7 +65,8 @@ fun AppLimitsScreen(
     }
 
     val allGeneralLimitsConfigured = dataDailyLimitConfigured && dataMonthlyLimitConfigured &&
-            wifiDailyLimitConfigured && wifiMonthlyLimitConfigured
+            wifiDailyLimitConfigured && wifiMonthlyLimitConfigured &&
+            dataCustomLimitConfigured && wifiCustomLimitConfigured
 
     Box(modifier = modifier) {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -162,6 +165,14 @@ fun AppLimitsScreen(
                                     viewModel.setDataMonthlyLimitEnabled(false)
                                     viewModel.setDataMonthlyLimitConfigured(false)
                                 }
+                                "system.wifi.custom" -> {
+                                    viewModel.setWifiCustomLimitEnabled(false)
+                                    viewModel.setWifiCustomLimitConfigured(false)
+                                }
+                                "system.mobile.custom" -> {
+                                    viewModel.setDataCustomLimitEnabled(false)
+                                    viewModel.setDataCustomLimitConfigured(false)
+                                }
                                 else -> viewModel.removeAppLimit(it)
                             }
                         }
@@ -194,6 +205,12 @@ fun AppLimitsOverlay(viewModel: AppLimitsViewModel) {
     val wifiDailyLimit by viewModel.wifiDailyLimit.collectAsState()
     val dataMonthlyLimit by viewModel.dataMonthlyLimit.collectAsState()
     val wifiMonthlyLimit by viewModel.wifiMonthlyLimit.collectAsState()
+    val dataCustomLimit by viewModel.dataCustomLimit.collectAsState()
+    val wifiCustomLimit by viewModel.wifiCustomLimit.collectAsState()
+    val dataCustomLimitStart by viewModel.dataCustomLimitStart.collectAsState()
+    val dataCustomLimitEnd by viewModel.dataCustomLimitEnd.collectAsState()
+    val wifiCustomLimitStart by viewModel.wifiCustomLimitStart.collectAsState()
+    val wifiCustomLimitEnd by viewModel.wifiCustomLimitEnd.collectAsState()
 
     AnimatedVisibility(
         visible = currentView != "list",
@@ -252,8 +269,14 @@ fun AppLimitsOverlay(viewModel: AppLimitsViewModel) {
                             initialWifiDailyLimit = wifiDailyLimit,
                             initialDataMonthlyLimit = dataMonthlyLimit,
                             initialWifiMonthlyLimit = wifiMonthlyLimit,
+                            initialDataCustomLimit = dataCustomLimit,
+                            initialWifiCustomLimit = wifiCustomLimit,
+                            initialDataCustomStart = dataCustomLimitStart,
+                            initialDataCustomEnd = dataCustomLimitEnd,
+                            initialWifiCustomStart = wifiCustomLimitStart,
+                            initialWifiCustomEnd = wifiCustomLimitEnd,
                             onBack = { viewModel.isGeneralLimitOpen = false },
-                            onConfirm = { network, period, dataDaily, wifiDaily, dataMonthly, wifiMonthly ->
+                            onConfirm = { network, period, dataDaily, wifiDaily, dataMonthly, wifiMonthly, dataCustom, wifiCustom, dataCustomStart, dataCustomEnd, wifiCustomStart, wifiCustomEnd ->
                                 when(network) {
                                     "mobile" -> {
                                         when (period) {
@@ -266,6 +289,12 @@ fun AppLimitsOverlay(viewModel: AppLimitsViewModel) {
                                                 viewModel.setDataMonthlyLimit(dataMonthly)
                                                 viewModel.setDataMonthlyLimitEnabled(enabled = true)
                                                 viewModel.setDataMonthlyLimitConfigured(configured = true)
+                                            }
+                                            "custom" -> {
+                                                viewModel.setDataCustomLimit(dataCustom)
+                                                viewModel.setDataCustomLimitRange(dataCustomStart, dataCustomEnd)
+                                                viewModel.setDataCustomLimitEnabled(enabled = true)
+                                                viewModel.setDataCustomLimitConfigured(configured = true)
                                             }
                                             else -> {
                                                 viewModel.setDataDailyLimit(dataDaily)
@@ -288,6 +317,12 @@ fun AppLimitsOverlay(viewModel: AppLimitsViewModel) {
                                                 viewModel.setWifiMonthlyLimit(wifiMonthly)
                                                 viewModel.setWifiMonthlyLimitEnabled(enabled = true)
                                                 viewModel.setWifiMonthlyLimitConfigured(configured = true)
+                                            }
+                                            "custom" -> {
+                                                viewModel.setWifiCustomLimit(wifiCustom)
+                                                viewModel.setWifiCustomLimitRange(wifiCustomStart, wifiCustomEnd)
+                                                viewModel.setWifiCustomLimitEnabled(enabled = true)
+                                                viewModel.setWifiCustomLimitConfigured(configured = true)
                                             }
                                             else -> {
                                                 viewModel.setWifiDailyLimit(wifiDaily)
@@ -316,6 +351,16 @@ fun AppLimitsOverlay(viewModel: AppLimitsViewModel) {
                                                 viewModel.setWifiMonthlyLimit(wifiMonthly)
                                                 viewModel.setWifiMonthlyLimitEnabled(enabled = true)
                                                 viewModel.setWifiMonthlyLimitConfigured(configured = true)
+                                            }
+                                            "custom" -> {
+                                                viewModel.setDataCustomLimit(dataCustom)
+                                                viewModel.setDataCustomLimitRange(dataCustomStart, dataCustomEnd)
+                                                viewModel.setDataCustomLimitEnabled(enabled = true)
+                                                viewModel.setDataCustomLimitConfigured(configured = true)
+                                                viewModel.setWifiCustomLimit(wifiCustom)
+                                                viewModel.setWifiCustomLimitRange(wifiCustomStart, wifiCustomEnd)
+                                                viewModel.setWifiCustomLimitEnabled(enabled = true)
+                                                viewModel.setWifiCustomLimitConfigured(configured = true)
                                             }
                                             else -> {
                                                 viewModel.setDataDailyLimit(dataDaily)
@@ -406,24 +451,43 @@ fun GeneralLimitsList(
     val dataMonthlyLimitEnabled by viewModel.dataMonthlyLimitEnabled.collectAsState()
     val wifiDailyLimitEnabled by viewModel.wifiDailyLimitEnabled.collectAsState()
     val wifiMonthlyLimitEnabled by viewModel.wifiMonthlyLimitEnabled.collectAsState()
+    val dataCustomLimitEnabled by viewModel.dataCustomLimitEnabled.collectAsState()
+    val wifiCustomLimitEnabled by viewModel.wifiCustomLimitEnabled.collectAsState()
 
     val dataDailyLimitConfigured by viewModel.dataDailyLimitConfigured.collectAsState()
     val dataMonthlyLimitConfigured by viewModel.dataMonthlyLimitConfigured.collectAsState()
     val wifiDailyLimitConfigured by viewModel.wifiDailyLimitConfigured.collectAsState()
     val wifiMonthlyLimitConfigured by viewModel.wifiMonthlyLimitConfigured.collectAsState()
+    val dataCustomLimitConfigured by viewModel.dataCustomLimitConfigured.collectAsState()
+    val wifiCustomLimitConfigured by viewModel.wifiCustomLimitConfigured.collectAsState()
 
     val dataDailyLimit by viewModel.dataDailyLimit.collectAsState()
     val wifiDailyLimit by viewModel.wifiDailyLimit.collectAsState()
     val dataMonthlyLimit by viewModel.dataMonthlyLimit.collectAsState()
     val wifiMonthlyLimit by viewModel.wifiMonthlyLimit.collectAsState()
+    val dataCustomLimit by viewModel.dataCustomLimit.collectAsState()
+    val wifiCustomLimit by viewModel.wifiCustomLimit.collectAsState()
+
+    val dataCustomLimitStart by viewModel.dataCustomLimitStart.collectAsState()
+    val dataCustomLimitEnd by viewModel.dataCustomLimitEnd.collectAsState()
+    val wifiCustomLimitStart by viewModel.wifiCustomLimitStart.collectAsState()
+    val wifiCustomLimitEnd by viewModel.wifiCustomLimitEnd.collectAsState()
 
     val currentMobileUsage by viewModel.currentMobileUsage.collectAsState()
     val currentWifiUsage by viewModel.currentWifiUsage.collectAsState()
     val currentMonthlyMobileUsage by viewModel.currentMonthlyMobileUsage.collectAsState()
     val currentMonthlyWifiUsage by viewModel.currentMonthlyWifiUsage.collectAsState()
+    val currentCustomMobileUsage by viewModel.currentCustomMobileUsage.collectAsState()
+    val currentCustomWifiUsage by viewModel.currentCustomWifiUsage.collectAsState()
 
     val anyLimitConfigured = dataDailyLimitConfigured || dataMonthlyLimitConfigured ||
-            wifiDailyLimitConfigured || wifiMonthlyLimitConfigured
+            wifiDailyLimitConfigured || wifiMonthlyLimitConfigured ||
+            dataCustomLimitConfigured || wifiCustomLimitConfigured
+
+    fun formatRange(start: Long, end: Long): String {
+        val sdf = java.text.SimpleDateFormat("MMM dd, yyyy", java.util.Locale.getDefault())
+        return "${sdf.format(java.util.Date(start))} - ${sdf.format(java.util.Date(end))}"
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         if (!anyLimitConfigured) {
@@ -493,6 +557,36 @@ fun GeneralLimitsList(
                         )
                     }
                 }
+                if (wifiCustomLimitConfigured) {
+                    item {
+                        GeneralLimitItem(
+                            title = "Custom Wi-Fi",
+                            icon = Icons.Rounded.Wifi,
+                            currentUsage = currentCustomWifiUsage,
+                            limit = wifiCustomLimit,
+                            onToggle = { viewModel.setWifiCustomLimitEnabled(it) },
+                            onEdit = onEdit,
+                            onDelete = { onDelete(AppLimit(packageName = "system.wifi.custom", appName = "Custom Wi-Fi Limit", dataLimit = wifiCustomLimit, limitType = "custom", networkType = "wifi")) },
+                            enabled = wifiCustomLimitEnabled,
+                            subtitle = formatRange(wifiCustomLimitStart, wifiCustomLimitEnd)
+                        )
+                    }
+                }
+                if (dataCustomLimitConfigured) {
+                    item {
+                        GeneralLimitItem(
+                            title = "Custom Mobile",
+                            icon = Icons.Rounded.SignalCellularAlt,
+                            currentUsage = currentCustomMobileUsage,
+                            limit = dataCustomLimit,
+                            onToggle = { viewModel.setDataCustomLimitEnabled(it) },
+                            onEdit = onEdit,
+                            onDelete = { onDelete(AppLimit(packageName = "system.mobile.custom", appName = "Custom Mobile Limit", dataLimit = dataCustomLimit, limitType = "custom", networkType = "mobile")) },
+                            enabled = dataCustomLimitEnabled,
+                            subtitle = formatRange(dataCustomLimitStart, dataCustomLimitEnd)
+                        )
+                    }
+                }
             }
         }
     }
@@ -545,6 +639,7 @@ fun GeneralLimitItem(
     onEdit: () -> Unit,
     onDelete: () -> Unit,
     enabled: Boolean,
+    subtitle: String? = null,
 ) {
     var expanded by remember { mutableStateOf(false) }
     val progress = if (limit > 0) (currentUsage.toFloat() / limit).coerceIn(0f, 1f) else 0f
@@ -613,6 +708,16 @@ fun GeneralLimitItem(
                                 contentDescription = stringResource(R.string.badge_limit_reached)
                             )
                         }
+                    }
+                    if (subtitle != null) {
+                        Spacer(Modifier.height(2.dp))
+                        Text(
+                            text = subtitle,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = if (enabled) 0.8f else 0.5f),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
                     }
                     
                     if (enabled) {

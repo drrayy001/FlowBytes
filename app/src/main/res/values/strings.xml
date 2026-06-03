@@ -226,6 +226,11 @@
     <string name="label_app_limit_reached">App Limit Reached</string>
     <string name="label_daily_limit_reached">Daily Limit Reached</string>
     <string name="label_monthly_limit_reached">Monthly Limit Reached</string>
+    <string name="label_custom_limit_reached">Custom Limit Reached</string>
+    <string name="msg_no_alerts_custom">No custom limit alerts recorded.</string>
+    <string name="label_start_date_select">Start Date: %s</string>
+    <string name="label_end_date_select">End Date: %s</string>
+    <string name="msg_invalid_date_range">End Date must be at or after Start Date</string>
     <string name="label_high_traffic_detected">High Traffic Detected</string>
     <string name="label_trigger_speed_header">TRIGGER SPEED</string>
     <string name="label_limit_set_header">LIMIT SET</string>

@@ -90,12 +90,16 @@ class NetworkMonitoringService : Service() {
     private var cachedMobileUsage: Long = 0
     private var cachedMonthlyWifiUsage: Long = 0
     private var cachedMonthlyMobileUsage: Long = 0
+    private var cachedCustomWifiUsage: Long = 0
+    private var cachedCustomMobileUsage: Long = 0
     private var lastUsageQueryTime: Long = 0
 
     private var hasAlertedData = false
     private var hasAlertedWifi = false
     private var hasAlertedMonthlyData = false
     private var hasAlertedMonthlyWifi = false
+    private var hasAlertedCustomData = false
+    private var hasAlertedCustomWifi = false
 
     private var iconBitmap: Bitmap? = null
     private var iconCanvas: Canvas? = null
@@ -352,6 +356,32 @@ class NetworkMonitoringService : Service() {
             cachedMonthlyWifiUsage = getSumUsage(NetworkCapabilities.TRANSPORT_WIFI, "monthly")
             cachedMonthlyMobileUsage = getSumUsage(NetworkCapabilities.TRANSPORT_CELLULAR, "monthly")
 
+            val dataCustomStart = repository.dataCustomLimitStart.first()
+            val dataCustomEnd = repository.dataCustomLimitEnd.first()
+            val wifiCustomStart = repository.wifiCustomLimitStart.first()
+            val wifiCustomEnd = repository.wifiCustomLimitEnd.first()
+
+            fun getCustomSumUsage(transportType: Int, start: Long, end: Long): Long {
+                var total = 0L
+                try {
+                    val queryEnd = end.coerceAtMost(currentTime)
+                    val queryStart = start.coerceAtMost(queryEnd)
+                    val stats = networkStatsManager.querySummary(transportType, null, queryStart, queryEnd)
+                    val bucket = NetworkStats.Bucket()
+                    while (stats.hasNextBucket()) {
+                        stats.getNextBucket(bucket)
+                        total += bucket.rxBytes + bucket.txBytes
+                    }
+                    stats.close()
+                } catch (_: Exception) {
+                    // ignore
+                }
+                return total
+            }
+
+            cachedCustomMobileUsage = getCustomSumUsage(NetworkCapabilities.TRANSPORT_CELLULAR, dataCustomStart, dataCustomEnd)
+            cachedCustomWifiUsage = getCustomSumUsage(NetworkCapabilities.TRANSPORT_WIFI, wifiCustomStart, wifiCustomEnd)
+
             checkLimits()
             lastUsageQueryTime = System.currentTimeMillis()
         } catch (e: Exception) {
@@ -401,13 +431,41 @@ class NetworkMonitoringService : Service() {
         } else if (cachedMonthlyWifiUsage < wifiMonthlyLimit) {
             hasAlertedMonthlyWifi = false
         }
+
+        // 5. Check Custom Mobile
+        val dataCustomEnabled = repository.dataCustomLimitEnabled.first()
+        val dataCustomLimit = repository.dataCustomLimit.first()
+        if (dataCustomEnabled && (cachedCustomMobileUsage > dataCustomLimit) && !hasAlertedCustomData) {
+            sendLimitAlert(getString(R.string.label_mobile), cachedCustomMobileUsage, "custom", dataCustomLimit)
+            hasAlertedCustomData = true
+        } else if (cachedCustomMobileUsage < dataCustomLimit) {
+            hasAlertedCustomData = false
+        }
+
+        // 6. Check Custom Wi-Fi
+        val wifiCustomEnabled = repository.wifiCustomLimitEnabled.first()
+        val wifiCustomLimit = repository.wifiCustomLimit.first()
+        if (wifiCustomEnabled && (cachedCustomWifiUsage > wifiCustomLimit) && !hasAlertedCustomWifi) {
+            sendLimitAlert(getString(R.string.label_wifi), cachedCustomWifiUsage, "custom", wifiCustomLimit)
+            hasAlertedCustomWifi = true
+        } else if (cachedCustomWifiUsage < wifiCustomLimit) {
+            hasAlertedCustomWifi = false
+        }
     }
 
     private fun sendLimitAlert(type: String, currentUsage: Long, period: String, limitValue: Long) {
         val manager = getSystemService(NotificationManager::class.java)
-        val alertType = if (period == "monthly") "MONTHLY_LIMIT" else "DAILY_LIMIT"
+        val alertType = when (period) {
+            "monthly" -> "MONTHLY_LIMIT"
+            "custom" -> "CUSTOM_LIMIT"
+            else -> "DAILY_LIMIT"
+        }
         
-        val displayPeriod = if (period == "daily") "Daily" else "Monthly"
+        val displayPeriod = when (period) {
+            "daily" -> "Daily"
+            "monthly" -> "Monthly"
+            else -> "Custom"
+        }
         val appNameForAlert = "$displayPeriod $type Limit"
 
         serviceScope.launch(Dispatchers.IO) {
@@ -433,10 +491,18 @@ class NetworkMonitoringService : Service() {
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
         )
 
-        val periodLabel = if (period == "daily") getString(R.string.filter_daily).lowercase() else getString(R.string.filter_monthly).lowercase()
+        val periodLabel = when (period) {
+            "daily" -> getString(R.string.filter_daily).lowercase()
+            "monthly" -> getString(R.string.filter_monthly).lowercase()
+            else -> getString(R.string.filter_custom).lowercase()
+        }
         val message = getString(R.string.msg_reached_limit, periodLabel, type, formatDataUsage(currentUsage))
 
-        val title = if (period == "daily") getString(R.string.label_daily_limit_reached) else getString(R.string.label_monthly_limit_reached)
+        val title = when (period) {
+            "daily" -> getString(R.string.label_daily_limit_reached)
+            "monthly" -> getString(R.string.label_monthly_limit_reached)
+            else -> getString(R.string.label_custom_limit_reached)
+        }
 
         val notification = NotificationCompat.Builder(this, CHANNEL_ALERTS)
             .setSmallIcon(R.drawable.ic_launcher_foreground)

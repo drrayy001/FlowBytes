@@ -190,6 +190,16 @@ class UserPreferencesRepository(private val context: Context) {
         val WIFI_DAILY_LIMIT = longPreferencesKey("wifi_daily_limit")
         val DATA_MONTHLY_LIMIT = longPreferencesKey("data_monthly_limit")
         val WIFI_MONTHLY_LIMIT = longPreferencesKey("wifi_monthly_limit")
+        val DATA_CUSTOM_LIMIT_CONFIGURED = booleanPreferencesKey("data_custom_limit_configured")
+        val WIFI_CUSTOM_LIMIT_CONFIGURED = booleanPreferencesKey("wifi_custom_limit_configured")
+        val DATA_CUSTOM_LIMIT_ENABLED = booleanPreferencesKey("data_custom_limit_enabled")
+        val WIFI_CUSTOM_LIMIT_ENABLED = booleanPreferencesKey("wifi_custom_limit_enabled")
+        val DATA_CUSTOM_LIMIT = longPreferencesKey("data_custom_limit")
+        val WIFI_CUSTOM_LIMIT = longPreferencesKey("wifi_custom_limit")
+        val DATA_CUSTOM_LIMIT_START = longPreferencesKey("data_custom_limit_start")
+        val DATA_CUSTOM_LIMIT_END = longPreferencesKey("data_custom_limit_end")
+        val WIFI_CUSTOM_LIMIT_START = longPreferencesKey("wifi_custom_limit_start")
+        val WIFI_CUSTOM_LIMIT_END = longPreferencesKey("wifi_custom_limit_end")
         val NOTIFICATION_ICON_SCALE = floatPreferencesKey("notification_icon_scale")
         val HIGH_PRIORITY_NOTIFICATION = booleanPreferencesKey("high_priority_notification")
         val RESET_TIME_HOUR = intPreferencesKey("reset_time_hour")
@@ -305,6 +315,26 @@ class UserPreferencesRepository(private val context: Context) {
             preferences[PreferencesKeys.WIFI_MONTHLY_LIMIT_ENABLED] ?: false
         }.distinctUntilChanged()
 
+    val dataCustomLimitConfigured: Flow<Boolean> = preferencesFlow
+        .map { preferences ->
+            preferences[PreferencesKeys.DATA_CUSTOM_LIMIT_CONFIGURED] ?: false
+        }.distinctUntilChanged()
+
+    val wifiCustomLimitConfigured: Flow<Boolean> = preferencesFlow
+        .map { preferences ->
+            preferences[PreferencesKeys.WIFI_CUSTOM_LIMIT_CONFIGURED] ?: false
+        }.distinctUntilChanged()
+
+    val dataCustomLimitEnabled: Flow<Boolean> = preferencesFlow
+        .map { preferences ->
+            preferences[PreferencesKeys.DATA_CUSTOM_LIMIT_ENABLED] ?: false
+        }.distinctUntilChanged()
+
+    val wifiCustomLimitEnabled: Flow<Boolean> = preferencesFlow
+        .map { preferences ->
+            preferences[PreferencesKeys.WIFI_CUSTOM_LIMIT_ENABLED] ?: false
+        }.distinctUntilChanged()
+
     val dataDailyLimit: Flow<Long> = preferencesFlow
         .map { preferences ->
             preferences[PreferencesKeys.DATA_DAILY_LIMIT] ?: 2_147_483_648L
@@ -323,6 +353,36 @@ class UserPreferencesRepository(private val context: Context) {
     val wifiMonthlyLimit: Flow<Long> = preferencesFlow
         .map { preferences ->
             preferences[PreferencesKeys.WIFI_MONTHLY_LIMIT] ?: 107_374_182_400L // 100 GB default
+        }.distinctUntilChanged()
+
+    val dataCustomLimit: Flow<Long> = preferencesFlow
+        .map { preferences ->
+            preferences[PreferencesKeys.DATA_CUSTOM_LIMIT] ?: 0L
+        }.distinctUntilChanged()
+
+    val wifiCustomLimit: Flow<Long> = preferencesFlow
+        .map { preferences ->
+            preferences[PreferencesKeys.WIFI_CUSTOM_LIMIT] ?: 0L
+        }.distinctUntilChanged()
+
+    val dataCustomLimitStart: Flow<Long> = preferencesFlow
+        .map { preferences ->
+            preferences[PreferencesKeys.DATA_CUSTOM_LIMIT_START] ?: 0L
+        }.distinctUntilChanged()
+
+    val dataCustomLimitEnd: Flow<Long> = preferencesFlow
+        .map { preferences ->
+            preferences[PreferencesKeys.DATA_CUSTOM_LIMIT_END] ?: 0L
+        }.distinctUntilChanged()
+
+    val wifiCustomLimitStart: Flow<Long> = preferencesFlow
+        .map { preferences ->
+            preferences[PreferencesKeys.WIFI_CUSTOM_LIMIT_START] ?: 0L
+        }.distinctUntilChanged()
+
+    val wifiCustomLimitEnd: Flow<Long> = preferencesFlow
+        .map { preferences ->
+            preferences[PreferencesKeys.WIFI_CUSTOM_LIMIT_END] ?: 0L
         }.distinctUntilChanged()
 
     val notificationIconScale: Flow<Float> = preferencesFlow
@@ -530,6 +590,30 @@ class UserPreferencesRepository(private val context: Context) {
         }
     }
 
+    suspend fun setDataCustomLimitConfigured(configured: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.DATA_CUSTOM_LIMIT_CONFIGURED] = configured
+        }
+    }
+
+    suspend fun setWifiCustomLimitConfigured(configured: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.WIFI_CUSTOM_LIMIT_CONFIGURED] = configured
+        }
+    }
+
+    suspend fun setDataCustomLimitEnabled(enabled: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.DATA_CUSTOM_LIMIT_ENABLED] = enabled
+        }
+    }
+
+    suspend fun setWifiCustomLimitEnabled(enabled: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.WIFI_CUSTOM_LIMIT_ENABLED] = enabled
+        }
+    }
+
     suspend fun setDataDailyLimit(limitBytes: Long) {
         context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.DATA_DAILY_LIMIT] = limitBytes
@@ -551,6 +635,32 @@ class UserPreferencesRepository(private val context: Context) {
     suspend fun setWifiMonthlyLimit(limitBytes: Long) {
         context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.WIFI_MONTHLY_LIMIT] = limitBytes
+        }
+    }
+
+    suspend fun setDataCustomLimit(limitBytes: Long) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.DATA_CUSTOM_LIMIT] = limitBytes
+        }
+    }
+
+    suspend fun setWifiCustomLimit(limitBytes: Long) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.WIFI_CUSTOM_LIMIT] = limitBytes
+        }
+    }
+
+    suspend fun setDataCustomLimitRange(start: Long, end: Long) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.DATA_CUSTOM_LIMIT_START] = start
+            preferences[PreferencesKeys.DATA_CUSTOM_LIMIT_END] = end
+        }
+    }
+
+    suspend fun setWifiCustomLimitRange(start: Long, end: Long) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.WIFI_CUSTOM_LIMIT_START] = start
+            preferences[PreferencesKeys.WIFI_CUSTOM_LIMIT_END] = end
         }
     }
 

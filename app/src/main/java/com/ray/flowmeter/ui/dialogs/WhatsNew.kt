@@ -73,24 +73,18 @@ fun ChangelogDialog(
                 )
 
                 ChangelogTextItem(
-                    title = "Refined Alert Cards",
-                    description = "Improved alert card elements for better visual clarity and interaction."
+                    title = "Custom Date Range Limits",
+                    description = "You can now set data limits for specific date ranges across both Mobile and Wi-Fi networks."
                 )
 
                 ChangelogTextItem(
-                    title = "Notification Fixes",
-                    description = "Fixed the reset timer and silence button on notifications to ensure reliable control."
+                    title = "Monthly Reset Day",
+                    description = "Support for custom billing cycles. Choose a specific day of the month for your usage to reset."
                 )
 
-                ChangelogTextItem(
-                    title = "UI Tweaks",
-                    description = "Applied various UI adjustments and refinements across the application."
-                )
 
-                ChangelogTextItem(
-                    title = "General Improvements",
-                    description = "Includes other minor improvements and bug fixes for a smoother experience."
-                )
+
+
 
                 Spacer(modifier = Modifier.height(32.dp))
 

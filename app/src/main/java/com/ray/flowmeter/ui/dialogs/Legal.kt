@@ -100,25 +100,41 @@ fun LegalDialog(
 object LegalContent {
     val PRIVACY_POLICY: String
         get() = """
-            Privacy Policy for FlowBytes
-            Last Updated: ${SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault()).format(Date())}
+            Privacy Policy
+            Effective Date: April 29, 2026
 
-            1. Overview
-            FlowMeter ("we", "us", or "our") respects your privacy. This app is designed to help you monitor your network speed and data usage.
+I, the developer of FlowBytes (the "App"), provide this application free of charge. The App is offered as-is and is intended for use without any warranties or guarantees.
+            1. Information Collection and Use
+            FlowBytes monitors your device's network speeds and data usage (Wi-Fi and cellular) to help you stay in control of your internet. 
+            All monitoring, data usage calculations, and blocking actions are performed locally on your device. We do not collect, store, or transmit any personal data, including:
+            - Browsing history
+            - Network traffic content
+            - IP address
+            - Any personally identifiable information
 
-            2. Data Collection
-            We DO NOT collect, store, or transmit any personal information, browsing history, or network traffic content. All data processing (speed calculation and usage tracking) happens locally on your device.
+            2. Required Permissions
+            To function correctly, the App requires the following permissions:
+            - Usage Access (Network Stats): Used to access network usage statistics (via NetworkStatsManager and TrafficStats) in order to calculate download/upload speeds and track data usage per app.
+            - Foreground Service: Allows the App to run a background service to display real-time network speed in the notification bar and ensure consistent monitoring.
+            - VPN Service (Local VPN): FlowBytes uses a local VPN to manage internet access for apps that exceed their limits. This VPN is 100% local; your traffic never leaves your device and is never intercepted by us.
 
-            3. Permissions Used
-            - Usage Access: Required to calculate data usage per application.
-            - Notifications: Used to display the real-time speed meter and usage alerts.
-            - Battery Optimization: Required for the background service to provide accurate monitoring.
+            All data accessed through these permissions remains on your device and is used solely to provide the monitoring and control features within the App.
 
-            4. Data Security
-            Since no data is collected or transmitted to our servers, your information remains entirely on your device.
+            3. Third-Party Services
+            The App does not use any third-party services, analytics tools, or advertising networks that collect information used to identify you.
 
-            5. Changes to This Policy
-            We may update our Privacy Policy from time to time. You are advised to review this page periodically for any changes.
+            4. Security
+            Since all data processing occurs locally on your device, the risk of data breaches from our side is minimal. However, no method of electronic storage or transmission over the internet is completely secure, and we cannot guarantee absolute security.
+
+            5. Children’s Privacy
+            This Service is not intended for individuals under the age of 13. We do not knowingly collect personally identifiable information from children under 13.
+
+            6. Changes to This Privacy Policy
+            We may update this Privacy Policy from time to time. Any changes will be posted on this page. You are advised to review this page periodically for updates.
+
+            7. Contact Us
+            If you have any questions or suggestions about this Privacy Policy, you can contact us at:
+            Email: drrayy001@gmail.com
         """.trimIndent()
 
     val TERMS_AND_CONDITIONS: String

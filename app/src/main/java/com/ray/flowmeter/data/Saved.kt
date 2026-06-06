@@ -224,6 +224,11 @@ class UserPreferencesRepository(private val context: Context) {
         val USAGE_CHART_TYPE = stringPreferencesKey("usage_chart_type")
         val ALERTS_CATEGORY = stringPreferencesKey("alerts_category")
         val MONTHLY_RESET_DAY = intPreferencesKey("monthly_reset_day")
+
+        val APP_LAUNCH_COUNT = intPreferencesKey("app_launch_count")
+        val FIRST_INSTALL_TIME = longPreferencesKey("first_install_time")
+        val LAST_REVIEW_PROMPT_TIME = longPreferencesKey("last_review_prompt_time")
+        val USER_REVIEWED_RATED = booleanPreferencesKey("user_reviewed_rated")
     }
 
     private val preferencesFlow = context.dataStore.data
@@ -488,6 +493,26 @@ class UserPreferencesRepository(private val context: Context) {
     val alertsCategory: Flow<String> = preferencesFlow
         .map { preferences ->
             preferences[PreferencesKeys.ALERTS_CATEGORY] ?: "ALL"
+        }.distinctUntilChanged()
+
+    val appLaunchCount: Flow<Int> = preferencesFlow
+        .map { preferences ->
+            preferences[PreferencesKeys.APP_LAUNCH_COUNT] ?: 0
+        }.distinctUntilChanged()
+
+    val firstInstallTime: Flow<Long> = preferencesFlow
+        .map { preferences ->
+            preferences[PreferencesKeys.FIRST_INSTALL_TIME] ?: 0L
+        }.distinctUntilChanged()
+
+    val lastReviewPromptTime: Flow<Long> = preferencesFlow
+        .map { preferences ->
+            preferences[PreferencesKeys.LAST_REVIEW_PROMPT_TIME] ?: 0L
+        }.distinctUntilChanged()
+
+    val userReviewedRated: Flow<Boolean> = preferencesFlow
+        .map { preferences ->
+            preferences[PreferencesKeys.USER_REVIEWED_RATED] ?: false
         }.distinctUntilChanged()
 
     suspend fun setOnboardingCompleted(completed: Boolean) {
@@ -763,6 +788,28 @@ class UserPreferencesRepository(private val context: Context) {
     suspend fun saveAlertsCategory(category: String) {
         context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.ALERTS_CATEGORY] = category
+        }
+    }
+
+    suspend fun incrementLaunchCount() {
+        context.dataStore.edit { preferences ->
+            val current = preferences[PreferencesKeys.APP_LAUNCH_COUNT] ?: 0
+            preferences[PreferencesKeys.APP_LAUNCH_COUNT] = current + 1
+            if (preferences[PreferencesKeys.FIRST_INSTALL_TIME] == null || preferences[PreferencesKeys.FIRST_INSTALL_TIME] == 0L) {
+                preferences[PreferencesKeys.FIRST_INSTALL_TIME] = System.currentTimeMillis()
+            }
+        }
+    }
+
+    suspend fun setUserReviewedRated(reviewed: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.USER_REVIEWED_RATED] = reviewed
+        }
+    }
+
+    suspend fun setLastReviewPromptTime(time: Long) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.LAST_REVIEW_PROMPT_TIME] = time
         }
     }
 }

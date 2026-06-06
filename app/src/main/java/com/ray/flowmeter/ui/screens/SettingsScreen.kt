@@ -377,6 +377,7 @@ fun SettingsScreen(
                     title = stringResource(R.string.settings_rate_app),
                     subtitle = stringResource(R.string.settings_rate_app_desc),
                     onClick = {
+                        viewModel.markAsReviewed()
                         val intent = Intent(Intent.ACTION_VIEW, "market://details?id=${context.packageName}".toUri())
                         try {
                             context.startActivity(intent)

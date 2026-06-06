@@ -236,4 +236,10 @@ class SettingsViewModel(
         billingManager?.makePurchase(activity, productId)
     }
 
+    fun markAsReviewed() {
+        viewModelScope.launch {
+            repository.setUserReviewedRated(true)
+        }
+    }
+
 }

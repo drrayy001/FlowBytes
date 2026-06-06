@@ -282,4 +282,19 @@
     <string name="badge_limit_reached">Limit Reached</string>
     <string name="badge_blocked">Blocked</string>
     <string name="badge_silenced">Silenced</string>
+
+    <!-- App Review Dialog -->
+    <string name="review_dialog_title">Enjoying FlowBytes?</string>
+    <string name="review_dialog_description">If you find FlowBytes helpful, please take a moment to rate us! It helps us improve and keep the app ad-free.</string>
+    <string name="review_later">Later</string>
+    <string name="review_never">Never</string>
+    <string name="review_submit_feedback">Submit Feedback</string>
+    <string name="review_rate_on_play_store">Rate on Play Store</string>
+    <string name="review_feedback_title">Help Us Improve</string>
+    <string name="review_feedback_description">We\'re sorry to hear you\'re not fully satisfied. Please let us know how we can make FlowBytes better for you.</string>
+    <string name="review_feedback_placeholder">Enter your suggestions or feedback here...</string>
+    <string name="review_feedback_thanks">Thank you for your feedback!</string>
+    <string name="review_play_store_title">Thank you for the rating!</string>
+    <string name="review_play_store_description">We would appreciate it if you could write a quick review on Google Play. It really helps a lot!</string>
+    <string name="review_toast_feedback_submitted">Feedback submitted successfully. Thank you!</string>
 </resources>

@@ -19,6 +19,8 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.lifecycleScope
+import androidx.compose.runtime.rememberCoroutineScope
 import com.ray.flowmeter.data.AlertRepository
 import com.ray.flowmeter.data.AppLimitRepository
 import com.ray.flowmeter.data.FlowMeterDatabase
@@ -26,6 +28,7 @@ import com.ray.flowmeter.data.UserPreferencesRepository
 import com.ray.flowmeter.service.AppBlockVpnService
 import com.ray.flowmeter.service.NetworkMonitoringService
 import com.ray.flowmeter.ui.dialogs.ChangelogDialog
+import com.ray.flowmeter.ui.dialogs.ReviewDialog
 import com.ray.flowmeter.ui.screens.MainScreen
 import com.ray.flowmeter.ui.screens.OnboardingScreen
 import com.ray.flowmeter.ui.screens.Destination
@@ -80,6 +83,11 @@ class MainActivity : ComponentActivity() {
         val database = FlowMeterDatabase.getDatabase(applicationContext)
         val alertRepository = AlertRepository(database.appAlertDao())
         val appLimitRepository = AppLimitRepository(database.appLimitDao())
+
+        // Increment launch count for review dialog
+        lifecycleScope.launch {
+            repository.incrementLaunchCount()
+        }
 
         // Pre-load theme settings to avoid dark theme flash on startup
         val initialTheme = runBlocking { repository.themeMode.first() }
@@ -164,6 +172,29 @@ class MainActivity : ComponentActivity() {
 
             val currentVersionCode = BuildConfig.VERSION_CODE
             val (showChangelog, setShowChangelog) = remember { mutableStateOf(false) }
+
+            val (showReviewDialog, setShowReviewDialog) = remember { mutableStateOf(false) }
+            val appLaunchCount by repository.appLaunchCount.collectAsState(0)
+            val firstInstallTime by repository.firstInstallTime.collectAsState(0L)
+            val lastReviewPromptTime by repository.lastReviewPromptTime.collectAsState(0L)
+            val userReviewedRated by repository.userReviewedRated.collectAsState(false)
+
+            LaunchedEffect(onboardingCompleted, showChangelog, appLaunchCount, firstInstallTime, lastReviewPromptTime, userReviewedRated) {
+                if (onboardingCompleted == true && !showChangelog && !userReviewedRated) {
+                    val now = System.currentTimeMillis()
+                    val threeDays = 3 * 24 * 60 * 60 * 1000L
+                    val sevenDays = 7 * 24 * 60 * 60 * 1000L
+
+                    val isTimeSinceInstallOk = (now - firstInstallTime) >= threeDays
+                    val isTimeSinceLastPromptOk = (now - lastReviewPromptTime) >= sevenDays
+                    val isLaunchCountOk = appLaunchCount >= 3
+
+                    if (isTimeSinceInstallOk && isTimeSinceLastPromptOk && isLaunchCountOk) {
+                        delay(2000)
+                        setShowReviewDialog(true)
+                    }
+                }
+            }
 
             LaunchedEffect(onboardingCompleted, lastVersionCode) {
                 if ((onboardingCompleted == true) && (lastVersionCode != -1)) {
@@ -271,6 +302,31 @@ class MainActivity : ComponentActivity() {
 
                         if (showChangelog) {
                             ChangelogDialog { setShowChangelog(false) }
+                        }
+
+                        val coroutineScope = rememberCoroutineScope()
+                        if (showReviewDialog) {
+                            ReviewDialog(
+                                onDismiss = { setShowReviewDialog(false) },
+                                onNeverShowAgain = {
+                                    coroutineScope.launch {
+                                        repository.setUserReviewedRated(true)
+                                    }
+                                    setShowReviewDialog(false)
+                                },
+                                onLater = {
+                                    coroutineScope.launch {
+                                        repository.setLastReviewPromptTime(System.currentTimeMillis())
+                                    }
+                                    setShowReviewDialog(false)
+                                },
+                                onReviewCompleted = {
+                                    coroutineScope.launch {
+                                        repository.setUserReviewedRated(true)
+                                    }
+                                    setShowReviewDialog(false)
+                                }
+                            )
                         }
                     } else {
                         OnboardingScreen(

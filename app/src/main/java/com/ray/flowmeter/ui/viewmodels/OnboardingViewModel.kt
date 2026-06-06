@@ -12,6 +12,7 @@ class OnboardingViewModel(
         viewModelScope.launch {
             repository.setOnboardingCompleted(completed = true)
             repository.setMonitoringEnabled(enabled = true)
+            repository.updateLastVersionCode(com.ray.flowmeter.BuildConfig.VERSION_CODE)
         }
     }
 }

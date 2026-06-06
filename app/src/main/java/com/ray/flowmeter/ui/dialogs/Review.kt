@@ -113,7 +113,8 @@ fun ReviewDialog(
                                 onSubmitFeedback = {
                                     if (feedbackText.isNotBlank()) {
                                         val intent = Intent(Intent.ACTION_SENDTO).apply {
-                                            data = Uri.parse("mailto:drrayy001@gmail.com")
+                                            data = Uri.parse("mailto:")
+                                            putExtra(Intent.EXTRA_EMAIL, arrayOf("drrayy001@gmail.com"))
                                             putExtra(Intent.EXTRA_SUBJECT, "FlowBytes Feedback - $targetRating Stars")
                                             putExtra(Intent.EXTRA_TEXT, feedbackText)
                                         }
@@ -169,6 +170,7 @@ private fun RatingSelectionStep(
         ) {
             for (i in 1..5) {
                 val isSelected = i <= currentRating
+                val interactionSource = remember { MutableInteractionSource() }
                 Icon(
                     imageVector = if (isSelected) Icons.Rounded.Star else Icons.Outlined.Star,
                     contentDescription = "Rate $i stars",
@@ -176,13 +178,10 @@ private fun RatingSelectionStep(
                     modifier = Modifier
                         .size(48.dp)
                         .padding(horizontal = 4.dp)
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null
-                        ) {
-                            onRatingSelected(i)
-                        }
-                        .bounceClick()
+                        .bounceClick(
+                            interactionSource = interactionSource,
+                            onClick = { onRatingSelected(i) }
+                        )
                 )
             }
         }

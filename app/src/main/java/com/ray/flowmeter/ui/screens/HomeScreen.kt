@@ -114,20 +114,17 @@ fun HomeScreen(
 
                         Spacer(modifier = Modifier.height(20.dp))
 
-                        Row(
+                        FlowRow(
                             modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically
+                            horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally),
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            ChartType.entries.forEachIndexed { index, type ->
+                            ChartType.entries.forEach { type ->
                                 LegendItem(
                                     label = type.getLabel(),
                                     color = type.getColor(),
                                     isSelected = selectedChartType == type,
                                 ) { viewModel.updateChartType(type) }
-                                if (index < (ChartType.entries.size - 1)) {
-                                    Spacer(modifier = Modifier.width(12.dp))
-                                }
                             }
                         }
                     }

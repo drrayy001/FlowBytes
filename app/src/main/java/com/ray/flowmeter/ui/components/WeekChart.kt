@@ -264,7 +264,9 @@ fun WeeklyBarChart(
                                     style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp),
                                     fontWeight = FontWeight.Black,
                                     color = MaterialTheme.colorScheme.onPrimary,
-                                    modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                                    maxLines = 1,
+                                    softWrap = false,
+                                    modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp)
                                 )
                             }
                         } else {
@@ -273,6 +275,8 @@ fun WeeklyBarChart(
                                 style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp),
                                 fontWeight = FontWeight.ExtraBold,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
+                                maxLines = 1,
+                                softWrap = false,
                                 modifier = Modifier.padding(bottom = 12.dp)
                             )
                         }

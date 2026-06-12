@@ -291,6 +291,8 @@ fun AlertItemFront(alert: AppAlert) {
         } else null
     }
 
+    val wifiLabel = stringResource(R.string.label_wifi)
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
@@ -305,7 +307,12 @@ fun AlertItemFront(alert: AppAlert) {
                 )
             } else {
                 val icon = when(alert.alertType) {
-                    "DAILY_LIMIT", "MONTHLY_LIMIT" -> if (displayAppName.contains("Wi-Fi")) Icons.Rounded.Wifi else Icons.Rounded.SignalCellularAlt
+                    "DAILY_LIMIT", "MONTHLY_LIMIT", "CUSTOM_LIMIT" -> {
+                        val isWifi = displayAppName.contains("Wi-Fi", ignoreCase = true) || 
+                                     displayAppName.contains("Wifi", ignoreCase = true) || 
+                                     displayAppName.contains(wifiLabel, ignoreCase = true)
+                        if (isWifi) Icons.Rounded.Wifi else Icons.Rounded.SignalCellularAlt
+                    }
                     else -> Icons.Rounded.Category
                 }
                 Box(

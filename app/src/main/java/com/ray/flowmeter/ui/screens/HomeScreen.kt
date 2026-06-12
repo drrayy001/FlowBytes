@@ -50,10 +50,10 @@ fun HomeScreen(
                     title = stringResource(R.string.label_todays_usage),
                     totalUsage = viewModel.dailyUsage,
                     subItems = listOf(
-                        UsageItemData(viewModel.downloadReceived, stringResource(R.string.label_download), MaterialTheme.colorScheme.primary),
-                        UsageItemData(viewModel.uploadSent, stringResource(R.string.label_upload), MaterialTheme.colorScheme.secondary),
-                        UsageItemData(viewModel.dailyWifiUsage, stringResource(R.string.label_wifi), MaterialTheme.colorScheme.primary),
-                        UsageItemData(viewModel.dailyMobileUsage, stringResource(R.string.label_mobile), MaterialTheme.colorScheme.secondary)
+                        UsageItemData(viewModel.downloadReceived, stringResource(R.string.label_download), MaterialTheme.colorScheme.primary, AppIcons.Download),
+                        UsageItemData(viewModel.uploadSent, stringResource(R.string.label_upload), MaterialTheme.colorScheme.secondary, AppIcons.Upload),
+                        UsageItemData(viewModel.dailyWifiUsage, stringResource(R.string.label_wifi), MaterialTheme.colorScheme.primary, AppIcons.Wifi),
+                        UsageItemData(viewModel.dailyMobileUsage, stringResource(R.string.label_mobile), MaterialTheme.colorScheme.secondary, AppIcons.Mobile)
                     ),
                     icon = AppIcons.TodayUsage,
                     accentColor = MaterialTheme.colorScheme.primary,
@@ -138,8 +138,8 @@ fun HomeScreen(
                     title = stringResource(R.string.label_this_month),
                     totalUsage = viewModel.monthlyUsage,
                     subItems = listOf(
-                        UsageItemData(viewModel.monthlyWifiUsage, stringResource(R.string.label_wifi), MaterialTheme.colorScheme.primary),
-                        UsageItemData(viewModel.monthlyMobileUsage, stringResource(R.string.label_mobile), MaterialTheme.colorScheme.secondary)
+                        UsageItemData(viewModel.monthlyWifiUsage, stringResource(R.string.label_wifi), MaterialTheme.colorScheme.primary, AppIcons.Wifi),
+                        UsageItemData(viewModel.monthlyMobileUsage, stringResource(R.string.label_mobile), MaterialTheme.colorScheme.secondary, AppIcons.Mobile)
                     ),
                     icon = AppIcons.ThisMonthUsage,
                     accentColor = MaterialTheme.colorScheme.primary,
@@ -186,7 +186,8 @@ fun LegendItem(label: String, color: Color, isSelected: Boolean, onClick: () -> 
 data class UsageItemData(
     val value: String,
     val label: String,
-    val color: Color
+    val color: Color,
+    val icon: ImageVector
 )
 
 // Reusable card component for displaying usage summaries
@@ -254,16 +255,6 @@ fun UsageSummaryContent(
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
         Spacer(modifier = Modifier.height(16.dp))
 
-        val getIconForLabel = { label: String ->
-            when {
-                label.contains("Download", ignoreCase = true) -> AppIcons.Download
-                label.contains("Upload", ignoreCase = true) -> AppIcons.Upload
-                label.contains("Wi-Fi", ignoreCase = true) || label.contains("Wifi", ignoreCase = true) -> AppIcons.Wifi
-                label.contains("Mobile", ignoreCase = true) -> AppIcons.Mobile
-                else -> AppIcons.GenericData
-            }
-        }
-
         Row(modifier = Modifier.fillMaxWidth()) {
             // Left Column (Items 1 and 3 - e.g. Download and Mobile)
             Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
@@ -272,7 +263,7 @@ fun UsageSummaryContent(
                         UsageSubItem(
                             label = subItems[0].label,
                             value = subItems[0].value,
-                            icon = getIconForLabel(subItems[0].label),
+                            icon = subItems[0].icon,
                             color = subItems[0].color
                         )
                     }
@@ -281,7 +272,7 @@ fun UsageSummaryContent(
                         UsageSubItem(
                             label = subItems[2].label,
                             value = subItems[2].value,
-                            icon = getIconForLabel(subItems[2].label),
+                            icon = subItems[2].icon,
                             color = subItems[2].color
                         )
                     }
@@ -295,7 +286,7 @@ fun UsageSummaryContent(
                         UsageSubItem(
                             label = subItems[1].label,
                             value = subItems[1].value,
-                            icon = getIconForLabel(subItems[1].label),
+                            icon = subItems[1].icon,
                             color = subItems[1].color
                         )
                     }
@@ -304,7 +295,7 @@ fun UsageSummaryContent(
                         UsageSubItem(
                             label = subItems[3].label,
                             value = subItems[3].value,
-                            icon = getIconForLabel(subItems[3].label),
+                            icon = subItems[3].icon,
                             color = subItems[3].color
                         )
                     }

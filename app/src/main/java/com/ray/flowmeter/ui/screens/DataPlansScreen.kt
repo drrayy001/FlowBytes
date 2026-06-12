@@ -645,9 +645,9 @@ fun GeneralLimitItem(
     val progress = if (limit > 0) (currentUsage.toFloat() / limit).coerceIn(0f, 1f) else 0f
     val isOverLimitValue = enabled && (limit > 0) && (currentUsage >= limit)
     
-    val accentColor = when {
-        title.contains("Wi-Fi", ignoreCase = true) -> MaterialTheme.colorScheme.secondary
-        title.contains("Mobile", ignoreCase = true) -> MaterialTheme.colorScheme.tertiary
+    val accentColor = when (icon) {
+        Icons.Rounded.Wifi -> MaterialTheme.colorScheme.secondary
+        Icons.Rounded.SignalCellularAlt -> MaterialTheme.colorScheme.tertiary
         else -> MaterialTheme.colorScheme.primary
     }
 

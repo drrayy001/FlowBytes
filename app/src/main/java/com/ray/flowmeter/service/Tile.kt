@@ -47,7 +47,7 @@ class SpeedTileService : TileService() {
             val tile = qsTile ?: return@launch
 
             tile.state = if (isEnabled) Tile.STATE_ACTIVE else Tile.STATE_INACTIVE
-            tile.label = if (isEnabled) "Monitoring ON" else "Monitoring OFF"
+            tile.label = if (isEnabled) getString(R.string.tile_monitoring_on) else getString(R.string.tile_monitoring_off)
             tile.subtitle = getString(R.string.app_name)
             tile.updateTile()
         }

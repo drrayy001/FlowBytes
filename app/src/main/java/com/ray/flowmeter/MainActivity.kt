@@ -41,6 +41,13 @@ import com.ray.flowmeter.ui.viewmodels.OnboardingViewModel
 import com.ray.flowmeter.ui.viewmodels.SettingsViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Box
+import androidx.compose.runtime.produceState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 
 class MainActivity : ComponentActivity() {
 
@@ -89,79 +96,101 @@ class MainActivity : ComponentActivity() {
             repository.incrementLaunchCount()
         }
 
-        // Pre-load theme settings to avoid dark theme flash on startup
-        val initialTheme = runBlocking { repository.themeMode.first() }
-        val initialMaterialYou = runBlocking { repository.useMaterialYou.first() }
-        val initialAmoled = runBlocking { repository.useAmoled.first() }
-        val initialAccent = runBlocking { repository.accentColor.first() }
-
-        val onboardingViewModel = ViewModelProvider(
-            this,
-            object : ViewModelProvider.Factory {
-                override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
-                    @Suppress("UNCHECKED_CAST")
-                    return OnboardingViewModel(repository) as T
-                }
-            },
-        )[OnboardingViewModel::class.java]
-
-        val settingsViewModel = ViewModelProvider(
-            this,
-            object : ViewModelProvider.Factory {
-                override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
-                    @Suppress("UNCHECKED_CAST")
-                    return SettingsViewModel(
-                        repository = repository,
-                        initialTheme = initialTheme,
-                        initialMaterialYou = initialMaterialYou,
-                        initialAmoled = initialAmoled,
-                        initialAccent = initialAccent
-                    ) as T
-                }
-            },
-        )[SettingsViewModel::class.java]
-
-        val homeViewModel = ViewModelProvider(
-            this,
-            object : ViewModelProvider.Factory {
-                override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
-                    @Suppress("UNCHECKED_CAST")
-                    return HomeViewModel(applicationContext, repository) as T
-                }
-            },
-        )[HomeViewModel::class.java]
-
-        val appUsageViewModel = ViewModelProvider(
-            this,
-            object : ViewModelProvider.Factory {
-                override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
-                    @Suppress("UNCHECKED_CAST")
-                    return AppUsageViewModel(repository, applicationContext) as T
-                }
-            },
-        )[AppUsageViewModel::class.java]
-
-        val alertsViewModel = ViewModelProvider(
-            this,
-            object : ViewModelProvider.Factory {
-                override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
-                    @Suppress("UNCHECKED_CAST")
-                    return AlertsViewModel(alertRepository, repository) as T
-                }
-            },
-        )[AlertsViewModel::class.java]
-
-        val appLimitsViewModel = ViewModelProvider(
-            this,
-            object : ViewModelProvider.Factory {
-                override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
-                    @Suppress("UNCHECKED_CAST")
-                    return AppLimitsViewModel(appLimitRepository, repository, applicationContext) as T
-                }
-            },
-        )[AppLimitsViewModel::class.java]
-
         setContent {
+            val themeSettingsState = produceState<ThemeSettings?>(initialValue = null) {
+                val themeMode = repository.themeMode.first()
+                val useMaterialYou = repository.useMaterialYou.first()
+                val useAmoled = repository.useAmoled.first()
+                val accentColor = repository.accentColor.first()
+                value = ThemeSettings(themeMode, useMaterialYou, useAmoled, accentColor)
+            }
+
+            val settings = themeSettingsState.value
+            if (settings == null) {
+                val isDark = isSystemInDarkTheme()
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(if (isDark) Color(0xFF1A1B1E) else Color(0xFFFDFBFF))
+                )
+            } else {
+                val onboardingViewModel = remember {
+                    ViewModelProvider(
+                        this@MainActivity,
+                        object : ViewModelProvider.Factory {
+                            override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
+                                @Suppress("UNCHECKED_CAST")
+                                return OnboardingViewModel(repository) as T
+                            }
+                        },
+                    )[OnboardingViewModel::class.java]
+                }
+
+                val settingsViewModel = remember(settings) {
+                    ViewModelProvider(
+                        this@MainActivity,
+                        object : ViewModelProvider.Factory {
+                            override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
+                                @Suppress("UNCHECKED_CAST")
+                                return SettingsViewModel(
+                                    repository = repository,
+                                    initialTheme = settings.themeMode,
+                                    initialMaterialYou = settings.useMaterialYou,
+                                    initialAmoled = settings.useAmoled,
+                                    initialAccent = settings.accentColor
+                                ) as T
+                            }
+                        },
+                    )[SettingsViewModel::class.java]
+                }
+
+                val homeViewModel = remember {
+                    ViewModelProvider(
+                        this@MainActivity,
+                        object : ViewModelProvider.Factory {
+                            override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
+                                @Suppress("UNCHECKED_CAST")
+                                return HomeViewModel(applicationContext, repository) as T
+                            }
+                        },
+                    )[HomeViewModel::class.java]
+                }
+
+                val appUsageViewModel = remember {
+                    ViewModelProvider(
+                        this@MainActivity,
+                        object : ViewModelProvider.Factory {
+                            override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
+                                @Suppress("UNCHECKED_CAST")
+                                return AppUsageViewModel(repository, applicationContext) as T
+                            }
+                        },
+                    )[AppUsageViewModel::class.java]
+                }
+
+                val alertsViewModel = remember {
+                    ViewModelProvider(
+                        this@MainActivity,
+                        object : ViewModelProvider.Factory {
+                            override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
+                                @Suppress("UNCHECKED_CAST")
+                                return AlertsViewModel(alertRepository, repository) as T
+                            }
+                        },
+                    )[AlertsViewModel::class.java]
+                }
+
+                val appLimitsViewModel = remember {
+                    ViewModelProvider(
+                        this@MainActivity,
+                        object : ViewModelProvider.Factory {
+                            override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
+                                @Suppress("UNCHECKED_CAST")
+                                return AppLimitsViewModel(appLimitRepository, repository, applicationContext) as T
+                            }
+                        },
+                    )[AppLimitsViewModel::class.java]
+                }
             val onboardingCompleted by repository.onboardingCompleted.collectAsState(null)
             val lastVersionCode by repository.lastVersionCode.collectAsState(-1)
             
@@ -340,3 +369,11 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+}
+
+private data class ThemeSettings(
+    val themeMode: String,
+    val useMaterialYou: Boolean,
+    val useAmoled: Boolean,
+    val accentColor: Long?
+)

@@ -183,13 +183,7 @@ fun AppPickerScreen(
                                     initialValue = null,
                                     key1 = app.packageName
                                 ) {
-                                    value = withContext(Dispatchers.IO) {
-                                        try {
-                                            context.packageManager.getApplicationIcon(app.packageName)
-                                        } catch (_: Exception) {
-                                            null
-                                        }
-                                    }
+                                    value = viewModel.getAppIcon(app.packageName)
                                 }
 
                                 ListItem(

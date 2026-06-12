@@ -43,6 +43,7 @@ fun AppLimitsScreen(
 ) {
     var limitToDelete by remember { mutableStateOf<AppLimit?>(null) }
     val (showTypeSelector, setShowTypeSelector) = remember { mutableStateOf(value = false) }
+    var showAddGeneralLimitDialog by remember { mutableStateOf(false) }
 
     val dataDailyLimitConfigured by viewModel.dataDailyLimitConfigured.collectAsState()
     val dataMonthlyLimitConfigured by viewModel.dataMonthlyLimitConfigured.collectAsState()
@@ -64,9 +65,29 @@ fun AppLimitsScreen(
         setInternalTab(index)
     }
 
-    val allGeneralLimitsConfigured = dataDailyLimitConfigured && dataMonthlyLimitConfigured &&
-            wifiDailyLimitConfigured && wifiMonthlyLimitConfigured &&
-            dataCustomLimitConfigured && wifiCustomLimitConfigured
+    val unconfiguredPlans = remember(dataDailyLimitConfigured, dataMonthlyLimitConfigured, wifiDailyLimitConfigured, wifiMonthlyLimitConfigured, dataCustomLimitConfigured, wifiCustomLimitConfigured) {
+        buildList {
+            if (!wifiDailyLimitConfigured) add("daily_wifi")
+            if (!dataDailyLimitConfigured) add("daily_mobile")
+            if (!wifiMonthlyLimitConfigured) add("monthly_wifi")
+            if (!dataMonthlyLimitConfigured) add("monthly_mobile")
+            if (!wifiCustomLimitConfigured) add("custom_wifi")
+            if (!dataCustomLimitConfigured) add("custom_mobile")
+        }
+    }
+
+    val allGeneralLimitsConfigured = unconfiguredPlans.isEmpty()
+
+    if (showAddGeneralLimitDialog) {
+        AddGeneralLimitDialog(
+            unconfiguredPlans = unconfiguredPlans,
+            onDismiss = { showAddGeneralLimitDialog = false },
+            onPlanSelected = { planType ->
+                viewModel.configuringGeneralLimitType = planType
+                showAddGeneralLimitDialog = false
+            }
+        )
+    }
 
     Box(modifier = modifier) {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -87,7 +108,7 @@ fun AppLimitsScreen(
                 when (page) {
                     0 -> GeneralLimitsList(
                         viewModel = viewModel,
-                        onEdit = { viewModel.isGeneralLimitOpen = true },
+                        onEdit = { planType -> viewModel.configuringGeneralLimitType = planType },
                         onDelete = { limitToDelete = it }
                     )
                     1 -> AppLimitsList(
@@ -108,7 +129,11 @@ fun AppLimitsScreen(
                         viewModel.loadInstalledApps()
                         viewModel.isPickerOpen = true
                     } else {
-                        viewModel.isGeneralLimitOpen = true
+                        if (unconfiguredPlans.size == 1) {
+                            viewModel.configuringGeneralLimitType = unconfiguredPlans.first()
+                        } else {
+                            showAddGeneralLimitDialog = true
+                        }
                     }
                 },
                 modifier = Modifier
@@ -133,7 +158,11 @@ fun AppLimitsScreen(
                 setShowTypeSelector(false)
             },
             onGeneralLimitSelected = {
-                viewModel.isGeneralLimitOpen = true
+                if (unconfiguredPlans.size == 1) {
+                    viewModel.configuringGeneralLimitType = unconfiguredPlans.first()
+                } else {
+                    showAddGeneralLimitDialog = true
+                }
                 setShowTypeSelector(false)
             }
         )
@@ -197,7 +226,7 @@ fun AppLimitsOverlay(viewModel: AppLimitsViewModel) {
     val currentView = when {
         viewModel.isPickerOpen -> "picker"
         viewModel.editingLimit != null -> "edit"
-        viewModel.isGeneralLimitOpen -> "general"
+        viewModel.configuringGeneralLimitType != null -> "general"
         else -> "list"
     }
 
@@ -264,122 +293,69 @@ fun AppLimitsOverlay(viewModel: AppLimitsViewModel) {
                         }
                     }
                     "general" -> {
+                        val planType = viewModel.configuringGeneralLimitType ?: ""
+                        val initialLimit = when (planType) {
+                            "daily_wifi" -> wifiDailyLimit
+                            "daily_mobile" -> dataDailyLimit
+                            "monthly_wifi" -> wifiMonthlyLimit
+                            "monthly_mobile" -> dataMonthlyLimit
+                            "custom_wifi" -> wifiCustomLimit
+                            "custom_mobile" -> dataCustomLimit
+                            else -> 0L
+                        }
+                        val initialStart = when (planType) {
+                            "custom_wifi" -> wifiCustomLimitStart
+                            "custom_mobile" -> dataCustomLimitStart
+                            else -> 0L
+                        }
+                        val initialEnd = when (planType) {
+                            "custom_wifi" -> wifiCustomLimitEnd
+                            "custom_mobile" -> dataCustomLimitEnd
+                            else -> 0L
+                        }
+
                         GeneralLimitConfigScreen(
-                            initialDataDailyLimit = dataDailyLimit,
-                            initialWifiDailyLimit = wifiDailyLimit,
-                            initialDataMonthlyLimit = dataMonthlyLimit,
-                            initialWifiMonthlyLimit = wifiMonthlyLimit,
-                            initialDataCustomLimit = dataCustomLimit,
-                            initialWifiCustomLimit = wifiCustomLimit,
-                            initialDataCustomStart = dataCustomLimitStart,
-                            initialDataCustomEnd = dataCustomLimitEnd,
-                            initialWifiCustomStart = wifiCustomLimitStart,
-                            initialWifiCustomEnd = wifiCustomLimitEnd,
-                            onBack = { viewModel.isGeneralLimitOpen = false },
-                            onConfirm = { network, period, dataDaily, wifiDaily, dataMonthly, wifiMonthly, dataCustom, wifiCustom, dataCustomStart, dataCustomEnd, wifiCustomStart, wifiCustomEnd ->
-                                when(network) {
-                                    "mobile" -> {
-                                        when (period) {
-                                            "daily" -> {
-                                                viewModel.setDataDailyLimit(dataDaily)
-                                                viewModel.setDataDailyLimitEnabled(enabled = true)
-                                                viewModel.setDataDailyLimitConfigured(configured = true)
-                                            }
-                                            "monthly" -> {
-                                                viewModel.setDataMonthlyLimit(dataMonthly)
-                                                viewModel.setDataMonthlyLimitEnabled(enabled = true)
-                                                viewModel.setDataMonthlyLimitConfigured(configured = true)
-                                            }
-                                            "custom" -> {
-                                                viewModel.setDataCustomLimit(dataCustom)
-                                                viewModel.setDataCustomLimitRange(dataCustomStart, dataCustomEnd)
-                                                viewModel.setDataCustomLimitEnabled(enabled = true)
-                                                viewModel.setDataCustomLimitConfigured(configured = true)
-                                            }
-                                            else -> {
-                                                viewModel.setDataDailyLimit(dataDaily)
-                                                viewModel.setDataDailyLimitEnabled(enabled = true)
-                                                viewModel.setDataDailyLimitConfigured(configured = true)
-                                                viewModel.setDataMonthlyLimit(dataMonthly)
-                                                viewModel.setDataMonthlyLimitEnabled(enabled = true)
-                                                viewModel.setDataMonthlyLimitConfigured(configured = true)
-                                            }
-                                        }
+                            planType = planType,
+                            initialLimit = initialLimit,
+                            initialStart = initialStart,
+                            initialEnd = initialEnd,
+                            onBack = { viewModel.configuringGeneralLimitType = null },
+                            onConfirm = { limitBytes, start, end ->
+                                when (planType) {
+                                    "daily_wifi" -> {
+                                        viewModel.setWifiDailyLimit(limitBytes)
+                                        viewModel.setWifiDailyLimitEnabled(enabled = true)
+                                        viewModel.setWifiDailyLimitConfigured(configured = true)
                                     }
-                                    "wifi" -> {
-                                        when (period) {
-                                            "daily" -> {
-                                                viewModel.setWifiDailyLimit(wifiDaily)
-                                                viewModel.setWifiDailyLimitEnabled(enabled = true)
-                                                viewModel.setWifiDailyLimitConfigured(configured = true)
-                                            }
-                                            "monthly" -> {
-                                                viewModel.setWifiMonthlyLimit(wifiMonthly)
-                                                viewModel.setWifiMonthlyLimitEnabled(enabled = true)
-                                                viewModel.setWifiMonthlyLimitConfigured(configured = true)
-                                            }
-                                            "custom" -> {
-                                                viewModel.setWifiCustomLimit(wifiCustom)
-                                                viewModel.setWifiCustomLimitRange(wifiCustomStart, wifiCustomEnd)
-                                                viewModel.setWifiCustomLimitEnabled(enabled = true)
-                                                viewModel.setWifiCustomLimitConfigured(configured = true)
-                                            }
-                                            else -> {
-                                                viewModel.setWifiDailyLimit(wifiDaily)
-                                                viewModel.setWifiDailyLimitEnabled(enabled = true)
-                                                viewModel.setWifiDailyLimitConfigured(configured = true)
-                                                viewModel.setWifiMonthlyLimit(wifiMonthly)
-                                                viewModel.setWifiMonthlyLimitEnabled(enabled = true)
-                                                viewModel.setWifiMonthlyLimitConfigured(configured = true)
-                                            }
-                                        }
+                                    "daily_mobile" -> {
+                                        viewModel.setDataDailyLimit(limitBytes)
+                                        viewModel.setDataDailyLimitEnabled(enabled = true)
+                                        viewModel.setDataDailyLimitConfigured(configured = true)
                                     }
-                                    "both" -> {
-                                        when (period) {
-                                            "daily" -> {
-                                                viewModel.setDataDailyLimit(dataDaily)
-                                                viewModel.setDataDailyLimitEnabled(enabled = true)
-                                                viewModel.setDataDailyLimitConfigured(configured = true)
-                                                viewModel.setWifiDailyLimit(wifiDaily)
-                                                viewModel.setWifiDailyLimitEnabled(enabled = true)
-                                                viewModel.setWifiDailyLimitConfigured(configured = true)
-                                            }
-                                            "monthly" -> {
-                                                viewModel.setDataMonthlyLimit(dataMonthly)
-                                                viewModel.setDataMonthlyLimitEnabled(enabled = true)
-                                                viewModel.setDataMonthlyLimitConfigured(configured = true)
-                                                viewModel.setWifiMonthlyLimit(wifiMonthly)
-                                                viewModel.setWifiMonthlyLimitEnabled(enabled = true)
-                                                viewModel.setWifiMonthlyLimitConfigured(configured = true)
-                                            }
-                                            "custom" -> {
-                                                viewModel.setDataCustomLimit(dataCustom)
-                                                viewModel.setDataCustomLimitRange(dataCustomStart, dataCustomEnd)
-                                                viewModel.setDataCustomLimitEnabled(enabled = true)
-                                                viewModel.setDataCustomLimitConfigured(configured = true)
-                                                viewModel.setWifiCustomLimit(wifiCustom)
-                                                viewModel.setWifiCustomLimitRange(wifiCustomStart, wifiCustomEnd)
-                                                viewModel.setWifiCustomLimitEnabled(enabled = true)
-                                                viewModel.setWifiCustomLimitConfigured(configured = true)
-                                            }
-                                            else -> {
-                                                viewModel.setDataDailyLimit(dataDaily)
-                                                viewModel.setDataDailyLimitEnabled(enabled = true)
-                                                viewModel.setDataDailyLimitConfigured(configured = true)
-                                                viewModel.setDataMonthlyLimit(dataMonthly)
-                                                viewModel.setDataMonthlyLimitEnabled(enabled = true)
-                                                viewModel.setDataMonthlyLimitConfigured(configured = true)
-                                                viewModel.setWifiDailyLimit(wifiDaily)
-                                                viewModel.setWifiDailyLimitEnabled(enabled = true)
-                                                viewModel.setWifiDailyLimitConfigured(configured = true)
-                                                viewModel.setWifiMonthlyLimit(wifiMonthly)
-                                                viewModel.setWifiMonthlyLimitEnabled(enabled = true)
-                                                viewModel.setWifiMonthlyLimitConfigured(configured = true)
-                                            }
-                                        }
+                                    "monthly_wifi" -> {
+                                        viewModel.setWifiMonthlyLimit(limitBytes)
+                                        viewModel.setWifiMonthlyLimitEnabled(enabled = true)
+                                        viewModel.setWifiMonthlyLimitConfigured(configured = true)
+                                    }
+                                    "monthly_mobile" -> {
+                                        viewModel.setDataMonthlyLimit(limitBytes)
+                                        viewModel.setDataMonthlyLimitEnabled(enabled = true)
+                                        viewModel.setDataMonthlyLimitConfigured(configured = true)
+                                    }
+                                    "custom_wifi" -> {
+                                        viewModel.setWifiCustomLimit(limitBytes)
+                                        viewModel.setWifiCustomLimitRange(start, end)
+                                        viewModel.setWifiCustomLimitEnabled(enabled = true)
+                                        viewModel.setWifiCustomLimitConfigured(configured = true)
+                                    }
+                                    "custom_mobile" -> {
+                                        viewModel.setDataCustomLimit(limitBytes)
+                                        viewModel.setDataCustomLimitRange(start, end)
+                                        viewModel.setDataCustomLimitEnabled(enabled = true)
+                                        viewModel.setDataCustomLimitConfigured(configured = true)
                                     }
                                 }
-                                viewModel.isGeneralLimitOpen = false
+                                viewModel.configuringGeneralLimitType = null
                             }
                         )
                     }
@@ -444,7 +420,7 @@ fun MinimalPillsRow(
 @Composable
 fun GeneralLimitsList(
     viewModel: AppLimitsViewModel,
-    onEdit: () -> Unit,
+    onEdit: (String) -> Unit,
     onDelete: (AppLimit) -> Unit
 ) {
     val dataDailyLimitEnabled by viewModel.dataDailyLimitEnabled.collectAsState()
@@ -509,7 +485,7 @@ fun GeneralLimitsList(
                             currentUsage = currentWifiUsage,
                             limit = wifiDailyLimit,
                             onToggle = { viewModel.setWifiDailyLimitEnabled(it) },
-                            onEdit = onEdit,
+                            onEdit = { onEdit("daily_wifi") },
                             onDelete = { onDelete(AppLimit(packageName = "system.wifi.daily", appName = "Daily Wi-Fi Limit", dataLimit = wifiDailyLimit, limitType = "daily", networkType = "wifi")) },
                             enabled = wifiDailyLimitEnabled,
                         )
@@ -523,7 +499,7 @@ fun GeneralLimitsList(
                             currentUsage = currentMobileUsage,
                             limit = dataDailyLimit,
                             onToggle = { viewModel.setDataDailyLimitEnabled(it) },
-                            onEdit = onEdit,
+                            onEdit = { onEdit("daily_mobile") },
                             onDelete = { onDelete(AppLimit(packageName = "system.mobile.daily", appName = "Daily Mobile Limit", dataLimit = dataDailyLimit, limitType = "daily", networkType = "mobile")) },
                             enabled = dataDailyLimitEnabled,
                         )
@@ -537,7 +513,7 @@ fun GeneralLimitsList(
                             currentUsage = currentMonthlyWifiUsage,
                             limit = wifiMonthlyLimit,
                             onToggle = { viewModel.setWifiMonthlyLimitEnabled(it) },
-                            onEdit = onEdit,
+                            onEdit = { onEdit("monthly_wifi") },
                             onDelete = { onDelete(AppLimit(packageName = "system.wifi.monthly", appName = "Monthly Wi-Fi Limit", dataLimit = wifiMonthlyLimit, limitType = "monthly", networkType = "wifi")) },
                             enabled = wifiMonthlyLimitEnabled,
                         )
@@ -551,7 +527,7 @@ fun GeneralLimitsList(
                             currentUsage = currentMonthlyMobileUsage,
                             limit = dataMonthlyLimit,
                             onToggle = { viewModel.setDataMonthlyLimitEnabled(it) },
-                            onEdit = onEdit,
+                            onEdit = { onEdit("monthly_mobile") },
                             onDelete = { onDelete(AppLimit(packageName = "system.mobile.monthly", appName = "Monthly Mobile Limit", dataLimit = dataMonthlyLimit, limitType = "monthly", networkType = "mobile")) },
                             enabled = dataMonthlyLimitEnabled,
                         )
@@ -565,7 +541,7 @@ fun GeneralLimitsList(
                             currentUsage = currentCustomWifiUsage,
                             limit = wifiCustomLimit,
                             onToggle = { viewModel.setWifiCustomLimitEnabled(it) },
-                            onEdit = onEdit,
+                            onEdit = { onEdit("custom_wifi") },
                             onDelete = { onDelete(AppLimit(packageName = "system.wifi.custom", appName = "Custom Wi-Fi Limit", dataLimit = wifiCustomLimit, limitType = "custom", networkType = "wifi")) },
                             enabled = wifiCustomLimitEnabled,
                             subtitle = formatRange(wifiCustomLimitStart, wifiCustomLimitEnd)
@@ -580,7 +556,7 @@ fun GeneralLimitsList(
                             currentUsage = currentCustomMobileUsage,
                             limit = dataCustomLimit,
                             onToggle = { viewModel.setDataCustomLimitEnabled(it) },
-                            onEdit = onEdit,
+                            onEdit = { onEdit("custom_mobile") },
                             onDelete = { onDelete(AppLimit(packageName = "system.mobile.custom", appName = "Custom Mobile Limit", dataLimit = dataCustomLimit, limitType = "custom", networkType = "mobile")) },
                             enabled = dataCustomLimitEnabled,
                             subtitle = formatRange(dataCustomLimitStart, dataCustomLimitEnd)
@@ -1054,5 +1030,90 @@ fun LimitTypeSelectionDialog(
         dismissButton = {
             TextButton(onClick = onDismiss) { Text(stringResource(R.string.btn_cancel)) }
         }
+    )
+}
+
+@Composable
+fun AddGeneralLimitDialog(
+    unconfiguredPlans: List<String>,
+    onDismiss: () -> Unit,
+    onPlanSelected: (String) -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
+            Text(
+                text = "Select Plan Type",
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.titleLarge
+            )
+        },
+        text = {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                unconfiguredPlans.forEach { planType ->
+                    val periodText = when {
+                        planType.startsWith("daily") -> stringResource(R.string.filter_daily)
+                        planType.startsWith("monthly") -> stringResource(R.string.filter_monthly)
+                        else -> stringResource(R.string.filter_custom)
+                    }
+                    val networkText = when {
+                        planType.endsWith("wifi") -> stringResource(R.string.label_wifi)
+                        else -> stringResource(R.string.label_mobile)
+                    }
+                    val icon = when {
+                        planType.endsWith("wifi") -> Icons.Rounded.Wifi
+                        else -> Icons.Rounded.SignalCellularAlt
+                    }
+                    val accentColor = when {
+                        planType.endsWith("wifi") -> MaterialTheme.colorScheme.secondary
+                        else -> MaterialTheme.colorScheme.tertiary
+                    }
+                    
+                    Surface(
+                        onClick = { onPlanSelected(planType) },
+                        shape = RoundedCornerShape(16.dp),
+                        color = MaterialTheme.colorScheme.surfaceContainerLow,
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .size(36.dp)
+                                    .background(accentColor.copy(alpha = 0.12f), CircleShape),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    imageVector = icon,
+                                    contentDescription = null,
+                                    tint = accentColor,
+                                    modifier = Modifier.size(18.dp)
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(16.dp))
+                            Text(
+                                text = "$periodText $networkText",
+                                style = MaterialTheme.typography.bodyLarge,
+                                fontWeight = FontWeight.SemiBold,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+                    }
+                }
+            }
+        },
+        confirmButton = {},
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text(stringResource(android.R.string.cancel))
+            }
+        },
+        shape = RoundedCornerShape(28.dp)
     )
 }

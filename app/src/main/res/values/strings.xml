@@ -78,6 +78,9 @@
     <string name="label_unattributed">System / Unattributed</string>
     <string name="label_unknown_app">Unknown App</string>
 
+    <string name="tile_monitoring_on">Monitoring ON</string>
+    <string name="tile_monitoring_off">Monitoring OFF</string>
+
     <!-- Settings: General -->
     <string name="settings_section_general">General</string>
     <string name="settings_monitoring_toggle">Enable Monitoring</string>

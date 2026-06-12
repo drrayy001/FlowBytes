@@ -20,6 +20,8 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Calendar
+import android.graphics.drawable.Drawable
+import java.util.concurrent.ConcurrentHashMap
 
 class AppLimitsViewModel(
     private val repository: AppLimitRepository,
@@ -246,10 +248,10 @@ class AppLimitsViewModel(
 
     var isPickerOpen by mutableStateOf(false)
     var editingLimit by mutableStateOf<AppLimit?>(null)
-    var isGeneralLimitOpen by mutableStateOf(false)
+    var configuringGeneralLimitType by mutableStateOf<String?>(null)
 
     val isSubViewOpen: Boolean
-        get() = isPickerOpen || (editingLimit != null) || isGeneralLimitOpen
+        get() = isPickerOpen || (editingLimit != null) || (configuringGeneralLimitType != null)
 
     val filteredApps: List<AppInfo>
         get() = if (searchQuery.isBlank()) installedApps
@@ -275,6 +277,22 @@ class AppLimitsViewModel(
                     .toList()
             }
             isLoadingApps = false
+        }
+    }
+
+    private val iconCache = ConcurrentHashMap<String, Drawable>()
+
+    suspend fun getAppIcon(packageName: String): Drawable? {
+        iconCache[packageName]?.let { return it }
+        return withContext(Dispatchers.IO) {
+            try {
+                val pm = applicationContext.packageManager
+                val icon = pm.getApplicationIcon(packageName)
+                iconCache[packageName] = icon
+                icon
+            } catch (_: Exception) {
+                null
+            }
         }
     }
 

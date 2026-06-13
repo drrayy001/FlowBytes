@@ -8,7 +8,7 @@ plugins {
     alias(libs.plugins.google.devtools.ksp)
 }
 
-val appVersionName = "2.0.3"
+val appVersionName = "2.0.4"
 
 
 base {
@@ -23,7 +23,7 @@ android {
         applicationId = "com.ray.flowmeter"
         minSdk = 29
         targetSdk = 37
-        versionCode = 29
+        versionCode = 30
         versionName = appVersionName
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

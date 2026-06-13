@@ -229,7 +229,7 @@ class MainActivity : ComponentActivity() {
                 if ((onboardingCompleted == true) && (lastVersionCode != -1)) {
                     if (lastVersionCode < currentVersionCode) {
                         delay(1000)
-                        setShowChangelog(true)
+                        //setShowChangelog(true)
                         repository.updateLastVersionCode(currentVersionCode)
                     }
                 }

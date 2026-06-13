@@ -1,5 +1,6 @@
 package com.ray.flowmeter.ui.viewmodels
 
+import android.app.usage.NetworkStats
 import android.app.usage.NetworkStatsManager
 import android.content.Context
 import android.content.pm.ApplicationInfo
@@ -209,23 +210,37 @@ class AppLimitsViewModel(
 
         fun sumUsage(transport: Int, period: String): Long {
             val start = getStartTime(period)
-            return try {
-                val stats = nsm.querySummaryForDevice(transport, null, start, endTime)
-                stats.rxBytes + stats.txBytes
+            var total = 0L
+            try {
+                val stats = nsm.querySummary(transport, null, start, endTime)
+                val bucket = NetworkStats.Bucket()
+                while (stats.hasNextBucket()) {
+                    stats.getNextBucket(bucket)
+                    total += bucket.rxBytes + bucket.txBytes
+                }
+                stats.close()
             } catch (_: Exception) {
-                0L
+                // ignore
             }
+            return total
         }
 
         fun sumCustomUsage(transport: Int, start: Long, end: Long): Long {
-            return try {
+            var total = 0L
+            try {
                 val queryEnd = end.coerceAtMost(endTime)
                 val queryStart = start.coerceAtMost(queryEnd)
-                val stats = nsm.querySummaryForDevice(transport, null, queryStart, queryEnd)
-                stats.rxBytes + stats.txBytes
+                val stats = nsm.querySummary(transport, null, queryStart, queryEnd)
+                val bucket = NetworkStats.Bucket()
+                while (stats.hasNextBucket()) {
+                    stats.getNextBucket(bucket)
+                    total += bucket.rxBytes + bucket.txBytes
+                }
+                stats.close()
             } catch (_: Exception) {
-                0L
+                // ignore
             }
+            return total
         }
 
         return DeviceUsage(

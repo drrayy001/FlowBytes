@@ -252,12 +252,22 @@ fun NetworkChip(selected: Boolean, onClick: () -> Unit, label: String, icon: and
 }
 
 fun formatUsage(bytes: Long): String {
-    val kb = bytes / 1024.0
-    val mb = kb / 1024.0
-    val gb = mb / 1024.0
     return when {
-        gb >= 1 -> String.format(Locale.getDefault(), "%.1f GB", gb)
-        mb >= 1 -> String.format(Locale.getDefault(), "%.1f MB", mb)
-        else -> String.format(Locale.getDefault(), "%.1f KB", kb)
+        (bytes >= (1024L * 1024L * 1024L)) -> {
+            val gb = bytes / (1024.0 * 1024.0 * 1024.0)
+            if (gb % 1.0 == 0.0) String.format(Locale.getDefault(), "%.0f GB", gb)
+            else String.format(Locale.getDefault(), "%.2f GB", gb)
+        }
+        (bytes >= (1024L * 1024L)) -> {
+            val mb = bytes / (1024.0 * 1024.0)
+            if (mb % 1.0 == 0.0) String.format(Locale.getDefault(), "%.0f MB", mb)
+            else String.format(Locale.getDefault(), "%.2f MB", mb)
+        }
+        (bytes >= 1024L) -> {
+            val kb = bytes / 1024.0
+            if (kb % 1.0 == 0.0) String.format(Locale.getDefault(), "%.0f KB", kb)
+            else String.format(Locale.getDefault(), "%.2f KB", kb)
+        }
+        else -> "$bytes B"
     }
 }

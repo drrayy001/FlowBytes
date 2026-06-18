@@ -443,7 +443,7 @@ fun AlertItemBack(alert: AppAlert) {
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = "Alert Muted",
+                        text = stringResource(R.string.msg_alert_muted),
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.outline,
                         fontWeight = FontWeight.Bold

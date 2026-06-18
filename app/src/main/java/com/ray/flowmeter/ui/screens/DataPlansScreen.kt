@@ -1043,7 +1043,7 @@ fun AddGeneralLimitDialog(
         onDismissRequest = onDismiss,
         title = {
             Text(
-                text = "Select Plan Type",
+                text = stringResource(R.string.title_select_plan_type),
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.titleLarge
             )

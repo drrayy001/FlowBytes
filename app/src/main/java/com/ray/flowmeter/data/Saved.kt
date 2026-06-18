@@ -224,6 +224,7 @@ class UserPreferencesRepository(private val context: Context) {
         val USAGE_CHART_TYPE = stringPreferencesKey("usage_chart_type")
         val ALERTS_CATEGORY = stringPreferencesKey("alerts_category")
         val MONTHLY_RESET_DAY = intPreferencesKey("monthly_reset_day")
+        val LANGUAGE = stringPreferencesKey("language")
 
         val APP_LAUNCH_COUNT = intPreferencesKey("app_launch_count")
         val FIRST_INSTALL_TIME = longPreferencesKey("first_install_time")
@@ -493,6 +494,11 @@ class UserPreferencesRepository(private val context: Context) {
     val alertsCategory: Flow<String> = preferencesFlow
         .map { preferences ->
             preferences[PreferencesKeys.ALERTS_CATEGORY] ?: "ALL"
+        }.distinctUntilChanged()
+
+    val language: Flow<String> = preferencesFlow
+        .map { preferences ->
+            preferences[PreferencesKeys.LANGUAGE] ?: ""
         }.distinctUntilChanged()
 
     val appLaunchCount: Flow<Int> = preferencesFlow
@@ -788,6 +794,12 @@ class UserPreferencesRepository(private val context: Context) {
     suspend fun saveAlertsCategory(category: String) {
         context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.ALERTS_CATEGORY] = category
+        }
+    }
+
+    suspend fun setLanguage(languageCode: String) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.LANGUAGE] = languageCode
         }
     }
 

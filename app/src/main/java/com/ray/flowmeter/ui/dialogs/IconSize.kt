@@ -49,9 +49,9 @@ fun IconScaleDialog(
                 )
 
                 val options = listOf(
-                    Triple("Small", 1.22f, Icons.Rounded.PhotoSizeSelectSmall),
-                    Triple("Medium", 1.28f, Icons.Rounded.PhotoSizeSelectLarge),
-                    Triple("Large", 1.35f, Icons.Rounded.AspectRatio)
+                    Triple(stringResource(R.string.size_small), 1.22f, Icons.Rounded.PhotoSizeSelectSmall),
+                    Triple(stringResource(R.string.size_medium), 1.28f, Icons.Rounded.PhotoSizeSelectLarge),
+                    Triple(stringResource(R.string.size_large), 1.35f, Icons.Rounded.AspectRatio)
                 )
 
                 options.forEach { (label, scale, icon) ->

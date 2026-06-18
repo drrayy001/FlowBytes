@@ -109,6 +109,9 @@ class SettingsViewModel(
     val appBlockingMasterEnabled: StateFlow<Boolean?> = repository.appBlockingMasterEnabled
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
+    val language: StateFlow<String> = repository.language
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), "")
+
     val vpnDisclosureAccepted: StateFlow<Boolean> = repository.vpnDisclosureAccepted
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), initialValue = false)
 
@@ -201,6 +204,12 @@ class SettingsViewModel(
     fun toggleAppBlockingMaster(enabled: Boolean) {
         viewModelScope.launch {
             repository.setAppBlockingMasterEnabled(enabled)
+        }
+    }
+
+    fun setLanguage(languageCode: String) {
+        viewModelScope.launch {
+            repository.setLanguage(languageCode)
         }
     }
 

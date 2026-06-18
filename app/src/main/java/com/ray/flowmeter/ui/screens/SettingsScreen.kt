@@ -40,6 +40,7 @@ fun SettingsScreen(
     val showNotification by viewModel.showNotification.collectAsState()
     val notificationContentType by viewModel.notificationContentType.collectAsState()
     val notificationIconScale by viewModel.notificationIconScale.collectAsState()
+    val languageCode by viewModel.language.collectAsState()
 
     val highPriorityNotification by viewModel.highPriorityNotification.collectAsState()
     val showOnlyWhenConnected by viewModel.showOnlyWhenConnected.collectAsState()
@@ -104,6 +105,7 @@ fun SettingsScreen(
     var showThemeDialog by remember { mutableStateOf(value = false) }
     var showNotificationContentDialog by remember { mutableStateOf(value = false) }
     var showIconScaleDialog by remember { mutableStateOf(value = false) }
+    var showLanguageDialog by remember { mutableStateOf(value = false) }
     var showLicensesDialog by remember { mutableStateOf(value = false) }
     var showPrivacyDialog by remember { mutableStateOf(value = false) }
     var showTermsDialog by remember { mutableStateOf(value = false) }
@@ -193,14 +195,18 @@ fun SettingsScreen(
                 SettingsItem(
                     icon = Icons.Rounded.Palette,
                     title = stringResource(R.string.settings_app_theme),
-                    subtitle = themeMode,
+                    subtitle = when (themeMode) {
+                        ThemeMode.LIGHT -> stringResource(R.string.theme_light)
+                        ThemeMode.DARK -> stringResource(R.string.theme_dark)
+                        else -> stringResource(R.string.theme_system)
+                    },
                     onClick = { showThemeDialog = true }
                 )
 
                 SettingsItem(
                     icon = Icons.Rounded.AutoAwesome,
-                    title = "Material You",
-                    subtitle = "Use system accent colors",
+                    title = stringResource(R.string.settings_material_you),
+                    subtitle = stringResource(R.string.settings_material_you_desc),
                     trailingContent = {
                         Switch(
                             checked = useMaterialYou,
@@ -214,8 +220,8 @@ fun SettingsScreen(
                 if (!useMaterialYou) {
                     SettingsItem(
                         icon = Icons.Rounded.ColorLens,
-                        title = "Accent Color",
-                        subtitle = "Choose a custom primary color",
+                        title = stringResource(R.string.settings_accent_color),
+                        subtitle = stringResource(R.string.settings_accent_color_desc),
                         onClick = { showAccentColorDialog = true },
                         trailingContent = {
                             Box(
@@ -234,8 +240,8 @@ fun SettingsScreen(
                 if (isDark) {
                     SettingsItem(
                         icon = Icons.Rounded.DarkMode,
-                        title = "Amoled Mode",
-                        subtitle = "Pitch black background",
+                        title = stringResource(R.string.settings_amoled_mode),
+                        subtitle = stringResource(R.string.settings_amoled_mode_desc),
                         trailingContent = {
                             Switch(
                                 checked = useAmoled,
@@ -251,11 +257,23 @@ fun SettingsScreen(
                     icon = Icons.Rounded.FormatSize,
                     title = stringResource(R.string.settings_indicator_size),
                     subtitle = when {
-                        notificationIconScale < 1.25f -> "Small"
-                        notificationIconScale > 1.32f -> "Large"
-                        else -> "Medium"
+                        notificationIconScale < 1.25f -> stringResource(R.string.size_small)
+                        notificationIconScale > 1.32f -> stringResource(R.string.size_large)
+                        else -> stringResource(R.string.size_medium)
                     },
                     onClick = { showIconScaleDialog = true }
+                )
+
+                SettingsItem(
+                    icon = Icons.Rounded.Language,
+                    title = stringResource(R.string.settings_language),
+                    subtitle = when (languageCode) {
+                        "ar" -> stringResource(R.string.language_arabic)
+                        "fr" -> stringResource(R.string.language_french)
+                        "es" -> stringResource(R.string.language_spanish)
+                        else -> stringResource(R.string.language_default)
+                    },
+                    onClick = { showLanguageDialog = true }
                 )
             }
         }
@@ -472,6 +490,14 @@ fun SettingsScreen(
                 currentScale = notificationIconScale,
                 onDismiss = { showIconScaleDialog = false },
             ) { viewModel.setNotificationIconScale(it) }
+        }
+
+        if (showLanguageDialog) {
+            LanguageDialog(
+                currentLanguageCode = languageCode,
+                onDismiss = { showLanguageDialog = false },
+                onSelect = viewModel::setLanguage
+            )
         }
 
         if (showLicensesDialog) {

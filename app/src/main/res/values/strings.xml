@@ -106,7 +106,6 @@
     <string name="settings_high_priority_desc">Keep the speed indicator visible at the top of your notifications</string>
     <string name="settings_hide_offline">Hide When Offline</string>
     <string name="settings_hide_offline_desc">Automatically hide the speed indicator when disconnected</string>
-    <string name="settings_indicator_size">Icon Size</string>
     <string name="settings_indicator_size_desc">Adjust the speed indicator size in the status bar</string>
 
     <!-- Settings: Alerts & Limits -->
@@ -122,10 +121,34 @@
     <string name="msg_limit_desc">You will receive a notification upon reaching this limit.</string>
     <string name="btn_set_limit">Set Limit</string>
 
+    <string name="label_plan_duration">Plan Duration</string>
+    <string name="msg_alert_muted">Alert Muted</string>
+    <string name="title_select_plan_type">Select Plan Type</string>
+    <string name="settings_indicator_size">Icon Size</string>
+
     <!-- Settings: Appearance -->
     <string name="settings_section_appearance">Appearance</string>
     <string name="settings_app_theme">App Theme</string>
     <string name="dialog_select_theme_title">Select Theme</string>
+    <string name="theme_system">System</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="settings_material_you">Material You</string>
+    <string name="settings_material_you_desc">Use system accent colors</string>
+    <string name="settings_accent_color">Accent Color</string>
+    <string name="settings_accent_color_desc">Choose a custom primary color</string>
+    <string name="settings_amoled_mode">Amoled Mode</string>
+    <string name="settings_amoled_mode_desc">Pitch black background</string>
+    <string name="size_small">Small</string>
+    <string name="size_medium">Medium</string>
+    <string name="size_large">Large</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_language_desc">Choose your preferred language</string>
+    <string name="dialog_select_language_title">Select Language</string>
+    <string name="language_default">System Default</string>
+    <string name="language_arabic">Arabic (العربية)</string>
+    <string name="language_french">French (Français)</string>
+    <string name="language_spanish">Spanish (Español)</string>
 
     <!-- Settings: Support & Feedback -->
     <string name="settings_section_support">Support &amp; Feedback</string>

@@ -4,23 +4,24 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.core.view.WindowCompat
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
-import kotlinx.coroutines.launch
-import android.net.VpnService
-import androidx.activity.result.contract.ActivityResultContracts
-import kotlinx.coroutines.delay
-import androidx.lifecycle.ViewModelProvider
-import androidx.compose.runtime.DisposableEffect
-import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import androidx.compose.runtime.rememberCoroutineScope
 import com.ray.flowmeter.data.AlertRepository
 import com.ray.flowmeter.data.AppLimitRepository
 import com.ray.flowmeter.data.FlowMeterDatabase
@@ -29,9 +30,9 @@ import com.ray.flowmeter.service.AppBlockVpnService
 import com.ray.flowmeter.service.NetworkMonitoringService
 import com.ray.flowmeter.ui.dialogs.ChangelogDialog
 import com.ray.flowmeter.ui.dialogs.ReviewDialog
+import com.ray.flowmeter.ui.screens.Destination
 import com.ray.flowmeter.ui.screens.MainScreen
 import com.ray.flowmeter.ui.screens.OnboardingScreen
-import com.ray.flowmeter.ui.screens.Destination
 import com.ray.flowmeter.ui.theme.FlowMeterTheme
 import com.ray.flowmeter.ui.viewmodels.AlertsViewModel
 import com.ray.flowmeter.ui.viewmodels.AppLimitsViewModel
@@ -39,15 +40,16 @@ import com.ray.flowmeter.ui.viewmodels.AppUsageViewModel
 import com.ray.flowmeter.ui.viewmodels.HomeViewModel
 import com.ray.flowmeter.ui.viewmodels.OnboardingViewModel
 import com.ray.flowmeter.ui.viewmodels.SettingsViewModel
+import com.ray.flowmeter.utils.LocaleHelper
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
-import androidx.compose.foundation.isSystemInDarkTheme
+import kotlinx.coroutines.launch
+import android.net.VpnService
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
-import androidx.compose.runtime.produceState
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.foundation.layout.fillMaxSize
 
 class MainActivity : ComponentActivity() {
 
@@ -191,184 +193,185 @@ class MainActivity : ComponentActivity() {
                         },
                     )[AppLimitsViewModel::class.java]
                 }
-            val onboardingCompleted by repository.onboardingCompleted.collectAsState(null)
-            val lastVersionCode by repository.lastVersionCode.collectAsState(-1)
-            
-            val themeMode by settingsViewModel.themeMode.collectAsState()
-            val useMaterialYou by settingsViewModel.useMaterialYou.collectAsState()
-            val useAmoled by settingsViewModel.useAmoled.collectAsState()
-            val accentColor by settingsViewModel.accentColor.collectAsState()
 
-            val currentVersionCode = BuildConfig.VERSION_CODE
-            val (showChangelog, setShowChangelog) = remember { mutableStateOf(false) }
+                val themeMode by settingsViewModel.themeMode.collectAsState()
+                val languageCode by settingsViewModel.language.collectAsState()
+                val useMaterialYou by settingsViewModel.useMaterialYou.collectAsState()
+                val useAmoled by settingsViewModel.useAmoled.collectAsState()
+                val accentColor by settingsViewModel.accentColor.collectAsState()
+                val onboardingCompleted by repository.onboardingCompleted.collectAsState(null)
 
-            val (showReviewDialog, setShowReviewDialog) = remember { mutableStateOf(false) }
-            val appLaunchCount by repository.appLaunchCount.collectAsState(0)
-            val firstInstallTime by repository.firstInstallTime.collectAsState(0L)
-            val lastReviewPromptTime by repository.lastReviewPromptTime.collectAsState(0L)
-            val userReviewedRated by repository.userReviewedRated.collectAsState(false)
-
-            LaunchedEffect(onboardingCompleted, showChangelog, appLaunchCount, firstInstallTime, lastReviewPromptTime, userReviewedRated) {
-                if (onboardingCompleted == true && !showChangelog && !userReviewedRated) {
-                    val now = System.currentTimeMillis()
-                    val threeDays = 3 * 24 * 60 * 60 * 1000L
-                    val sevenDays = 7 * 24 * 60 * 60 * 1000L
-
-                    val isTimeSinceInstallOk = (now - firstInstallTime) >= threeDays
-                    val isTimeSinceLastPromptOk = (now - lastReviewPromptTime) >= sevenDays
-                    val isLaunchCountOk = appLaunchCount >= 3
-
-                    if (isTimeSinceInstallOk && isTimeSinceLastPromptOk && isLaunchCountOk) {
-                        delay(2000)
-                        setShowReviewDialog(true)
-                    }
-                }
-            }
-
-            LaunchedEffect(onboardingCompleted, lastVersionCode) {
-                if ((onboardingCompleted == true) && (lastVersionCode != -1)) {
-                    if (lastVersionCode < currentVersionCode) {
-                        delay(1000)
-                        //setShowChangelog(true)
-                        repository.updateLastVersionCode(currentVersionCode)
-                    }
-                }
-            }
-
-            if (onboardingCompleted != null) {
-                val monitoringEnabled by settingsViewModel.monitoringEnabled.collectAsState()
-                val appBlockingMasterEnabled by settingsViewModel.appBlockingMasterEnabled.collectAsState()
-                
-                LaunchedEffect(monitoringEnabled) {
-                    if ((onboardingCompleted == true) && (monitoringEnabled != null)) {
-                        val serviceIntent = Intent(this@MainActivity, NetworkMonitoringService::class.java)
-                        if (monitoringEnabled == true) {
-                            if (!NetworkMonitoringService.isRunning) {
-                                startForegroundService(serviceIntent)
-                            }
-                        } else {
-                            stopService(serviceIntent)
-                            stopService(Intent(this@MainActivity, AppBlockVpnService::class.java))
-                        }
-                    }
-                }
-
-                LaunchedEffect(monitoringEnabled, appBlockingMasterEnabled) {
-                    if ((onboardingCompleted == true) && (monitoringEnabled == true) && (appBlockingMasterEnabled == true)) {
-                        prepareVpn()
-                    }
-                }
-
-                FlowMeterTheme(
-                    themeMode = themeMode,
-                    useMaterialYou = useMaterialYou,
-                    useAmoled = useAmoled,
-                    accentColor = accentColor,
+                CompositionLocalProvider(
+                    LocalContext provides LocaleHelper.applyLocale(LocalContext.current, languageCode)
                 ) {
-                    if (onboardingCompleted == true) {
-                        val (currentIntent, setCurrentIntent) = remember { mutableStateOf(intent) }
-                        
-                        LaunchedEffect(Unit) {
-                        }
-                        
-                        // Handler for incoming intents
-                        val lifecycleOwner = LocalLifecycleOwner.current
-                        DisposableEffect(lifecycleOwner) {
-                            val observer = LifecycleEventObserver { _, event ->
-                                if (event == Lifecycle.Event.ON_RESUME) {
-                                    if (currentIntent != intent) {
-                                        setCurrentIntent(intent)
-                                    }
-                                }
-                            }
-                            lifecycleOwner.lifecycle.addObserver(observer)
-                            onDispose {
-                                lifecycleOwner.lifecycle.removeObserver(observer)
-                            }
-                        }
+                    val currentVersionCode = BuildConfig.VERSION_CODE
+                    val (showChangelog, setShowChangelog) = remember { mutableStateOf(false) }
 
-                        val navigateToAlerts = currentIntent?.getBooleanExtra(NetworkMonitoringService.EXTRA_NAVIGATE_TO_ALERTS, false) ?: false
-                        val navigateToLimits = currentIntent?.getBooleanExtra(NetworkMonitoringService.EXTRA_NAVIGATE_TO_LIMITS, false) ?: false
-                        
-                        val initialDestination = when {
-                            navigateToLimits -> Destination.Limits
-                            navigateToAlerts -> Destination.Alerts
-                            else -> Destination.Home
-                        }
+                    val (showReviewDialog, setShowReviewDialog) = remember { mutableStateOf(false) }
+                    val appLaunchCount by repository.appLaunchCount.collectAsState(0)
+                    val firstInstallTime by repository.firstInstallTime.collectAsState(0L)
+                    val lastReviewPromptTime by repository.lastReviewPromptTime.collectAsState(0L)
+                    val userReviewedRated by repository.userReviewedRated.collectAsState(false)
+                    val lastVersionCode by repository.lastVersionCode.collectAsState(-1)
 
-                        val muteAppName = currentIntent?.getStringExtra(NetworkMonitoringService.EXTRA_MUTE_APP_NAME)
-                        val dismissNotificationId = currentIntent?.getIntExtra(NetworkMonitoringService.EXTRA_DISMISS_NOTIFICATION_ID, -1) ?: -1
-                        val isIgnoreAction = currentIntent?.action == NetworkMonitoringService.ACTION_IGNORE_APP
+                    LaunchedEffect(onboardingCompleted, showChangelog, appLaunchCount, firstInstallTime, lastReviewPromptTime, userReviewedRated) {
+                        if (onboardingCompleted == true && !showChangelog && !userReviewedRated) {
+                            val now = System.currentTimeMillis()
+                            val threeDays = 3 * 24 * 60 * 60 * 1000L
+                            val sevenDays = 7 * 24 * 60 * 60 * 1000L
 
-                        LaunchedEffect(currentIntent) {
-                            if (muteAppName != null) {
-                                if (isIgnoreAction) {
-                                    if (dismissNotificationId != -1) {
-                                        val manager = getSystemService(android.app.NotificationManager::class.java)
-                                        manager.cancel(dismissNotificationId)
-                                    }
-                                }
-                                alertsViewModel.onMuteRequested(muteAppName)
-                                
-                                intent.removeExtra(NetworkMonitoringService.EXTRA_MUTE_APP_NAME)
-                                intent.removeExtra(NetworkMonitoringService.EXTRA_DISMISS_NOTIFICATION_ID)
-                                if (intent.action == NetworkMonitoringService.ACTION_IGNORE_APP) {
-                                    intent.action = null
-                                }
+                            val isTimeSinceInstallOk = (now - firstInstallTime) >= threeDays
+                            val isTimeSinceLastPromptOk = (now - lastReviewPromptTime) >= sevenDays
+                            val isLaunchCountOk = appLaunchCount >= 3
 
-                                setCurrentIntent(null)
+                            if (isTimeSinceInstallOk && isTimeSinceLastPromptOk && isLaunchCountOk) {
+                                delay(2000)
+                                setShowReviewDialog(true)
                             }
                         }
+                    }
 
-                        MainScreen(
-                            homeViewModel = homeViewModel,
-                            appUsageViewModel = appUsageViewModel,
-                            alertsViewModel = alertsViewModel,
-                            appLimitsViewModel = appLimitsViewModel,
-                            settingsViewModel = settingsViewModel,
-                            initialDestination = initialDestination,
-                        )
-
-                        if (showChangelog) {
-                            ChangelogDialog { setShowChangelog(false) }
+                    LaunchedEffect(onboardingCompleted, lastVersionCode) {
+                        if ((onboardingCompleted == true) && (lastVersionCode != -1)) {
+                            if (lastVersionCode < currentVersionCode) {
+                                delay(1000)
+                                repository.updateLastVersionCode(currentVersionCode)
+                            }
                         }
+                    }
 
-                        val coroutineScope = rememberCoroutineScope()
-                        if (showReviewDialog) {
-                            ReviewDialog(
-                                onDismiss = { setShowReviewDialog(false) },
-                                onNeverShowAgain = {
-                                    coroutineScope.launch {
-                                        repository.setUserReviewedRated(true)
+                    if (onboardingCompleted != null) {
+                        val monitoringEnabled by settingsViewModel.monitoringEnabled.collectAsState()
+                        val appBlockingMasterEnabled by settingsViewModel.appBlockingMasterEnabled.collectAsState()
+
+                        LaunchedEffect(monitoringEnabled) {
+                            if ((onboardingCompleted == true) && (monitoringEnabled != null)) {
+                                val serviceIntent = Intent(this@MainActivity, NetworkMonitoringService::class.java)
+                                if (monitoringEnabled == true) {
+                                    if (!NetworkMonitoringService.isRunning) {
+                                        startForegroundService(serviceIntent)
                                     }
-                                    setShowReviewDialog(false)
-                                },
-                                onLater = {
-                                    coroutineScope.launch {
-                                        repository.setLastReviewPromptTime(System.currentTimeMillis())
-                                    }
-                                    setShowReviewDialog(false)
-                                },
-                                onReviewCompleted = {
-                                    coroutineScope.launch {
-                                        repository.setUserReviewedRated(true)
-                                    }
-                                    setShowReviewDialog(false)
+                                } else {
+                                    stopService(serviceIntent)
+                                    stopService(Intent(this@MainActivity, AppBlockVpnService::class.java))
                                 }
-                            )
+                            }
                         }
-                    } else {
-                        OnboardingScreen(
-                            onComplete = {
-                                onboardingViewModel.completeOnboarding()
-                            },
-                        )
+
+                        LaunchedEffect(monitoringEnabled, appBlockingMasterEnabled) {
+                            if ((onboardingCompleted == true) && (monitoringEnabled == true) && (appBlockingMasterEnabled == true)) {
+                                prepareVpn()
+                            }
+                        }
+
+                        FlowMeterTheme(
+                            themeMode = themeMode,
+                            useMaterialYou = useMaterialYou,
+                            useAmoled = useAmoled,
+                            accentColor = accentColor,
+                        ) {
+                            if (onboardingCompleted == true) {
+                                val (currentIntent, setCurrentIntent) = remember { mutableStateOf(intent) }
+
+                                // Handler for incoming intents
+                                val lifecycleOwner = LocalLifecycleOwner.current
+                                DisposableEffect(lifecycleOwner) {
+                                    val observer = LifecycleEventObserver { _, event ->
+                                        if (event == Lifecycle.Event.ON_RESUME) {
+                                            if (currentIntent != intent) {
+                                                setCurrentIntent(intent)
+                                            }
+                                        }
+                                    }
+                                    lifecycleOwner.lifecycle.addObserver(observer)
+                                    onDispose {
+                                        lifecycleOwner.lifecycle.removeObserver(observer)
+                                    }
+                                }
+
+                                val navigateToAlerts = currentIntent?.getBooleanExtra(NetworkMonitoringService.EXTRA_NAVIGATE_TO_ALERTS, false) ?: false
+                                val navigateToLimits = currentIntent?.getBooleanExtra(NetworkMonitoringService.EXTRA_NAVIGATE_TO_LIMITS, false) ?: false
+
+                                val initialDestination = when {
+                                    navigateToLimits -> Destination.Limits
+                                    navigateToAlerts -> Destination.Alerts
+                                    else -> Destination.Home
+                                }
+
+                                val muteAppName = currentIntent?.getStringExtra(NetworkMonitoringService.EXTRA_MUTE_APP_NAME)
+                                val dismissNotificationId = currentIntent?.getIntExtra(NetworkMonitoringService.EXTRA_DISMISS_NOTIFICATION_ID, -1) ?: -1
+                                val isIgnoreAction = currentIntent?.action == NetworkMonitoringService.ACTION_IGNORE_APP
+
+                                LaunchedEffect(currentIntent) {
+                                    if (muteAppName != null) {
+                                        if (isIgnoreAction) {
+                                            if (dismissNotificationId != -1) {
+                                                val manager = getSystemService(android.app.NotificationManager::class.java)
+                                                manager.cancel(dismissNotificationId)
+                                            }
+                                        }
+                                        alertsViewModel.onMuteRequested(muteAppName)
+
+                                        intent.removeExtra(NetworkMonitoringService.EXTRA_MUTE_APP_NAME)
+                                        intent.removeExtra(NetworkMonitoringService.EXTRA_DISMISS_NOTIFICATION_ID)
+                                        if (intent.action == NetworkMonitoringService.ACTION_IGNORE_APP) {
+                                            intent.action = null
+                                        }
+
+                                        setCurrentIntent(null)
+                                    }
+                                }
+
+                                MainScreen(
+                                    homeViewModel = homeViewModel,
+                                    appUsageViewModel = appUsageViewModel,
+                                    alertsViewModel = alertsViewModel,
+                                    appLimitsViewModel = appLimitsViewModel,
+                                    settingsViewModel = settingsViewModel,
+                                    initialDestination = initialDestination,
+                                )
+
+                                if (showChangelog) {
+                                    ChangelogDialog { setShowChangelog(false) }
+                                }
+
+                                val coroutineScope = rememberCoroutineScope()
+                                if (showReviewDialog) {
+                                    ReviewDialog(
+                                        onDismiss = { setShowReviewDialog(false) },
+                                        onNeverShowAgain = {
+                                            coroutineScope.launch {
+                                                repository.setUserReviewedRated(true)
+                                            }
+                                            setShowReviewDialog(false)
+                                        },
+                                        onLater = {
+                                            coroutineScope.launch {
+                                                repository.setLastReviewPromptTime(System.currentTimeMillis())
+                                            }
+                                            setShowReviewDialog(false)
+                                        },
+                                        onReviewCompleted = {
+                                            coroutineScope.launch {
+                                                repository.setUserReviewedRated(true)
+                                            }
+                                            setShowReviewDialog(false)
+                                        }
+                                    )
+                                }
+                            } else {
+                                OnboardingScreen(
+                                    onComplete = {
+                                        onboardingViewModel.completeOnboarding()
+                                    },
+                                )
+                            }
+                        }
                     }
                 }
             }
         }
     }
-}
 }
 
 private data class ThemeSettings(

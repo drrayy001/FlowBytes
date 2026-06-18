@@ -190,7 +190,7 @@ fun GeneralLimitConfigScreen(
 
             if (isCustom) {
                 Text(
-                    text = "Plan Duration",
+                    text = stringResource(R.string.label_plan_duration),
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.Bold

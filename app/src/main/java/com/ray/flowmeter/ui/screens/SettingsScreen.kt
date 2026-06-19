@@ -1,5 +1,8 @@
 package com.ray.flowmeter.ui.screens
 
+import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -397,10 +400,21 @@ fun SettingsScreen(
                     onClick = {
                         viewModel.markAsReviewed()
                         val intent = Intent(Intent.ACTION_VIEW, "market://details?id=${context.packageName}".toUri())
+                        val activity = context.findActivity()
+                        val targetContext = activity ?: context
+                        if (targetContext !is Activity) {
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        }
                         try {
-                            context.startActivity(intent)
+                            targetContext.startActivity(intent)
                         } catch (_: Exception) {
-                            context.startActivity(Intent(Intent.ACTION_VIEW, "https://play.google.com/store/apps/details?id=${context.packageName}".toUri()))
+                            val webIntent = Intent(Intent.ACTION_VIEW, "https://play.google.com/store/apps/details?id=${context.packageName}".toUri())
+                            if (targetContext !is Activity) {
+                                webIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            }
+                            try {
+                                targetContext.startActivity(webIntent)
+                            } catch (_: Exception) {}
                         }
                     }
                 )
@@ -413,7 +427,15 @@ fun SettingsScreen(
                             type = "text/plain"
                             putExtra(Intent.EXTRA_TEXT, shareTextTemplate)
                         }
-                        context.startActivity(Intent.createChooser(shareIntent, "Share via"))
+                        val chooserIntent = Intent.createChooser(shareIntent, "Share via")
+                        val activity = context.findActivity()
+                        val targetContext = activity ?: context
+                        if (targetContext !is Activity) {
+                            chooserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        }
+                        try {
+                            targetContext.startActivity(chooserIntent)
+                        } catch (_: Exception) {}
                     }
                 )
                 SettingsItem(
@@ -455,7 +477,14 @@ fun SettingsScreen(
                     subtitle = stringResource(R.string.settings_view_source_desc),
                     onClick = {
                         val intent = Intent(Intent.ACTION_VIEW, "https://github.com/drrayy001/FlowBytes".toUri())
-                        context.startActivity(intent)
+                        val activity = context.findActivity()
+                        val targetContext = activity ?: context
+                        if (targetContext !is Activity) {
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        }
+                        try {
+                            targetContext.startActivity(intent)
+                        } catch (_: Exception) {}
                     }
                 )
                 SettingsItem(
@@ -503,21 +532,21 @@ fun SettingsScreen(
         if (showLicensesDialog) {
             LegalDialog(
                 title = stringResource(R.string.settings_licenses),
-                content = LegalContent.LICENSES,
+                content = stringResource(R.string.legal_licenses),
             ) { showLicensesDialog = false }
         }
 
         if (showPrivacyDialog) {
             LegalDialog(
                 title = stringResource(R.string.settings_privacy_policy),
-                content = LegalContent.PRIVACY_POLICY,
+                content = stringResource(R.string.legal_privacy_policy),
             ) { showPrivacyDialog = false }
         }
 
         if (showTermsDialog) {
             LegalDialog(
                 title = stringResource(R.string.settings_terms_conditions),
-                content = LegalContent.TERMS_AND_CONDITIONS,
+                content = stringResource(R.string.legal_terms_conditions),
             ) { showTermsDialog = false }
         }
 
@@ -550,7 +579,7 @@ fun SettingsScreen(
                     isDonationSuccess = false
                 },
             ) { amount ->
-                val activity = context as? android.app.Activity
+                val activity = context.findActivity()
                 activity?.let {
                     viewModel.makeDonation(it, amount)
                 }
@@ -589,13 +618,21 @@ fun SettingsScreen(
                     val telegramAppIntent = Intent(Intent.ACTION_VIEW, "tg://resolve?domain=$username".toUri()).apply {
                         setPackage("org.telegram.messenger")
                     }
+                    val activity = context.findActivity()
+                    val targetContext = activity ?: context
+                    if (targetContext !is Activity) {
+                        telegramAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    }
                     try {
-                        context.startActivity(telegramAppIntent)
+                        targetContext.startActivity(telegramAppIntent)
                     } catch (_: Exception) {
                         // Fallback to browser if Telegram app is not installed
                         val browserIntent = Intent(Intent.ACTION_VIEW, "https://t.me/$username".toUri())
+                        if (targetContext !is Activity) {
+                            browserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        }
                         try {
-                            context.startActivity(browserIntent)
+                            targetContext.startActivity(browserIntent)
                         } catch (__: Exception) {}
                     }
                 },
@@ -604,8 +641,13 @@ fun SettingsScreen(
                         data = "mailto:drrayy001@gmail.com".toUri()
                         putExtra(Intent.EXTRA_SUBJECT, "Feedback: FlowBytes (v$versionName)")
                     }
+                    val activity = context.findActivity()
+                    val targetContext = activity ?: context
+                    if (targetContext !is Activity) {
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    }
                     try {
-                        context.startActivity(intent)
+                        targetContext.startActivity(intent)
                     } catch (_: Exception) {}
                 }
             )
@@ -619,4 +661,13 @@ fun SettingsScreen(
         }
 
     }
+}
+
+private fun Context.findActivity(): Activity? {
+    var currentContext = this
+    while (currentContext is ContextWrapper) {
+        if (currentContext is Activity) return currentContext
+        currentContext = currentContext.baseContext
+    }
+    return null
 }

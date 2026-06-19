@@ -313,4 +313,43 @@
     <string name="whats_new_reset_day_title">Jour de réinitialisation mensuel</string>
     <string name="whats_new_reset_day_desc">Prise en charge des cycles de facturation personnalisés. Choisissez un jour spécifique du mois pour réinitialiser votre utilisation.</string>
     <string name="feedback_email_subject">Commentaires FlowBytes - %1$d étoiles</string>
+
+    <string name="btn_done">Terminé</string>
+    <string name="desc_block_apps">Restreindre automatiquement l\'accès Internet pour les applications qui atteignent leur limite</string>
+    <string name="legal_privacy_policy">Politique de confidentialité\nDate d\'entrée en vigueur : 29 avril 2026\n\nJe, le développeur de FlowBytes (l\'« Application »), fournis cette application gratuitement. L\'Application est proposée en l\'état et est destinée à être utilisée sans aucune garantie.\n\n1. Collecte et utilisation des informations\nFlowBytes surveille les vitesses de réseau de votre appareil et l\'utilisation des données (Wi-Fi et cellulaire) pour vous aider à garder le contrôle de votre internet. Toutes les actions de surveillance, de calcul d\'utilisation des données et de blocage sont effectuées localement sur votre appareil. Nous ne collectons, ne stockons ni ne transmettons aucune donnée personnelle, y compris :\n- L\'historique de navigation\n- Le contenu du trafic réseau\n- L\'adresse IP\n- Toute information d\'identification personnelle\n\n2. Autorisations requises\nPour fonctionner correctement, l\'Application nécessite les autorisations suivantes :\n- Accès aux données d\'utilisation (statistiques réseau) : utilisé pour accéder aux statistiques d\'utilisation du réseau (via NetworkStatsManager et TrafficStats) afin de calculer les vitesses de téléchargement/envoi et de suivre l\'utilisation des données par application.\n- Service de premier plan : permet à l\'Application d\'exécuter un service en arrière-plan pour afficher la vitesse du réseau en temps réel dans la barre de notification et assurer une surveillance cohérente.\n- Service VPN (VPN local) : FlowBytes utilise un VPN local pour gérer l\'accès Internet des applications qui dépassent leurs limites. Ce VPN est 100 % local ; votre trafic ne quitte jamais votre appareil et n\'est jamais intercepté par nous.\n\nToutes les données consultées via ces autorisations restent sur votre appareil et sont utilisées uniquement pour fournir les fonctionnalités de surveillance et de contrôle au sein de l\'Application.\n\n3. Services tiers\nL\'Application n\'utilise aucun service tiers, outil d\'analyse ou réseau publicitaire qui collecte des informations utilisées pour vous identifier.\n\n4. Sécurité\nPuisque tout le traitement des données se produit localement sur votre appareil, le risque de violation de données de notre côté est minimal. Cependant, aucune méthode de stockage électronique ou de transmission sur Internet n\'est totalement sécurisée, et nous ne pouvons garantir une sécurité absolue.\n\n5. Confidentialité des enfants\nCe service ne s\'adresse pas aux personnes de moins de 13 ans. Nous ne collectons pas sciemment d\'informations d\'identification personnelle auprès d\'enfants de moins de 13 ans.\n\n6. Modifications de cette politique de confidentialité\nNous pouvons mettre à jour notre politique de confidentialité de temps à autre. Tout changement sera publié sur cette page. Il vous est conseillé de consulter périodiquement cette page pour connaître les mises à jour.\n\n7. Contactez-nous\nSi vous avez des questions ou des suggestions concernant cette politique de confidentialité, vous pouvez nous contacter à :\nE-mail : drrayy001@gmail.com</string>
+    <string name="legal_terms_conditions">Conditions générales\n\n1. Acceptation des conditions\nEn utilisant FlowBytes, vous acceptez ces conditions. Si vous ne les acceptez pas, veuillez ne pas utiliser l\'application.\n\n2. Clause de non-responsabilité du service\nFlowBytes fournit des statistiques de réseau à titre informatif. Bien que nous nous efforcions d\'assurer l\'exactitude, les mesures de vitesse et les calculs d\'utilisation des données sont des estimations et peuvent différer des enregistrements de facturation officiels de votre FAI.\n\n3. Batterie et performances\nCette application exécute un service en arrière-plan pour surveiller le trafic réseau. Bien qu\'elle soit optimisée pour l\'efficacité, elle peut avoir un impact mineur sur la durée de vie de la batterie.\n\n4. Limitation de responsabilité\nNous ne sommes pas responsables des dépassements de données, des pertes de données ou des problèmes d\'appareil résultant de l\'utilisation de cette application.</string>
+    <string name="legal_licenses">Licences open source\n\n- Jetpack Compose : Licence Apache 2.0\n- Coroutines Kotlin : Licence Apache 2.0\n- Bibliothèques Android Jetpack (Room, DataStore, Lifecycle) : Licence Apache 2.0\n- Composants Material pour Android : Licence Apache 2.0\n- Bibliothèque standard Kotlin : Licence Apache 2.0\n\nCe logiciel est fourni « en l\'état » sans aucune garantie d\'aucune sorte.</string>
+    <string name="label_daily_wifi_limit">Limite Wi-Fi quotidienne</string>
+    <string name="label_monthly_wifi_limit">Limite Wi-Fi mensuelle</string>
+    <string name="label_daily_mobile_limit">Limite mobile quotidienne</string>
+    <string name="label_monthly_mobile_limit">Limite mobile mensuelle</string>
+    <string name="label_unknown">Inconnu</string>
+    <string name="desc_configure_limit_format">Configurez la limite pour votre forfait %1$s.</string>
+    <string name="label_select_date">Sélectionner la date</string>
+
+    <string name="btn_ok">OK</string>
+    <string name="btn_cancel">Annuler</string>
+    <string name="msg_no_alerts_app">Aucune alerte de limite d\'application enregistrée.</string>
+    <string name="msg_no_alerts_daily">Aucune alerte de limite quotidienne enregistrée.</string>
+    <string name="msg_no_alerts_monthly">Aucune alerte de limite mensuelle enregistrée.</string>
+    <string name="label_daily_limit_reached">Limite quotidienne atteinte</string>
+    <string name="label_monthly_limit_reached">Limite mensuelle atteinte</string>
+    <string name="label_custom_limit_reached">Limite personnalisée atteinte</string>
+    <string name="msg_no_alerts_custom">Aucune alerte de limite personnalisée enregistrée.</string>
+    <string name="label_limit_set_header">LIMITE DÉFINIE</string>
+    <string name="msg_no_app_limits">Aucune limite d\'application configurée.</string>
+    <string name="cd_add_app_limit">Ajouter une limite d\'application</string>
+    <string name="title_edit_app_limit">Modifier la limite de l\'application</string>
+    <string name="btn_create_app_limit">Créer une limite</string>
+    <string name="label_app_limit_selection">Limite d\'application</string>
+    <string name="desc_app_limit_selection">Définir des restrictions pour une application spécifique</string>
+    <string name="title_delete_limit">Supprimer la limite</string>
+    <string name="msg_confirm_delete_limit">Voulez-vous vraiment supprimer la limite pour %s ?</string>
+    <string name="title_configure_limit">Configurer la limite</string>
+    <string name="title_general_limits">Forfaits système</string>
+    <string name="msg_no_general_limits">Aucun forfait système configuré.</string>
+    <string name="desc_add_general_limit_subtitle">Définissez un forfait de données global pour garder le contrôle.</string>
+    <string name="label_general_limit_selection">Forfait système</string>
+    <string name="desc_general_limit_selection">Configurer les limites quotidiennes de données globales</string>
+    <string name="title_choose_limit_type">Choisir le type de limite</string>
 </resources>

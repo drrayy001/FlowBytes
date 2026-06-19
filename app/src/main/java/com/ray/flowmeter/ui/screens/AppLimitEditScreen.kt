@@ -71,7 +71,7 @@ fun AppLimitEditScreen(
                 title = { Text(stringResource(R.string.title_edit_app_limit), fontWeight = FontWeight.Black) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = stringResource(R.string.cd_back))
                     }
                 },
                 windowInsets = TopAppBarDefaults.windowInsets

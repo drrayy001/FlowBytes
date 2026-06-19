@@ -20,10 +20,11 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+@Composable
 private fun formatDate(timestamp: Long): String {
-    if (timestamp == 0L) return "Select Date"
-    val sdf = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
-    return sdf.format(Date(timestamp))
+    if (timestamp == 0L) return stringResource(R.string.label_select_date)
+    val sdf = remember { SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()) }
+    return remember(timestamp) { sdf.format(Date(timestamp)) }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -127,7 +128,7 @@ fun GeneralLimitConfigScreen(
                 title = { Text(titleText, fontWeight = FontWeight.Black) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = stringResource(R.string.cd_back))
                     }
                 },
                 windowInsets = TopAppBarDefaults.windowInsets
@@ -142,7 +143,7 @@ fun GeneralLimitConfigScreen(
                 .padding(horizontal = 24.dp, vertical = 12.dp)
         ) {
             Text(
-                text = "${stringResource(R.string.title_configure_limit)} for your $titleText plan.",
+                text = stringResource(R.string.desc_configure_limit_format, titleText),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

@@ -76,6 +76,14 @@ class BillingManager(context: Context, private val scope: CoroutineScope) {
     }
 
     fun makePurchase(activity: Activity, productId: String) {
+        if (!billingClient.isReady) {
+            scope.launch {
+                _events.emit(BillingEvent.Error("Billing service is not ready. Try again in a moment."))
+            }
+            startConnection()
+            return
+        }
+
         val productList = listOf(
             QueryProductDetailsParams.Product.newBuilder()
                 .setProductId(productId)
@@ -88,17 +96,27 @@ class BillingManager(context: Context, private val scope: CoroutineScope) {
             .build()
 
         billingClient.queryProductDetailsAsync(params) { billingResult, productDetailsList ->
-            if ((billingResult.responseCode == BillingClient.BillingResponseCode.OK) && productDetailsList.isNotEmpty()) {
-                val flowParams = BillingFlowParams.newBuilder()
-                    .setProductDetailsParamsList(
-                        listOf(
-                            BillingFlowParams.ProductDetailsParams.newBuilder()
-                                .setProductDetails(productDetailsList[0])
-                                .build(),
-                        ),
-                    )
-                    .build()
-                billingClient.launchBillingFlow(activity, flowParams)
+            scope.launch {
+                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                    if (productDetailsList.isNotEmpty()) {
+                        val flowParams = BillingFlowParams.newBuilder()
+                            .setProductDetailsParamsList(
+                                listOf(
+                                    BillingFlowParams.ProductDetailsParams.newBuilder()
+                                        .setProductDetails(productDetailsList[0])
+                                        .build(),
+                                ),
+                            )
+                            .build()
+                        billingClient.launchBillingFlow(activity, flowParams)
+                    } else {
+                        _events.emit(BillingEvent.Error("Product details not found. Make sure the app is installed from Google Play."))
+                    }
+                } else {
+                    val debugMsg = billingResult.debugMessage
+                    val errMsg = if (debugMsg.isNotEmpty()) debugMsg else "Google Play Billing error (Code: ${billingResult.responseCode})"
+                    _events.emit(BillingEvent.Error(errMsg))
+                }
             }
         }
     }

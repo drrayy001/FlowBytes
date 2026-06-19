@@ -273,11 +273,11 @@ fun AlertItemFront(alert: AppAlert) {
     // Mapping old names to new descriptive names for existing data
     val displayAppName = remember(alert.appName) {
         when (alert.appName) {
-            "Wi-Fi (Daily)" -> "Daily Wi-Fi Limit"
-            "Wi-Fi (Monthly)" -> "Monthly Wi-Fi Limit"
-            "Mobile (Daily)" -> "Daily Mobile Limit"
-            "Mobile (Monthly)" -> "Monthly Mobile Limit"
-            else -> alert.appName ?: "Unknown"
+            "Wi-Fi (Daily)", "Daily Wi-Fi Limit" -> context.getString(R.string.label_daily_wifi_limit)
+            "Wi-Fi (Monthly)", "Monthly Wi-Fi Limit" -> context.getString(R.string.label_monthly_wifi_limit)
+            "Mobile (Daily)", "Daily Mobile Limit" -> context.getString(R.string.label_daily_mobile_limit)
+            "Mobile (Monthly)", "Monthly Mobile Limit" -> context.getString(R.string.label_monthly_mobile_limit)
+            else -> alert.appName ?: context.getString(R.string.label_unknown)
         }
     }
 

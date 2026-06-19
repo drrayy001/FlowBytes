@@ -1,0 +1,373 @@
+<resources>
+    <string name="app_name">FlowBytes</string>
+
+    <!-- Screen Titles -->
+    <string name="title_app_usage">Использование приложений</string>
+    <string name="title_settings">Настройки</string>
+    <string name="title_home">Главная</string>
+    <string name="title_limits">Планы данных</string>
+    <string name="title_alerts">История алертов</string>
+    <string name="label_usage">Трафик</string>
+    <string name="label_plans">Планы</string>
+    <string name="label_alerts">Алерты</string>
+
+    <!-- Accessibility Descriptions -->
+    <string name="cd_settings">Открыть настройки</string>
+    <string name="cd_back">Назад</string>
+    <string name="cd_prev_month">Предыдущий месяц</string>
+    <string name="cd_next_month">Следующий месяц</string>
+    <string name="cd_prev_year">Предыдущий год</string>
+    <string name="cd_next_year">Следующий год</string>
+    <string name="cd_dropdown">Открыть выпадающее меню</string>
+    <string name="cd_pull_to_refresh">Потяните вниз, чтобы обновить</string>
+    <string name="cd_download">Загрузка</string>
+    <string name="cd_upload">Отдача</string>
+    <string name="cd_clear_search">Очистить поиск</string>
+    <string name="cd_prev_date">Предыдущая дата</string>
+    <string name="cd_next_date">Следующая дата</string>
+    <string name="cd_toggle_filters">Переключить фильтры</string>
+    <string name="cd_app_icon">Иконка приложения</string>
+    <string name="desc_download">Скорость загрузки</string>
+    <string name="desc_upload">Скорость отдачи</string>
+    <string name="desc_combined">Общая скорость</string>
+    <string name="desc_mobile_data">Использование мобильных данных</string>
+    <string name="desc_wifi">Использование Wi-Fi</string>
+
+    <!-- Home Screen -->
+    <string name="label_today_colon">Сегодня:</string>
+    <string name="label_separator">|</string>
+    <string name="label_download">Загрузка</string>
+    <string name="label_upload">Отдача</string>
+    <string name="label_this_month">В этом месяце</string>
+    <string name="label_last_7_days">ПОСЛЕДНИЕ 7 ДНЕЙ</string>
+    <string name="label_usage_breakdown">Недельная активность</string>
+    <string name="label_mobile">Мобильные</string>
+    <string name="label_wifi">Wi-Fi</string>
+    <string name="label_combined">Всего</string>
+    <string name="label_todays_usage">Трафик за сегодня</string>
+    <string name="label_usage_summary">Обзор использования</string>
+    <string name="label_usage_insight">Анализ использования</string>
+    <string name="msg_limit_forecast_warning">Вы приближаетесь к суточному лимиту. Рекомендуется снизить потребление данных.</string>
+    <string name="msg_limit_forecast_safe">Использование данных в пределах нормы.</string>
+    <string name="label_projected_upper">ПРОГНОЗ</string>
+    <string name="label_daily_limit_upper">ДНЕВНОЙ ЛИМИТ</string>
+    <string name="msg_no_usage_recorded">Данные об использовании отсутствуют</string>
+
+    <!-- App Usage Screen -->
+    <string name="filter_daily">День</string>
+    <string name="filter_monthly">Месяц</string>
+    <string name="filter_custom">Период</string>
+    <string name="filter_mobile_wifi">Моб. и Wi-Fi</string>
+    <string name="filter_mobile_only">Только моб.</string>
+    <string name="filter_wifi_only">Только Wi-Fi</string>
+    <string name="btn_ok">ОК</string>
+    <string name="btn_cancel">Отмена</string>
+    <string name="btn_delete">Удалить</string>
+    <string name="btn_edit">Изменить</string>
+    <string name="label_both">Оба</string>
+    <string name="title_select_date_range">Выбор дат</string>
+    <string name="label_start_date">С</string>
+    <string name="label_end_date">По</string>
+    <string name="title_select_month">Выберите месяц</string>
+    <string name="label_today">Сегодня</string>
+    <string name="msg_no_usage_data">Данные за выбранный период не найдены.</string>
+    <string name="label_wifi_usage">Wi-Fi</string>
+    <string name="label_mobile_usage">Мобильные</string>
+    <string name="label_wifi_colon">Wi-Fi:</string>
+    <string name="label_mobile_colon">Моб.:</string>
+    <string name="label_system_apps">Системные приложения</string>
+    <string name="title_system_data_usage">Системный трафик</string>
+    <string name="label_system_processes">Системные процессы</string>
+    <string name="label_tethering">Режим модема</string>
+    <string name="label_removed_apps">Удаленные приложения</string>
+    <string name="label_unattributed">Система / Прочее</string>
+    <string name="label_unknown_app">Неизвестное приложение</string>
+    <string name="label_root">Root</string>
+    <string name="label_android_system">Android System</string>
+    <string name="label_dns_resolver">DNS Resolver</string>
+    <string name="label_mdns_responder">mDNS Responder</string>
+    <string name="label_media_service">Media Service</string>
+    <string name="label_system_update">System Update</string>
+
+    <string name="tile_monitoring_on">Мониторинг ВКЛ</string>
+    <string name="tile_monitoring_off">Мониторинг ВЫКЛ</string>
+
+    <!-- Settings: General -->
+    <string name="settings_section_general">Основные</string>
+    <string name="settings_monitoring_toggle">Включить мониторинг</string>
+    <string name="settings_monitoring_desc">Отслеживать скорость и трафик в реальном времени</string>
+    <string name="settings_reset_time">Время сброса</string>
+    <string name="settings_reset_time_desc">Время начала нового цикла отслеживания</string>
+    <string name="dialog_reset_time_title">Установить время сброса</string>
+    <string name="settings_monthly_reset_day">День ежемесячного сброса</string>
+    <string name="settings_monthly_reset_day_desc">Цикл сбрасывается в %d-й день месяца</string>
+    <string name="dialog_reset_day_title">Выберите день сброса</string>
+    <string name="msg_reset_day_explanation">Ежемесячный трафик и лимиты будут отсчитываться с этого дня.</string>
+
+    <!-- Settings: Notifications & Status Bar -->
+    <string name="settings_section_notifications">Уведомления и статус-бар</string>
+    <string name="settings_show_daily_usage">Показывать уведомление</string>
+    <string name="settings_daily_usage_desc">Отображать скорость и трафик в панели уведомлений</string>
+    <string name="settings_notification_content">Содержимое уведомления</string>
+    <string name="settings_notification_content_desc">Выберите информацию для отображения</string>
+    <string name="option_speed_only">Только скорость</string>
+    <string name="option_daily_only">Только статистика</string>
+    <string name="option_both">Скорость и статистика</string>
+    <string name="settings_high_priority">Высокий приоритет</string>
+    <string name="settings_high_priority_desc">Закрепить индикатор скорости поверх других уведомлений</string>
+    <string name="settings_hide_offline">Скрывать без сети</string>
+    <string name="settings_hide_offline_desc">Автоматически скрывать индикатор при отсутствии сети</string>
+    <string name="settings_indicator_size_desc">Размер индикатора скорости в статус-баре</string>
+
+    <!-- Settings: Alerts & Limits -->
+    <string name="settings_section_alerts">Алерты и лимиты</string>
+    <string name="settings_data_alerts">Алерты высокого трафика</string>
+    <string name="settings_data_alerts_desc">Уведомлять о чрезмерном фоновом потреблении данных</string>
+    <string name="settings_mobile_limit">Лимит мобильных данных</string>
+    <string name="settings_wifi_limit">Лимит Wi-Fi</string>
+    <string name="label_limit_value">Лимит: %s</string>
+    <string name="label_disabled">Отключено</string>
+    <string name="dialog_set_limit_title">Лимит %1$s на день</string>
+    <string name="label_limit_mb">Лимит (МБ)</string>
+    <string name="msg_limit_desc">Вы получите уведомление при достижении этого порога.</string>
+    <string name="btn_set_limit">Установить лимит</string>
+
+    <string name="label_plan_duration">Длительность плана</string>
+    <string name="msg_alert_muted">Алерт заглушен</string>
+    <string name="title_select_plan_type">Выберите тип плана</string>
+    <string name="settings_indicator_size">Размер иконки</string>
+
+    <!-- Settings: Appearance -->
+    <string name="settings_section_appearance">Внешний вид</string>
+    <string name="settings_app_theme">Тема приложения</string>
+    <string name="dialog_select_theme_title">Выберите тему</string>
+    <string name="theme_system">Системная</string>
+    <string name="theme_light">Светлая</string>
+    <string name="theme_dark">Темная</string>
+    <string name="settings_material_you">Material You</string>
+    <string name="settings_material_you_desc">Использовать системные акцентные цвета</string>
+    <string name="settings_accent_color">Акцентный цвет</string>
+    <string name="settings_accent_color_desc">Выбрать основной цвет</string>
+    <string name="settings_amoled_mode">Amoled-режим</string>
+    <string name="settings_amoled_mode_desc">Глубокий черный фон</string>
+    <string name="size_small">Маленький</string>
+    <string name="size_medium">Средний</string>
+    <string name="size_large">Большой</string>
+    <string name="settings_language">Язык</string>
+    <string name="settings_language_desc">Выберите предпочитаемый язык</string>
+    <string name="dialog_select_language_title">Выберите язык</string>
+    <string name="language_default">Системный</string>
+    <string name="language_arabic">Арабский (العربية)</string>
+    <string name="language_french">Французский (Français)</string>
+    <string name="language_spanish">Испанский (Español)</string>
+    <string name="language_german">Немецкий (Deutsch)</string>
+    <string name="language_portuguese">Португальский (Português)</string>
+    <string name="language_italian">Итальянский (Italiano)</string>
+    <string name="language_chinese">Китайский (中文)</string>
+    <string name="language_hindi">Хинди (हिन्दी)</string>
+    <string name="language_japanese">Японский (日本語)</string>
+    <string name="language_korean">Корейский (한국어)</string>
+    <string name="language_russian">Русский</string>
+
+    <!-- Settings: Support & Feedback -->
+    <string name="settings_section_support">Поддержка и отзывы</string>
+    <string name="settings_rate_app">Оценить FlowBytes</string>
+    <string name="settings_rate_app_desc">Поделитесь своим опытом</string>
+    <string name="settings_share_app">Поделиться с друзьями</string>
+    <string name="settings_share_app_desc">Порекомендовать FlowBytes</string>
+    <string name="label_share_via">Поделиться через</string>
+    <string name="share_text_body">Попробуй FlowBytes! Точный учет трафика: https://play.google.com/store/apps/details?id=%1$s</string>
+    <string name="settings_help_feedback">Помощь и отзывы</string>
+    <string name="settings_help_feedback_desc">Связаться в Telegram или по Email</string>
+    <string name="option_telegram">Telegram</string>
+    <string name="desc_telegram">Написать разработчику напрямую</string>
+    <string name="option_email">Email</string>
+    <string name="desc_email">Отправить письмо разработчику</string>
+    <string name="settings_donate">Поддержать проект</string>
+    <string name="settings_donate_desc">Помочь FlowBytes оставаться бесплатным и без рекламы</string>
+    <string name="dialog_donate_title">Поддержка FlowBytes</string>
+    <string name="dialog_donate_desc">Если вам нравится FlowBytes, вы можете поддержать его развитие. Любая помощь важна!</string>
+    <string name="label_donate_amount_1">Чаевые ($1.00)</string>
+    <string name="label_donate_amount_2_5">Поддержка проекта ($2.50)</string>
+    <string name="label_donate_amount_6">Меценат проекта ($6.00)</string>
+    <string name="desc_donate_1">Простой способ выразить благодарность и помочь в поддержке проекта.</string>
+    <string name="desc_donate_2_5">Помогает финансировать разработку новых функций и оптимизацию.</string>
+    <string name="desc_donate_6">Значительный вклад в развитие открытого и свободного ПО.</string>
+    <string name="title_pick_amount">Выберите сумму</string>
+    <string name="btn_donate">Пожертвовать</string>
+    <string name="msg_donation_success_title">Спасибо!</string>
+    <string name="msg_donation_success_body">Ваша поддержка очень важна для нас.</string>
+    <string name="msg_donation_cancelled">Пожертвование отменено.</string>
+    <string name="msg_donation_failed">Ошибка: %1$s</string>
+
+    <!-- Settings: About -->
+    <string name="settings_section_about">О приложении</string>
+    <string name="settings_version_label">Версия</string>
+    <string name="settings_view_source">Исходный код</string>
+    <string name="settings_view_source_desc">FlowBytes — открытый проект</string>
+    <string name="settings_privacy_policy">Политика конфиденциальности</string>
+    <string name="settings_terms_conditions">Условия использования</string>
+    <string name="settings_licenses">Лицензии ПО</string>
+    <string name="label_am">AM</string>
+    <string name="label_pm">PM</string>
+
+    <!-- Alerts History -->
+    <string name="msg_no_alerts_history">История алертов пуста.</string>
+    <string name="btn_clear_history">Очистить историю</string>
+    <string name="label_alert_total">Всего: %1$s</string>
+    <string name="label_alert_speed">Скорость: %1$s</string>
+    <string name="label_alert_down">Загр.: %1$s</string>
+    <string name="label_alert_up">Отд.: %1$s</string>
+    <string name="msg_confirm_clear_history">Вы уверены, что хотите безвозвратно очистить историю?</string>
+
+    <!-- New Strings extracted from Code -->
+    <string name="msg_enable_detection_hint">Включите алерты трафика, чтобы увидеть историю здесь.</string>
+    <string name="label_advanced_settings">Дополнительно</string>
+    <string name="label_trigger_speed">Порог срабатывания</string>
+    <string name="label_total_data">Всего данных</string>
+    <string name="title_mute_app">Заглушить %s</string>
+    <string name="desc_mute_app">Перестать получать алерты для этого приложения.</string>
+    <string name="btn_mute">Заглушить</string>
+    <string name="title_whats_new">Что нового</string>
+    <string name="desc_whats_new">Узнайте о последних изменениях и функциях.</string>
+    <string name="btn_done">Готово</string>
+    <string name="title_vpn_disclosure">Включить блокировку</string>
+    <string name="desc_vpn_disclosure">FlowBytes использует локальный VPN для управления доступом приложений к сети при превышении лимитов.</string>
+    <string name="msg_vpn_feature_local">100% Локально: трафик не покидает устройство.</string>
+    <string name="msg_vpn_feature_privacy">Приватность: мы не собираем и не передаем ваши данные.</string>
+    <string name="msg_vpn_feature_focused">Точечно: влияет только на выбранные вами приложения.</string>
+    <string name="btn_not_now">Не сейчас</string>
+    <string name="btn_continue">Продолжить</string>
+    <string name="title_custom_color">Настройка цвета</string>
+    <string name="btn_apply_globally">Применить везде</string>
+    <string name="btn_reset_default">Сбросить</string>
+    <string name="btn_get_started">Начать</string>
+    <string name="title_welcome">Добро пожаловать в FlowBytes</string>
+    <string name="msg_onboarding_desc">Для работы мониторинга и учета трафика необходимы разрешения.</string>
+    <string name="label_usage_access">Доступ к статистике</string>
+    <string name="desc_usage_access">Требуется для учета трафика по приложениям.</string>
+    <string name="label_notifications">Уведомления</string>
+    <string name="desc_notifications">Требуется для отображения скорости в статус-баре.</string>
+    <string name="label_battery_optimization">Оптимизация батареи</string>
+    <string name="desc_battery_optimization">Требуется для стабильной работы мониторинга в фоне.</string>
+    <string name="label_granted">Разрешено</string>
+    <string name="btn_grant">Разрешить</string>
+    <string name="title_traffic_settings">Конфигурация алертов</string>
+    <string name="label_speed_threshold">Порог обнаружения</string>
+    <string name="label_time_above_threshold">Длительность превышения</string>
+    <string name="label_alert_cooldown">Задержка уведомлений</string>
+    <string name="label_reset_speed_threshold">Порог сброса</string>
+    <string name="label_time_below_reset">Длительность под порогом</string>
+    <string name="btn_save_config">Сохранить</string>
+    <string name="label_app_limits">Лимиты приложений</string>
+    <string name="filter_all">Все</string>
+    <string name="label_daily_limits">Дневные лимиты</string>
+    <string name="label_monthly_limits">Месячные лимиты</string>
+    <string name="label_high_traffic">Высокий трафик</string>
+    <string name="msg_no_alerts_all">Алерты не записаны.</string>
+    <string name="msg_no_alerts_app">Алерты приложений отсутствуют.</string>
+    <string name="msg_no_alerts_daily">Дневные алерты отсутствуют.</string>
+    <string name="msg_no_alerts_monthly">Месячные алерты отсутствуют.</string>
+    <string name="msg_no_alerts_traffic">Алерты трафика отсутствуют.</string>
+    <string name="label_app_limit_reached">Лимит приложения</string>
+    <string name="label_daily_limit_reached">Дневной лимит</string>
+    <string name="label_monthly_limit_reached">Месячный лимит</string>
+    <string name="label_custom_limit_reached">Особый лимит</string>
+    <string name="msg_no_alerts_custom">Особые алерты отсутствуют.</string>
+    <string name="label_start_date_select">С: %s</string>
+    <string name="label_end_date_select">По: %s</string>
+    <string name="msg_invalid_date_range">Конечная дата должна быть позже начальной</string>
+    <string name="label_high_traffic_detected">Высокий трафик!</string>
+    <string name="label_trigger_speed_header">ПОРОГ</string>
+    <string name="label_limit_set_header">ЛИМИТ</string>
+    <string name="label_usage_recorded_header">РАСХОД</string>
+    <string name="label_history_header">ИСТОРИЯ</string>
+    <string name="msg_no_app_limits">Лимиты приложений не настроены.</string>
+    <string name="desc_restrict_app_subtitle">Добавьте приложение для управления его трафиком.</string>
+    <string name="cd_add_app_limit">Добавить лимит</string>
+    <string name="label_block_apps">Блокировка</string>
+    <string name="desc_block_apps">Ограничивать доступ в сеть при превышении лимита</string>
+    <string name="title_edit_app_limit">Изменить лимит</string>
+    <string name="btn_create_app_limit">Создать</string>
+    <string name="btn_save_changes">Сохранить</string>
+    <string name="label_app_limit_selection">Лимит приложения</string>
+    <string name="desc_app_limit_selection">Настроить ограничения для приложения</string>
+    <string name="title_delete_limit">Удалить лимит</string>
+    <string name="msg_confirm_delete_limit">Удалить лимит для %s?</string>
+    <string name="msg_no_apps_found">Приложения не найдены.</string>
+    <string name="placeholder_search_apps">Поиск...</string>
+    <string name="title_select_application">Выберите приложение</string>
+    <string name="title_configure_limit">Настройка лимита</string>
+    <string name="title_general_limits">Системные планы</string>
+    <string name="msg_no_general_limits">Системные планы не настроены.</string>
+    <string name="desc_add_general_limit_subtitle">Установите общий лимит для всего устройства.</string>
+    <string name="label_general_limit_selection">Системный план</string>
+    <string name="desc_general_limit_selection">Настройка общих дневных лимитов</string>
+    <string name="title_choose_limit_type">Выберите тип лимита</string>
+
+    <!-- Notification Strings -->
+    <string name="notification_limit_reached_title">Превышен лимит %s</string>
+    <string name="notification_limit_reached_msg">Потрачено %s за сегодня.</string>
+    <string name="status_not_supported">Мониторинг не поддерживается на этом устройстве</string>
+    <string name="channel_speed_monitor_name">Скорость</string>
+    <string name="channel_speed_monitor_desc">Индикаторы скорости в реальном времени</string>
+    <string name="channel_usage_alerts_name">Алерты трафика</string>
+    <string name="channel_usage_alerts_desc">Уведомления о превышении лимитов</string>
+    <string name="notification_high_usage_app_msg">%1$s потребляет много трафика: %2$s (всего %3$s).</string>
+    <string name="notification_high_usage_generic_msg">Обнаружено высокое фоновое потребление: %s</string>
+    <string name="notification_high_usage_title">Высокий расход данных</string>
+    <string name="notification_summary_title">Алерты FlowBytes</string>
+    <string name="notification_summary_msg">Нажмите, чтобы просмотреть историю.</string>
+    <string name="notification_summary_text">История алертов</string>
+    <string name="notification_app_limit_msg">%1$s превысил лимит в %2$s.</string>
+    <string name="notification_app_limit_title">Лимит %s превышен</string>
+    <string name="msg_reached_limit">Превышен лимит %2$s для %1$s (израсходовано %3$s).</string>
+    <string name="btn_silence">Заглушить</string>
+
+    <!-- Badges -->
+    <string name="badge_limit_reached">Превышен</string>
+    <string name="badge_blocked">Блокировка</string>
+    <string name="badge_silenced">Заглушен</string>
+
+    <!-- App Review Dialog -->
+    <string name="review_dialog_title">Нравится FlowBytes?</string>
+    <string name="review_dialog_description">Если приложение вам помогает, пожалуйста, оцените его! Это поможет нам стать лучше.</string>
+    <string name="review_later">Позже</string>
+    <string name="review_never">Никогда</string>
+    <string name="review_submit_feedback">Оставить отзыв</string>
+    <string name="review_rate_on_play_store">Оценить в Play Store</string>
+    <string name="review_feedback_title">Помогите нам стать лучше</string>
+    <string name="review_feedback_description">Жаль, что вы не полностью довольны. Расскажите, что нам нужно исправить.</string>
+    <string name="review_feedback_placeholder">Ваши предложения...</string>
+    <string name="review_feedback_thanks">Спасибо за ваш отзыв!</string>
+    <string name="review_play_store_title">Спасибо за оценку!</string>
+    <string name="review_play_store_description">Будем очень признательны, если вы напишете краткий отзыв в Google Play!</string>
+    <string name="review_toast_feedback_submitted">Отзыв успешно отправлен. Спасибо!</string>
+
+    <string name="label_network_type">Тип сети</string>
+    <string name="label_limit_period">Период лимита</string>
+    <string name="label_daily_wifi">Дневной Wi-Fi</string>
+    <string name="label_daily_mobile">Дневной моб.</string>
+    <string name="label_monthly_wifi">Месячный Wi-Fi</string>
+    <string name="label_monthly_mobile">Месячный моб.</string>
+    <string name="label_custom_wifi">Особый Wi-Fi</string>
+    <string name="label_custom_mobile">Особый моб.</string>
+    <string name="settings_traffic_threshold_subtitle">Настройка порогов обнаружения трафика</string>
+    <string name="whats_new_custom_limits_title">Лимиты на период</string>
+    <string name="whats_new_custom_limits_desc">Теперь можно устанавливать лимиты на произвольные даты для любых сетей.</string>
+    <string name="whats_new_reset_day_title">День сброса</string>
+    <string name="whats_new_reset_day_desc">Поддержка произвольных расчетных циклов. Выберите день месяца для сброса статистики.</string>
+    <string name="feedback_email_subject">FlowBytes Отзыв - %1$d звезд</string>
+
+    <string name="legal_privacy_policy">Политика конфиденциальности\nДата вступления в силу: 29 апреля 2026 г.\n\nЯ, разработчик FlowBytes («Приложение»), предоставляю это приложение бесплатно. Приложение предоставляется «как есть» и без каких-либо гарантий.\n\n1. Сбор и использование информации\nFlowBytes отслеживает скорость сети и трафик вашего устройства (Wi-Fi и мобильные данные), чтобы помочь вам контролировать использование интернета. Все действия по мониторингу, расчету трафика и блокировке выполняются локально на вашем устройстве. Мы не собираем, не храним и не передаем никакие персональные данные, включая:\n- Историю посещений\n- Содержимое сетевого трафика\n- IP-адрес\n- Любую личную информацию\n\n2. Требуемые разрешения\nДля корректной работы приложению требуются следующие разрешения:\n- Доступ к статистике использования: используется для получения данных о трафике (через NetworkStatsManager и TrafficStats) для расчета скорости и учета данных по приложениям.\n- Служба переднего плана: позволяет приложению работать в фоне для отображения скорости в реальном времени и обеспечения непрерывного мониторинга.\n- VPN-сервис (локальный VPN): FlowBytes использует локальный VPN для управления доступом к сети для приложений, превысивших лимиты. Этот VPN является 100% локальным; ваш трафик не покидает устройство и никогда не перехватывается нами.\n\nВсе данные, полученные через эти разрешения, остаются на вашем устройстве и используются исключительно для обеспечения функций мониторинга и контроля.\n\n3. Сторонние сервисы\nПриложение не использует сторонние сервисы, инструменты аналитики или рекламные сети, которые собирают информацию, используемую для вашей идентификации.\n\n4. Безопасность\nПоскольку вся обработка данных происходит локально на вашем устройстве, риск утечки данных с нашей стороны минимален. Тем не менее, ни один метод электронного хранения или передачи через Интернет не является на 100% безопасным, и мы не можем гарантировать абсолютную безопасность.\n\n5. Конфиденциальность детей\nЭтот сервис не предназначен для лиц младше 13 лет. Мы не собираем намеренно личную информацию детей младше 13 лет.\n\n6. Изменения в настоящей Политике конфиденциальности\nМы можем время от времени обновлять нашу Политику конфиденциальности. Любые изменения будут опубликованы на этой странице. Рекомендуется периодически проверять эту страницу на наличие обновлений.\n\n7. Контакты\nЕсли у вас есть вопросы или предложения по этой Политике конфиденциальности, вы можете связаться с нами по адресу:\nEmail: drrayy001@gmail.com</string>
+    <string name="legal_terms_conditions">Условия использования\n\n1. Принятие условий\nИспользуя FlowBytes, вы соглашаетесь с этими условиями. Если вы не согласны, пожалуйста, не используйте приложение.\n\n2. Отказ от ответственности\nFlowBytes предоставляет сетевую статистику в информационных целях. Несмотря на то, что мы стремимся к точности, измерения скорости и расчеты трафика являются оценочными и могут отличаться от официальных данных вашего провайдера.\n\n3. Аккумулятор и производительность\nЭто приложение запускает фоновую службу для мониторинга сетевого трафика. Несмотря на оптимизацию, это может оказывать незначительное влияние на время работы от батареи.\n\n4. Ограничение ответственности\nМы не несем ответственности за перерасход данных, потерю данных или проблемы с устройством, возникшие в результате использования этого приложения.</string>
+    <string name="legal_licenses">Лицензии открытого ПО\n\n- Jetpack Compose: Apache License 2.0\n- Kotlin Coroutines: Apache License 2.0\n- Android Jetpack Libraries (Room, DataStore, Lifecycle): Apache License 2.0\n- Material Components for Android: Apache License 2.0\n- Kotlin Standard Library: Apache License 2.0\n\nДанное ПО предоставляется «как есть» без каких-либо гарантий.</string>
+
+    <string name="label_daily_wifi_limit">Дневной лимит Wi-Fi</string>
+    <string name="label_monthly_wifi_limit">Месячный лимит Wi-Fi</string>
+    <string name="label_daily_mobile_limit">Дневной лимит моб.</string>
+    <string name="label_monthly_mobile_limit">Месячный лимит моб.</string>
+    <string name="label_unknown">Неизвестно</string>
+    <string name="desc_configure_limit_format">Настройте лимит для плана %1$s.</string>
+    <string name="label_select_date">Выберите дату</string>
+</resources>

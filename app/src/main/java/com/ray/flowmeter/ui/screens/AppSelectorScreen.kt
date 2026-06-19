@@ -129,7 +129,7 @@ fun AppPickerScreen(
                             ) {
                                 Icon(
                                     Icons.Rounded.Close,
-                                    contentDescription = "Clear search"
+                                    contentDescription = stringResource(R.string.cd_clear_search)
                                 )
                             }
                         }

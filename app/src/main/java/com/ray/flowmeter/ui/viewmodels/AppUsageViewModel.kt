@@ -477,19 +477,19 @@ class AppUsageViewModel(
 
     private fun resolveUidToInfo(uid: Int, packageManager: PackageManager, systemIcon: ImageBitmap?): ResolvedInfo {
         when (uid) {
-            -2, -4 -> return ResolvedInfo("removed_$uid", "Removed Apps", null, true, true)
-            -3, -5 -> return ResolvedInfo("tethering_$uid", "Tethering", null, true, true)
-            0 -> return ResolvedInfo("root_0", "Root", systemIcon, true, true)
-            1000 -> return ResolvedInfo("android.system_$uid", "Android System", systemIcon, true, true)
-            1051, 1052 -> return ResolvedInfo("android.dns_$uid", "DNS Resolver", systemIcon, true, true)
-            1020 -> return ResolvedInfo("android.mdns_$uid", "mDNS Responder", systemIcon, true, true)
-            1013 -> return ResolvedInfo("android.media_$uid", "Media Service", systemIcon, true, true)
-            1061, 2904 -> return ResolvedInfo("android.ota_$uid", "System Update", systemIcon, true, true)
+            -2, -4 -> return ResolvedInfo("removed_$uid", applicationContext.getString(R.string.label_removed_apps), null, true, true)
+            -3, -5 -> return ResolvedInfo("tethering_$uid", applicationContext.getString(R.string.label_tethering), null, true, true)
+            0 -> return ResolvedInfo("root_0", applicationContext.getString(R.string.label_root), systemIcon, true, true)
+            1000 -> return ResolvedInfo("android.system_$uid", applicationContext.getString(R.string.label_android_system), systemIcon, true, true)
+            1051, 1052 -> return ResolvedInfo("android.dns_$uid", applicationContext.getString(R.string.label_dns_resolver), systemIcon, true, true)
+            1020 -> return ResolvedInfo("android.mdns_$uid", applicationContext.getString(R.string.label_mdns_responder), systemIcon, true, true)
+            1013 -> return ResolvedInfo("android.media_$uid", applicationContext.getString(R.string.label_media_service), systemIcon, true, true)
+            1061, 2904 -> return ResolvedInfo("android.ota_$uid", applicationContext.getString(R.string.label_system_update), systemIcon, true, true)
         }
 
         val packages = packageManager.getPackagesForUid(uid)
         if (packages.isNullOrEmpty()) {
-            val systemName = packageManager.getNameForUid(uid) ?: "System process ($uid)"
+            val systemName = packageManager.getNameForUid(uid) ?: (applicationContext.getString(R.string.label_system_processes) + " ($uid)")
             val icon = if (uid < 10000) systemIcon else null
             return ResolvedInfo("uid_$uid", systemName, icon, true, true)
         }

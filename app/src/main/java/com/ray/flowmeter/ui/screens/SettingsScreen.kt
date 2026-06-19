@@ -278,6 +278,10 @@ fun SettingsScreen(
                         "pt" -> stringResource(R.string.language_portuguese)
                         "it" -> stringResource(R.string.language_italian)
                         "zh" -> stringResource(R.string.language_chinese)
+                        "hi" -> stringResource(R.string.language_hindi)
+                        "ja" -> stringResource(R.string.language_japanese)
+                        "ko" -> stringResource(R.string.language_korean)
+                        "ru" -> stringResource(R.string.language_russian)
                         else -> stringResource(R.string.language_default)
                     },
                     onClick = { showLanguageDialog = true }
@@ -431,7 +435,8 @@ fun SettingsScreen(
                             type = "text/plain"
                             putExtra(Intent.EXTRA_TEXT, shareTextTemplate)
                         }
-                        val chooserIntent = Intent.createChooser(shareIntent, "Share via")
+                        val chooserTitle = context.getString(R.string.label_share_via)
+                        val chooserIntent = Intent.createChooser(shareIntent, chooserTitle)
                         val activity = context.findActivity()
                         val targetContext = activity ?: context
                         if (targetContext !is Activity) {

@@ -130,7 +130,7 @@ fun OnboardingScreen(
                         Box(contentAlignment = Alignment.Center) {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_launcher_foreground),
-                                contentDescription = "App Icon",
+                                contentDescription = stringResource(R.string.cd_app_icon),
                                 modifier = Modifier.fillMaxSize(),
                                 tint = MaterialTheme.colorScheme.primary
                             )

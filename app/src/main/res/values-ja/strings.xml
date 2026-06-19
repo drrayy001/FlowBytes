@@ -1,0 +1,373 @@
+<resources>
+    <string name="app_name">FlowBytes</string>
+
+    <!-- Screen Titles -->
+    <string name="title_app_usage">アプリの使用状況</string>
+    <string name="title_settings">設定</string>
+    <string name="title_home">ホーム</string>
+    <string name="title_limits">データプラン</string>
+    <string name="title_alerts">アラート履歴</string>
+    <string name="label_usage">使用状況</string>
+    <string name="label_plans">プラン</string>
+    <string name="label_alerts">アラート</string>
+
+    <!-- Accessibility Descriptions -->
+    <string name="cd_settings">設定を開く</string>
+    <string name="cd_back">戻る</string>
+    <string name="cd_prev_month">前の月</string>
+    <string name="cd_next_month">次の月</string>
+    <string name="cd_prev_year">前の年</string>
+    <string name="cd_next_year">次の年</string>
+    <string name="cd_dropdown">ドロップダウンメニューを開く</string>
+    <string name="cd_pull_to_refresh">下に引いて使用状況データを更新</string>
+    <string name="cd_download">ダウンロード</string>
+    <string name="cd_upload">アップロード</string>
+    <string name="cd_clear_search">検索をクリア</string>
+    <string name="cd_prev_date">前の日付</string>
+    <string name="cd_next_date">次の日付</string>
+    <string name="cd_toggle_filters">フィルターを切り替え</string>
+    <string name="cd_app_icon">アプリのアイコン</string>
+    <string name="desc_download">ダウンロード速度</string>
+    <string name="desc_upload">アップロード速度</string>
+    <string name="desc_combined">合計速度</string>
+    <string name="desc_mobile_data">モバイルデータ使用状況</string>
+    <string name="desc_wifi">Wi-Fi使用状況</string>
+
+    <!-- Home Screen -->
+    <string name="label_today_colon">今日：</string>
+    <string name="label_separator">|</string>
+    <string name="label_download">ダウンロード</string>
+    <string name="label_upload">アップロード</string>
+    <string name="label_this_month">今月</string>
+    <string name="label_last_7_days">過去7日間</string>
+    <string name="label_usage_breakdown">週間の活動</string>
+    <string name="label_mobile">モバイル</string>
+    <string name="label_wifi">Wi-Fi</string>
+    <string name="label_combined">合計</string>
+    <string name="label_todays_usage">今日の使用状況</string>
+    <string name="label_usage_summary">使用状況の概要</string>
+    <string name="label_usage_insight">使用状況のインサイト</string>
+    <string name="msg_limit_forecast_warning">1日の制限に近づいています。データ使用を抑えることを検討してください。</string>
+    <string name="msg_limit_forecast_safe">データ使用量は1日の制限内に収まっています。</string>
+    <string name="label_projected_upper">予測</string>
+    <string name="label_daily_limit_upper">1日の制限</string>
+    <string name="msg_no_usage_recorded">使用データはまだ記録されていません</string>
+
+    <!-- App Usage Screen -->
+    <string name="filter_daily">日次</string>
+    <string name="filter_monthly">月次</string>
+    <string name="filter_custom">カスタム</string>
+    <string name="filter_mobile_wifi">モバイルとWi-Fi</string>
+    <string name="filter_mobile_only">モバイルのみ</string>
+    <string name="filter_wifi_only">Wi-Fiのみ</string>
+    <string name="btn_ok">OK</string>
+    <string name="btn_cancel">キャンセル</string>
+    <string name="btn_delete">削除</string>
+    <string name="btn_edit">編集</string>
+    <string name="label_both">両方</string>
+    <string name="title_select_date_range">期間を選択</string>
+    <string name="label_start_date">開始日</string>
+    <string name="label_end_date">終了日</string>
+    <string name="title_select_month">月を選択</string>
+    <string name="label_today">今日</string>
+    <string name="msg_no_usage_data">選択されたフィルターの使用データが見つかりませんでした。</string>
+    <string name="label_wifi_usage">Wi-Fi</string>
+    <string name="label_mobile_usage">モバイル</string>
+    <string name="label_wifi_colon">Wi-Fi：</string>
+    <string name="label_mobile_colon">モバイル：</string>
+    <string name="label_system_apps">システムアプリ</string>
+    <string name="title_system_data_usage">システムのデータ使用量</string>
+    <string name="label_system_processes">システムプロセス</string>
+    <string name="label_tethering">テザリングとホットスポット</string>
+    <string name="label_removed_apps">削除済みのアプリ</string>
+    <string name="label_unattributed">システム / 未分類</string>
+    <string name="label_unknown_app">不明なアプリ</string>
+    <string name="label_root">ルート</string>
+    <string name="label_android_system">Androidシステム</string>
+    <string name="label_dns_resolver">DNSリゾルバー</string>
+    <string name="label_mdns_responder">mDNSレスポンダー</string>
+    <string name="label_media_service">メディアサービス</string>
+    <string name="label_system_update">システムアップデート</string>
+
+    <string name="tile_monitoring_on">監視中</string>
+    <string name="tile_monitoring_off">停止中</string>
+
+    <!-- Settings: General -->
+    <string name="settings_section_general">一般</string>
+    <string name="settings_monitoring_toggle">監視を有効にする</string>
+    <string name="settings_monitoring_desc">リアルタイムでネットワーク速度とデータ使用量を追跡します</string>
+    <string name="settings_reset_time">リセット時刻</string>
+    <string name="settings_reset_time_desc">追跡サイクルを開始する時刻</string>
+    <string name="dialog_reset_time_title">リセット時刻を設定</string>
+    <string name="settings_monthly_reset_day">月次リセット日</string>
+    <string name="settings_monthly_reset_day_desc">請求サイクルは毎月 %d 日にリセットされます</string>
+    <string name="dialog_reset_day_title">毎月のリセット日を選択</string>
+    <string name="msg_reset_day_explanation">すべての月間データ使用量および制限通知はこの日からカウントされます。</string>
+
+    <!-- Settings: Notifications & Status Bar -->
+    <string name="settings_section_notifications">通知とステータスバー</string>
+    <string name="settings_show_daily_usage">通知を表示</string>
+    <string name="settings_daily_usage_desc">リアルタイムの速度と使用状況を通知エリアに表示します</string>
+    <string name="settings_notification_content">通知の内容</string>
+    <string name="settings_notification_content_desc">通知に表示する情報を選択します</string>
+    <string name="option_speed_only">速度のみ</string>
+    <string name="option_daily_only">日次統計のみ</string>
+    <string name="option_both">速度と日次統計の両方</string>
+    <string name="settings_high_priority">高優先度</string>
+    <string name="settings_high_priority_desc">速度インジケーターを通知の最上部に保持します</string>
+    <string name="settings_hide_offline">オフライン時は非表示</string>
+    <string name="settings_hide_offline_desc">切断時に速度インジケーターを自動的に非表示にします</string>
+    <string name="settings_indicator_size_desc">ステータスバーの速度インジケーターのサイズを調整します</string>
+
+    <!-- Settings: Alerts & Limits -->
+    <string name="settings_section_alerts">アラートと制限</string>
+    <string name="settings_data_alerts">高データ使用量アラート</string>
+    <string name="settings_data_alerts_desc">アプリがバックグラウンドで過剰なデータを消費したときに通知を受け取ります</string>
+    <string name="settings_mobile_limit">モバイルデータ制限</string>
+    <string name="settings_wifi_limit">Wi-Fiデータ制限</string>
+    <string name="label_limit_value">制限： %s</string>
+    <string name="label_disabled">無効</string>
+    <string name="dialog_set_limit_title">1日の %1$s 制限を設定</string>
+    <string name="label_limit_mb">制限 (MB)</string>
+    <string name="msg_limit_desc">この制限に達すると通知が届きます。</string>
+    <string name="btn_set_limit">制限を設定</string>
+
+    <string name="label_plan_duration">プランの期間</string>
+    <string name="msg_alert_muted">アラートをミュートしました</string>
+    <string name="title_select_plan_type">プランの種類を選択</string>
+    <string name="settings_indicator_size">アイコンのサイズ</string>
+
+    <!-- Settings: Appearance -->
+    <string name="settings_section_appearance">外観</string>
+    <string name="settings_app_theme">アプリのテーマ</string>
+    <string name="dialog_select_theme_title">テーマを選択</string>
+    <string name="theme_system">システム</string>
+    <string name="theme_light">ライト</string>
+    <string name="theme_dark">ダーク</string>
+    <string name="settings_material_you">Material You</string>
+    <string name="settings_material_you_desc">システムのアクセントカラーを使用します</string>
+    <string name="settings_accent_color">アクセントカラー</string>
+    <string name="settings_accent_color_desc">カスタムプライマリカラーを選択します</string>
+    <string name="settings_amoled_mode">AMOLEDモード</string>
+    <string name="settings_amoled_mode_desc">完全な黒の背景</string>
+    <string name="size_small">小</string>
+    <string name="size_medium">中</string>
+    <string name="size_large">大</string>
+    <string name="settings_language">言語</string>
+    <string name="settings_language_desc">優先する言語を選択してください</string>
+    <string name="dialog_select_language_title">言語を選択</string>
+    <string name="language_default">システム標準</string>
+    <string name="language_arabic">アラビア語 (العربية)</string>
+    <string name="language_french">フランス語 (Français)</string>
+    <string name="language_spanish">スペイン語 (Español)</string>
+    <string name="language_german">ドイツ語 (Deutsch)</string>
+    <string name="language_portuguese">ポルトガル語 (Português)</string>
+    <string name="language_italian">イタリア語 (Italiano)</string>
+    <string name="language_chinese">中国語 (中文)</string>
+    <string name="language_hindi">ヒンディー語 (हिन्दी)</string>
+    <string name="language_japanese">日本語</string>
+    <string name="language_korean">韓国語 (한국어)</string>
+    <string name="language_russian">ロシア語 (Русский)</string>
+
+    <!-- Settings: Support & Feedback -->
+    <string name="settings_section_support">サポートとフィードバック</string>
+    <string name="settings_rate_app">FlowBytesを評価</string>
+    <string name="settings_rate_app_desc">体験を共有して改善にご協力ください</string>
+    <string name="settings_share_app">友達と共有</string>
+    <string name="settings_share_app_desc">他の人にFlowBytesを勧める</string>
+    <string name="label_share_via">共有方法</string>
+    <string name="share_text_body">FlowBytesをチェック！正確にデータ使用量を追跡できます： https://play.google.com/store/apps/details?id=%1$s</string>
+    <string name="settings_help_feedback">ヘルプとフィードバック</string>
+    <string name="settings_help_feedback_desc">Telegramまたはメールで問い合わせる</string>
+    <string name="option_telegram">Telegram</string>
+    <string name="desc_telegram">開発者に直接メッセージを送る</string>
+    <string name="option_email">メール</string>
+    <string name="desc_email">開発者にメールを送る</string>
+    <string name="settings_donate">寄付</string>
+    <string name="settings_donate_desc">広告なし・オープンソースの継続にご協力ください</string>
+    <string name="dialog_donate_title">FlowBytesをサポート</string>
+    <string name="dialog_donate_desc">FlowBytesが役立つと思われたら、開発のサポートをご検討ください。あらゆる寄付が助けになります！</string>
+    <string name="label_donate_amount_1">少額のチップ ($1.00)</string>
+    <string name="label_donate_amount_2_5">プロジェクトサポーター ($2.50)</string>
+    <string name="label_donate_amount_6">プロジェクトパトロン ($6.00)</string>
+    <string name="desc_donate_1">感謝の気持ちを表し、プロジェクトの維持をサポートする簡単な方法です。</string>
+    <string name="desc_donate_2_5">新機能の開発やパフォーマンスの向上を支援します。</string>
+    <string name="desc_donate_6">FlowBytesをオープンソース、広告なし、独立した状態に保つための重要な貢献です。</string>
+    <string name="title_pick_amount">金額を選択</string>
+    <string name="btn_donate">寄付する</string>
+    <string name="msg_donation_success_title">ありがとうございます！</string>
+    <string name="msg_donation_success_body">皆様のサポートに深く感謝いたします。プロジェクトの継続に役立てさせていただきます。</string>
+    <string name="msg_donation_cancelled">寄付がキャンセルされました。</string>
+    <string name="msg_donation_failed">寄付に失敗しました： %1$s</string>
+
+    <!-- Settings: About -->
+    <string name="settings_section_about">FlowBytesについて</string>
+    <string name="settings_version_label">バージョン</string>
+    <string name="settings_view_source">ソースコード</string>
+    <string name="settings_view_source_desc">FlowBytesはオープンソースプロジェクトです</string>
+    <string name="settings_privacy_policy">プライバシーポリシー</string>
+    <string name="settings_terms_conditions">利用規約</string>
+    <string name="settings_licenses">オープンソースライセンス</string>
+    <string name="label_am">午前</string>
+    <string name="label_pm">午後</string>
+
+    <!-- Alerts History -->
+    <string name="msg_no_alerts_history">アラート履歴が見つかりません。</string>
+    <string name="btn_clear_history">履歴を消去</string>
+    <string name="label_alert_total">合計： %1$s</string>
+    <string name="label_alert_speed">速度： %1$s</string>
+    <string name="label_alert_down">下り： %1$s</string>
+    <string name="label_alert_up">上り： %1$s</string>
+    <string name="msg_confirm_clear_history">アラート履歴を完全に消去してもよろしいですか？</string>
+
+    <!-- New Strings extracted from Code -->
+    <string name="msg_enable_detection_hint">高データ使用量アラートを有効にすると、ここに履歴が表示されます。</string>
+    <string name="label_advanced_settings">詳細設定</string>
+    <string name="label_trigger_speed">トリガー速度</string>
+    <string name="label_total_data">合計データ量</string>
+    <string name="title_mute_app">%sをミュート</string>
+    <string name="desc_mute_app">このアプリの高データ使用量アラートを停止します。</string>
+    <string name="btn_mute">ミュート</string>
+    <string name="title_whats_new">新機能</string>
+    <string name="desc_whats_new">最新の機能と改善点をチェックしてください。</string>
+    <string name="btn_done">完了</string>
+    <string name="title_vpn_disclosure">アプリのブロックを有効にする</string>
+    <string name="desc_vpn_disclosure">FlowBytesはローカルVPNを使用して、制限を超えたアプリのインターネットアクセスを管理します。</string>
+    <string name="msg_vpn_feature_local">100%ローカル：通信データがデバイスの外に出ることはありません。</string>
+    <string name="msg_vpn_feature_privacy">プライバシー第一：データの収集、保存、追跡は一切行いません。</string>
+    <string name="msg_vpn_feature_focused">ターゲット限定：制限を選択したアプリにのみ影響します。</string>
+    <string name="btn_not_now">後で</string>
+    <string name="btn_continue">続行</string>
+    <string name="title_custom_color">色をカスタマイズ</string>
+    <string name="btn_apply_globally">全体に適用</string>
+    <string name="btn_reset_default">デフォルトに戻す</string>
+    <string name="btn_get_started">使ってみる</string>
+    <string name="title_welcome">FlowBytesへようこそ</string>
+    <string name="msg_onboarding_desc">正確なデータ追跡とリアルタイムの速度監視を提供するために、いくつかの権限が必要です。</string>
+    <string name="label_usage_access">使用状況へのアクセス</string>
+    <string name="desc_usage_access">アプリごとのデータ使用量を追跡するために必要です。</string>
+    <string name="label_notifications">通知</string>
+    <string name="desc_notifications">ステータスバーにリアルタイムの速度を表示するために必要です。</string>
+    <string name="label_battery_optimization">バッテリーの最適化</string>
+    <string name="desc_battery_optimization">速度モニターをバックグラウンドで実行し続けるために必要です。</string>
+    <string name="label_granted">許可済み</string>
+    <string name="btn_grant">許可する</string>
+    <string name="title_traffic_settings">アラート設定</string>
+    <string name="label_speed_threshold">検出しきい値</string>
+    <string name="label_time_above_threshold">制限超過の継続時間</string>
+    <string name="label_alert_cooldown">通知のクールダウン</string>
+    <string name="label_reset_speed_threshold">リセットしきい値</string>
+    <string name="label_time_below_reset">しきい値を下回る継続時間</string>
+    <string name="btn_save_config">設定を保存</string>
+    <string name="label_app_limits">アプリ制限</string>
+    <string name="filter_all">すべて</string>
+    <string name="label_daily_limits">1日の制限</string>
+    <string name="label_monthly_limits">月間の制限</string>
+    <string name="label_high_traffic">高トラフィック</string>
+    <string name="msg_no_alerts_all">アラートは記録されていません。</string>
+    <string name="msg_no_alerts_app">アプリ制限アラートは記録されていません。</string>
+    <string name="msg_no_alerts_daily">1日の制限アラートは記録されていません。</string>
+    <string name="msg_no_alerts_monthly">月間の制限アラートは記録されていません。</string>
+    <string name="msg_no_alerts_traffic">高トラフィックアラートは記録されていません。</string>
+    <string name="label_app_limit_reached">アプリ制限に到達</string>
+    <string name="label_daily_limit_reached">1日の制限に到達</string>
+    <string name="label_monthly_limit_reached">月間の制限に到達</string>
+    <string name="label_custom_limit_reached">カスタム制限に到達</string>
+    <string name="msg_no_alerts_custom">カスタム制限アラートは記録されていません。</string>
+    <string name="label_start_date_select">開始日： %s</string>
+    <string name="label_end_date_select">終了日： %s</string>
+    <string name="msg_invalid_date_range">終了日は開始日以降である必要があります</string>
+    <string name="label_high_traffic_detected">高トラフィックを検出</string>
+    <string name="label_trigger_speed_header">トリガー速度</string>
+    <string name="label_limit_set_header">設定制限</string>
+    <string name="label_usage_recorded_header">記録使用量</string>
+    <string name="label_history_header">履歴</string>
+    <string name="msg_no_app_limits">アプリ制限が設定されていません。</string>
+    <string name="desc_restrict_app_subtitle">アプリを追加してデータ使用量の管理を開始します。</string>
+    <string name="cd_add_app_limit">アプリ制限を追加</string>
+    <string name="label_block_apps">アプリをブロック</string>
+    <string name="desc_block_apps">制限に達したアプリのインターネットアクセスを自動的に制限します</string>
+    <string name="title_edit_app_limit">アプリ制限を編集</string>
+    <string name="btn_create_app_limit">制限を作成</string>
+    <string name="btn_save_changes">変更を保存</string>
+    <string name="label_app_limit_selection">アプリ制限</string>
+    <string name="desc_app_limit_selection">特定のアプリに対して制限を設定します</string>
+    <string name="title_delete_limit">制限を削除</string>
+    <string name="msg_confirm_delete_limit">%s の制限を削除してもよろしいですか？</string>
+    <string name="msg_no_apps_found">アプリが見つかりませんでした。</string>
+    <string name="placeholder_search_apps">アプリを検索</string>
+    <string name="title_select_application">アプリを選択</string>
+    <string name="title_configure_limit">制限を設定</string>
+    <string name="title_general_limits">システムプラン</string>
+    <string name="msg_no_general_limits">システムプランが設定されていません。</string>
+    <string name="desc_add_general_limit_subtitle">デバイス全体のデータプランを設定して管理します。</string>
+    <string name="label_general_limit_selection">システムプラン</string>
+    <string name="desc_general_limit_selection">デバイス全体の1日のデータ制限を設定します</string>
+    <string name="title_choose_limit_type">制限の種類を選択</string>
+
+    <!-- Notification Strings -->
+    <string name="notification_limit_reached_title">1日の %s 制限に到達</string>
+    <string name="notification_limit_reached_msg">本日 %s 消費しました。</string>
+    <string name="status_not_supported">このデバイスでは速度監視はサポートされていません</string>
+    <string name="channel_speed_monitor_name">速度モニター</string>
+    <string name="channel_speed_monitor_desc">リアルタイムのネットワーク速度表示</string>
+    <string name="channel_usage_alerts_name">高データ使用量アラート</string>
+    <string name="channel_usage_alerts_desc">データ制限しきい値の通知</string>
+    <string name="notification_high_usage_app_msg">%1$s が大量のデータを消費しています： %2$s （%3$s 使用）。</string>
+    <string name="notification_high_usage_generic_msg">バックグラウンドでの高データ使用を検出： %s</string>
+    <string name="notification_high_usage_title">高データ使用量</string>
+    <string name="notification_summary_title">高データ使用量アラート</string>
+    <string name="notification_summary_msg">タップしてアラート履歴を表示します。</string>
+    <string name="notification_summary_text">FlowBytesアラート</string>
+    <string name="notification_app_limit_msg">%1$s がデータ制限（%2$s）に達しました。</string>
+    <string name="notification_app_limit_title">%s 制限に到達</string>
+    <string name="msg_reached_limit">%1$s の %2$s 制限（%3$s 使用）に到達しました。</string>
+    <string name="btn_silence">サイレンス</string>
+
+    <!-- Badges -->
+    <string name="badge_limit_reached">制限到達</string>
+    <string name="badge_blocked">ブロック中</string>
+    <string name="badge_silenced">サイレンス中</string>
+
+    <!-- App Review Dialog -->
+    <string name="review_dialog_title">FlowBytesを気に入っていただけましたか？</string>
+    <string name="review_dialog_description">FlowBytesがお役に立ちましたら、評価をお願いいたします。改善と広告なしの継続に役立ちます。</string>
+    <string name="review_later">後で</string>
+    <string name="review_never">表示しない</string>
+    <string name="review_submit_feedback">フィードバックを送信</string>
+    <string name="review_rate_on_play_store">Play ストアで評価</string>
+    <string name="review_feedback_title">改善にご協力ください</string>
+    <string name="review_feedback_description">ご満足いただけず申し訳ありません。改善のためのご意見をお聞かせください。</string>
+    <string name="review_feedback_placeholder">ご提案やフィードバックをここに入力してください...</string>
+    <string name="review_feedback_thanks">フィードバックありがとうございます！</string>
+    <string name="review_play_store_title">評価ありがとうございます！</string>
+    <string name="review_play_store_description">Google Playで簡単なレビューを書いていただけると幸いです。大変励みになります！</string>
+    <string name="review_toast_feedback_submitted">フィードバックが送信されました。ありがとうございます！</string>
+
+    <string name="label_network_type">ネットワークの種類</string>
+    <string name="label_limit_period">制限期間</string>
+    <string name="label_daily_wifi">日次 Wi-Fi</string>
+    <string name="label_daily_mobile">日次 モバイル</string>
+    <string name="label_monthly_wifi">月次 Wi-Fi</string>
+    <string name="label_monthly_mobile">月次 モバイル</string>
+    <string name="label_custom_wifi">カスタム Wi-Fi</string>
+    <string name="label_custom_mobile">カスタム モバイル</string>
+    <string name="settings_traffic_threshold_subtitle">トラフィック検出のしきい値を設定します</string>
+    <string name="whats_new_custom_limits_title">カスタム期間の制限</string>
+    <string name="whats_new_custom_limits_desc">モバイルとWi-Fiの両方で、特定の期間に対するデータ制限を設定できるようになりました。</string>
+    <string name="whats_new_reset_day_title">月次リセット日</string>
+    <string name="whats_new_reset_day_desc">カスタムの請求サイクルをサポートしました。使用量がリセットされる日を自由に選択できます。</string>
+    <string name="feedback_email_subject">FlowBytes フィードバック - 星 %1$d 個</string>
+
+    <string name="legal_privacy_policy">プライバシーポリシー\n発効日：2026年4月29日\n\nFlowBytes（以下「本アプリ」）の開発者は、本アプリを無料で提供します。本アプリは現状有姿で提供され、いかなる保証もありません。\n\n1. 情報の収集と利用\nFlowBytesは、デバイスのネットワーク速度とデータ使用量（Wi-Fiおよびモバイル通信）を監視し、インターネット利用の管理を支援します。監視、データ使用量の計算、およびブロックのアクションはすべてデバイス内でローカルに実行されます。以下を含む個人データを収集、保存、または送信することはありません：\n- 閲覧履歴\n- ネットワーク通信の内容\n- IPアドレス\n- 個人を特定できる情報\n\n2. 必要な権限\n正しく機能するために、本アプリは以下の権限を必要とします：\n- 使用状況へのアクセス（ネットワーク統計）：NetworkStatsManagerおよびTrafficStatsを介してネットワーク使用統計にアクセスし、ダウンロード/アップロード速度の計算およびアプリごとのデータ使用量を追跡するために使用します。\n- フォアグラウンドサービス：通知バーにリアルタイムのネットワーク速度を表示し、継続的な監視を確保するために、バックグラウンドでサービスを実行することを許可します。\n- VPNサービス（ローカルVPN）：制限を超えたアプリのインターネットアクセスを管理するためにローカルVPNを使用します。このVPNは100%ローカルであり、通信データがデバイスの外に出ることや、開発者が傍受することはありません。\n\nこれらの権限を通じてアクセスされるすべてのデータはデバイス内に留まり、本アプリ内の監視および制御機能を提供するためだけに利用されます。\n\n3. 第三者サービス\n本アプリは、個人を特定するために利用される情報を収集する第三者サービス、分析ツール、または広告ネットワークを使用していません。\n\n4. セキュリティ\nすべてのデータ処理はデバイス内でローカルに実行されるため、開発者側からのデータ漏洩のリスクは最小限です。ただし、電子的な保存方法やインターネット経由の送信方法に完全に安全なものはなく、絶対的なセキュリティを保証することはできません。\n\n5. 子供のプライバシー\n本サービスは13歳未満の方を対象としていません。13歳未満の子供から個人を特定できる情報を意図的に収集することはありません。\n\n6. プライバシーポリシーの変更\nプライバシーポリシーは随時更新されることがあります。変更はこのページに掲載されます。定期的にこのページを確認することをお勧めします。\n\n7. お問い合わせ\n本プライバシーポリシーに関するご質問やご提案がある場合は、以下までご連絡ください：\nメール： drrayy001@gmail.com</string>
+    <string name="legal_terms_conditions">利用規約\n\n1. 規約への同意\nFlowBytesを利用することで、本規約に同意したものとみなされます。同意いただけない場合は、アプリを利用しないでください。\n\n2. サービス免責事項\nFlowBytesは情報提供を目的としてネットワーク統計を提供します。正確を期しておりますが、速度計測やデータ使用量の計算は推定値であり、通信事業者の公式な記録とは異なる場合があります。\n\n3. バッテリーとパフォーマンス\n本アプリは通信監視のためにバックグラウンドで動作します。効率化されていますが、バッテリー消費にわずかな影響を与える可能性があります。\n\n4. 責任の制限\n本アプリの利用に起因するデータの超過、データの紛失、またはデバイスの問題について、開発者は一切の責任を負いません。</string>
+    <string name="legal_licenses">オープンソースライセンス\n\n- Jetpack Compose: Apache License 2.0\n- Kotlin Coroutines: Apache License 2.0\n- Android Jetpack Libraries (Room, DataStore, Lifecycle): Apache License 2.0\n- Material Components for Android: Apache License 2.0\n- Kotlin Standard Library: Apache License 2.0\n\n本ソフトウェアは、いかなる保証もなく「現状有姿」で提供されます。</string>
+
+    <string name="label_daily_wifi_limit">1日のWi-Fi制限</string>
+    <string name="label_monthly_wifi_limit">月間のWi-Fi制限</string>
+    <string name="label_daily_mobile_limit">1日のモバイル制限</string>
+    <string name="label_monthly_mobile_limit">月間のモバイル制限</string>
+    <string name="label_unknown">不明</string>
+    <string name="desc_configure_limit_format">%1$s プランの制限を設定します。</string>
+    <string name="label_select_date">日付を選択</string>
+</resources>

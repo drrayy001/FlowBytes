@@ -160,7 +160,7 @@ fun MainScreen(
                                     ) {
                                         Icon(
                                             imageVector = com.ray.flowmeter.ui.components.AppIcons.Filter,
-                                            contentDescription = "Toggle Filters",
+                                            contentDescription = stringResource(R.string.cd_toggle_filters),
                                             tint = if (showUsageFilters) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
                                         )
                                     }

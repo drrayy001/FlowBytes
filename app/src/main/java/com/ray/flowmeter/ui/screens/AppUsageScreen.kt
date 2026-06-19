@@ -652,7 +652,7 @@ fun AppUsageScreen(
                                             IconButton(onClick = { viewModel.moveDate(backwards = true) }) {
                                                 Icon(
                                                     Icons.Default.ChevronLeft,
-                                                    contentDescription = "Previous Date",
+                                                    contentDescription = stringResource(R.string.cd_prev_date),
                                                     tint = MaterialTheme.colorScheme.primary
                                                 )
                                             }
@@ -707,7 +707,7 @@ fun AppUsageScreen(
                                             ) {
                                                 Icon(
                                                     Icons.Default.ChevronRight,
-                                                    contentDescription = "Next Date",
+                                                    contentDescription = stringResource(R.string.cd_next_date),
                                                     tint = if (isForwardDisabled) {
                                                         MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)
                                                     } else {

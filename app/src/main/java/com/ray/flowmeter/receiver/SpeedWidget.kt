@@ -7,6 +7,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.view.View
+import android.os.Bundle
 import android.widget.RemoteViews
 import com.ray.flowmeter.MainActivity
 import com.ray.flowmeter.R
@@ -23,6 +24,16 @@ class SpeedWidget : AppWidgetProvider() {
         for (appWidgetId in appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId)
         }
+    }
+
+    override fun onAppWidgetOptionsChanged(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetId: Int,
+        newOptions: Bundle
+    ) {
+        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
+        updateAppWidget(context, appWidgetManager, appWidgetId)
     }
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -53,7 +64,15 @@ class SpeedWidget : AppWidgetProvider() {
         const val EXTRA_SHOW_SPEED = "extra_show_speed"
 
         fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
-            val views = RemoteViews(context.packageName, R.layout.widget_speed_usage)
+            val options = appWidgetManager.getAppWidgetOptions(appWidgetId)
+            val minHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 72)
+            
+            val layoutResId = if (minHeight < 100) {
+                R.layout.widget_speed_usage_compact
+            } else {
+                R.layout.widget_speed_usage
+            }
+            val views = RemoteViews(context.packageName, layoutResId)
             
             val intent = Intent(context, MainActivity::class.java)
             val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
@@ -80,7 +99,15 @@ class SpeedWidget : AppWidgetProvider() {
             usageType: String,
             showSpeed: Boolean
         ) {
-            val views = RemoteViews(context.packageName, R.layout.widget_speed_usage)
+            val options = appWidgetManager.getAppWidgetOptions(appWidgetId)
+            val minHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 72)
+            
+            val layoutResId = if (minHeight < 100) {
+                R.layout.widget_speed_usage_compact
+            } else {
+                R.layout.widget_speed_usage
+            }
+            val views = RemoteViews(context.packageName, layoutResId)
             
             views.setTextViewText(R.id.widget_text_down, SpeedFormatter.formatBytes(rxSpeed))
             views.setTextViewText(R.id.widget_text_up, SpeedFormatter.formatBytes(txSpeed))

@@ -35,9 +35,8 @@
             <ImageView
                 android:layout_width="12dp"
                 android:layout_height="12dp"
-                android:src="@drawable/ic_arrow_down"
-                android:contentDescription="@string/desc_download"
-                app:tint="#00E676" />
+                android:src="@drawable/ic_arrow_down_green"
+                android:contentDescription="@string/desc_download" />
             <TextView
                 android:id="@+id/widget_text_down"
                 android:layout_width="wrap_content"
@@ -66,9 +65,8 @@
             <ImageView
                 android:layout_width="12dp"
                 android:layout_height="12dp"
-                android:src="@drawable/ic_arrow_up"
-                android:contentDescription="@string/desc_upload"
-                app:tint="#FF1744" />
+                android:src="@drawable/ic_arrow_up_red"
+                android:contentDescription="@string/desc_upload" />
             <TextView
                 android:id="@+id/widget_text_up"
                 android:layout_width="wrap_content"
@@ -86,39 +84,24 @@
 
     <!-- Bottom Section: Usage Data -->
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/widget_label_usage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="4dp">
-            <ImageView
-                android:id="@+id/widget_icon_usage"
-                android:layout_width="14dp"
-                android:layout_height="14dp"
-                android:src="@drawable/ic_data_usage"
-                android:contentDescription="@string/desc_mobile_data"
-                app:tint="#FFA726" />
-
-            <TextView
-                android:id="@+id/widget_label_usage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:text="@string/label_todays_usage"
-                android:textColor="#99FFFFFF"
-                android:textSize="10sp"
-                android:textStyle="bold"
-                android:textAllCaps="true"
-                android:letterSpacing="0.06"
-                android:fontFamily="sans-serif-medium"
-                android:gravity="center"/>
-        </LinearLayout>
+            android:text="@string/label_todays_usage"
+            android:textColor="#99FFFFFF"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:letterSpacing="0.06"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:layout_marginBottom="4dp"/>
 
         <TextView
             android:id="@+id/widget_text_usage"

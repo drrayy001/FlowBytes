@@ -22,6 +22,11 @@
     <string name="cd_pull_to_refresh">اسحب للأسفل لتحديث البيانات</string>
     <string name="cd_download">تنزيل</string>
     <string name="cd_upload">رفع</string>
+    <string name="cd_clear_search">مسح البحث</string>
+    <string name="cd_prev_date">التاريخ السابق</string>
+    <string name="cd_next_date">التاريخ التالي</string>
+    <string name="cd_toggle_filters">تبديل الفلاتر</string>
+    <string name="cd_app_icon">أيقونة التطبيق</string>
     <string name="desc_download">سرعة التنزيل</string>
     <string name="desc_upload">سرعة الرفع</string>
     <string name="desc_combined">السرعة الإجمالية</string>
@@ -73,6 +78,12 @@
     <string name="label_system_processes">عمليات النظام</string>
     <string name="label_tethering">نقطة الاتصال والربط</string>
     <string name="label_removed_apps">التطبيقات المحذوفة</string>
+    <string name="label_root">جذر (Root)</string>
+    <string name="label_android_system">نظام أندرويد</string>
+    <string name="label_dns_resolver">محلل DNS</string>
+    <string name="label_mdns_responder">مستجيب mDNS</string>
+    <string name="label_media_service">خدمة الوسائط</string>
+    <string name="label_system_update">تحديث النظام</string>
     <string name="label_unattributed">النظام / غير محدد</string>
     <string name="label_unknown_app">تطبيق غير معروف</string>
 
@@ -157,6 +168,10 @@
     <string name="language_portuguese">البرتغالية (Português)</string>
     <string name="language_italian">الإيطالية (Italiano)</string>
     <string name="language_chinese">الصينية (中文)</string>
+    <string name="language_hindi">الهندية (हिन्दी)</string>
+    <string name="language_japanese">اليابانية (日本語)</string>
+    <string name="language_korean">الكورية (한국어)</string>
+    <string name="language_russian">الروسية (Русский)</string>
 
     <!-- Settings: Support & Feedback -->
     <string name="settings_section_support">الدعم والملاحظات</string>
@@ -164,6 +179,7 @@
     <string name="settings_rate_app_desc">شارك تجربتك وساعدنا على التحسين</string>
     <string name="settings_share_app">مشاركة مع الأصدقاء</string>
     <string name="settings_share_app_desc">انصح الآخرين بتطبيق FlowBytes</string>
+    <string name="label_share_via">مشاركة عبر</string>
     <string name="share_text_body">جرب تطبيق FlowBytes! لتتبع استخدام البيانات بدقة: https://play.google.com/store/apps/details?id=%1$s</string>
     <string name="settings_help_feedback">المساعدة والملاحظات</string>
     <string name="settings_help_feedback_desc">تواصل معنا عبر تلغرام أو البريد الإلكتروني</string>

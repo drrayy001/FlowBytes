@@ -22,6 +22,11 @@
     <string name="cd_pull_to_refresh">下拉以刷新使用数据</string>
     <string name="cd_download">下载</string>
     <string name="cd_upload">上传</string>
+    <string name="cd_clear_search">清空搜索</string>
+    <string name="cd_prev_date">上一个日期</string>
+    <string name="cd_next_date">下一个日期</string>
+    <string name="cd_toggle_filters">切换过滤器</string>
+    <string name="cd_app_icon">应用图标</string>
     <string name="desc_download">下载速度</string>
     <string name="desc_upload">上传速度</string>
     <string name="desc_combined">合并速度</string>
@@ -75,6 +80,12 @@
     <string name="label_system_processes">系统进程</string>
     <string name="label_tethering">热点与共享</string>
     <string name="label_removed_apps">已卸载应用</string>
+    <string name="label_root">Root</string>
+    <string name="label_android_system">安卓系统</string>
+    <string name="label_dns_resolver">DNS 解析器</string>
+    <string name="label_mdns_responder">mDNS 响应器</string>
+    <string name="label_media_service">媒体服务</string>
+    <string name="label_system_update">系统更新</string>
     <string name="label_unattributed">系统 / 未归类</string>
     <string name="label_unknown_app">未知应用</string>
 
@@ -159,6 +170,10 @@
     <string name="language_portuguese">葡萄牙语 (Português)</string>
     <string name="language_italian">意大利语 (Italiano)</string>
     <string name="language_chinese">简体中文 (中文)</string>
+    <string name="language_hindi">印地语 (हिन्दी)</string>
+    <string name="language_japanese">日语 (日本語)</string>
+    <string name="language_korean">韩语 (한국어)</string>
+    <string name="language_russian">俄语 (Русский)</string>
 
     <!-- Settings: Support & Feedback -->
     <string name="settings_section_support">支持与反馈</string>
@@ -166,6 +181,7 @@
     <string name="settings_rate_app_desc">分享您的使用体验并帮助我们改进</string>
     <string name="settings_share_app">分享给朋友</string>
     <string name="settings_share_app_desc">向他人推荐 FlowBytes</string>
+    <string name="label_share_via">分享方式</string>
     <string name="share_text_body">向您推荐 FlowBytes！它可以帮您精准监控和管理您的网络流量使用：https://play.google.com/store/apps/details?id=%1$s</string>
     <string name="settings_help_feedback">帮助与反馈</string>
     <string name="settings_help_feedback_desc">通过 Telegram 或电子邮件联系我们</string>

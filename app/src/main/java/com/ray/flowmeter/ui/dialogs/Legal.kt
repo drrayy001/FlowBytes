@@ -132,8 +132,8 @@ I, the developer of FlowBytes (the "App"), provide this application free of char
             6. Changes to This Privacy Policy
             We may update this Privacy Policy from time to time. Any changes will be posted on this page. You are advised to review this page periodically for updates.
 
-            7. Contact Us
-            If you have any questions or suggestions about this Privacy Policy, you can contact us at:
+            7. Contact Me
+            If you have any questions or suggestions about this Privacy Policy, you can contact me at:
             Email: drrayy001@gmail.com
         """.trimIndent()
 

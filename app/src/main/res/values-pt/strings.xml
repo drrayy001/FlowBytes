@@ -22,6 +22,11 @@
     <string name="cd_pull_to_refresh">Puxar para atualizar dados de uso</string>
     <string name="cd_download">Download</string>
     <string name="cd_upload">Upload</string>
+    <string name="cd_clear_search">Limpar pesquisa</string>
+    <string name="cd_prev_date">Data anterior</string>
+    <string name="cd_next_date">Próxima data</string>
+    <string name="cd_toggle_filters">Alternar filtros</string>
+    <string name="cd_app_icon">Ícone do aplicativo</string>
     <string name="desc_download">Velocidade de download</string>
     <string name="desc_upload">Velocidade de upload</string>
     <string name="desc_combined">Velocidade combinada</string>
@@ -75,6 +80,12 @@
     <string name="label_system_processes">Processos do sistema</string>
     <string name="label_tethering">Roteador e Ponto de acesso</string>
     <string name="label_removed_apps">Aplicativos removidos</string>
+    <string name="label_root">Root</string>
+    <string name="label_android_system">Sistema Android</string>
+    <string name="label_dns_resolver">Resolutor DNS</string>
+    <string name="label_mdns_responder">Respondedor mDNS</string>
+    <string name="label_media_service">Serviço de mídia</string>
+    <string name="label_system_update">Atualização do sistema</string>
     <string name="label_unattributed">Sistema / Não atribuído</string>
     <string name="label_unknown_app">Aplicativo desconhecido</string>
 
@@ -159,6 +170,10 @@
     <string name="language_portuguese">Português (Português)</string>
     <string name="language_italian">Italiano (Italiano)</string>
     <string name="language_chinese">Chinês (中文)</string>
+    <string name="language_hindi">Hindi (हिन्दी)</string>
+    <string name="language_japanese">Japonês (日本語)</string>
+    <string name="language_korean">Coreano (한국어)</string>
+    <string name="language_russian">Russo (Русский)</string>
 
     <!-- Settings: Support & Feedback -->
     <string name="settings_section_support">Suporte e Feedback</string>
@@ -166,6 +181,7 @@
     <string name="settings_rate_app_desc">Compartilhe sua experiência e nos ajude a melhorar</string>
     <string name="settings_share_app">Compartilhar com amigos</string>
     <string name="settings_share_app_desc">Recomende o FlowBytes para outras pessoas</string>
+    <string name="label_share_via">Compartilhar via</string>
     <string name="share_text_body">Confira o FlowBytes! Acompanhe seu uso de dados com precisão: https://play.google.com/store/apps/details?id=%1$s</string>
     <string name="settings_help_feedback">Ajuda e Feedback</string>
     <string name="settings_help_feedback_desc">Entre em contato via Telegram ou E-mail</string>

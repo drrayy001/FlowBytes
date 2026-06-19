@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/widget_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,7 +9,7 @@
     android:background="@drawable/widget_background"
     android:gravity="center">
 
-    <!-- Top Row: Speed Indicators -->
+    <!-- Top Row: Speed Indicators (Pill Badges) -->
     <LinearLayout
         android:id="@+id/widget_speed_layout"
         android:layout_width="match_parent"
@@ -16,21 +17,27 @@
         android:orientation="horizontal"
         android:baselineAligned="false"
         android:gravity="center"
-        android:layout_marginBottom="12dp">
+        android:layout_marginBottom="14dp">
 
-        <!-- Download Speed -->
+        <!-- Download Speed Badge -->
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:orientation="horizontal"
-            android:gravity="center">
+            android:gravity="center_vertical"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/widget_badge_down">
+
             <ImageView
                 android:layout_width="12dp"
                 android:layout_height="12dp"
                 android:src="@drawable/ic_arrow_down"
-                android:tint="#80FFFFFF"
-                android:contentDescription="@string/desc_download"/>
+                android:contentDescription="@string/desc_download"
+                app:tint="#00E5FF" />
             <TextView
                 android:id="@+id/widget_text_down"
                 android:layout_width="wrap_content"
@@ -40,23 +47,28 @@
                 android:textColor="#FFFFFF"
                 android:textSize="12sp"
                 android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
                 android:maxLines="1"
                 android:ellipsize="end"/>
         </LinearLayout>
 
-        <!-- Upload Speed -->
+        <!-- Upload Speed Badge -->
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:orientation="horizontal"
-            android:gravity="center">
+            android:gravity="center_vertical"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:background="@drawable/widget_badge_up">
             <ImageView
                 android:layout_width="12dp"
                 android:layout_height="12dp"
                 android:src="@drawable/ic_arrow_up"
-                android:tint="#80FFFFFF"
-                android:contentDescription="@string/desc_upload"/>
+                android:contentDescription="@string/desc_upload"
+                app:tint="#E040FB" />
             <TextView
                 android:id="@+id/widget_text_up"
                 android:layout_width="wrap_content"
@@ -66,38 +78,47 @@
                 android:textColor="#FFFFFF"
                 android:textSize="12sp"
                 android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
                 android:maxLines="1"
                 android:ellipsize="end"/>
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Bottom Section: Usage Data (Centralized) -->
+    <!-- Bottom Section: Usage Data -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center">
 
-        <ImageView
-            android:id="@+id/widget_icon_usage"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/ic_speed"
-            android:tint="#FF9800"
-            android:contentDescription="@string/desc_mobile_data"
-            android:layout_marginBottom="4dp"/>
-
-        <TextView
-            android:id="@+id/widget_label_usage"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/label_today"
-            android:textColor="#99FFFFFF"
-            android:textSize="10sp"
-            android:textStyle="bold"
-            android:textAllCaps="true"
-            android:letterSpacing="0.05"
-            android:gravity="center"/>
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="4dp">
+            <ImageView
+                android:id="@+id/widget_icon_usage"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:src="@drawable/ic_data_usage"
+                android:contentDescription="@string/desc_mobile_data"
+                app:tint="#FFA726" />
+
+            <TextView
+                android:id="@+id/widget_label_usage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:text="@string/label_todays_usage"
+                android:textColor="#99FFFFFF"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                android:letterSpacing="0.06"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"/>
+        </LinearLayout>
 
         <TextView
             android:id="@+id/widget_text_usage"
@@ -105,8 +126,9 @@
             android:layout_height="wrap_content"
             android:text="0.00 MB"
             android:textColor="#FFFFFF"
-            android:textSize="18sp"
+            android:textSize="22sp"
             android:textStyle="bold"
+            android:fontFamily="sans-serif-medium"
             android:includeFontPadding="false"
             android:gravity="center"/>
     </LinearLayout>

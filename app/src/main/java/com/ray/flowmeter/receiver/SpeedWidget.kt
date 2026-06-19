@@ -86,7 +86,7 @@ class SpeedWidget : AppWidgetProvider() {
             views.setTextViewText(R.id.widget_text_up, SpeedFormatter.formatBytes(txSpeed))
             views.setTextViewText(R.id.widget_text_usage, SpeedFormatter.formatUsage(usageBytes))
             
-            val labelRes = if (usageType == "MONTHLY") R.string.label_this_month else R.string.label_today
+            val labelRes = R.string.label_todays_usage
             views.setTextViewText(R.id.widget_label_usage, context.getString(labelRes).uppercase())
 
             val intent = Intent(context, MainActivity::class.java)

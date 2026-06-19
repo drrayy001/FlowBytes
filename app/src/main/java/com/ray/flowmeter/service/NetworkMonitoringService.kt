@@ -126,6 +126,7 @@ class NetworkMonitoringService : Service() {
     private var showOnlyWhenConnected = false
     private var highTrafficDetectionEnabled = false
     private var widgetUsageType = "DAILY"
+    private var widgetShowSpeed = true
 
     private var trafficTimer: Long = 0
     private var uidSnapshot: Map<Int, Pair<Long, Long>> = emptyMap()
@@ -202,6 +203,7 @@ class NetworkMonitoringService : Service() {
         serviceScope.launch { repository.resetTimeMinute.collect { resetMinute = it } }
         serviceScope.launch { repository.monthlyResetDay.collect { monthlyResetDay = it } }
         serviceScope.launch { repository.widgetUsageType.collect { widgetUsageType = it } }
+        serviceScope.launch { repository.widgetShowSpeed.collect { widgetShowSpeed = it } }
         serviceScope.launch { 
             var isFirst = true
             repository.showOnlyWhenConnected.collect { 
@@ -747,6 +749,7 @@ class NetworkMonitoringService : Service() {
             putExtra(com.ray.flowmeter.receiver.SpeedWidget.EXTRA_TX_SPEED, currentTxSpeed)
             putExtra(com.ray.flowmeter.receiver.SpeedWidget.EXTRA_USAGE, usage)
             putExtra(com.ray.flowmeter.receiver.SpeedWidget.EXTRA_USAGE_TYPE, widgetUsageType)
+            putExtra(com.ray.flowmeter.receiver.SpeedWidget.EXTRA_SHOW_SPEED, widgetShowSpeed)
         }
         sendBroadcast(intent)
     }

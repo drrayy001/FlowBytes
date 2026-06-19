@@ -36,9 +36,10 @@ class SpeedWidget : AppWidgetProvider() {
             val txSpeed = intent.getLongExtra(EXTRA_TX_SPEED, 0L)
             val usageBytes = intent.getLongExtra(EXTRA_USAGE, 0L)
             val usageType = intent.getStringExtra(EXTRA_USAGE_TYPE) ?: "DAILY"
+            val showSpeed = intent.getBooleanExtra(EXTRA_SHOW_SPEED, true)
 
             for (appWidgetId in appWidgetIds) {
-                updateWidgetData(context, appWidgetManager, appWidgetId, rxSpeed, txSpeed, usageBytes, usageType)
+                updateWidgetData(context, appWidgetManager, appWidgetId, rxSpeed, txSpeed, usageBytes, usageType, showSpeed)
             }
         }
     }
@@ -49,6 +50,7 @@ class SpeedWidget : AppWidgetProvider() {
         const val EXTRA_TX_SPEED = "extra_tx_speed"
         const val EXTRA_USAGE = "extra_usage"
         const val EXTRA_USAGE_TYPE = "extra_usage_type"
+        const val EXTRA_SHOW_SPEED = "extra_show_speed"
 
         fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
             val views = RemoteViews(context.packageName, R.layout.widget_speed_usage)
@@ -75,7 +77,8 @@ class SpeedWidget : AppWidgetProvider() {
             rxSpeed: Long,
             txSpeed: Long,
             usageBytes: Long,
-            usageType: String
+            usageType: String,
+            showSpeed: Boolean
         ) {
             val views = RemoteViews(context.packageName, R.layout.widget_speed_usage)
             
@@ -84,21 +87,14 @@ class SpeedWidget : AppWidgetProvider() {
             views.setTextViewText(R.id.widget_text_usage, SpeedFormatter.formatUsage(usageBytes))
             
             val labelRes = if (usageType == "MONTHLY") R.string.label_this_month else R.string.label_today
-            views.setTextViewText(R.id.widget_label_usage, context.getString(labelRes))
+            views.setTextViewText(R.id.widget_label_usage, context.getString(labelRes).uppercase())
 
             val intent = Intent(context, MainActivity::class.java)
             val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
             views.setOnClickPendingIntent(R.id.widget_container, pendingIntent)
 
-            CoroutineScope(Dispatchers.IO).launch {
-                val repository = UserPreferencesRepository(context)
-                val showSpeed = repository.widgetShowSpeed.first()
-                
-                CoroutineScope(Dispatchers.Main).launch {
-                    views.setViewVisibility(R.id.widget_speed_layout, if (showSpeed) View.VISIBLE else View.GONE)
-                    appWidgetManager.updateAppWidget(appWidgetId, views)
-                }
-            }
+            views.setViewVisibility(R.id.widget_speed_layout, if (showSpeed) View.VISIBLE else View.GONE)
+            appWidgetManager.updateAppWidget(appWidgetId, views)
         }
     }
 }

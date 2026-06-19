@@ -700,6 +700,17 @@ fun SettingsScreen(
                     try {
                         targetContext.startActivity(intent)
                     } catch (_: Exception) {}
+                },
+                onReportBugClick = {
+                    val intent = Intent(Intent.ACTION_VIEW, "https://github.com/drrayy001/FlowBytes/issues".toUri())
+                    val activity = context.findActivity()
+                    val targetContext = activity ?: context
+                    if (targetContext !is Activity) {
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    }
+                    try {
+                        targetContext.startActivity(intent)
+                    } catch (_: Exception) {}
                 }
             )
         }

@@ -189,6 +189,8 @@
     <string name="desc_telegram">Написать разработчику напрямую</string>
     <string name="option_email">Email</string>
     <string name="desc_email">Отправить письмо разработчику</string>
+    <string name="option_report_bug">Сообщить об ошибке / Предложить функцию</string>
+    <string name="desc_report_bug">Открыть GitHub Issues для сообщения об ошибках или запроса функций</string>
     <string name="settings_donate">Поддержать проект</string>
     <string name="settings_donate_desc">Помочь FlowBytes оставаться бесплатным и без рекламы</string>
     <string name="dialog_donate_title">Поддержка FlowBytes</string>

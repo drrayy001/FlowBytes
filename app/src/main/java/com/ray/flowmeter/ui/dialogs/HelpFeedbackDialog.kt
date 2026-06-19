@@ -3,6 +3,7 @@ package com.ray.flowmeter.ui.dialogs
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.BugReport
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -20,7 +21,8 @@ import com.ray.flowmeter.ui.components.SettingsItem
 fun HelpFeedbackDialog(
     onDismiss: () -> Unit,
     onTelegramClick: () -> Unit,
-    onEmailClick: () -> Unit
+    onEmailClick: () -> Unit,
+    onReportBugClick: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
@@ -62,6 +64,16 @@ fun HelpFeedbackDialog(
                     subtitle = stringResource(R.string.desc_email),
                     onClick = {
                         onEmailClick()
+                        onDismiss()
+                    }
+                )
+
+                SettingsItem(
+                    icon = Icons.Rounded.BugReport,
+                    title = stringResource(R.string.option_report_bug),
+                    subtitle = stringResource(R.string.desc_report_bug),
+                    onClick = {
+                        onReportBugClick()
                         onDismiss()
                     }
                 )

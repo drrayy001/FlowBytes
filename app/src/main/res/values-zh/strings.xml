@@ -189,6 +189,8 @@
     <string name="desc_telegram">直接向开发者发送消息</string>
     <string name="option_email">电子邮件</string>
     <string name="desc_email">向开发者发送电子邮件</string>
+    <string name="option_report_bug">报告错误 / 建议功能</string>
+    <string name="desc_report_bug">打开 GitHub Issues 以报告错误或请求新功能</string>
     <string name="settings_donate">赞助支持</string>
     <string name="settings_donate_desc">赞助我们以支持 FlowBytes 保持无广告且完全开源</string>
     <string name="dialog_donate_title">赞助 FlowBytes</string>

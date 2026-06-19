@@ -187,6 +187,8 @@
     <string name="desc_telegram">راسل المطور مباشرة</string>
     <string name="option_email">البريد الإلكتروني</string>
     <string name="desc_email">أرسل بريداً إلكترونياً للمطور</string>
+    <string name="option_report_bug">الإبلاغ عن خلل / اقتراح ميزة</string>
+    <string name="desc_report_bug">افتح مشكلات GitHub للإبلاغ عن أخطاء أو طلب ميزات</string>
     <string name="settings_donate">تبرع</string>
     <string name="settings_donate_desc">ساهم في إبقاء التطبيق خالياً من الإعلانات ومفتوح المصدر</string>
     <string name="dialog_donate_title">دعم FlowBytes</string>

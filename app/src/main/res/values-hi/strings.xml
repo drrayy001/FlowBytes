@@ -189,6 +189,8 @@
     <string name="desc_telegram">डेवलपर को सीधे संदेश भेजें</string>
     <string name="option_email">ईमेल</string>
     <string name="desc_email">डेवलपर को एक ईमेल भेजें</string>
+    <string name="option_report_bug">बग रिपोर्ट करें / फीचर का सुझाव दें</string>
+    <string name="desc_report_bug">बग की रिपोर्ट करने या सुविधाओं का अनुरोध करने के लिए GitHub इश्यू खोलें</string>
     <string name="settings_donate">दान करें</string>
     <string name="settings_donate_desc">फ्लोबाइट्स को विज्ञापन-मुक्त और ओपन सोर्स रखने में योगदान दें</string>
     <string name="dialog_donate_title">फ्लोबाइट्स का समर्थन करें</string>

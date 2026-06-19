@@ -26,7 +26,7 @@ data class LanguageOption(val name: String, val code: String)
 fun LanguageDialog(
     currentLanguageCode: String,
     onDismiss: () -> Unit,
-    onSelect: (String) -> Unit
+    onSelect: (String) -> Unit,
 ) {
     Dialog(
         onDismissRequest = onDismiss,

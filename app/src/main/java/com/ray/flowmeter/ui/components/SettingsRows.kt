@@ -23,7 +23,7 @@ fun SettingsItem(
     title: String,
     subtitle: String? = null,
     onClick: (() -> Unit)? = null,
-    trailingContent: @Composable (() -> Unit)? = null
+    trailingContent: @Composable (() -> Unit)? = null,
 ) {
     Row(
         modifier = Modifier
@@ -60,9 +60,9 @@ fun SettingsItem(
                 ),
                 color = MaterialTheme.colorScheme.onSurface
             )
-            if (subtitle != null) {
+            subtitle?.let {
                 Text(
-                    text = subtitle,
+                    text = it,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     lineHeight = 18.sp

@@ -378,4 +378,6 @@
     <string name="label_unknown">Unknown</string>
     <string name="desc_configure_limit_format">Configure limit for your %1$s plan.</string>
     <string name="label_select_date">Select Date</string>
+    <string name="placeholder_usage" translatable="false">0.00 MB</string>
+    <string name="placeholder_speed" translatable="false">0 KB/s</string>
 </resources>

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/widget_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:padding="12dp"
     android:background="@drawable/widget_background"
-    android:gravity="center_vertical">
+    android:gravity="center_vertical"
+    android:baselineAligned="false">
 
     <!-- Left Partition: Usage Section (Centered vertically & horizontally in remaining space) -->
     <LinearLayout
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:text="@string/label_todays_usage"
             android:textColor="#99FFFFFF"
-            android:textSize="9sp"
+            android:textSize="11sp"
             android:textStyle="bold"
             android:textAllCaps="true"
             android:letterSpacing="0.05"
@@ -36,7 +36,7 @@
             android:id="@+id/widget_text_usage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0.00 MB"
+            android:text="@string/placeholder_usage"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -76,7 +76,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:text="0 KB/s"
+                android:text="@string/placeholder_speed"
                 android:textColor="#FFFFFF"
                 android:textSize="11sp"
                 android:textStyle="bold"
@@ -106,7 +106,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:text="0 KB/s"
+                android:text="@string/placeholder_speed"
                 android:textColor="#FFFFFF"
                 android:textSize="11sp"
                 android:textStyle="bold"

@@ -22,6 +22,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Calendar
 import android.graphics.drawable.Drawable
+import kotlin.time.Duration.Companion.milliseconds
 import java.util.concurrent.ConcurrentHashMap
 
 class AppLimitsViewModel(
@@ -139,7 +140,7 @@ class AppLimitsViewModel(
         usageJob = viewModelScope.launch {
             while (true) {
                 updateUsage()
-                delay(3000) // Update every 3 seconds
+                delay(3000.milliseconds) // Update every 3 seconds
             }
         }
     }
@@ -265,9 +266,6 @@ class AppLimitsViewModel(
     var editingLimit by mutableStateOf<AppLimit?>(null)
     var configuringGeneralLimitType by mutableStateOf<String?>(null)
 
-    val isSubViewOpen: Boolean
-        get() = isPickerOpen || (editingLimit != null) || (configuringGeneralLimitType != null)
-
     val filteredApps: List<AppInfo>
         get() = if (searchQuery.isBlank()) installedApps
         else installedApps.filter { it.name.contains(searchQuery, ignoreCase = true) || it.packageName.contains(searchQuery, ignoreCase = true) }
@@ -279,6 +277,7 @@ class AppLimitsViewModel(
             isLoadingApps = true
             installedApps = withContext(Dispatchers.IO) {
                 val pm = applicationContext.packageManager
+                @Suppress("DEPRECATION")
                 val apps = pm.getInstalledApplications(PackageManager.GET_META_DATA)
                 apps.asSequence()
                     .filter { ((it.flags and ApplicationInfo.FLAG_SYSTEM) == 0) || ((it.flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0) }

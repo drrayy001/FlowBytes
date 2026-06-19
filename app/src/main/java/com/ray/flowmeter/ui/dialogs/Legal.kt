@@ -22,7 +22,7 @@ import com.ray.flowmeter.ui.theme.bounceClick
 fun LegalDialog(
     title: String,
     content: String,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
@@ -95,73 +95,4 @@ fun LegalDialog(
     }
 }
 
-object LegalContent {
-    val PRIVACY_POLICY: String
-        get() = """
-            Privacy Policy
-            Effective Date: April 29, 2026
 
-I, the developer of FlowBytes (the "App"), provide this application free of charge. The App is offered as-is and is intended for use without any warranties or guarantees.
-            1. Information Collection and Use
-            FlowBytes monitors your device's network speeds and data usage (Wi-Fi and cellular) to help you stay in control of your internet. 
-            All monitoring, data usage calculations, and blocking actions are performed locally on your device. We do not collect, store, or transmit any personal data, including:
-            - Browsing history
-            - Network traffic content
-            - IP address
-            - Any personally identifiable information
-
-            2. Required Permissions
-            To function correctly, the App requires the following permissions:
-            - Usage Access (Network Stats): Used to access network usage statistics (via NetworkStatsManager and TrafficStats) in order to calculate download/upload speeds and track data usage per app.
-            - Foreground Service: Allows the App to run a background service to display real-time network speed in the notification bar and ensure consistent monitoring.
-            - VPN Service (Local VPN): FlowBytes uses a local VPN to manage internet access for apps that exceed their limits. This VPN is 100% local; your traffic never leaves your device and is never intercepted by us.
-
-            All data accessed through these permissions remains on your device and is used solely to provide the monitoring and control features within the App.
-
-            3. Third-Party Services
-            The App does not use any third-party services, analytics tools, or advertising networks that collect information used to identify you.
-
-            4. Security
-            Since all data processing occurs locally on your device, the risk of data breaches from our side is minimal. However, no method of electronic storage or transmission over the internet is completely secure, and we cannot guarantee absolute security.
-
-            5. Children’s Privacy
-            This Service is not intended for individuals under the age of 13. We do not knowingly collect personally identifiable information from children under 13.
-
-            6. Changes to This Privacy Policy
-            We may update this Privacy Policy from time to time. Any changes will be posted on this page. You are advised to review this page periodically for updates.
-
-            7. Contact Me
-            If you have any questions or suggestions about this Privacy Policy, you can contact me at:
-            Email: drrayy001@gmail.com
-        """.trimIndent()
-
-    val TERMS_AND_CONDITIONS: String
-        get() = """
-            Terms and Conditions
-            
-            1. Acceptance of Terms
-            By using FlowMeter, you agree to these terms. If you do not agree, please do not use the app.
-
-            2. Service Disclaimer
-            FlowMeter provides network statistics for informational purposes. While we strive for accuracy, speed measurements and data usage calculations are estimates and may vary from your ISP's official billing records.
-
-            3. Battery and Performance
-            This app runs a background service to monitor network traffic. While optimized for efficiency, it may have a minor impact on battery life.
-
-            4. Limitation of Liability
-            We are not responsible for any data overages, loss of data, or device issues resulting from the use of this application.
-        """.trimIndent()
-
-    val LICENSES: String
-        get() = """
-            Open Source Licenses
-            
-            - Jetpack Compose: Apache License 2.0
-            - Kotlin Coroutines: Apache License 2.0
-            - Android Jetpack Libraries (Room, DataStore, Lifecycle): Apache License 2.0
-            - Material Components for Android: Apache License 2.0
-            - Kotlin Standard Library: Apache License 2.0
-            
-            This software is provided "as is" without warranty of any kind.
-        """.trimIndent()
-}

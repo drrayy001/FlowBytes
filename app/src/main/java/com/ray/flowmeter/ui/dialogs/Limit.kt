@@ -20,7 +20,7 @@ fun UsageLimitDialog(
     type: String,
     currentLimit: Long,
     onDismiss: () -> Unit,
-    onConfirm: (Long) -> Unit
+    onConfirm: (Long) -> Unit,
 ) {
     var textValue by remember { mutableStateOf((currentLimit / (1024 * 1024)).toString()) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)

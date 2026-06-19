@@ -22,7 +22,7 @@ import com.ray.flowmeter.ui.theme.bounceClick
 fun IconScaleDialog(
     currentScale: Float,
     onDismiss: () -> Unit,
-    onSelect: (Float) -> Unit
+    onSelect: (Float) -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     ModalBottomSheet(

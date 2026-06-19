@@ -33,10 +33,10 @@ private fun formatDate(timestamp: Long): String {
 fun SimpleDatePickerDialog(
     initialSelectedDateMillis: Long?,
     onDismiss: () -> Unit,
-    onDateSelected: (Long) -> Unit
+    onDateSelected: (Long) -> Unit,
 ) {
     val datePickerState = rememberDatePickerState(
-        initialSelectedDateMillis = initialSelectedDateMillis ?: System.currentTimeMillis()
+        initialSelectedDateMillis = initialSelectedDateMillis ?: System.currentTimeMillis(),
     )
     DatePickerDialog(
         onDismissRequest = onDismiss,
@@ -75,11 +75,11 @@ fun GeneralLimitConfigScreen(
             mutableStateOf("")
         } else {
             val mb = initialLimit / (1024 * 1024)
-            mutableStateOf(if (initialLimit % (1024 * 1024 * 1024) == 0L) (initialLimit / (1024 * 1024 * 1024)).toString() else mb.toString())
+            mutableStateOf(if ((initialLimit % (1024 * 1024 * 1024)) == 0L) (initialLimit / (1024 * 1024 * 1024)).toString() else mb.toString())
         }
     }
     val (limitUnit, setLimitUnit) = remember {
-        mutableStateOf(if (initialLimit >= 1024 * 1024 * 1024 && initialLimit % (1024 * 1024 * 1024) == 0L) "GB" else "MB")
+        mutableStateOf(if ((initialLimit >= 1024L * 1024L * 1024L) && ((initialLimit % (1024L * 1024L * 1024L)) == 0L)) "GB" else "MB")
     }
 
     val isCustom = planType.startsWith("custom")
@@ -99,15 +99,14 @@ fun GeneralLimitConfigScreen(
         }
         SimpleDatePickerDialog(
             initialSelectedDateMillis = initialDate,
-            onDismiss = { activeDatePicker = null },
-            onDateSelected = { selectedDate ->
-                if (activeDatePicker == "start") {
-                    customStart = selectedDate
-                } else if (activeDatePicker == "end") {
-                    customEnd = selectedDate
-                }
+            onDismiss = { activeDatePicker = null }
+        ) { selectedDate ->
+            if (activeDatePicker == "start") {
+                customStart = selectedDate
+            } else if (activeDatePicker == "end") {
+                customEnd = selectedDate
             }
-        )
+        }
     }
 
     val periodText = when {

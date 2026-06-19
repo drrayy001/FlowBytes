@@ -7,6 +7,7 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.net.NetworkCapabilities
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.ImageBitmap
@@ -26,6 +27,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
+import kotlin.time.Duration.Companion.milliseconds
 import java.util.Calendar
 import java.util.Locale
 
@@ -93,10 +95,10 @@ class AppUsageViewModel(
 
     private val iconCache = mutableMapOf<String, ImageBitmap?>()
 
-    var globalWifiDown by mutableStateOf(0L)
-    var globalWifiUp by mutableStateOf(0L)
-    var globalCellDown by mutableStateOf(0L)
-    var globalCellUp by mutableStateOf(0L)
+    var globalWifiDown by mutableLongStateOf(0L)
+    var globalWifiUp by mutableLongStateOf(0L)
+    var globalCellDown by mutableLongStateOf(0L)
+    var globalCellUp by mutableLongStateOf(0L)
 
     var isLoading by mutableStateOf(false)
     var isRefreshing by mutableStateOf(false)
@@ -264,7 +266,7 @@ class AppUsageViewModel(
             }
             _appUsageList.value = getAppUsageList(start, end)
             if (isManual) {
-                delay(500)
+                delay(500.milliseconds)
                 isRefreshing = false
             } else {
                 isLoading = false
@@ -353,13 +355,6 @@ class AppUsageViewModel(
         }
     }
 
-    fun updateDateFilter(year: Int, month: Int, day: Int) {
-        val cal = Calendar.getInstance()
-        cal.set(year, month, day, 0, 0, 0)
-        cal.set(Calendar.MILLISECOND, 0)
-        loadAppUsageForDateInternal(cal.timeInMillis)
-    }
-
     fun updateToThisMonth() {
         viewModelScope.launch {
             val resetHour = repository.resetTimeHour.first()
@@ -395,8 +390,7 @@ class AppUsageViewModel(
             val now = System.currentTimeMillis()
 
             val cal = Calendar.getInstance()
-            cal.set(Calendar.YEAR, year)
-            cal.set(Calendar.MONTH, month)
+            cal.set(year, month, 1) // Just ensuring we have the right year/month
             val clampedDay = monthlyResetDay.coerceAtMost(cal.getActualMaximum(Calendar.DAY_OF_MONTH))
             cal.set(Calendar.DAY_OF_MONTH, clampedDay)
             cal.set(Calendar.HOUR_OF_DAY, resetHour)
@@ -477,21 +471,21 @@ class AppUsageViewModel(
 
     private fun resolveUidToInfo(uid: Int, packageManager: PackageManager, systemIcon: ImageBitmap?): ResolvedInfo {
         when (uid) {
-            -2, -4 -> return ResolvedInfo("removed_$uid", applicationContext.getString(R.string.label_removed_apps), null, true, true)
-            -3, -5 -> return ResolvedInfo("tethering_$uid", applicationContext.getString(R.string.label_tethering), null, true, true)
-            0 -> return ResolvedInfo("root_0", applicationContext.getString(R.string.label_root), systemIcon, true, true)
-            1000 -> return ResolvedInfo("android.system_$uid", applicationContext.getString(R.string.label_android_system), systemIcon, true, true)
-            1051, 1052 -> return ResolvedInfo("android.dns_$uid", applicationContext.getString(R.string.label_dns_resolver), systemIcon, true, true)
-            1020 -> return ResolvedInfo("android.mdns_$uid", applicationContext.getString(R.string.label_mdns_responder), systemIcon, true, true)
-            1013 -> return ResolvedInfo("android.media_$uid", applicationContext.getString(R.string.label_media_service), systemIcon, true, true)
-            1061, 2904 -> return ResolvedInfo("android.ota_$uid", applicationContext.getString(R.string.label_system_update), systemIcon, true, true)
+            -2, -4 -> return ResolvedInfo("removed_$uid", applicationContext.getString(R.string.label_removed_apps), null, isSystem = true, isProcess = true)
+            -3, -5 -> return ResolvedInfo("tethering_$uid", applicationContext.getString(R.string.label_tethering), null, isSystem = true, isProcess = true)
+            0 -> return ResolvedInfo("root_0", applicationContext.getString(R.string.label_root), systemIcon, isSystem = true, isProcess = true)
+            1000 -> return ResolvedInfo("android.system_$uid", applicationContext.getString(R.string.label_android_system), systemIcon, isSystem = true, isProcess = true)
+            1051, 1052 -> return ResolvedInfo("android.dns_$uid", applicationContext.getString(R.string.label_dns_resolver), systemIcon, isSystem = true, isProcess = true)
+            1020 -> return ResolvedInfo("android.mdns_$uid", applicationContext.getString(R.string.label_mdns_responder), systemIcon, isSystem = true, isProcess = true)
+            1013 -> return ResolvedInfo("android.media_$uid", applicationContext.getString(R.string.label_media_service), systemIcon, isSystem = true, isProcess = true)
+            1061, 2904 -> return ResolvedInfo("android.ota_$uid", applicationContext.getString(R.string.label_system_update), systemIcon, isSystem = true, isProcess = true)
         }
 
         val packages = packageManager.getPackagesForUid(uid)
         if (packages.isNullOrEmpty()) {
             val systemName = packageManager.getNameForUid(uid) ?: (applicationContext.getString(R.string.label_system_processes) + " ($uid)")
             val icon = if (uid < 10000) systemIcon else null
-            return ResolvedInfo("uid_$uid", systemName, icon, true, true)
+            return ResolvedInfo("uid_$uid", systemName, icon, isSystem = true, isProcess = true)
         }
 
         var isSystem = uid < 10000

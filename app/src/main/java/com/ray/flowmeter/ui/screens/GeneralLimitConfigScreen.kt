@@ -83,8 +83,8 @@ fun GeneralLimitConfigScreen(
     }
 
     val isCustom = planType.startsWith("custom")
-    var customStart by remember { mutableStateOf(if (initialStart > 0) initialStart else System.currentTimeMillis()) }
-    var customEnd by remember { mutableStateOf(if (initialEnd > 0) initialEnd else System.currentTimeMillis()) }
+    var customStart by remember { mutableLongStateOf(if (initialStart > 0) initialStart else System.currentTimeMillis()) }
+    var customEnd by remember { mutableLongStateOf(if (initialEnd > 0) initialEnd else System.currentTimeMillis()) }
 
     var activeDatePicker by remember { mutableStateOf<String?>(null) }
 

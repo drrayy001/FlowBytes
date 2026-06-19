@@ -133,6 +133,7 @@ fun SettingsScreen(
     val donationCancelledMessage = stringResource(R.string.msg_donation_cancelled)
     val donationFailedMessage = stringResource(R.string.msg_donation_failed)
     val shareTextTemplate = stringResource(R.string.share_text_body, context.packageName)
+    val shareChooserTitle = stringResource(R.string.label_share_via)
 
     LaunchedEffect(Unit) {
         viewModel.billingEvents.collect { event ->
@@ -466,8 +467,7 @@ fun SettingsScreen(
                             type = "text/plain"
                             putExtra(Intent.EXTRA_TEXT, shareTextTemplate)
                         }
-                        val chooserTitle = context.getString(R.string.label_share_via)
-                        val chooserIntent = Intent.createChooser(shareIntent, chooserTitle)
+                        val chooserIntent = Intent.createChooser(shareIntent, shareChooserTitle)
                         val activity = context.findActivity()
                         val targetContext = activity ?: context
                         if (targetContext !is Activity) {
@@ -562,7 +562,7 @@ fun SettingsScreen(
         }
 
         if (showWidgetUsageDialog) {
-            com.ray.flowmeter.ui.dialogs.WidgetUsageDialog(
+            WidgetUsageDialog(
                 currentType = widgetUsageType,
                 onDismiss = { showWidgetUsageDialog = false },
                 onSelect = {
@@ -684,7 +684,7 @@ fun SettingsScreen(
                         }
                         try {
                             targetContext.startActivity(browserIntent)
-                        } catch (__: Exception) {}
+                        } catch (_: Exception) {}
                     }
                 },
                 onEmailClick = {

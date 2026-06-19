@@ -28,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -1151,7 +1150,6 @@ fun AppUsageItem(
                     val downloadColor = MaterialTheme.colorScheme.primary
                     val uploadColor = MaterialTheme.colorScheme.tertiary
                     val wifiColor = MaterialTheme.colorScheme.secondary
-                    val mobileColor = uploadColor
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -1204,7 +1202,7 @@ fun AppUsageItem(
                                     label = stringResource(R.string.label_mobile_usage),
                                     value = formatUsage(appUsage.cellUsage, locale),
                                     icon = AppIcons.Mobile,
-                                    color = mobileColor
+                                    color = uploadColor
                                 )
                             }
                         }

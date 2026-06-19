@@ -59,7 +59,6 @@ fun AppLimitsScreen(
         setInternalTab(currentTab)
     }
 
-    val selectedTab = internalTab
     val updateTab = { index: Int ->
         onTabChange(index)
         setInternalTab(index)
@@ -92,13 +91,13 @@ fun AppLimitsScreen(
     Box(modifier = modifier) {
         Column(modifier = Modifier.fillMaxSize()) {
             MinimalPillsRow(
-                selectedTab = selectedTab,
+                selectedTab = internalTab,
                 onTabChange = updateTab,
                 modifier = Modifier.padding(top = 8.dp, bottom = 12.dp)
             )
 
             AnimatedContent(
-                targetState = selectedTab,
+                targetState = internalTab,
                 modifier = Modifier.weight(1f),
                 transitionSpec = {
                     EnterTransition.None togetherWith ExitTransition.None using SizeTransform(clip = false) { _, _ -> snap() }
@@ -120,12 +119,12 @@ fun AppLimitsScreen(
             }
         }
 
-        val showFab = if (selectedTab == 0) !allGeneralLimitsConfigured else true
+        val showFab = if (internalTab == 0) !allGeneralLimitsConfigured else true
 
         if (showFab) {
             FloatingActionButton(
                 onClick = {
-                    if (selectedTab == 1) {
+                    if (internalTab == 1) {
                         viewModel.loadInstalledApps()
                         viewModel.isPickerOpen = true
                     } else {

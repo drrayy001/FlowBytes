@@ -270,14 +270,20 @@ fun AlertItemFront(alert: AppAlert) {
     val dateFormat = remember { SimpleDateFormat("HH:mm", Locale.getDefault()) }
     val timeString = dateFormat.format(Date(alert.timestamp))
 
+    val dailyWifiLimit = stringResource(R.string.label_daily_wifi_limit)
+    val monthlyWifiLimit = stringResource(R.string.label_monthly_wifi_limit)
+    val dailyMobileLimit = stringResource(R.string.label_daily_mobile_limit)
+    val monthlyMobileLimit = stringResource(R.string.label_monthly_mobile_limit)
+    val unknownLabel = stringResource(R.string.label_unknown)
+
     // Mapping old names to new descriptive names for existing data
-    val displayAppName = remember(alert.appName) {
+    val displayAppName = remember(alert.appName, dailyWifiLimit, monthlyWifiLimit, dailyMobileLimit, monthlyMobileLimit, unknownLabel) {
         when (alert.appName) {
-            "Wi-Fi (Daily)", "Daily Wi-Fi Limit" -> context.getString(R.string.label_daily_wifi_limit)
-            "Wi-Fi (Monthly)", "Monthly Wi-Fi Limit" -> context.getString(R.string.label_monthly_wifi_limit)
-            "Mobile (Daily)", "Daily Mobile Limit" -> context.getString(R.string.label_daily_mobile_limit)
-            "Mobile (Monthly)", "Monthly Mobile Limit" -> context.getString(R.string.label_monthly_mobile_limit)
-            else -> alert.appName ?: context.getString(R.string.label_unknown)
+            "Wi-Fi (Daily)", "Daily Wi-Fi Limit" -> dailyWifiLimit
+            "Wi-Fi (Monthly)", "Monthly Wi-Fi Limit" -> monthlyWifiLimit
+            "Mobile (Daily)", "Daily Mobile Limit" -> dailyMobileLimit
+            "Mobile (Monthly)", "Monthly Mobile Limit" -> monthlyMobileLimit
+            else -> alert.appName ?: unknownLabel
         }
     }
 

@@ -230,6 +230,9 @@ class UserPreferencesRepository(private val context: Context) {
         val FIRST_INSTALL_TIME = longPreferencesKey("first_install_time")
         val LAST_REVIEW_PROMPT_TIME = longPreferencesKey("last_review_prompt_time")
         val USER_REVIEWED_RATED = booleanPreferencesKey("user_reviewed_rated")
+
+        val WIDGET_SHOW_SPEED = booleanPreferencesKey("widget_show_speed")
+        val WIDGET_USAGE_TYPE = stringPreferencesKey("widget_usage_type") // "DAILY", "MONTHLY"
     }
 
     private val preferencesFlow = context.dataStore.data
@@ -519,6 +522,16 @@ class UserPreferencesRepository(private val context: Context) {
     val userReviewedRated: Flow<Boolean> = preferencesFlow
         .map { preferences ->
             preferences[PreferencesKeys.USER_REVIEWED_RATED] ?: false
+        }.distinctUntilChanged()
+
+    val widgetShowSpeed: Flow<Boolean> = preferencesFlow
+        .map { preferences ->
+            preferences[PreferencesKeys.WIDGET_SHOW_SPEED] ?: true
+        }.distinctUntilChanged()
+
+    val widgetUsageType: Flow<String> = preferencesFlow
+        .map { preferences ->
+            preferences[PreferencesKeys.WIDGET_USAGE_TYPE] ?: "DAILY"
         }.distinctUntilChanged()
 
     suspend fun setOnboardingCompleted(completed: Boolean) {
@@ -822,6 +835,18 @@ class UserPreferencesRepository(private val context: Context) {
     suspend fun setLastReviewPromptTime(time: Long) {
         context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.LAST_REVIEW_PROMPT_TIME] = time
+        }
+    }
+
+    suspend fun setWidgetShowSpeed(show: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.WIDGET_SHOW_SPEED] = show
+        }
+    }
+
+    suspend fun setWidgetUsageType(type: String) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.WIDGET_USAGE_TYPE] = type
         }
     }
 }

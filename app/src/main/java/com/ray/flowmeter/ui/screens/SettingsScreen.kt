@@ -47,6 +47,8 @@ fun SettingsScreen(
 
     val highPriorityNotification by viewModel.highPriorityNotification.collectAsState()
     val showOnlyWhenConnected by viewModel.showOnlyWhenConnected.collectAsState()
+    val widgetShowSpeed by viewModel.widgetShowSpeed.collectAsState()
+    val widgetUsageType by viewModel.widgetUsageType.collectAsState()
     val appBlockingMasterEnabled by viewModel.appBlockingMasterEnabled.collectAsState()
     val vpnDisclosureAccepted by viewModel.vpnDisclosureAccepted.collectAsState()
 
@@ -107,6 +109,7 @@ fun SettingsScreen(
 
     var showThemeDialog by remember { mutableStateOf(value = false) }
     var showNotificationContentDialog by remember { mutableStateOf(value = false) }
+    var showWidgetUsageDialog by remember { mutableStateOf(value = false) }
     var showIconScaleDialog by remember { mutableStateOf(value = false) }
     var showLanguageDialog by remember { mutableStateOf(value = false) }
     var showLicensesDialog by remember { mutableStateOf(value = false) }
@@ -349,7 +352,35 @@ fun SettingsScreen(
             }
         }
 
-        // ================== 4. MONITORING & SECURITY ==================
+        // ================== 4. WIDGET ==================
+        StaggeredEntrance {
+            SettingsGroup(title = stringResource(R.string.settings_section_widget)) {
+                SettingsItem(
+                    icon = Icons.Rounded.Speed,
+                    title = stringResource(R.string.settings_widget_show_speed),
+                    subtitle = stringResource(R.string.settings_widget_show_speed_desc),
+                    trailingContent = {
+                        Switch(
+                            checked = widgetShowSpeed,
+                            onCheckedChange = { viewModel.setWidgetShowSpeed(it) },
+                            colors = switchColors,
+                            thumbContent = { thumbContent(widgetShowSpeed) }
+                        )
+                    }
+                )
+                SettingsItem(
+                    icon = Icons.Rounded.DataUsage,
+                    title = stringResource(R.string.settings_widget_usage_type),
+                    subtitle = when (widgetUsageType) {
+                        "MONTHLY" -> stringResource(R.string.filter_monthly)
+                        else -> stringResource(R.string.filter_daily)
+                    },
+                    onClick = { showWidgetUsageDialog = true }
+                )
+            }
+        }
+
+        // ================== 5. MONITORING & SECURITY ==================
         StaggeredEntrance {
             SettingsGroup(title = stringResource(R.string.settings_section_alerts)) {
                 SettingsItem(
@@ -520,6 +551,17 @@ fun SettingsScreen(
                 currentType = notificationContentType,
                 onDismiss = { showNotificationContentDialog = false },
                 onSelect = viewModel::setNotificationContentType
+            )
+        }
+
+        if (showWidgetUsageDialog) {
+            com.ray.flowmeter.ui.dialogs.WidgetUsageDialog(
+                currentType = widgetUsageType,
+                onDismiss = { showWidgetUsageDialog = false },
+                onSelect = {
+                    viewModel.setWidgetUsageType(it)
+                    showWidgetUsageDialog = false
+                }
             )
         }
 

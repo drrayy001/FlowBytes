@@ -119,6 +119,12 @@
     <string name="settings_hide_offline_desc">연결이 끊겼을 때 속도 표시기를 자동으로 숨깁니다</string>
     <string name="settings_indicator_size_desc">상태 표시줄의 속도 표시기 크기를 조절합니다</string>
 
+    <string name="settings_section_widget">홈 위젯</string>
+    <string name="settings_widget_show_speed">속도 표시</string>
+    <string name="settings_widget_show_speed_desc">위젯에 실시간 다운로드 및 업로드 속도를 표시합니다</string>
+    <string name="settings_widget_usage_type">위젯 사용량 표시</string>
+    <string name="settings_widget_usage_type_desc">일간 또는 월간 데이터 소비량 중에서 선택하세요</string>
+
     <!-- Settings: Alerts & Limits -->
     <string name="settings_section_alerts">알림 및 한도</string>
     <string name="settings_data_alerts">높은 데이터 알림</string>

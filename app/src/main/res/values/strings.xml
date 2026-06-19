@@ -119,6 +119,12 @@
     <string name="settings_hide_offline_desc">Automatically hide the speed indicator when disconnected</string>
     <string name="settings_indicator_size_desc">Adjust the speed indicator size in the status bar</string>
 
+    <string name="settings_section_widget">Home Widget</string>
+    <string name="settings_widget_show_speed">Show Speed</string>
+    <string name="settings_widget_show_speed_desc">Display real-time download and upload speeds on the widget</string>
+    <string name="settings_widget_usage_type">Widget Usage Display</string>
+    <string name="settings_widget_usage_type_desc">Choose between daily or monthly data consumption</string>
+
     <!-- Settings: Alerts & Limits -->
     <string name="settings_section_alerts">Alerts &amp; Limits</string>
     <string name="settings_data_alerts">High Data Alerts</string>

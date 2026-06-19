@@ -125,6 +125,7 @@ class NetworkMonitoringService : Service() {
     private var monthlyResetDay = 1
     private var showOnlyWhenConnected = false
     private var highTrafficDetectionEnabled = false
+    private var widgetUsageType = "DAILY"
 
     private var trafficTimer: Long = 0
     private var uidSnapshot: Map<Int, Pair<Long, Long>> = emptyMap()
@@ -200,6 +201,7 @@ class NetworkMonitoringService : Service() {
         serviceScope.launch { repository.resetTimeHour.collect { resetHour = it } }
         serviceScope.launch { repository.resetTimeMinute.collect { resetMinute = it } }
         serviceScope.launch { repository.monthlyResetDay.collect { monthlyResetDay = it } }
+        serviceScope.launch { repository.widgetUsageType.collect { widgetUsageType = it } }
         serviceScope.launch { 
             var isFirst = true
             repository.showOnlyWhenConnected.collect { 
@@ -622,6 +624,7 @@ class NetworkMonitoringService : Service() {
                     } else {
                         updateNotification(customLayout, "0 KB/s")
                     }
+                    updateWidget()
 
                     lastTime = currentTime
                     lastRxBytes = TrafficStats.getTotalRxBytes()
@@ -727,7 +730,25 @@ class NetworkMonitoringService : Service() {
             } else {
                 updateNotification(customLayout, formatSpeed(currentTotalSpeed))
             }
+            updateWidget()
         }
+    }
+
+    private fun updateWidget() {
+        val usage = if (widgetUsageType == "MONTHLY") {
+            cachedMonthlyWifiUsage + cachedMonthlyMobileUsage
+        } else {
+            cachedWifiUsage + cachedMobileUsage
+        }
+
+        val intent = Intent(com.ray.flowmeter.receiver.SpeedWidget.ACTION_UPDATE_WIDGET).apply {
+            setPackage(packageName)
+            putExtra(com.ray.flowmeter.receiver.SpeedWidget.EXTRA_RX_SPEED, currentRxSpeed)
+            putExtra(com.ray.flowmeter.receiver.SpeedWidget.EXTRA_TX_SPEED, currentTxSpeed)
+            putExtra(com.ray.flowmeter.receiver.SpeedWidget.EXTRA_USAGE, usage)
+            putExtra(com.ray.flowmeter.receiver.SpeedWidget.EXTRA_USAGE_TYPE, widgetUsageType)
+        }
+        sendBroadcast(intent)
     }
 
     private fun createNotificationChannel() {

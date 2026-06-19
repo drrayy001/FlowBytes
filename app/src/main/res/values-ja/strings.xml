@@ -119,6 +119,12 @@
     <string name="settings_hide_offline_desc">切断時に速度インジケーターを自動的に非表示にします</string>
     <string name="settings_indicator_size_desc">ステータスバーの速度インジケーターのサイズを調整します</string>
 
+    <string name="settings_section_widget">ホームウィジェット</string>
+    <string name="settings_widget_show_speed">速度を表示</string>
+    <string name="settings_widget_show_speed_desc">ウィジェットにリアルタイムのダウンロードとアップロード速度を表示します</string>
+    <string name="settings_widget_usage_type">ウィジェットの使用状況表示</string>
+    <string name="settings_widget_usage_type_desc">日次または月次のデータ消費量を選択します</string>
+
     <!-- Settings: Alerts & Limits -->
     <string name="settings_section_alerts">アラートと制限</string>
     <string name="settings_data_alerts">高データ使用量アラート</string>

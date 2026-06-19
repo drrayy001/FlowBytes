@@ -108,6 +108,12 @@
     <string name="settings_hide_offline_desc">断开连接时自动隐藏网速指示器</string>
     <string name="settings_indicator_size_desc">调整状态栏中网速指示图标的大小</string>
 
+    <string name="settings_section_widget">主屏幕小部件</string>
+    <string name="settings_widget_show_speed">显示速度</string>
+    <string name="settings_widget_show_speed_desc">在小部件上显示实时的下载和上传速度</string>
+    <string name="settings_widget_usage_type">小部件用量显示</string>
+    <string name="settings_widget_usage_type_desc">选择显示每日或每月的数据消耗量</string>
+
     <!-- Settings: Alerts & Limits -->
     <string name="settings_section_alerts">警报与额度限制</string>
     <string name="settings_data_alerts">高流量警报</string>

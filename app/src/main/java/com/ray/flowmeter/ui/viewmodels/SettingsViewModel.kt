@@ -115,6 +115,12 @@ class SettingsViewModel(
     val vpnDisclosureAccepted: StateFlow<Boolean> = repository.vpnDisclosureAccepted
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), initialValue = false)
 
+    val widgetShowSpeed: StateFlow<Boolean> = repository.widgetShowSpeed
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), initialValue = true)
+
+    val widgetUsageType: StateFlow<String> = repository.widgetUsageType
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), initialValue = "DAILY")
+
     fun toggleMonitoring(enabled: Boolean) {
         viewModelScope.launch {
             repository.setMonitoringEnabled(enabled)
@@ -251,4 +257,11 @@ class SettingsViewModel(
         }
     }
 
+    fun setWidgetShowSpeed(show: Boolean) {
+        viewModelScope.launch { repository.setWidgetShowSpeed(show) }
+    }
+
+    fun setWidgetUsageType(type: String) {
+        viewModelScope.launch { repository.setWidgetUsageType(type) }
+    }
 }

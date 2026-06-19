@@ -106,6 +106,12 @@
     <string name="settings_hide_offline_desc">إخفاء مؤشر السرعة تلقائياً عند قطع الاتصال</string>
     <string name="settings_indicator_size_desc">ضبط حجم مؤشر السرعة في شريط الحالة</string>
 
+    <string name="settings_section_widget">أداة الشاشة الرئيسية</string>
+    <string name="settings_widget_show_speed">إظهار السرعة</string>
+    <string name="settings_widget_show_speed_desc">عرض سرعات التحميل والرفع في الوقت الفعلي على الأداة</string>
+    <string name="settings_widget_usage_type">عرض الاستهلاك في الأداة</string>
+    <string name="settings_widget_usage_type_desc">اختر بين استهلاك البيانات اليومي أو الشهري</string>
+
     <!-- Settings: Alerts & Limits -->
     <string name="settings_section_alerts">التنبيهات والحدود</string>
     <string name="settings_data_alerts">تنبيهات الاستهلاك العالي</string>

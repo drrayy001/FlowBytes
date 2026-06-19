@@ -108,6 +108,12 @@
     <string name="settings_hide_offline_desc">Geschwindigkeitsanzeige automatisch ausblenden, wenn die Verbindung getrennt ist</string>
     <string name="settings_indicator_size_desc">Größe der Geschwindigkeitsanzeige in der Statusleiste anpassen</string>
 
+    <string name="settings_section_widget">Home-Widget</string>
+    <string name="settings_widget_show_speed">Geschwindigkeit anzeigen</string>
+    <string name="settings_widget_show_speed_desc">Echtzeit-Download- und Upload-Geschwindigkeiten auf dem Widget anzeigen</string>
+    <string name="settings_widget_usage_type">Widget-Verbrauchsanzeige</string>
+    <string name="settings_widget_usage_type_desc">Wählen Sie zwischen täglichem oder monatlichem Datenverbrauch</string>
+
     <!-- Settings: Alerts & Limits -->
     <string name="settings_section_alerts">Alarme &amp; Limits</string>
     <string name="settings_data_alerts">Datenüberschreitungs-Alarme</string>

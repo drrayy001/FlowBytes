@@ -108,6 +108,12 @@
     <string name="settings_hide_offline_desc">Ocultar automaticamente o indicador de velocidade quando desconectado</string>
     <string name="settings_indicator_size_desc">Ajustar o tamanho do indicador de velocidade na barra de status</string>
 
+    <string name="settings_section_widget">Widget Inicial</string>
+    <string name="settings_widget_show_speed">Mostrar velocidade</string>
+    <string name="settings_widget_show_speed_desc">Exibir velocidades de download e upload em tempo real no widget</string>
+    <string name="settings_widget_usage_type">Exibição de consumo do widget</string>
+    <string name="settings_widget_usage_type_desc">Escolha entre consumo de dados diário ou mensal</string>
+
     <!-- Settings: Alerts & Limits -->
     <string name="settings_section_alerts">Alertas e Limites</string>
     <string name="settings_data_alerts">Alertas de alto uso de dados</string>

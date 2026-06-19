@@ -119,6 +119,12 @@
     <string name="settings_hide_offline_desc">Автоматически скрывать индикатор при отсутствии сети</string>
     <string name="settings_indicator_size_desc">Размер индикатора скорости в статус-баре</string>
 
+    <string name="settings_section_widget">Виджет на главном экране</string>
+    <string name="settings_widget_show_speed">Показывать скорость</string>
+    <string name="settings_widget_show_speed_desc">Отображать скорость загрузки и отдачи в реальном времени на виджете</string>
+    <string name="settings_widget_usage_type">Отображение трафика в виджете</string>
+    <string name="settings_widget_usage_type_desc">Выберите между дневным или месячным потреблением данных</string>
+
     <!-- Settings: Alerts & Limits -->
     <string name="settings_section_alerts">Алерты и лимиты</string>
     <string name="settings_data_alerts">Алерты высокого трафика</string>

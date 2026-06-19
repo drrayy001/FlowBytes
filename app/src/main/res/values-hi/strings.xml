@@ -119,6 +119,12 @@
     <string name="settings_hide_offline_desc">डिस्कनेक्ट होने पर स्वचालित रूप से गति संकेतक छुपाएं</string>
     <string name="settings_indicator_size_desc">स्टेटस बार में गति संकेतक का आकार समायोजित करें</string>
 
+    <string name="settings_section_widget">होम विजेट</string>
+    <string name="settings_widget_show_speed">गति दिखाएं</string>
+    <string name="settings_widget_show_speed_desc">विजेट पर वास्तविक समय की डाउनलोड और अपलोड गति प्रदर्शित करें</string>
+    <string name="settings_widget_usage_type">विजेट उपयोग प्रदर्शन</string>
+    <string name="settings_widget_usage_type_desc">दैनिक या मासिक डेटा खपत के बीच चयन करें</string>
+
     <!-- Settings: Alerts & Limits -->
     <string name="settings_section_alerts">अलर्ट और सीमाएं</string>
     <string name="settings_data_alerts">उच्च डेटा अलर्ट</string>

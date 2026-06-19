@@ -23,7 +23,7 @@ android {
         applicationId = "com.ray.flowmeter"
         minSdk = 29
         targetSdk = 37
-        versionCode = 30
+        versionCode = 32
         versionName = appVersionName
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

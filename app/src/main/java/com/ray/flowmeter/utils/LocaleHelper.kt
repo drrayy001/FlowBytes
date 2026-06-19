@@ -5,8 +5,19 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import java.util.Locale
 
+class LocaleContextWrapper(
+    base: Context,
+    private val realContext: Context
+) : android.content.ContextWrapper(base) {
+    override fun getBaseContext(): Context {
+        return realContext
+    }
+}
+
 object LocaleHelper {
     fun applyLocale(context: Context, languageCode: String): Context {
+        val originalContext = if (context is LocaleContextWrapper) context.baseContext else context
+
         val locale = if (languageCode.isEmpty()) {
             val systemLocales = Resources.getSystem().configuration.locales
             if (!systemLocales.isEmpty) systemLocales.get(0) else Locale.getDefault()
@@ -16,19 +27,20 @@ object LocaleHelper {
 
         Locale.setDefault(locale)
 
-        val config = Configuration(context.resources.configuration)
+        val config = Configuration(originalContext.resources.configuration)
         config.setLocale(locale)
         config.setLayoutDirection(locale)
 
         @Suppress("DEPRECATION")
-        context.resources.updateConfiguration(config, context.resources.displayMetrics)
+        originalContext.resources.updateConfiguration(config, originalContext.resources.displayMetrics)
 
-        val appContext = context.applicationContext
-        if (appContext != null && appContext !== context) {
+        val appContext = originalContext.applicationContext
+        if (appContext != null && appContext !== originalContext) {
             @Suppress("DEPRECATION")
             appContext.resources.updateConfiguration(config, appContext.resources.displayMetrics)
         }
 
-        return context.createConfigurationContext(config)
+        val configContext = originalContext.createConfigurationContext(config)
+        return LocaleContextWrapper(configContext, originalContext)
     }
 }

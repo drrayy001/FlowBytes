@@ -37,7 +37,7 @@
                 android:layout_height="12dp"
                 android:src="@drawable/ic_arrow_down"
                 android:contentDescription="@string/desc_download"
-                app:tint="#00E5FF" />
+                app:tint="#00E676" />
             <TextView
                 android:id="@+id/widget_text_down"
                 android:layout_width="wrap_content"
@@ -68,7 +68,7 @@
                 android:layout_height="12dp"
                 android:src="@drawable/ic_arrow_up"
                 android:contentDescription="@string/desc_upload"
-                app:tint="#E040FB" />
+                app:tint="#FF1744" />
             <TextView
                 android:id="@+id/widget_text_up"
                 android:layout_width="wrap_content"

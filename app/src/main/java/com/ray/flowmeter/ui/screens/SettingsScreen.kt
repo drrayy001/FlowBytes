@@ -109,6 +109,7 @@ fun SettingsScreen(
 
     var showThemeDialog by remember { mutableStateOf(value = false) }
     var showNotificationContentDialog by remember { mutableStateOf(value = false) }
+    var showWidgetUsageDialog by remember { mutableStateOf(value = false) }
     var showIconScaleDialog by remember { mutableStateOf(value = false) }
     var showLanguageDialog by remember { mutableStateOf(value = false) }
     var showLicensesDialog by remember { mutableStateOf(value = false) }
@@ -367,6 +368,15 @@ fun SettingsScreen(
                         )
                     }
                 )
+                SettingsItem(
+                    icon = Icons.Rounded.DataUsage,
+                    title = stringResource(R.string.settings_widget_usage_type),
+                    subtitle = when (widgetUsageType) {
+                        "MONTHLY" -> stringResource(R.string.filter_monthly)
+                        else -> stringResource(R.string.filter_daily)
+                    },
+                    onClick = { showWidgetUsageDialog = true }
+                )
             }
         }
 
@@ -549,6 +559,17 @@ fun SettingsScreen(
                 currentScale = notificationIconScale,
                 onDismiss = { showIconScaleDialog = false },
             ) { viewModel.setNotificationIconScale(it) }
+        }
+
+        if (showWidgetUsageDialog) {
+            com.ray.flowmeter.ui.dialogs.WidgetUsageDialog(
+                currentType = widgetUsageType,
+                onDismiss = { showWidgetUsageDialog = false },
+                onSelect = {
+                    viewModel.setWidgetUsageType(it)
+                    showWidgetUsageDialog = false
+                }
+            )
         }
 
         if (showLanguageDialog) {

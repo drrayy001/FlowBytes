@@ -737,14 +737,18 @@ class NetworkMonitoringService : Service() {
     }
 
     private fun updateWidget() {
-        val usage = cachedWifiUsage + cachedMobileUsage
+        val usage = if (widgetUsageType == "MONTHLY") {
+            cachedMonthlyWifiUsage + cachedMonthlyMobileUsage
+        } else {
+            cachedWifiUsage + cachedMobileUsage
+        }
 
         val intent = Intent(com.ray.flowmeter.receiver.SpeedWidget.ACTION_UPDATE_WIDGET).apply {
             setPackage(packageName)
             putExtra(com.ray.flowmeter.receiver.SpeedWidget.EXTRA_RX_SPEED, currentRxSpeed)
             putExtra(com.ray.flowmeter.receiver.SpeedWidget.EXTRA_TX_SPEED, currentTxSpeed)
             putExtra(com.ray.flowmeter.receiver.SpeedWidget.EXTRA_USAGE, usage)
-            putExtra(com.ray.flowmeter.receiver.SpeedWidget.EXTRA_USAGE_TYPE, "DAILY")
+            putExtra(com.ray.flowmeter.receiver.SpeedWidget.EXTRA_USAGE_TYPE, widgetUsageType)
             putExtra(com.ray.flowmeter.receiver.SpeedWidget.EXTRA_SHOW_SPEED, widgetShowSpeed)
         }
         sendBroadcast(intent)

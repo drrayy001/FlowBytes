@@ -1,5 +1,6 @@
 package com.ray.flowmeter.service
 
+import android.content.Context
 import android.content.Intent
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
@@ -9,6 +10,19 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
 
 class SpeedTileService : TileService() {
+
+    override fun attachBaseContext(newBase: Context) {
+        val repository = UserPreferencesRepository(newBase)
+        val languageCode = kotlinx.coroutines.runBlocking {
+            try {
+                repository.language.first()
+            } catch (e: Exception) {
+                ""
+            }
+        }
+        val context = com.ray.flowmeter.utils.LocaleHelper.applyLocale(newBase, languageCode)
+        super.attachBaseContext(context)
+    }
 
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
     private lateinit var repository: UserPreferencesRepository

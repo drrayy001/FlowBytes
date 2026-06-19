@@ -479,70 +479,75 @@ fun GeneralLimitsList(
             ) {
                 if (wifiDailyLimitConfigured) {
                     item {
+                        val title = stringResource(R.string.label_daily_wifi)
                         GeneralLimitItem(
-                            title = "Daily Wi-Fi",
+                            title = title,
                             icon = Icons.Rounded.Wifi,
                             currentUsage = currentWifiUsage,
                             limit = wifiDailyLimit,
                             onToggle = { viewModel.setWifiDailyLimitEnabled(it) },
                             onEdit = { onEdit("daily_wifi") },
-                            onDelete = { onDelete(AppLimit(packageName = "system.wifi.daily", appName = "Daily Wi-Fi Limit", dataLimit = wifiDailyLimit, limitType = "daily", networkType = "wifi")) },
+                            onDelete = { onDelete(AppLimit(packageName = "system.wifi.daily", appName = title, dataLimit = wifiDailyLimit, limitType = "daily", networkType = "wifi")) },
                             enabled = wifiDailyLimitEnabled,
                         )
                     }
                 }
                 if (dataDailyLimitConfigured) {
                     item {
+                        val title = stringResource(R.string.label_daily_mobile)
                         GeneralLimitItem(
-                            title = "Daily Mobile",
+                            title = title,
                             icon = Icons.Rounded.SignalCellularAlt,
                             currentUsage = currentMobileUsage,
                             limit = dataDailyLimit,
                             onToggle = { viewModel.setDataDailyLimitEnabled(it) },
                             onEdit = { onEdit("daily_mobile") },
-                            onDelete = { onDelete(AppLimit(packageName = "system.mobile.daily", appName = "Daily Mobile Limit", dataLimit = dataDailyLimit, limitType = "daily", networkType = "mobile")) },
+                            onDelete = { onDelete(AppLimit(packageName = "system.mobile.daily", appName = title, dataLimit = dataDailyLimit, limitType = "daily", networkType = "mobile")) },
                             enabled = dataDailyLimitEnabled,
                         )
                     }
                 }
                 if (wifiMonthlyLimitConfigured) {
                     item {
+                        val title = stringResource(R.string.label_monthly_wifi)
                         GeneralLimitItem(
-                            title = "Monthly Wi-Fi",
+                            title = title,
                             icon = Icons.Rounded.Wifi,
                             currentUsage = currentMonthlyWifiUsage,
                             limit = wifiMonthlyLimit,
                             onToggle = { viewModel.setWifiMonthlyLimitEnabled(it) },
                             onEdit = { onEdit("monthly_wifi") },
-                            onDelete = { onDelete(AppLimit(packageName = "system.wifi.monthly", appName = "Monthly Wi-Fi Limit", dataLimit = wifiMonthlyLimit, limitType = "monthly", networkType = "wifi")) },
+                            onDelete = { onDelete(AppLimit(packageName = "system.wifi.monthly", appName = title, dataLimit = wifiMonthlyLimit, limitType = "monthly", networkType = "wifi")) },
                             enabled = wifiMonthlyLimitEnabled,
                         )
                     }
                 }
                 if (dataMonthlyLimitConfigured) {
                     item {
+                        val title = stringResource(R.string.label_monthly_mobile)
                         GeneralLimitItem(
-                            title = "Monthly Mobile",
+                            title = title,
                             icon = Icons.Rounded.SignalCellularAlt,
                             currentUsage = currentMonthlyMobileUsage,
                             limit = dataMonthlyLimit,
                             onToggle = { viewModel.setDataMonthlyLimitEnabled(it) },
                             onEdit = { onEdit("monthly_mobile") },
-                            onDelete = { onDelete(AppLimit(packageName = "system.mobile.monthly", appName = "Monthly Mobile Limit", dataLimit = dataMonthlyLimit, limitType = "monthly", networkType = "mobile")) },
+                            onDelete = { onDelete(AppLimit(packageName = "system.mobile.monthly", appName = title, dataLimit = dataMonthlyLimit, limitType = "monthly", networkType = "mobile")) },
                             enabled = dataMonthlyLimitEnabled,
                         )
                     }
                 }
                 if (wifiCustomLimitConfigured) {
                     item {
+                        val title = stringResource(R.string.label_custom_wifi)
                         GeneralLimitItem(
-                            title = "Custom Wi-Fi",
+                            title = title,
                             icon = Icons.Rounded.Wifi,
                             currentUsage = currentCustomWifiUsage,
                             limit = wifiCustomLimit,
                             onToggle = { viewModel.setWifiCustomLimitEnabled(it) },
                             onEdit = { onEdit("custom_wifi") },
-                            onDelete = { onDelete(AppLimit(packageName = "system.wifi.custom", appName = "Custom Wi-Fi Limit", dataLimit = wifiCustomLimit, limitType = "custom", networkType = "wifi")) },
+                            onDelete = { onDelete(AppLimit(packageName = "system.wifi.custom", appName = title, dataLimit = wifiCustomLimit, limitType = "custom", networkType = "wifi")) },
                             enabled = wifiCustomLimitEnabled,
                             subtitle = formatRange(wifiCustomLimitStart, wifiCustomLimitEnd)
                         )
@@ -550,14 +555,15 @@ fun GeneralLimitsList(
                 }
                 if (dataCustomLimitConfigured) {
                     item {
+                        val title = stringResource(R.string.label_custom_mobile)
                         GeneralLimitItem(
-                            title = "Custom Mobile",
+                            title = title,
                             icon = Icons.Rounded.SignalCellularAlt,
                             currentUsage = currentCustomMobileUsage,
                             limit = dataCustomLimit,
                             onToggle = { viewModel.setDataCustomLimitEnabled(it) },
                             onEdit = { onEdit("custom_mobile") },
-                            onDelete = { onDelete(AppLimit(packageName = "system.mobile.custom", appName = "Custom Mobile Limit", dataLimit = dataCustomLimit, limitType = "custom", networkType = "mobile")) },
+                            onDelete = { onDelete(AppLimit(packageName = "system.mobile.custom", appName = title, dataLimit = dataCustomLimit, limitType = "custom", networkType = "mobile")) },
                             enabled = dataCustomLimitEnabled,
                             subtitle = formatRange(dataCustomLimitStart, dataCustomLimitEnd)
                         )

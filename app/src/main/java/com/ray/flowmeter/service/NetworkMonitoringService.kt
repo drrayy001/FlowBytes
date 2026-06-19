@@ -7,6 +7,7 @@ import android.app.PendingIntent
 import android.app.Service
 import android.app.usage.NetworkStats
 import android.app.usage.NetworkStatsManager
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo
 import android.graphics.Bitmap
@@ -141,6 +142,19 @@ class NetworkMonitoringService : Service() {
     private val statsMutex = Mutex()
 
     private val ignoredApps = mutableMapOf<String, Long>()
+
+    override fun attachBaseContext(newBase: Context) {
+        val repository = UserPreferencesRepository(newBase)
+        val languageCode = kotlinx.coroutines.runBlocking {
+            try {
+                repository.language.first()
+            } catch (e: Exception) {
+                ""
+            }
+        }
+        val context = com.ray.flowmeter.utils.LocaleHelper.applyLocale(newBase, languageCode)
+        super.attachBaseContext(context)
+    }
 
     override fun onCreate() {
         super.onCreate()

@@ -73,13 +73,13 @@ fun ChangelogDialog(
                 )
 
                 ChangelogTextItem(
-                    title = "Custom Date Range Limits",
-                    description = "You can now set data limits for specific date ranges across both Mobile and Wi-Fi networks."
+                    title = stringResource(R.string.whats_new_custom_limits_title),
+                    description = stringResource(R.string.whats_new_custom_limits_desc)
                 )
 
                 ChangelogTextItem(
-                    title = "Monthly Reset Day",
-                    description = "Support for custom billing cycles. Choose a specific day of the month for your usage to reset."
+                    title = stringResource(R.string.whats_new_reset_day_title),
+                    description = stringResource(R.string.whats_new_reset_day_desc)
                 )
 
 

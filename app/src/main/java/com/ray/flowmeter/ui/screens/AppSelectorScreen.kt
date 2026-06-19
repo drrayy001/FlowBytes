@@ -399,7 +399,7 @@ fun LimitConfigurationContent(
     onMobileLimitUnitChange: (String) -> Unit = {}
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
-        Text("Network Type", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
+        Text(stringResource(R.string.label_network_type), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(8.dp))
         FlowRow(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 NetworkChip(selected = networkType == "both", onClick = { onNetworkTypeChange("both") }, label = stringResource(R.string.label_both), icon = Icons.Rounded.Language)
@@ -410,7 +410,7 @@ fun LimitConfigurationContent(
         Spacer(modifier = Modifier.height(28.dp))
 
         if (networkType == "both") {
-            Text("Wi-Fi Data Limit", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
+            Text(stringResource(R.string.settings_wifi_limit), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(12.dp))
             LimitInputRow(
                 value = wifiLimitInput,
@@ -421,7 +421,7 @@ fun LimitConfigurationContent(
 
             Spacer(modifier = Modifier.height(28.dp))
 
-            Text("Mobile Data Limit", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
+            Text(stringResource(R.string.settings_mobile_limit), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(12.dp))
             LimitInputRow(
                 value = mobileLimitInput,
@@ -430,7 +430,8 @@ fun LimitConfigurationContent(
                 onUnitChange = onMobileLimitUnitChange
             )
         } else {
-            Text("${if (networkType == "wifi") "Wi-Fi" else "Mobile"} Data Limit", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
+            val dynamicLimitLabel = if (networkType == "wifi") stringResource(R.string.settings_wifi_limit) else stringResource(R.string.settings_mobile_limit)
+            Text(dynamicLimitLabel, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(12.dp))
             LimitInputRow(
                 value = limitInput,
@@ -442,7 +443,7 @@ fun LimitConfigurationContent(
 
         Spacer(modifier = Modifier.height(28.dp))
 
-        Text("Limit Period", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
+        Text(stringResource(R.string.label_limit_period), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(8.dp))
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             PeriodChip(selected = limitType == "daily", onClick = { onLimitTypeChange("daily") }, label = stringResource(R.string.filter_daily))

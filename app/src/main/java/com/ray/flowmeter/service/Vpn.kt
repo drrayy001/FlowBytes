@@ -1,6 +1,7 @@
 package com.ray.flowmeter.service
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.Network
@@ -16,11 +17,24 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
-
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
 
 @SuppressLint("VpnServicePolicy")
 class AppBlockVpnService : VpnService() {
+
+    override fun attachBaseContext(newBase: Context) {
+        val repository = UserPreferencesRepository(newBase)
+        val languageCode = kotlinx.coroutines.runBlocking {
+            try {
+                repository.language.first()
+            } catch (e: Exception) {
+                ""
+            }
+        }
+        val context = com.ray.flowmeter.utils.LocaleHelper.applyLocale(newBase, languageCode)
+        super.attachBaseContext(context)
+    }
 
     private var vpnInterface: ParcelFileDescriptor? = null
     private val serviceJob = Job()

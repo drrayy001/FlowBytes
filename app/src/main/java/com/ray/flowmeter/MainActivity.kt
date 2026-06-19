@@ -1,5 +1,6 @@
 package com.ray.flowmeter
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -9,6 +10,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
@@ -53,6 +55,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 
 class MainActivity : ComponentActivity() {
 
+    private var currentAppliedLanguage: String = ""
+
     private val vpnRequestLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
             startVpnService()
@@ -89,6 +93,20 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         val repository = UserPreferencesRepository(applicationContext)
+
+        // Apply locale in onCreate
+        lifecycleScope.launch {
+            val languageCode = try {
+                repository.language.first()
+            } catch (e: Exception) {
+                ""
+            }
+            if (languageCode != currentAppliedLanguage) {
+                currentAppliedLanguage = languageCode
+                LocaleHelper.applyLocale(this@MainActivity, languageCode)
+            }
+        }
+
         val database = FlowMeterDatabase.getDatabase(applicationContext)
         val alertRepository = AlertRepository(database.appAlertDao())
         val appLimitRepository = AppLimitRepository(database.appLimitDao())
@@ -204,6 +222,15 @@ class MainActivity : ComponentActivity() {
                 CompositionLocalProvider(
                     LocalContext provides LocaleHelper.applyLocale(LocalContext.current, languageCode)
                 ) {
+                    var isInitialCollect by remember { mutableStateOf(true) }
+                    LaunchedEffect(languageCode) {
+                        if (isInitialCollect) {
+                            isInitialCollect = false
+                        } else if (languageCode != currentAppliedLanguage) {
+                            recreate()
+                        }
+                    }
+
                     val currentVersionCode = BuildConfig.VERSION_CODE
                     val (showChangelog, setShowChangelog) = remember { mutableStateOf(false) }
 

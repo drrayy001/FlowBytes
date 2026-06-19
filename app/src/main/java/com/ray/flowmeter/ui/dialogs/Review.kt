@@ -115,7 +115,7 @@ fun ReviewDialog(
                                         val intent = Intent(Intent.ACTION_SENDTO).apply {
                                             data = Uri.parse("mailto:")
                                             putExtra(Intent.EXTRA_EMAIL, arrayOf("drrayy001@gmail.com"))
-                                            putExtra(Intent.EXTRA_SUBJECT, "FlowBytes Feedback - $targetRating Stars")
+                                            putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.feedback_email_subject, targetRating))
                                             putExtra(Intent.EXTRA_TEXT, feedbackText)
                                         }
                                         try {

@@ -360,7 +360,7 @@ fun SettingsScreen(
                     SettingsItem(
                         icon = Icons.Rounded.Tune,
                         title = stringResource(R.string.label_advanced_settings),
-                        subtitle = "Configure traffic detection thresholds",
+                        subtitle = stringResource(R.string.settings_traffic_threshold_subtitle),
                         onClick = { showTrafficSettingsDialog = true }
                     )
                 }

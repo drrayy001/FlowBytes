@@ -23,6 +23,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.serialization.Serializable
@@ -145,7 +146,9 @@ fun MainScreen(
                                     },
                                     style = MaterialTheme.typography.headlineSmall,
                                     fontWeight = FontWeight.Black,
-                                    letterSpacing = (-0.5).sp
+                                    letterSpacing = (-0.5).sp,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
                                 )
 
                                 if (currentDestination == Destination.Usage) {
@@ -221,7 +224,7 @@ fun MainScreen(
                                 contentDescription = stringResource(R.string.title_home)
                             )
                         },
-                        label = { Text(stringResource(R.string.title_home)) },
+                        label = { Text(stringResource(R.string.title_home), maxLines = 1, overflow = TextOverflow.Ellipsis) },
                         selected = currentDestination == Destination.Home,
                         onClick = {
                             if (currentDestination != Destination.Home) {
@@ -237,7 +240,7 @@ fun MainScreen(
                                 contentDescription = stringResource(R.string.title_app_usage)
                             )
                         },
-                        label = { Text(stringResource(R.string.label_usage)) },
+                        label = { Text(stringResource(R.string.label_usage), maxLines = 1, overflow = TextOverflow.Ellipsis) },
                         selected = currentDestination == Destination.Usage,
                         onClick = {
                             if (currentDestination != Destination.Usage) {
@@ -253,7 +256,7 @@ fun MainScreen(
                                 contentDescription = stringResource(R.string.title_alerts)
                             )
                         },
-                        label = { Text(stringResource(R.string.label_alerts)) },
+                        label = { Text(stringResource(R.string.label_alerts), maxLines = 1, overflow = TextOverflow.Ellipsis) },
                         selected = currentDestination == Destination.Alerts,
                         onClick = {
                             if (currentDestination != Destination.Alerts) {
@@ -269,7 +272,7 @@ fun MainScreen(
                                 contentDescription = stringResource(R.string.title_limits)
                             )
                         },
-                        label = { Text(stringResource(R.string.label_plans)) },
+                        label = { Text(stringResource(R.string.label_plans), maxLines = 1, overflow = TextOverflow.Ellipsis) },
                         selected = currentDestination == Destination.Limits,
                         onClick = {
                             if (currentDestination != Destination.Limits) {
@@ -285,7 +288,7 @@ fun MainScreen(
                                 contentDescription = stringResource(R.string.title_settings)
                             )
                         },
-                        label = { Text(stringResource(R.string.title_settings)) },
+                        label = { Text(stringResource(R.string.title_settings), maxLines = 1, overflow = TextOverflow.Ellipsis) },
                         selected = currentDestination == Destination.Settings,
                         onClick = {
                             if (currentDestination != Destination.Settings) {
@@ -410,7 +413,9 @@ fun MainScreen(
                             title = {
                                 Text(
                                     text = stringResource(R.string.title_system_data_usage),
-                                    fontWeight = FontWeight.Black
+                                    fontWeight = FontWeight.Black,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
                                 )
                             },
                             navigationIcon = {

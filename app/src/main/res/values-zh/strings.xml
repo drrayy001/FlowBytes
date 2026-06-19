@@ -1,0 +1,357 @@
+<resources>
+    <string name="app_name">FlowBytes</string>
+
+    <!-- Screen Titles -->
+    <string name="title_app_usage">应用流量使用情况</string>
+    <string name="title_settings">设置</string>
+    <string name="title_home">首页</string>
+    <string name="title_limits">流量计划</string>
+    <string name="title_alerts">警报历史</string>
+    <string name="label_usage">使用情况</string>
+    <string name="label_plans">计划</string>
+    <string name="label_alerts">警报</string>
+
+    <!-- Accessibility Descriptions -->
+    <string name="cd_settings">打开设置</string>
+    <string name="cd_back">返回</string>
+    <string name="cd_prev_month">上个月</string>
+    <string name="cd_next_month">下个月</string>
+    <string name="cd_prev_year">上一年</string>
+    <string name="cd_next_year">下一年</string>
+    <string name="cd_dropdown">打开下拉菜单</string>
+    <string name="cd_pull_to_refresh">下拉以刷新使用数据</string>
+    <string name="cd_download">下载</string>
+    <string name="cd_upload">上传</string>
+    <string name="desc_download">下载速度</string>
+    <string name="desc_upload">上传速度</string>
+    <string name="desc_combined">合并速度</string>
+    <string name="desc_mobile_data">移动数据使用量</string>
+    <string name="desc_wifi">Wi-Fi 使用量</string>
+
+    <!-- Home Screen -->
+    <string name="label_today_colon">今天：</string>
+    <string name="label_separator">|</string>
+    <string name="label_download">下载</string>
+    <string name="label_upload">上传</string>
+    <string name="label_this_month">本月</string>
+    <string name="label_last_7_days">最近7天</string>
+    <string name="label_usage_breakdown">每周活动</string>
+    <string name="label_mobile">移动网络</string>
+    <string name="label_wifi">Wi-Fi</string>
+    <string name="label_combined">合并</string>
+    <string name="label_todays_usage">今日使用量</string>
+    <string name="label_usage_summary">使用量摘要</string>
+    <string name="label_usage_insight">使用量详情</string>
+    <string name="msg_limit_forecast_warning">您即将达到每日限额。请考虑减少数据使用。</string>
+    <string name="msg_limit_forecast_safe">您的数据使用量在每日限额内。</string>
+    <string name="label_projected_upper">预测量</string>
+    <string name="label_daily_limit_upper">每日限额</string>
+    <string name="msg_no_usage_recorded">尚无数据使用记录</string>
+
+    <!-- App Usage Screen -->
+    <string name="filter_daily">按天</string>
+    <string name="filter_monthly">按月</string>
+    <string name="filter_custom">自定义</string>
+    <string name="filter_mobile_wifi">移动与 Wi-Fi</string>
+    <string name="filter_mobile_only">仅移动网络</string>
+    <string name="filter_wifi_only">仅 Wi-Fi</string>
+    <string name="btn_ok">确定</string>
+    <string name="btn_cancel">取消</string>
+    <string name="btn_delete">删除</string>
+    <string name="btn_edit">编辑</string>
+    <string name="label_both">双网</string>
+    <string name="title_select_date_range">选择日期范围</string>
+    <string name="label_start_date">开始日期</string>
+    <string name="label_end_date">结束日期</string>
+    <string name="title_select_month">选择月份</string>
+    <string name="label_today">今天</string>
+    <string name="msg_no_usage_data">未找到所选过滤条件的流量使用数据。</string>
+    <string name="label_wifi_usage">Wi-Fi</string>
+    <string name="label_mobile_usage">移动网络</string>
+    <string name="label_wifi_colon">Wi-Fi：</string>
+    <string name="label_mobile_colon">移动网络：</string>
+    <string name="label_system_apps">系统应用</string>
+    <string name="title_system_data_usage">系统流量使用情况</string>
+    <string name="label_system_processes">系统进程</string>
+    <string name="label_tethering">热点与共享</string>
+    <string name="label_removed_apps">已卸载应用</string>
+    <string name="label_unattributed">系统 / 未归类</string>
+    <string name="label_unknown_app">未知应用</string>
+
+    <string name="tile_monitoring_on">流量监控已开启</string>
+    <string name="tile_monitoring_off">流量监控已关闭</string>
+
+    <!-- Settings: General -->
+    <string name="settings_section_general">常规</string>
+    <string name="settings_monitoring_toggle">启用流量监控</string>
+    <string name="settings_monitoring_desc">实时跟踪网络速度和数据使用量</string>
+    <string name="settings_reset_time">每日重置时间</string>
+    <string name="settings_reset_time_desc">每日开始新跟踪周期的时间</string>
+    <string name="dialog_reset_time_title">设置每日重置时间</string>
+    <string name="settings_monthly_reset_day">每月重置日期</string>
+    <string name="settings_monthly_reset_day_desc">计费周期在每月的第 %d 天重置</string>
+    <string name="dialog_reset_day_title">选择每月重置日期</string>
+    <string name="msg_reset_day_explanation">每月的数据使用和额度限制通知将从此日期开始计算。</string>
+
+    <!-- Settings: Notifications & Status Bar -->
+    <string name="settings_section_notifications">通知与状态栏</string>
+    <string name="settings_show_daily_usage">显示通知</string>
+    <string name="settings_daily_usage_desc">在通知栏中实时显示网速和流量使用情况</string>
+    <string name="settings_notification_content">通知内容</string>
+    <string name="settings_notification_content_desc">选择要在通知中显示的信息类型</string>
+    <string name="option_speed_only">仅显示网速</string>
+    <string name="option_daily_only">仅显示今日统计</string>
+    <string name="option_both">同时显示网速与今日统计</string>
+    <string name="settings_high_priority">高优先级</string>
+    <string name="settings_high_priority_desc">使网速指示器一直固定显示在通知顶部</string>
+    <string name="settings_hide_offline">离线时隐藏</string>
+    <string name="settings_hide_offline_desc">断开连接时自动隐藏网速指示器</string>
+    <string name="settings_indicator_size_desc">调整状态栏中网速指示图标的大小</string>
+
+    <!-- Settings: Alerts & Limits -->
+    <string name="settings_section_alerts">警报与额度限制</string>
+    <string name="settings_data_alerts">高流量警报</string>
+    <string name="settings_data_alerts_desc">当应用在后台消耗过多流量时接收通知</string>
+    <string name="settings_mobile_limit">移动数据限额</string>
+    <string name="settings_wifi_limit">Wi-Fi 数据限额</string>
+    <string name="label_limit_value">限额：%s</string>
+    <string name="label_disabled">已禁用</string>
+    <string name="dialog_set_limit_title">设置每日 %1$s 流量限额</string>
+    <string name="label_limit_mb">流量限额 (MB)</string>
+    <string name="msg_limit_desc">达到此限额时，您将收到通知警报。</string>
+    <string name="btn_set_limit">设置限额</string>
+
+    <string name="label_plan_duration">套餐时长</string>
+    <string name="msg_alert_muted">警报已静音</string>
+    <string name="title_select_plan_type">选择计划类型</string>
+    <string name="settings_indicator_size">图标大小</string>
+
+    <!-- Settings: Appearance -->
+    <string name="settings_section_appearance">个性化外观</string>
+    <string name="settings_app_theme">应用主题</string>
+    <string name="dialog_select_theme_title">选择主题</string>
+    <string name="theme_system">系统默认</string>
+    <string name="theme_light">浅色模式</string>
+    <string name="theme_dark">深色模式</string>
+    <string name="settings_material_you">Material You 动态色彩</string>
+    <string name="settings_material_you_desc">使用系统主题调色板色彩</string>
+    <string name="settings_accent_color">主题色</string>
+    <string name="settings_accent_color_desc">自定义应用主色调</string>
+    <string name="settings_amoled_mode">AMOLED 纯黑模式</string>
+    <string name="settings_amoled_mode_desc">使用纯黑背景以节省电量</string>
+    <string name="size_small">偏小</string>
+    <string name="size_medium">中等</string>
+    <string name="size_large">偏大</string>
+    <string name="settings_language">应用语言</string>
+    <string name="settings_language_desc">选择您偏好的语言</string>
+    <string name="dialog_select_language_title">选择语言</string>
+    <string name="language_default">系统默认</string>
+    <string name="language_arabic">阿拉伯语 (العربية)</string>
+    <string name="language_french">法语 (Français)</string>
+    <string name="language_spanish">西班牙语 (Español)</string>
+    <string name="language_german">德语 (Deutsch)</string>
+    <string name="language_portuguese">葡萄牙语 (Português)</string>
+    <string name="language_italian">意大利语 (Italiano)</string>
+    <string name="language_chinese">简体中文 (中文)</string>
+
+    <!-- Settings: Support & Feedback -->
+    <string name="settings_section_support">支持与反馈</string>
+    <string name="settings_rate_app">为 FlowBytes 评分</string>
+    <string name="settings_rate_app_desc">分享您的使用体验并帮助我们改进</string>
+    <string name="settings_share_app">分享给朋友</string>
+    <string name="settings_share_app_desc">向他人推荐 FlowBytes</string>
+    <string name="share_text_body">向您推荐 FlowBytes！它可以帮您精准监控和管理您的网络流量使用：https://play.google.com/store/apps/details?id=%1$s</string>
+    <string name="settings_help_feedback">帮助与反馈</string>
+    <string name="settings_help_feedback_desc">通过 Telegram 或电子邮件联系我们</string>
+    <string name="option_telegram">Telegram</string>
+    <string name="desc_telegram">直接向开发者发送消息</string>
+    <string name="option_email">电子邮件</string>
+    <string name="desc_email">向开发者发送电子邮件</string>
+    <string name="settings_donate">赞助支持</string>
+    <string name="settings_donate_desc">赞助我们以支持 FlowBytes 保持无广告且完全开源</string>
+    <string name="dialog_donate_title">赞助 FlowBytes</string>
+    <string name="dialog_donate_desc">如果您觉得 FlowBytes 对您有所帮助，请考虑支持其开发。您的每一份支持都至关重要！</string>
+    <string name="label_donate_amount_1">微薄支持 ($1.00)</string>
+    <string name="label_donate_amount_2_5">项目支持者 ($2.50)</string>
+    <string name="label_donate_amount_6">项目赞助人 ($6.00)</string>
+    <string name="desc_donate_1">对项目维护表达感谢的简单方式。</string>
+    <string name="desc_donate_2_5">帮助资助新功能和性能改进的持续开发。</string>
+    <string name="desc_donate_6">重大贡献，有助于使 FlowBytes 保持开源、无广告和独立。</string>
+    <string name="title_pick_amount">选择金额</string>
+    <string name="btn_donate">赞助</string>
+    <string name="msg_donation_success_title">非常感谢！</string>
+    <string name="msg_donation_success_body">非常感谢您的支持，它能够帮助我们维持项目的持续运营。</string>
+    <string name="msg_donation_cancelled">赞助已取消。</string>
+    <string name="msg_donation_failed">赞助失败：%1$s</string>
+
+    <!-- Settings: About -->
+    <string name="settings_section_about">关于</string>
+    <string name="settings_version_label">版本</string>
+    <string name="settings_view_source">开源源码</string>
+    <string name="settings_view_source_desc">FlowBytes 骄傲地宣布完全开源</string>
+    <string name="settings_privacy_policy">隐私政策</string>
+    <string name="settings_terms_conditions">服务条款</string>
+    <string name="settings_licenses">开源许可证</string>
+    <string name="label_am">上午</string>
+    <string name="label_pm">下午</string>
+
+    <!-- Alerts History -->
+    <string name="msg_no_alerts_history">未找到警报记录。</string>
+    <string name="btn_clear_history">清空记录</string>
+    <string name="label_alert_total">总计：%1$s</string>
+    <string name="label_alert_speed">网速：%1$s</string>
+    <string name="label_alert_down">下载：%1$s</string>
+    <string name="label_alert_up">上传：%1$s</string>
+    <string name="msg_confirm_clear_history">您确定要永久清空所有警报历史记录吗？</string>
+
+    <!-- New Strings extracted from Code -->
+    <string name="msg_enable_detection_hint">启用高流量警报后，您将在此处看到相关记录。</string>
+    <string name="label_advanced_settings">高级设置</string>
+    <string name="label_trigger_speed">触发网速</string>
+    <string name="label_total_data">流量总计</string>
+    <string name="title_mute_app">静音 %s</string>
+    <string name="desc_mute_app">不再接收此应用的高流量警报。</string>
+    <string name="btn_mute">静音</string>
+    <string name="title_whats_new">更新日志</string>
+    <string name="desc_whats_new">了解最新功能与体验改进。</string>
+    <string name="btn_done">完成</string>
+    <string name="title_vpn_disclosure">启用应用断网拦截</string>
+    <string name="desc_vpn_disclosure">FlowBytes 使用本地 VPN 服务来拦截限制超量应用的网络访问。</string>
+    <string name="msg_vpn_feature_local">100% 本地运行：您的流量数据绝不会离开您的设备。</string>
+    <string name="msg_vpn_feature_privacy">隐私第一：我们绝对不会收集、存储或追踪您的任何网络流量数据。</string>
+    <string name="msg_vpn_feature_focused">精准控制：拦截仅会影响您选择限制的应用，其他应用不受干扰。</string>
+    <string name="btn_not_now">暂不启用</string>
+    <string name="btn_continue">继续</string>
+    <string name="title_custom_color">自定义颜色</string>
+    <string name="btn_apply_globally">全局应用</string>
+    <string name="btn_reset_default">重置为默认</string>
+    <string name="btn_get_started">立即开始</string>
+    <string name="title_welcome">欢迎使用 FlowBytes</string>
+    <string name="msg_onboarding_desc">为了提供精准的流量使用统计和实时网速监控，我们需要您授予一些必要的权限。</string>
+    <string name="label_usage_access">应用使用情况访问权限</string>
+    <string name="desc_usage_access">允许系统统计每个应用的具体流量消耗数据。</string>
+    <string name="label_notifications">通知权限</string>
+    <string name="desc_notifications">允许在状态栏中实时显示当前网速指示器。</string>
+    <string name="label_battery_optimization">电池优化白名单</string>
+    <string name="desc_battery_optimization">允许网速和流量监控服务在后台持续稳定运行。</string>
+    <string name="label_granted">已授予</string>
+    <string name="btn_grant">去授予</string>
+    <string name="title_traffic_settings">警报参数配置</string>
+    <string name="label_speed_threshold">检测阈值</string>
+    <string name="label_time_above_threshold">超出限制持续时间</string>
+    <string name="label_alert_cooldown">警报冷却时间</string>
+    <string name="label_reset_speed_threshold">重置阈值</string>
+    <string name="label_time_below_reset">低于阈值持续时间</string>
+    <string name="btn_save_config">保存参数配置</string>
+    <string name="label_app_limits">应用限额</string>
+    <string name="filter_all">全部</string>
+    <string name="label_daily_limits">每日限额</string>
+    <string name="label_monthly_limits">每月限额</string>
+    <string name="label_high_traffic">高网络流量</string>
+    <string name="msg_no_alerts_all">尚无警报记录。</string>
+    <string name="msg_no_alerts_app">尚无应用额度限制警报记录。</string>
+    <string name="msg_no_alerts_daily">尚无每日额度限制警报记录。</string>
+    <string name="msg_no_alerts_monthly">尚无每月额度限制警报记录。</string>
+    <string name="msg_no_alerts_traffic">尚无高流量警报记录。</string>
+    <string name="label_app_limit_reached">应用流量已达上限</string>
+    <string name="label_daily_limit_reached">今日流量已达上限</string>
+    <string name="label_monthly_limit_reached">本月流量已达上限</string>
+    <string name="label_custom_limit_reached">自定义流量已达上限</string>
+    <string name="msg_no_alerts_custom">尚无自定义限额警报记录。</string>
+    <string name="label_start_date_select">开始日期：%s</string>
+    <string name="label_end_date_select">结束日期：%s</string>
+    <string name="msg_invalid_date_range">结束日期必须等于或晚于开始日期</string>
+    <string name="label_high_traffic_detected">检测到网络高流量消耗</string>
+    <string name="label_trigger_speed_header">触发网速</string>
+    <string name="label_limit_set_header">额度限额</string>
+    <string name="label_usage_recorded_header">已记录使用量</string>
+    <string name="label_history_header">历史记录</string>
+    <string name="msg_no_app_limits">尚无应用额度限制配置。</string>
+    <string name="desc_restrict_app_subtitle">添加并配置应用以开始管理其数据网络流量使用。</string>
+    <string name="cd_add_app_limit">添加应用流量限额</string>
+    <string name="label_block_apps">自动拦截超额应用</string>
+    <string name="desc_block_apps">当应用流量消耗超出限额时，自动拦截限制其网络访问</string>
+    <string name="title_edit_app_limit">编辑应用流量限额</string>
+    <string name="btn_create_app_limit">创建限额</string>
+    <string name="btn_save_changes">保存修改</string>
+    <string name="label_app_limit_selection">应用限额</string>
+    <string name="desc_app_limit_selection">针对特定应用设置限额和限制</string>
+    <string name="title_delete_limit">删除流量限额</string>
+    <string name="msg_confirm_delete_limit">确定要删除 %s 的流量额度限制吗？</string>
+    <string name="msg_no_apps_found">未找到应用。</string>
+    <string name="placeholder_search_apps">搜索应用</string>
+    <string name="title_select_application">选择应用</string>
+    <string name="title_configure_limit">配置限额参数</string>
+    <string name="title_general_limits">系统额度计划</string>
+    <string name="msg_no_general_limits">尚无全局设备额度计划配置。</string>
+    <string name="desc_add_general_limit_subtitle">设置全局设备数据流量额度计划以保持全局控制。</string>
+    <string name="label_general_limit_selection">全局设备额度计划</string>
+    <string name="desc_general_limit_selection">配置全局整个设备的每日数据流量额度</string>
+    <string name="title_choose_limit_type">选择额度限额类型</string>
+
+    <!-- Notification Strings -->
+    <string name="notification_limit_reached_title">每日 %s 流量超额警报</string>
+    <string name="notification_limit_reached_msg">您今天已消耗了 %s 的数据流量。</string>
+    <string name="status_not_supported">此设备不支持网速监控功能</string>
+    <string name="channel_speed_monitor_name">实时网速监控</string>
+    <string name="channel_speed_monitor_desc">状态栏实时显示网速和连接指示</string>
+    <string name="channel_usage_alerts_name">高流量超额警报</string>
+    <string name="channel_usage_alerts_desc">网络限额超额的提醒通知</string>
+    <string name="notification_high_usage_app_msg">%1$s 正在大量消耗流量：%2$s（已使用 %3$s）。</string>
+    <string name="notification_high_usage_generic_msg">检测到高额后台数据使用量：%s</string>
+    <string name="notification_high_usage_title">后台数据高流量消耗</string>
+    <string name="notification_summary_title">流量限制警报</string>
+    <string name="notification_summary_msg">点击以查看高流量限制警报的历史历史记录。</string>
+    <string name="notification_summary_text">FlowBytes 警报通知</string>
+    <string name="notification_app_limit_msg">%1$s 流量已达到其设定的限制限额 %2$s。</string>
+    <string name="notification_app_limit_title">%s 流量超限警报</string>
+    <string name="msg_reached_limit">您已达到 %1$s %2$s 的额度限制（已消耗了 %3$s）。</string>
+    <string name="btn_silence">静音警报</string>
+
+    <!-- Badges -->
+    <string name="badge_limit_reached">流量超额</string>
+    <string name="badge_blocked">网络已封锁</string>
+    <string name="badge_silenced">警报已静音</string>
+
+    <!-- App Review Dialog -->
+    <string name="review_dialog_title">觉得 FlowBytes 怎么样？</string>
+    <string name="review_dialog_description">如果您觉得 FlowBytes 很有帮助，请花点时间给我们评分！这能鼓励我们进一步改进，并帮我们维持完全无广告的体验。</string>
+    <string name="review_later">稍后再说</string>
+    <string name="review_never">从不提示</string>
+    <string name="review_submit_feedback">提交反馈</string>
+    <string name="review_rate_on_play_store">前往应用商店评分</string>
+    <string name="review_feedback_title">协助我们持续改进</string>
+    <string name="review_feedback_description">未能让您完全满意，我们深感抱歉。请告诉我们我们可以如何改进 FlowBytes，为您带来更好的使用体验。</string>
+    <string name="review_feedback_placeholder">在此输入您的意见或反馈建议...</string>
+    <string name="review_feedback_thanks">非常感谢您的反馈！</string>
+    <string name="review_play_store_title">感谢您的评分！</string>
+    <string name="review_play_store_description">如果您能在 Google Play 应用商店撰写简短的评价，我们将万分感激。这真的能帮我们大忙！</string>
+    <string name="review_toast_feedback_submitted">反馈提交成功。非常感谢！</string>
+
+    <string name="label_network_type">网络类型</string>
+    <string name="label_limit_period">计费额度周期</string>
+    <string name="label_daily_wifi">每日 Wi-Fi</string>
+    <string name="label_daily_mobile">每日移动网络</string>
+    <string name="label_monthly_wifi">每月 Wi-Fi</string>
+    <string name="label_monthly_mobile">每月移动网络</string>
+    <string name="label_custom_wifi">自定义 Wi-Fi</string>
+    <string name="label_custom_mobile">自定义移动网络</string>
+    <string name="settings_traffic_threshold_subtitle">配置高流量检测触发的阈值</string>
+    <string name="whats_new_custom_limits_title">自定义日期限制限额</string>
+    <string name="whats_new_custom_limits_desc">您现在可以针对特定的自定义日期范围（跨越移动和 Wi-Fi 网络）设定独立的流量使用限制。</string>
+    <string name="whats_new_reset_day_title">每月计费周期重置日</string>
+    <string name="whats_new_reset_day_desc">支持自定义的每月月结账日。自由选择当月流量统计计费周期的重置日期。</string>
+    <string name="feedback_email_subject">FlowBytes 反馈 - %1$d 星评级</string>
+
+    <string name="legal_privacy_policy" formatted="false">隐私政策\n生效日期：2026年4月29日\n\n我，FlowBytes（下称“本应用”）的开发者，免费提供本应用。本应用按“原样”提供，且不提供任何形式的担保或保证。\n\n1. 信息收集与使用\nFlowBytes 会监控您设备的网络速度和流量使用情况（Wi-Fi 和蜂窝网络），以帮助您掌控网络。所有监控、流量计算以及拦截操作均在您的设备本地处理。我们绝对不会收集、存储或传输您的任何个人数据，包括：\n- 网页浏览历史记录\n- 网络流量传输内容\n- IP 地址\n- 任何其他个人身份信息\n\n2. 所需的特殊权限\n为保证功能正常运作，本应用需要您授予以下特殊权限：\n- 应用使用情况访问权限（网络状态统计）：用于访问系统底层的流量使用情况数据（通过 NetworkStatsManager 和 TrafficStats），以此计算下载/上传速度并按应用统计每日/每月的流量消耗数据。\n- 前台服务权限：允许本应用在后台运行系统服务，以便在系统通知栏中实时刷新网络速度指示器并维持连续的流量监控。\n- VPN 服务权限（本地虚拟网络）：FlowBytes 会使用系统 VPN 框架在本地建立流量拦截服务，以便拦截已超出限额的网络流量访问。此 VPN 服务 100% 在您设备本地独立运行；流量绝不会上传至外部，我们也绝不会拦截窃听您的隐私内容。\n\n通过上述权限访问的所有数据都将安全地保留在您的设备本地，并且仅用于提供本应用内置的监控与控制功能。\n\n3. 第三方服务与 SDK\n本应用不接入任何可能收集您的个人身份信息的第三方数据分析服务、广告联盟 SDK 或推送跟踪组件。\n\n4. 数据安全保障\n由于所有的流量计算和拦截都完全在您设备本地独立完成，因此我们这边不存在任何服务器端泄露数据的隐私风险。但考虑到互联网和电子存储环境的局限性，我们无法做出绝对零风险的数据安全承诺。\n\n5. 儿童隐私保护\n本应用不面向 13 岁以下的儿童。我们绝不会有意收集 13 岁以下儿童的任何个人身份信息。\n\n6. 隐私政策的更新\n我们可能会随时更新本隐私政策。任何更新都将在此页面公布。建议您定期查看此页面以了解最新的隐私条款。\n\n7. 联系我们\n如果您对本隐私政策有任何疑问或改进建议，可以通过以下方式与我们取得联系：\n电子邮件：drrayy001@gmail.com</string>
+    <string name="legal_terms_conditions">服务条款\n\n1. 条款的接受与同意\n一旦您开始使用 FlowBytes，即表示您已阅读并完全同意遵守本服务条款。如果您不同意这些条款，请立即停止使用并卸载本应用。\n\n2. 服务与免责声明\nFlowBytes 提供的网速统计和流量消耗数据仅供参考。虽然我们极力确保统计数据的准确性，但网速测量和流量计算可能会受系统广播延迟等因素影响而存在一定偏差，其结果不能作为与您的运营商官方账单对账的最终凭据。\n\n3. 电池能耗与整机性能\n本应用需要运行后台监控服务来测量网络带宽。虽然我们已对后台服务运行时的功耗做出了最大程度的算法优化，但在部分设备上它仍可能会对电池能耗造成极其细微的影响。\n\n4. 责任限制与索赔免除\n对于因使用本应用（或因其流量统计存在偏差等原因）而造成的任何超出套餐外的额外扣费、数据丢失或设备故障，开发者概不承担任何直接或间接的赔偿责任。</string>
+    <string name="legal_licenses">开源许可声明\n\n- Jetpack Compose: Apache License 2.0\n- Kotlin Coroutines: Apache License 2.0\n- Android Jetpack Libraries (Room, DataStore, Lifecycle): Apache License 2.0\n- Material Components for Android: Apache License 2.0\n- Kotlin Standard Library: Apache License 2.0\n\n本软件按“原样”提供，不提供任何明示或暗示的保证。</string>
+
+    <string name="label_daily_wifi_limit">每日 Wi-Fi 限额</string>
+    <string name="label_monthly_wifi_limit">每月 Wi-Fi 限额</string>
+    <string name="label_daily_mobile_limit">每日移动网络限额</string>
+    <string name="label_monthly_mobile_limit">每月移动网络限额</string>
+    <string name="label_unknown">未知</string>
+    <string name="desc_configure_limit_format">配置您的 %1$s 计划限额。</string>
+    <string name="label_select_date">选择日期</string>
+</resources>

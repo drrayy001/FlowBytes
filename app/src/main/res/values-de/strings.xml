@@ -1,0 +1,357 @@
+<resources>
+    <string name="app_name">FlowBytes</string>
+
+    <!-- Screen Titles -->
+    <string name="title_app_usage">App-Nutzung</string>
+    <string name="title_settings">Einstellungen</string>
+    <string name="title_home">Home</string>
+    <string name="title_limits">Datenpläne</string>
+    <string name="title_alerts">Alarmverlauf</string>
+    <string name="label_usage">Nutzung</string>
+    <string name="label_plans">Pläne</string>
+    <string name="label_alerts">Alarme</string>
+
+    <!-- Accessibility Descriptions -->
+    <string name="cd_settings">Einstellungen öffnen</string>
+    <string name="cd_back">Zurück navigieren</string>
+    <string name="cd_prev_month">Vorheriger Monat</string>
+    <string name="cd_next_month">Nächster Monat</string>
+    <string name="cd_prev_year">Vorheriges Jahr</string>
+    <string name="cd_next_year">Nächstes Jahr</string>
+    <string name="cd_dropdown">Dropdown-Menü öffnen</string>
+    <string name="cd_pull_to_refresh">Zum Aktualisieren der Nutzungsdaten nach unten ziehen</string>
+    <string name="cd_download">Download</string>
+    <string name="cd_upload">Upload</string>
+    <string name="desc_download">Download-Geschwindigkeit</string>
+    <string name="desc_upload">Upload-Geschwindigkeit</string>
+    <string name="desc_combined">Kombinierte Geschwindigkeit</string>
+    <string name="desc_mobile_data">Mobile Datennutzung</string>
+    <string name="desc_wifi">WLAN-Nutzung</string>
+
+    <!-- Home Screen -->
+    <string name="label_today_colon">Heute:</string>
+    <string name="label_separator">|</string>
+    <string name="label_download">Download</string>
+    <string name="label_upload">Upload</string>
+    <string name="label_this_month">Diesen Monat</string>
+    <string name="label_last_7_days">LETZTE 7 TAGE</string>
+    <string name="label_usage_breakdown">Wöchentliche Aktivität</string>
+    <string name="label_mobile">Mobil</string>
+    <string name="label_wifi">WLAN</string>
+    <string name="label_combined">Kombiniert</string>
+    <string name="label_todays_usage">Heutige Nutzung</string>
+    <string name="label_usage_summary">Nutzungszusammenfassung</string>
+    <string name="label_usage_insight">Nutzungseinblick</string>
+    <string name="msg_limit_forecast_warning">Sie nähern sich Ihrem täglichen Limit. Ziehen Sie eine Reduzierung der Datennutzung in Betracht.</string>
+    <string name="msg_limit_forecast_safe">Ihre Datennutzung liegt gut innerhalb Ihres täglichen Limits.</string>
+    <string name="label_projected_upper">PROJIZIERT</string>
+    <string name="label_daily_limit_upper">TÄGLICHES LIMIT</string>
+    <string name="msg_no_usage_recorded">Noch keine Datennutzung aufgezeichnet</string>
+
+    <!-- App Usage Screen -->
+    <string name="filter_daily">Täglich</string>
+    <string name="filter_monthly">Monatlich</string>
+    <string name="filter_custom">Benutzerdefiniert</string>
+    <string name="filter_mobile_wifi">Mobil &amp; WLAN</string>
+    <string name="filter_mobile_only">Nur Mobil</string>
+    <string name="filter_wifi_only">Nur WLAN</string>
+    <string name="btn_ok">OK</string>
+    <string name="btn_cancel">Abbrechen</string>
+    <string name="btn_delete">Löschen</string>
+    <string name="btn_edit">Bearbeiten</string>
+    <string name="label_both">Beide</string>
+    <string name="title_select_date_range">Zeitraum wählen</string>
+    <string name="label_start_date">Von</string>
+    <string name="label_end_date">Bis</string>
+    <string name="title_select_month">Monat auswählen</string>
+    <string name="label_today">Heute</string>
+    <string name="msg_no_usage_data">Keine Nutzungsdaten für den ausgewählten Filter gefunden.</string>
+    <string name="label_wifi_usage">WLAN</string>
+    <string name="label_mobile_usage">Mobil</string>
+    <string name="label_wifi_colon">WLAN:</string>
+    <string name="label_mobile_colon">Mobil:</string>
+    <string name="label_system_apps">System-Apps</string>
+    <string name="title_system_data_usage">Systemdatennutzung</string>
+    <string name="label_system_processes">Systemprozesse</string>
+    <string name="label_tethering">Tethering &amp; Hotspot</string>
+    <string name="label_removed_apps">Entfernte Apps</string>
+    <string name="label_unattributed">System / Nicht zugeordnet</string>
+    <string name="label_unknown_app">Unbekannte App</string>
+
+    <string name="tile_monitoring_on">Überwachung AN</string>
+    <string name="tile_monitoring_off">Überwachung AUS</string>
+
+    <!-- Settings: General -->
+    <string name="settings_section_general">Allgemein</string>
+    <string name="settings_monitoring_toggle">Überwachung aktivieren</string>
+    <string name="settings_monitoring_desc">Netzwerkgeschwindigkeit und Datennutzung in Echtzeit verfolgen</string>
+    <string name="settings_reset_time">Zurücksetzungszeit</string>
+    <string name="settings_reset_time_desc">Uhrzeit, zu der ein neuer Tracking-Zyklus beginnt</string>
+    <string name="dialog_reset_time_title">Zurücksetzungszeit einstellen</string>
+    <string name="settings_monthly_reset_day">Monatlicher Zurücksetzungstag</string>
+    <string name="settings_monthly_reset_day_desc">Abrechnungszyklus wird am Tag %d des Monats zurückgesetzt</string>
+    <string name="dialog_reset_day_title">Abrechnungstag des Monats auswählen</string>
+    <string name="msg_reset_day_explanation">Alle monatlichen Datennutzungen und Limit-Benachrichtigungen werden ab diesem Tag des Monats gezählt.</string>
+
+    <!-- Settings: Notifications & Status Bar -->
+    <string name="settings_section_notifications">Benachrichtigungen &amp; Statusleiste</string>
+    <string name="settings_show_daily_usage">Benachrichtigung anzeigen</string>
+    <string name="settings_daily_usage_desc">Echtzeit-Geschwindigkeiten und Nutzung im Benachrichtigungsbereich anzeigen</string>
+    <string name="settings_notification_content">Benachrichtigungsinhalt</string>
+    <string name="settings_notification_content_desc">Auswählen, welche Informationen in der Benachrichtigung angezeigt werden sollen</string>
+    <string name="option_speed_only">Nur Geschwindigkeit</string>
+    <string name="option_daily_only">Nur tägliche Statistiken</string>
+    <string name="option_both">Geschwindigkeit &amp; tägliche Statistiken</string>
+    <string name="settings_high_priority">Hohe Priorität</string>
+    <string name="settings_high_priority_desc">Geschwindigkeitsanzeige oben in Ihren Benachrichtigungen halten</string>
+    <string name="settings_hide_offline">Offline ausblenden</string>
+    <string name="settings_hide_offline_desc">Geschwindigkeitsanzeige automatisch ausblenden, wenn die Verbindung getrennt ist</string>
+    <string name="settings_indicator_size_desc">Größe der Geschwindigkeitsanzeige in der Statusleiste anpassen</string>
+
+    <!-- Settings: Alerts & Limits -->
+    <string name="settings_section_alerts">Alarme &amp; Limits</string>
+    <string name="settings_data_alerts">Datenüberschreitungs-Alarme</string>
+    <string name="settings_data_alerts_desc">Benachrichtigt werden, wenn Apps im Hintergrund übermäßig viele Daten verbrauchen</string>
+    <string name="settings_mobile_limit">Limit für mobile Daten</string>
+    <string name="settings_wifi_limit">WLAN-Datenlimit</string>
+    <string name="label_limit_value">Limit: %s</string>
+    <string name="label_disabled">Deaktiviert</string>
+    <string name="dialog_set_limit_title">Tägliches %1$s-Limit festlegen</string>
+    <string name="label_limit_mb">Limit (MB)</string>
+    <string name="msg_limit_desc">Sie erhalten eine Benachrichtigung, wenn dieses Limit erreicht wird.</string>
+    <string name="btn_set_limit">Limit festlegen</string>
+
+    <string name="label_plan_duration">Plan-Dauer</string>
+    <string name="msg_alert_muted">Alarm stummgeschaltet</string>
+    <string name="title_select_plan_type">Plantyp auswählen</string>
+    <string name="settings_indicator_size">Symbolgröße</string>
+
+    <!-- Settings: Appearance -->
+    <string name="settings_section_appearance">Darstellung</string>
+    <string name="settings_app_theme">App-Design</string>
+    <string name="dialog_select_theme_title">Design auswählen</string>
+    <string name="theme_system">System</string>
+    <string name="theme_light">Hell</string>
+    <string name="theme_dark">Dunkel</string>
+    <string name="settings_material_you">Material You</string>
+    <string name="settings_material_you_desc">Systemakzentfarben verwenden</string>
+    <string name="settings_accent_color">Akzentfarbe</string>
+    <string name="settings_accent_color_desc">Benutzerdefinierte Primärfarbe auswählen</string>
+    <string name="settings_amoled_mode">Amoled-Modus</string>
+    <string name="settings_amoled_mode_desc">Tiefschwarzer Hintergrund</string>
+    <string name="size_small">Klein</string>
+    <string name="size_medium">Mittel</string>
+    <string name="size_large">Groß</string>
+    <string name="settings_language">Sprache</string>
+    <string name="settings_language_desc">Bevorzugte Sprache auswählen</string>
+    <string name="dialog_select_language_title">Sprache auswählen</string>
+    <string name="language_default">Systemstandard</string>
+    <string name="language_arabic">Arabisch (العربية)</string>
+    <string name="language_french">Französisch (Français)</string>
+    <string name="language_spanish">Spanisch (Español)</string>
+    <string name="language_german">Deutsch (Deutsch)</string>
+    <string name="language_portuguese">Portugiesisch (Português)</string>
+    <string name="language_italian">Italienisch (Italiano)</string>
+    <string name="language_chinese">Chinesisch (中文)</string>
+
+    <!-- Settings: Support & Feedback -->
+    <string name="settings_section_support">Support &amp; Feedback</string>
+    <string name="settings_rate_app">FlowBytes bewerten</string>
+    <string name="settings_rate_app_desc">Teilen Sie Ihre Erfahrungen und helfen Sie uns, uns zu verbessern</string>
+    <string name="settings_share_app">Mit Freunden teilen</string>
+    <string name="settings_share_app_desc">FlowBytes an andere weiterempfehlen</string>
+    <string name="share_text_body">Probiere FlowBytes aus! Verfolge deine Datennutzung genau: https://play.google.com/store/apps/details?id=%1$s</string>
+    <string name="settings_help_feedback">Hilfe &amp; Feedback</string>
+    <string name="settings_help_feedback_desc">Kontaktieren Sie uns per Telegram oder E-Mail</string>
+    <string name="option_telegram">Telegram</string>
+    <string name="desc_telegram">Nachricht direkt an den Entwickler senden</string>
+    <string name="option_email">E-Mail</string>
+    <string name="desc_email">Senden Sie eine E-Mail an den Entwickler</string>
+    <string name="settings_donate">Spenden</string>
+    <string name="settings_donate_desc">Unterstützen Sie uns dabei, FlowBytes werbefrei und quelloffen zu halten</string>
+    <string name="dialog_donate_title">Support FlowBytes</string>
+    <string name="dialog_donate_desc">Wenn du FlowBytes nützlich findest, ziehe bitte in Betracht, die Entwicklung zu unterstützen. Jeder Beitrag hilft!</string>
+    <string name="label_donate_amount_1">Kleines Trinkgeld ($1.00)</string>
+    <string name="label_donate_amount_2_5">Projekt-Unterstützer ($2.50)</string>
+    <string name="label_donate_amount_6">Projekt-Schirmherr ($6.00)</string>
+    <string name="desc_donate_1">Eine einfache Möglichkeit, deine Wertschätzung zu zeigen und die Wartung des Projekts zu unterstützen.</string>
+    <string name="desc_donate_2_5">Hilft bei der Finanzierung der laufenden Entwicklung neuer Funktionen und Leistungsverbesserungen.</string>
+    <string name="desc_donate_6">Ein bedeutender Beitrag, um FlowBytes open-source, werbefrei und unabhängig zu halten.</string>
+    <string name="title_pick_amount">Betrag auswählen</string>
+    <string name="btn_donate">Spenden</string>
+    <string name="msg_donation_success_title">Vielen Dank!</string>
+    <string name="msg_donation_success_body">Deine Unterstützung wird sehr geschätzt und hilft, das Projekt am Leben zu erhalten.</string>
+    <string name="msg_donation_cancelled">Spende abgebrochen.</string>
+    <string name="msg_donation_failed">Spende fehlgeschlagen: %1$s</string>
+
+    <!-- Settings: About -->
+    <string name="settings_section_about">Über</string>
+    <string name="settings_version_label">Version</string>
+    <string name="settings_view_source">Quellcode</string>
+    <string name="settings_view_source_desc">FlowBytes ist stolz darauf, Open Source zu sein</string>
+    <string name="settings_privacy_policy">Datenschutz-Bestimmungen</string>
+    <string name="settings_terms_conditions">Allgemeine Geschäftsbedingungen</string>
+    <string name="settings_licenses">Open-Source-Lizenzen</string>
+    <string name="label_am">AM</string>
+    <string name="label_pm">PM</string>
+
+    <!-- Alerts History -->
+    <string name="msg_no_alerts_history">Kein Alarmverlauf gefunden.</string>
+    <string name="btn_clear_history">Verlauf löschen</string>
+    <string name="label_alert_total">Gesamt: %1$s</string>
+    <string name="label_alert_speed">Geschwindigkeit: %1$s</string>
+    <string name="label_alert_down">Down: %1$s</string>
+    <string name="label_alert_up">Up: %1$s</string>
+    <string name="msg_confirm_clear_history">Möchten Sie Ihren Alarmverlauf wirklich dauerhaft löschen?</string>
+
+    <!-- New Strings extracted from Code -->
+    <string name="msg_enable_detection_hint">Aktivieren Sie Datenüberschreitungs-Alarme, um Ihren Verlauf hier anzuzeigen.</string>
+    <string name="label_advanced_settings">Erweiterte Einstellungen</string>
+    <string name="label_trigger_speed">Auslösegeschwindigkeit</string>
+    <string name="label_total_data">Gesamte Daten</string>
+    <string name="title_mute_app">Stummschalten %s</string>
+    <string name="desc_mute_app">Keine Datenüberschreitungs-Alarme mehr für diese Anwendung erhalten.</string>
+    <string name="btn_mute">Stumm</string>
+    <string name="title_whats_new">Was gibt\'s Neues</string>
+    <string name="desc_whats_new">Sehen Sie sich die neuesten Funktionen und Verbesserungen an.</string>
+    <string name="btn_done">Fertig</string>
+    <string name="title_vpn_disclosure">App-Sperre aktivieren</string>
+    <string name="desc_vpn_disclosure">FlowBytes verwendet ein lokales VPN, um den Internetzugang für Apps zu verwalten, die ihr Limit überschreiten.</string>
+    <string name="msg_vpn_feature_local">100% Lokal: Ihr Datenverkehr verlässt niemals Ihr Gerät.</string>
+    <string name="msg_vpn_feature_privacy">Datenschutz zuerst: Wir erfassen, speichern oder verfolgen Ihre Daten niemals.</string>
+    <string name="msg_vpn_feature_focused">Zielgerichtet: Betrifft nur die Apps, die Sie einschränken möchten.</string>
+    <string name="btn_not_now">Nicht jetzt</string>
+    <string name="btn_continue">Weiter</string>
+    <string name="title_custom_color">Farbe anpassen</string>
+    <string name="btn_apply_globally">Global anwenden</string>
+    <string name="btn_reset_default">Auf Standard zurücksetzen</string>
+    <string name="btn_get_started">Loslegen</string>
+    <string name="title_welcome">Willkommen bei FlowBytes</string>
+    <string name="msg_onboarding_desc">Um eine genaue Datenverfolgung und Live-Geschwindigkeitsüberwachung bereitzustellen, benötigen wir einige Berechtigungen.</string>
+    <string name="label_usage_access">Nutzungszugriff</string>
+    <string name="desc_usage_access">Erforderlich, um die Datennutzung pro Anwendung zu verfolgen.</string>
+    <string name="label_notifications">Benachrichtigungen</string>
+    <string name="desc_notifications">Erforderlich, um die Live-Geschwindigkeit in der Statusleiste anzuzeigen.</string>
+    <string name="label_battery_optimization">Akku-Optimierung</string>
+    <string name="desc_battery_optimization">Erforderlich, um die Geschwindigkeitsüberwachung im Hintergrund laufen zu lassen.</string>
+    <string name="label_granted">Erteilt</string>
+    <string name="btn_grant">Gewähren</string>
+    <string name="title_traffic_settings">Alarmkonfiguration</string>
+    <string name="label_speed_threshold">Erkennungsschwelle</string>
+    <string name="label_time_above_threshold">Dauer über Limit</string>
+    <string name="label_alert_cooldown">Benachrichtigungs-Cooldown</string>
+    <string name="label_reset_speed_threshold">Zurücksetzungsschwelle</string>
+    <string name="label_time_below_reset">Dauer unter Schwelle</string>
+    <string name="btn_save_config">Konfiguration speichern</string>
+    <string name="label_app_limits">App-Limits</string>
+    <string name="filter_all">Alle</string>
+    <string name="label_daily_limits">Tägliche Limits</string>
+    <string name="label_monthly_limits">Monatliche Limits</string>
+    <string name="label_high_traffic">Hoher Datenverkehr</string>
+    <string name="msg_no_alerts_all">Keine Alarme aufgezeichnet.</string>
+    <string name="msg_no_alerts_app">Keine App-Limit-Alarme aufgezeichnet.</string>
+    <string name="msg_no_alerts_daily">Keine täglichen Limit-Alarme aufgezeichnet.</string>
+    <string name="msg_no_alerts_monthly">Keine monatlichen Limit-Alarme aufgezeichnet.</string>
+    <string name="msg_no_alerts_traffic">Keine Alarme für hohen Datenverkehr aufgezeichnet.</string>
+    <string name="label_app_limit_reached">App-Limit erreicht</string>
+    <string name="label_daily_limit_reached">Tägliches Limit erreicht</string>
+    <string name="label_monthly_limit_reached">Monatliches Limit erreicht</string>
+    <string name="label_custom_limit_reached">Benutzerdefiniertes Limit erreicht</string>
+    <string name="msg_no_alerts_custom">Keine benutzerdefinierten Limit-Alarme aufgezeichnet.</string>
+    <string name="label_start_date_select">Startdatum: %s</string>
+    <string name="label_end_date_select">Enddatum: %s</string>
+    <string name="msg_invalid_date_range">Enddatum muss am oder nach dem Startdatum liegen</string>
+    <string name="label_high_traffic_detected">Hoher Datenverkehr erkannt</string>
+    <string name="label_trigger_speed_header">AUSLÖSEGESCHWINDIGKEIT</string>
+    <string name="label_limit_set_header">LIMIT FESTGELEGT</string>
+    <string name="label_usage_recorded_header">NUTZUNG AUFGEZEICHNET</string>
+    <string name="label_history_header">VERLAUF</string>
+    <string name="msg_no_app_limits">Keine App-Limits konfiguriert.</string>
+    <string name="desc_restrict_app_subtitle">Fügen Sie eine Anwendung hinzu, um deren Datennutzung zu verwalten.</string>
+    <string name="cd_add_app_limit">App-Limit hinzufügen</string>
+    <string name="label_block_apps">Apps sperren</string>
+    <string name="desc_block_apps">Den Internetzugang für Apps, die ihr Limit erreichen, automatisch einschränken</string>
+    <string name="title_edit_app_limit">App-Limit bearbeiten</string>
+    <string name="btn_create_app_limit">Limit erstellen</string>
+    <string name="btn_save_changes">Änderungen speichern</string>
+    <string name="label_app_limit_selection">App-Limit</string>
+    <string name="desc_app_limit_selection">Einschränkungen für eine bestimmte Anwendung festlegen</string>
+    <string name="title_delete_limit">Limit löschen</string>
+    <string name="msg_confirm_delete_limit">Sind Sie sicher, dass Sie das Limit für %s entfernen möchten?</string>
+    <string name="msg_no_apps_found">Keine Anwendungen gefunden.</string>
+    <string name="placeholder_search_apps">Apps suchen</string>
+    <string name="title_select_application">Anwendung auswählen</string>
+    <string name="title_configure_limit">Limit konfigurieren</string>
+    <string name="title_general_limits">Systempläne</string>
+    <string name="msg_no_general_limits">Keine Systempläne konfiguriert.</string>
+    <string name="desc_add_general_limit_subtitle">Legen Sie einen geräteweiten Datenplan fest, um die Kontrolle zu behalten.</string>
+    <string name="label_general_limit_selection">Systemplan</string>
+    <string name="desc_general_limit_selection">Geräteweite tägliche Datenlimits konfigurieren</string>
+    <string name="title_choose_limit_type">Limit-Typ wählen</string>
+
+    <!-- Notification Strings -->
+    <string name="notification_limit_reached_title">Tägliches %s-Limit erreicht</string>
+    <string name="notification_limit_reached_msg">Sie haben heute %s verbraucht.</string>
+    <string name="status_not_supported">Geschwindigkeitsüberwachung wird auf diesem Gerät nicht unterstützt</string>
+    <string name="channel_speed_monitor_name">Geschwindigkeitsüberwachung</string>
+    <string name="channel_speed_monitor_desc">Echtzeit-Netzwerkgeschwindigkeitsanzeigen</string>
+    <string name="channel_usage_alerts_name">Datenüberschreitungs-Alarme</string>
+    <string name="channel_usage_alerts_desc">Benachrichtigungen für Datenlimit-Schwellenwerte</string>
+    <string name="notification_high_usage_app_msg">%1$s verbraucht erhebliche Daten: %2$s (%3$s genutzt).</string>
+    <string name="notification_high_usage_generic_msg">Hohe Hintergrunddatennutzung erkannt: %s</string>
+    <string name="notification_high_usage_title">Hohe Datennutzung</string>
+    <string name="notification_summary_title">Datenüberschreitungs-Alarme</string>
+    <string name="notification_summary_msg">Tippen, um den Verlauf Ihrer Datenüberschreitungs-Alarme anzuzeigen.</string>
+    <string name="notification_summary_text">FlowBytes-Alarme</string>
+    <string name="notification_app_limit_msg">%1$s hat sein Datenlimit von %2$s erreicht.</string>
+    <string name="notification_app_limit_title">%s-Limit erreicht</string>
+    <string name="msg_reached_limit">Sie haben das %1$s-%2$s-Limit erreicht (%3$s verbraucht).</string>
+    <string name="btn_silence">Stumm</string>
+
+    <!-- Badges -->
+    <string name="badge_limit_reached">Limit erreicht</string>
+    <string name="badge_blocked">Gesperrt</string>
+    <string name="badge_silenced">Stumm</string>
+
+    <!-- App Review Dialog -->
+    <string name="review_dialog_title">Gefällt dir FlowBytes?</string>
+    <string name="review_dialog_description">Wenn du FlowBytes hilfreich findest, nimm dir bitte einen Moment Zeit, um uns zu bewerten! Es hilft uns, uns zu verbessern und die App werbefrei zu halten.</string>
+    <string name="review_later">Später</string>
+    <string name="review_never">Nie</string>
+    <string name="review_submit_feedback">Feedback senden</string>
+    <string name="review_rate_on_play_store">Im Play Store bewerten</string>
+    <string name="review_feedback_title">Hilf uns, uns zu verbessern</string>
+    <string name="review_feedback_description">Es tut uns leid zu hören, dass du nicht ganz zufrieden bist. Bitte lass uns wissen, wie wir FlowBytes für dich besser machen können.</string>
+    <string name="review_feedback_placeholder">Gib hier deine Vorschläge oder dein Feedback ein...</string>
+    <string name="review_feedback_thanks">Danke für dein Feedback!</string>
+    <string name="review_play_store_title">Danke für die Bewertung!</string>
+    <string name="review_play_store_description">Wir würden uns freuen, wenn du eine kurze Bewertung bei Google Play schreiben könntest. Das hilft wirklich sehr!</string>
+    <string name="review_toast_feedback_submitted">Feedback erfolgreich gesendet. Vielen Dank!</string>
+
+    <string name="label_network_type">Netzwerktyp</string>
+    <string name="label_limit_period">Limitzeitraum</string>
+    <string name="label_daily_wifi">Tägliches WLAN</string>
+    <string name="label_daily_mobile">Tägliches Mobil</string>
+    <string name="label_monthly_wifi">Monatliches WLAN</string>
+    <string name="label_monthly_mobile">Monatliches Mobil</string>
+    <string name="label_custom_wifi">Benutzerdefiniertes WLAN</string>
+    <string name="label_custom_mobile">Benutzerdefiniertes Mobil</string>
+    <string name="settings_traffic_threshold_subtitle">Schwellenwerte für die Erkennung von Datenverkehr konfigurieren</string>
+    <string name="whats_new_custom_limits_title">Limits für benutzerdefinierte Zeiträume</string>
+    <string name="whats_new_custom_limits_desc">Sie können jetzt Datenlimits für bestimmte Zeiträume sowohl für Mobilfunk- als auch für WLAN-Netzwerke festlegen.</string>
+    <string name="whats_new_reset_day_title">Monatlicher Zurücksetzungstag</string>
+    <string name="whats_new_reset_day_desc">Unterstützung für benutzerdefinierte Abrechnungszyklen. Wählen Sie einen bestimmten Tag des Monats aus, an dem Ihre Nutzung zurückgesetzt wird.</string>
+    <string name="feedback_email_subject">FlowBytes Feedback - %1$d Sterne</string>
+
+    <string name="legal_privacy_policy" formatted="false">Datenschutzerklärung\nInkrafttreten: 29. April 2026\n\nIch, der Entwickler von FlowBytes (die \"App\"), stelle diese Anwendung kostenlos zur Verfügung. Die App wird im Ist-Zustand angeboten und ist für die Nutzung ohne Gewährleistung oder Garantien bestimmt.\n\n1. Erfassung und Verwendung von Informationen\nFlowBytes überwacht die Netzwerkgeschwindigkeiten und die Datennutzung Ihres Geräts (WLAN und Mobilfunk), um Ihnen zu helfen, die Kontrolle über Ihr Internet zu behalten. Alle Überwachungen, Berechnungen der Datennutzung und Blockierungsaktionen werden lokal auf Ihrem Gerät durchgeführt. Wir erfassen, speichern oder übertragen keine personenbezogenen Daten, einschließlich:\n- Browserverlauf\n- Inhalt des Netzwerkverkehrs\n- IP-Adresse\n- Alle persönlich identifizierbaren Informationen\n\n2. Erforderliche Berechtigungen\nUm ordnungsgemäß zu funktionieren, benötigt die App die folgenden Berechtigungen:\n- Nutzungszugriff (Netzwerkstatistiken): Wird verwendet, um auf Netzwerknutzungsstatistiken zuzugreifen, um Download-/Upload-Geschwindigkeiten zu berechnen und die Datennutzung pro App zu verfolgen.\n- Vordergrunddienst: Ermöglicht es der App, einen Hintergrunddienst auszuführen, um die Netzwerkgeschwindigkeit in Echtzeit in der Benachrichtigungsleiste anzuzeigen und eine konsistente Überwachung zu gewährleisten.\n- VPN-Dienst (Lokales VPN): FlowBytes verwendet ein lokales VPN, um den Internetzugang für Apps zu verwalten, die ihr Limit überschreiten. Dieses VPN ist zu 100% lokal; Ihr Datenverkehr verlässt niemals Ihr Gerät und wird niemals von uns abgefangen.\n\nAlle Daten, auf die über diese Berechtigungen zugegriffen wird, verbleiben auf Ihrem Gerät und werden ausschließlich zur Bereitstellung der Überwachungs- und Steuerungsfunktionen innerhalb der App verwendet.\n\n3. Dienste von Drittanbietern\nDie App verwendet keine Dienste von Drittanbietern, Analysetools oder Werbenetzwerke, die Informationen erfassen, mit denen Sie identifiziert werden können.\n\n4. Sicherheit\nDa die gesamte Datenverarbeitung lokal auf Ihrem Gerät erfolgt, ist das Risiko von Datenschutzverletzungen unsererseits minimal. Keine Methode der elektronischen Speicherung oder Übertragung über das Internet ist jedoch absolut sicher, und wir können keine absolute Sicherheit garantieren.\n\n5. Privatsphäre von Kindern\nDieser Dienst ist nicht für Personen unter 13 Jahren bestimmt. Wir erfassen wissentlich keine personenbezogenen Daten von Kindern unter 13 Jahren.\n\n6. Änderungen an dieser Datenschutzerklärung\nWir können diese Datenschutzerklärung von Zeit zu Zeit aktualisieren. Alle Änderungen werden auf dieser Seite veröffentlicht. Es wird empfohlen, diese Seite regelmäßig auf Aktualisierungen zu überprüfen.\n\n7. Kontaktieren Sie uns\nWenn Sie Fragen oder Anregungen zu dieser Datenschutzerklärung haben, können Sie uns kontaktieren unter:\nE-Mail: drrayy001@gmail.com</string>
+    <string name="legal_terms_conditions">Allgemeine Geschäftsbedingungen\n\n1. Annahme der Bedingungen\nDurch die Nutzung von FlowBytes erklären Sie sich mit diesen Bedingungen einverstanden. Wenn Sie nicht einverstanden sind, nutzen Sie die App bitte nicht.\n\n2. Haftungsausschluss für den Dienst\nFlowBytes stellt Netzwerkstatistiken zu Informationszwecken zur Verfügung. Obwohl wir uns um Genauigkeit bemühen, sind Geschwindigkeitsmessungen und Berechnungen der Datennutzung Schätzungen und können von den offiziellen Abrechnungsunterlagen Ihres Mobilfunkanbieters abweichen.\n\n3. Akku und Leistung\nDiese App führt einen Hintergrunddienst aus, um den Netzwerkverkehr zu überwachen. Obwohl die App auf Effizienz optimiert ist, kann sie geringfügige Auswirkungen auf die Akkulaufzeit haben.\n\n4. Haftungsbeschränkung\nWir sind nicht verantwortlich für Datenüberschreitungen, Datenverlust oder Geräteprobleme, die sich aus der Nutzung dieser Anwendung ergeben.</string>
+    <string name="legal_licenses">Open-Source-Lizenzen\n\n- Jetpack Compose: Apache License 2.0\n- Kotlin Coroutines: Apache License 2.0\n- Android Jetpack-Bibliotheken (Room, DataStore, Lifecycle): Apache License 2.0\n- Material Components für Android: Apache License 2.0\n- Kotlin-Standardbibliothek: Apache License 2.0\n\nDiese Software wird im Ist-Zustand ohne jegliche ausdrückliche oder stillschweigende Gewährleistung bereitgestellt.</string>
+
+    <string name="label_daily_wifi_limit">Tägliches WLAN-Limit</string>
+    <string name="label_monthly_wifi_limit">Monatliches WLAN-Limit</string>
+    <string name="label_daily_mobile_limit">Tägliches Mobil-Limit</string>
+    <string name="label_monthly_mobile_limit">Monatliches Mobil-Limit</string>
+    <string name="label_unknown">Unbekannt</string>
+    <string name="desc_configure_limit_format">Konfigurieren Sie das Limit für Ihren %1$s-Plan.</string>
+    <string name="label_select_date">Datum auswählen</string>
+</resources>

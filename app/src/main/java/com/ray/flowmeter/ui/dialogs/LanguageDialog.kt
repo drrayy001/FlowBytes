@@ -51,7 +51,11 @@ fun LanguageDialog(
                     LanguageOption(stringResource(R.string.language_default), ""),
                     LanguageOption(stringResource(R.string.language_arabic), "ar"),
                     LanguageOption(stringResource(R.string.language_french), "fr"),
-                    LanguageOption(stringResource(R.string.language_spanish), "es")
+                    LanguageOption(stringResource(R.string.language_spanish), "es"),
+                    LanguageOption(stringResource(R.string.language_german), "de"),
+                    LanguageOption(stringResource(R.string.language_portuguese), "pt"),
+                    LanguageOption(stringResource(R.string.language_italian), "it"),
+                    LanguageOption(stringResource(R.string.language_chinese), "zh")
                 )
 
                 languageOptions.forEach { option ->

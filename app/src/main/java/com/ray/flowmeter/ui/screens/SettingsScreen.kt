@@ -274,6 +274,10 @@ fun SettingsScreen(
                         "ar" -> stringResource(R.string.language_arabic)
                         "fr" -> stringResource(R.string.language_french)
                         "es" -> stringResource(R.string.language_spanish)
+                        "de" -> stringResource(R.string.language_german)
+                        "pt" -> stringResource(R.string.language_portuguese)
+                        "it" -> stringResource(R.string.language_italian)
+                        "zh" -> stringResource(R.string.language_chinese)
                         else -> stringResource(R.string.language_default)
                     },
                     onClick = { showLanguageDialog = true }

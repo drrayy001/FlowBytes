@@ -72,7 +72,9 @@ fun AppPickerScreen(
                         } else {
                             stringResource(R.string.title_configure_limit)
                         },
-                        fontWeight = FontWeight.Black
+                        fontWeight = FontWeight.Black,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                 },
                 navigationIcon = {

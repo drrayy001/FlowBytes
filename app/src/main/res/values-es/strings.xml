@@ -147,6 +147,10 @@
     <string name="language_arabic">Árabe (العربية)</string>
     <string name="language_french">Francés (Français)</string>
     <string name="language_spanish">Español</string>
+    <string name="language_german">Alemán (Deutsch)</string>
+    <string name="language_portuguese">Portugués (Português)</string>
+    <string name="language_italian">Italiano (Italiano)</string>
+    <string name="language_chinese">Chino (中文)</string>
 
     <!-- Settings: Support & Feedback -->
     <string name="settings_section_support">Soporte y comentarios</string>

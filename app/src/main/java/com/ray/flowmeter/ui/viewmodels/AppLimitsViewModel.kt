@@ -3,8 +3,8 @@ package com.ray.flowmeter.ui.viewmodels
 import android.app.usage.NetworkStats
 import android.app.usage.NetworkStatsManager
 import android.content.Context
+import android.content.Intent
 import android.content.pm.ApplicationInfo
-import android.content.pm.PackageManager
 import android.net.NetworkCapabilities
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -171,7 +171,7 @@ class AppLimitsViewModel(
         val monthlyMobile: Long,
         val monthlyWifi: Long,
         val customMobile: Long,
-        val customWifi: Long
+        val customWifi: Long,
     )
 
     private fun getDeviceUsage(
@@ -262,7 +262,7 @@ class AppLimitsViewModel(
 
     var searchQuery by mutableStateOf("")
 
-    var isPickerOpen by mutableStateOf(false)
+    var isPickerOpen by mutableStateOf(value = false)
     var editingLimit by mutableStateOf<AppLimit?>(null)
     var configuringGeneralLimitType by mutableStateOf<String?>(null)
 
@@ -277,9 +277,14 @@ class AppLimitsViewModel(
             isLoadingApps = true
             installedApps = withContext(Dispatchers.IO) {
                 val pm = applicationContext.packageManager
-                @Suppress("DEPRECATION")
-                val apps = pm.getInstalledApplications(PackageManager.GET_META_DATA)
-                apps.asSequence()
+                val mainIntent = Intent(Intent.ACTION_MAIN, null).apply {
+                    addCategory(Intent.CATEGORY_LAUNCHER)
+                }
+                
+                pm.queryIntentActivities(mainIntent, 0)
+                    .asSequence()
+                    .map { it.activityInfo.applicationInfo }
+                    .distinctBy { it.packageName }
                     .filter { ((it.flags and ApplicationInfo.FLAG_SYSTEM) == 0) || ((it.flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0) }
                     .map { info ->
                         AppInfo(

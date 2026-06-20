@@ -5,16 +5,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.AutoGraph
 import androidx.compose.material.icons.rounded.BarChart
 import androidx.compose.material.icons.rounded.CalendarMonth
-import androidx.compose.material.icons.rounded.DataUsage
 import androidx.compose.material.icons.rounded.ArrowDownward
 import androidx.compose.material.icons.rounded.FilterList
 import androidx.compose.material.icons.rounded.SignalCellularAlt
 import androidx.compose.material.icons.rounded.Today
 import androidx.compose.material.icons.rounded.ArrowUpward
-import androidx.compose.material.icons.rounded.WarningAmber
 import androidx.compose.material.icons.rounded.Wifi
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -43,12 +40,9 @@ object AppIcons {
     val Upload = Icons.Rounded.ArrowUpward
     val Wifi = Icons.Rounded.Wifi
     val Mobile = Icons.Rounded.SignalCellularAlt
-    val GenericData = Icons.Rounded.DataUsage
 
     // Charts and forecast
     val ChartMain = Icons.Rounded.BarChart
-    val ForecastSafe = Icons.Rounded.AutoGraph
-    val ForecastWarning = Icons.Rounded.WarningAmber
 
     // UI Controls
     val Filter = Icons.Rounded.FilterList

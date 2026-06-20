@@ -30,6 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
 import com.ray.flowmeter.R
 import com.ray.flowmeter.ui.theme.bounceClick
 
@@ -44,6 +45,8 @@ fun ReviewDialog(
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val context = LocalContext.current
     var rating by remember { mutableIntStateOf(0) }
+    val feedbackSubject = stringResource(R.string.feedback_email_subject, rating)
+    val toastFeedback = stringResource(R.string.review_toast_feedback_submitted)
     var feedbackText by remember { mutableStateOf("") }
     
     ModalBottomSheet(
@@ -91,12 +94,12 @@ fun ReviewDialog(
                                 rating = targetRating,
                                 onRateNow = {
                                     val packageName = context.packageName
-                                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$packageName"))
+                                    val intent = Intent(Intent.ACTION_VIEW, "market://details?id=$packageName".toUri())
                                     try {
                                         context.startActivity(intent)
                                     } catch (_: Exception) {
                                         try {
-                                            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$packageName")))
+                                            context.startActivity(Intent(Intent.ACTION_VIEW, "https://play.google.com/store/apps/details?id=$packageName".toUri()))
                                         } catch (__: Exception) {}
                                     }
                                     onReviewCompleted()
@@ -113,9 +116,9 @@ fun ReviewDialog(
                                 onSubmitFeedback = {
                                     if (feedbackText.isNotBlank()) {
                                         val intent = Intent(Intent.ACTION_SENDTO).apply {
-                                            data = Uri.parse("mailto:")
+                                            data = "mailto:".toUri()
                                             putExtra(Intent.EXTRA_EMAIL, arrayOf("drrayy001@gmail.com"))
-                                            putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.feedback_email_subject, targetRating))
+                                            putExtra(Intent.EXTRA_SUBJECT, feedbackSubject)
                                             putExtra(Intent.EXTRA_TEXT, feedbackText)
                                         }
                                         try {
@@ -124,7 +127,7 @@ fun ReviewDialog(
                                             // Handle case with no email client
                                         }
                                     }
-                                    Toast.makeText(context, context.getString(R.string.review_toast_feedback_submitted), Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context, toastFeedback, Toast.LENGTH_SHORT).show()
                                     onReviewCompleted()
                                 },
                                 onCancel = onLater

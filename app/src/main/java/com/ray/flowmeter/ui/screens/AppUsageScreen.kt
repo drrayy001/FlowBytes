@@ -571,8 +571,9 @@ fun AppUsageScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .clipToBounds()
-            ) { _ ->
-                LazyColumn(
+            ) { targetContentKey ->
+                key(targetContentKey) {
+                    LazyColumn(
                     modifier = Modifier.fillMaxSize(),
                     state = listState,
                     contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 16.dp),
@@ -798,6 +799,7 @@ fun AppUsageScreen(
                         }
                     }
                 }
+            }
             }
         }
     }

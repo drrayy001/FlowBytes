@@ -13,10 +13,8 @@ import com.ray.flowmeter.MainActivity
 import com.ray.flowmeter.R
 import com.ray.flowmeter.data.UserPreferencesRepository
 import com.ray.flowmeter.utils.SpeedFormatter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 
 class SpeedWidget : AppWidgetProvider() {
 
@@ -82,7 +80,7 @@ class SpeedWidget : AppWidgetProvider() {
                 val repository = UserPreferencesRepository(context)
                 val showSpeed = repository.widgetShowSpeed.first()
                 
-                with(Dispatchers.Main) {
+                withContext(Dispatchers.Main) {
                     views.setViewVisibility(R.id.widget_speed_layout, if (showSpeed) View.VISIBLE else View.GONE)
                     appWidgetManager.updateAppWidget(appWidgetId, views)
                 }

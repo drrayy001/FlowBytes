@@ -38,6 +38,7 @@ import com.ray.flowmeter.data.FlowMeterDatabase
 import com.ray.flowmeter.data.UserPreferencesRepository
 import com.ray.flowmeter.receiver.NetworkWakeupReceiver
 import com.ray.flowmeter.utils.SpeedFormatter
+import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -150,7 +151,7 @@ class NetworkMonitoringService : Service() {
         val languageCode = kotlinx.coroutines.runBlocking {
             try {
                 repository.language.first()
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 ""
             }
         }
@@ -264,7 +265,7 @@ class NetworkMonitoringService : Service() {
                 
                 // Initial delay to get a proper measurement before first UI update
                 // Reduced from 600ms to 300ms for faster first update
-                delay(300)
+                delay(300.milliseconds)
                 updateStats(force = true)
             }
         } catch (e: Exception) {
@@ -288,7 +289,7 @@ class NetworkMonitoringService : Service() {
                 }
 
                 updateStats()
-                delay(1000)
+                delay(1000.milliseconds)
             }
         }
     }

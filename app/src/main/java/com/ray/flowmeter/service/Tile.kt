@@ -6,6 +6,7 @@ import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import com.ray.flowmeter.R
 import com.ray.flowmeter.data.UserPreferencesRepository
+import com.ray.flowmeter.utils.LocaleHelper
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
 
@@ -13,14 +14,14 @@ class SpeedTileService : TileService() {
 
     override fun attachBaseContext(newBase: Context) {
         val repository = UserPreferencesRepository(newBase)
-        val languageCode = kotlinx.coroutines.runBlocking {
+        val languageCode = runBlocking {
             try {
                 repository.language.first()
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 ""
             }
         }
-        val context = com.ray.flowmeter.utils.LocaleHelper.applyLocale(newBase, languageCode)
+        val context = LocaleHelper.applyLocale(newBase, languageCode)
         super.attachBaseContext(context)
     }
 

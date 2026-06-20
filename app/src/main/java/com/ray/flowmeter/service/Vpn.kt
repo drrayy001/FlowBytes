@@ -13,6 +13,7 @@ import android.util.Log
 import com.ray.flowmeter.data.AppLimitRepository
 import com.ray.flowmeter.data.FlowMeterDatabase
 import com.ray.flowmeter.data.UserPreferencesRepository
+import com.ray.flowmeter.utils.LocaleHelper
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -25,14 +26,14 @@ class AppBlockVpnService : VpnService() {
 
     override fun attachBaseContext(newBase: Context) {
         val repository = UserPreferencesRepository(newBase)
-        val languageCode = kotlinx.coroutines.runBlocking {
+        val languageCode = runBlocking {
             try {
                 repository.language.first()
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 ""
             }
         }
-        val context = com.ray.flowmeter.utils.LocaleHelper.applyLocale(newBase, languageCode)
+        val context = LocaleHelper.applyLocale(newBase, languageCode)
         super.attachBaseContext(context)
     }
 

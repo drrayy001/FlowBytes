@@ -1,3 +1,4 @@
+// Disclosure dialog presenting licensing terms and general privacy agreements.
 package com.ray.flowmeter.ui.dialogs
 
 

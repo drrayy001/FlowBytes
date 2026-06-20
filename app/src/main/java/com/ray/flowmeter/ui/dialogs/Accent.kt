@@ -1,3 +1,4 @@
+// Custom accent color picker dialog allowing user to choose custom MD3 theme accents.
 package com.ray.flowmeter.ui.dialogs
 
 import androidx.compose.foundation.BorderStroke
@@ -40,7 +41,6 @@ fun AccentColorDialog(
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     
-    // Use HSV for more precise color control
     val initialHsv = remember(currentColor) {
         val hsv = FloatArray(3)
         android.graphics.Color.colorToHSV(currentColor?.toInt() ?: 0xFF0056D2.toInt(), hsv)
@@ -57,7 +57,6 @@ fun AccentColorDialog(
     
     var hexText by remember { mutableStateOf(pickedColor.toHexString()) }
     
-    // Sync hex text when color changes from wheel/slider/presets
     LaunchedEffect(pickedColor) {
         val newHex = pickedColor.toHexString()
         if (hexText.uppercase() != newHex.uppercase()) {
@@ -90,15 +89,14 @@ fun AccentColorDialog(
                     textAlign = TextAlign.Center
                 )
 
-                // Presets
                 val presets = listOf(
-                    Color(0xFF0056D2), // Default Blue
-                    Color(0xFFD32F2F), // Red
-                    Color(0xFF388E3C), // Green
-                    Color(0xFFFBC02D), // Yellow
-                    Color(0xFF7B1FA2), // Purple
-                    Color(0xFFE64A19), // Orange
-                    Color(0xFF00796B), // Teal
+                    Color(0xFF0056D2),
+                    Color(0xFFD32F2F),
+                    Color(0xFF388E3C),
+                    Color(0xFFFBC02D),
+                    Color(0xFF7B1FA2),
+                    Color(0xFFE64A19),
+                    Color(0xFF00796B),
                 )
                 
                 Row(
@@ -125,7 +123,6 @@ fun AccentColorDialog(
                     }
                 }
 
-                // Centered Color Preview and Hex above the Color Wheel
                 Surface(
                     color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
                     shape = RoundedCornerShape(24.dp),
@@ -178,7 +175,6 @@ fun AccentColorDialog(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    // Adjusted size for better visual proportion
                     ColorWheel(
                         hue = hue,
                         saturation = saturation,
@@ -191,7 +187,6 @@ fun AccentColorDialog(
                     
                     Spacer(modifier = Modifier.width(24.dp))
                     
-                    // Brightness Slider
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier.height(200.dp)
@@ -292,7 +287,6 @@ fun ColorWheel(
             radius = radius
         )
 
-        // Selector
         val angle = (hue.toDouble() * PI / 180.0)
         val selectorRadius = saturation * radius
         val x = center.x + cos(angle).toFloat() * selectorRadius
@@ -342,7 +336,6 @@ fun BrightnessSlider(
         val strokeWidth = size.width
         val cornerRadius = strokeWidth / 2
 
-        // Background Gradient
         val colorTop = Color(android.graphics.Color.HSVToColor(floatArrayOf(hue, saturation, 1f)))
         val colorBottom = Color(android.graphics.Color.HSVToColor(floatArrayOf(hue, saturation, 0f)))
         
@@ -352,7 +345,6 @@ fun BrightnessSlider(
             cornerRadius = androidx.compose.ui.geometry.CornerRadius(cornerRadius, cornerRadius)
         )
 
-        // Selector
         val selectorY = (1f - value) * height
         drawCircle(
             color = Color.White,

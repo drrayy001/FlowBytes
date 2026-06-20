@@ -25,6 +25,7 @@ import android.graphics.drawable.Drawable
 import kotlin.time.Duration.Companion.milliseconds
 import java.util.concurrent.ConcurrentHashMap
 
+// ViewModel that coordinates application-wide and per-app usage limits and monitors real-time usage states.
 class AppLimitsViewModel(
     private val repository: AppLimitRepository,
     private val preferencesRepository: UserPreferencesRepository,
@@ -135,12 +136,13 @@ class AppLimitsViewModel(
         startUsageTracking()
     }
 
+    // Starts a recurring job to fetch fresh usage stats for UI data limit configurations.
     private fun startUsageTracking() {
         usageJob?.cancel()
         usageJob = viewModelScope.launch {
             while (true) {
                 updateUsage()
-                delay(3000.milliseconds) // Update every 3 seconds
+                delay(3000.milliseconds)
             }
         }
     }
@@ -221,7 +223,6 @@ class AppLimitsViewModel(
                 }
                 stats.close()
             } catch (_: Exception) {
-                // ignore
             }
             return total
         }

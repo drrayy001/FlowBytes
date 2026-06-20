@@ -1,3 +1,4 @@
+// Configuration dialog managing notification behavior in the system notification area.
 package com.ray.flowmeter.ui.dialogs
 
 import androidx.activity.compose.BackHandler
@@ -60,15 +61,10 @@ fun AnimatedDialogContent(
         label = "alpha"
     )
 
-    // Block upward scroll for all bottom sheets to prevent bouncing/expanding
-    // This makes the sheet "hit a wall" when swiping up at the top or bottom boundaries.
+
     val blockUpScroll = remember {
         object : NestedScrollConnection {
             override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-                // If the sheet is already at the top (negative y available), 
-                // we don't want to allow it to be dragged further up.
-                // However, we only want to block this if the content itself 
-                // isn't going to consume it (i.e., we are already at the bottom of the list).
                 return Offset.Zero
             }
 
@@ -77,8 +73,7 @@ fun AnimatedDialogContent(
                 available: Offset,
                 source: NestedScrollSource
             ): Offset {
-                // If there's unconsumed upward scroll (swiping up), consume it
-                // so the bottom sheet doesn't try to expand or bounce.
+
                 return if (available.y < 0) available else Offset.Zero
             }
         }

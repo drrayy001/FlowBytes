@@ -47,6 +47,7 @@ data class AppUsageInfo(
     val isSystemGroup: Boolean = false,
 )
 
+// ViewModel that processes and caches per-app traffic data and structures app categories.
 class AppUsageViewModel(
     private val repository: UserPreferencesRepository,
     private val applicationContext: Context,
@@ -77,6 +78,7 @@ class AppUsageViewModel(
         filterAndSort(list, filter)
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
+    // Sorts the app list based on selected network transport filter and total usage.
     private fun filterAndSort(list: List<AppUsageInfo>, filter: String): List<AppUsageInfo> {
         return list.asSequence().filter { app ->
             when (filter) {
@@ -148,7 +150,6 @@ class AppUsageViewModel(
                         start = repository.usageCustomStart.first() ?: (now - 86400000L)
                         val rawEnd = repository.usageCustomEnd.first() ?: now
                         
-                        // Correct inclusive end for custom range stored in preferences
                         val endCal = Calendar.getInstance().apply { timeInMillis = rawEnd }
                         endCal.set(Calendar.HOUR_OF_DAY, 23)
                         endCal.set(Calendar.MINUTE, 59)
@@ -312,7 +313,7 @@ class AppUsageViewModel(
             val start = cal.timeInMillis
             val endCal = (cal.clone() as Calendar)
             endCal.add(Calendar.DAY_OF_YEAR, 1)
-            endCal.set(Calendar.MILLISECOND, -1) // Inclusive end of the chosen day
+            endCal.set(Calendar.MILLISECOND, -1)
             val end = if (endCal.timeInMillis > now) now else endCal.timeInMillis
 
             _appUsageList.value = getAppUsageList(start, end)
@@ -332,14 +333,12 @@ class AppUsageViewModel(
             repository.saveUsageCustomRange(startMillis, endMillis)
             selectedDateString = formatRange(startMillis, endMillis)
             
-            // Normalize startMillis to reset time of that day
             val startCal = Calendar.getInstance().apply { timeInMillis = startMillis }
             startCal.set(Calendar.HOUR_OF_DAY, resetHour)
             startCal.set(Calendar.MINUTE, resetMinute)
             startCal.set(Calendar.SECOND, 0)
             startCal.set(Calendar.MILLISECOND, 0)
             
-            // Normalize endMillis to reset time of the NEXT day - 1ms
             val endCal = Calendar.getInstance().apply { timeInMillis = endMillis }
             endCal.set(Calendar.HOUR_OF_DAY, resetHour)
             endCal.set(Calendar.MINUTE, resetMinute)
@@ -390,7 +389,7 @@ class AppUsageViewModel(
             val now = System.currentTimeMillis()
 
             val cal = Calendar.getInstance()
-            cal.set(year, month, 1) // Just ensuring we have the right year/month
+            cal.set(year, month, 1)
             val clampedDay = monthlyResetDay.coerceAtMost(cal.getActualMaximum(Calendar.DAY_OF_MONTH))
             cal.set(Calendar.DAY_OF_MONTH, clampedDay)
             cal.set(Calendar.HOUR_OF_DAY, resetHour)
@@ -489,7 +488,6 @@ class AppUsageViewModel(
         }
 
         var isSystem = uid < 10000
-        // Check if any package is a system app
         for (pkg in packages) {
             try {
                 val appInfo = packageManager.getApplicationInfo(pkg, 0)
@@ -543,7 +541,6 @@ class AppUsageViewModel(
 
         val allUids = (wifiDownMap.keys + wifiUpMap.keys + cellDownMap.keys + cellUpMap.keys).toSet()
 
-        // Optimize: Resolve system icon once outside the loop
         val systemIcon = try {
             val appInfo = packageManager.getApplicationInfo("android", 0)
             synchronized(iconCache) {
@@ -555,7 +552,6 @@ class AppUsageViewModel(
             null
         }
 
-        // Optimize: Parallelize UID resolution to speed up list generation, especially for large datasets (Monthly)
         val resolvedInfos = coroutineScope {
             allUids.map { uid ->
                 async { uid to resolveUidToInfo(uid, packageManager, systemIcon) }
@@ -634,7 +630,7 @@ class AppUsageViewModel(
                     wifiUp = systemProcesses.sumOf { it.wifiUp },
                     cellDown = systemProcesses.sumOf { it.cellDown },
                     cellUp = systemProcesses.sumOf { it.cellUp },
-                    isSystemGroup = false, // Individual item in the system list, not a nested group
+                    isSystemGroup = false,
                 )
                 finalSystemList.add(processGroup)
             }
@@ -682,7 +678,6 @@ class AppUsageViewModel(
         return@withContext userList
     }
 
-    // Query detailed usage per UID and update maps
     private fun queryDetailedUsage(
         manager: NetworkStatsManager,
         transportType: Int,
@@ -702,7 +697,6 @@ class AppUsageViewModel(
             }
             stats.close()
         } catch (_: Exception) {
-            // Ignore
         }
     }
 }

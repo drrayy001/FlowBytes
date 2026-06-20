@@ -1,3 +1,4 @@
+// Selector listing available localizations to apply runtime locale overrides.
 package com.ray.flowmeter.ui.dialogs
 
 import androidx.compose.foundation.BorderStroke

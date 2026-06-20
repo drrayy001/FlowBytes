@@ -1,3 +1,5 @@
+// Configuration screen for general limits (daily/monthly limits, Wi-Fi vs mobile,
+// and custom billing period schedules).
 package com.ray.flowmeter.ui.screens
 
 import androidx.compose.animation.*
@@ -54,7 +56,6 @@ fun AppLimitsScreen(
 
     val (internalTab, setInternalTab) = remember { mutableIntStateOf(currentTab) }
     
-    // Sync internal state with external state when navigating back
     LaunchedEffect(currentTab) {
         setInternalTab(currentTab)
     }

@@ -1,3 +1,4 @@
+// Support dialog offering quick links to Github issues, email feedback, and version info.
 package com.ray.flowmeter.ui.dialogs
 
 import androidx.compose.foundation.layout.*

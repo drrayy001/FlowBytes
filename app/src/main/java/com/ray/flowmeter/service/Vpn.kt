@@ -21,6 +21,8 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 
+// VPN Service that intercepts and blocks network traffic for applications
+// that have exceeded their configured cellular or Wi-Fi data usage limits.
 @SuppressLint("VpnServicePolicy")
 class AppBlockVpnService : VpnService() {
 
@@ -46,6 +48,7 @@ class AppBlockVpnService : VpnService() {
     private var collectionJob: Job? = null
     private val currentNetworkType = MutableStateFlow<Int?>(null)
 
+    // Track active connection type changes (cellular vs Wi-Fi) to apply corresponding block rules.
     private val networkCallback = object : ConnectivityManager.NetworkCallback() {
         override fun onCapabilitiesChanged(network: Network, capabilities: NetworkCapabilities) {
             val type = when {
@@ -57,7 +60,6 @@ class AppBlockVpnService : VpnService() {
         }
 
         override fun onLost(network: Network) {
-            // Check if there's any other active network before setting to null
             val cm = getSystemService(ConnectivityManager::class.java)
             val activeNetwork = cm.activeNetwork
             val capabilities = cm.getNetworkCapabilities(activeNetwork)
@@ -82,7 +84,6 @@ class AppBlockVpnService : VpnService() {
 
         val connectivityManager = getSystemService(ConnectivityManager::class.java)
         
-        // Initial state
         val activeNet = connectivityManager.activeNetwork
         val caps = connectivityManager.getNetworkCapabilities(activeNet)
         if (caps != null) {
@@ -102,6 +103,8 @@ class AppBlockVpnService : VpnService() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         collectionJob?.cancel()
+        // Observe app limits, master blocking state, and connection transport types.
+        // Restructure local routing dynamically when limits or network environments toggle.
         collectionJob = serviceScope.launch {
             combine(
                 repository.allAppLimits,
@@ -135,6 +138,8 @@ class AppBlockVpnService : VpnService() {
         return START_STICKY
     }
 
+    // Recreates the VPN interface. Routing the network traffic of designated UIDs/packages
+    // to a virtual dummy local address effectively blocks their external internet access.
     private fun updateVpnInterface(blockedApps: List<String>) {
         vpnInterface?.close()
         vpnInterface = null

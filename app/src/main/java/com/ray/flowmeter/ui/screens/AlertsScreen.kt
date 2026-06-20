@@ -1,3 +1,5 @@
+// Historical network activity alerts list. Provides filters for different alert categories
+// and actions to clear logs or temporarily mute active alerts.
 package com.ray.flowmeter.ui.screens
 
 import androidx.compose.animation.*
@@ -276,7 +278,6 @@ fun AlertItemFront(alert: AppAlert) {
     val monthlyMobileLimit = stringResource(R.string.label_monthly_mobile_limit)
     val unknownLabel = stringResource(R.string.label_unknown)
 
-    // Mapping old names to new descriptive names for existing data
     val displayAppName = remember(alert.appName, dailyWifiLimit, monthlyWifiLimit, dailyMobileLimit, monthlyMobileLimit, unknownLabel) {
         when (alert.appName) {
             "Wi-Fi (Daily)", "Daily Wi-Fi Limit" -> dailyWifiLimit
@@ -456,7 +457,6 @@ fun AlertItemBack(alert: AppAlert) {
                     )
                 }
             } else {
-                // Placeholder to keep the date aligned to the right
                 Spacer(modifier = Modifier.weight(1f))
             }
 

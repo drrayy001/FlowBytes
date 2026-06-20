@@ -1,3 +1,4 @@
+// Custom Jetpack Compose chart using Canvas to render a styled weekly bar chart with relative y-axis labels.
 package com.ray.flowmeter.ui.components
 
 import androidx.compose.animation.core.Animatable
@@ -31,20 +32,14 @@ import java.util.Calendar
 import kotlin.math.pow
 
 object AppIcons {
-    // Top-level icons
     val TodayUsage = Icons.Rounded.Today
     val ThisMonthUsage = Icons.Rounded.CalendarMonth
 
-    // Usage data types
     val Download = Icons.Rounded.ArrowDownward
     val Upload = Icons.Rounded.ArrowUpward
     val Wifi = Icons.Rounded.Wifi
     val Mobile = Icons.Rounded.SignalCellularAlt
-
-    // Charts and forecast
     val ChartMain = Icons.Rounded.BarChart
-
-    // UI Controls
     val Filter = Icons.Rounded.FilterList
 }
 
@@ -60,7 +55,6 @@ enum class ChartType {
         MOBILE -> stringResource(R.string.label_mobile)
     }
 
-    // Chart colors
     @Composable
     fun getColor(): Color = when (this) {
         COMBINED -> MaterialTheme.colorScheme.primary
@@ -230,7 +224,6 @@ fun WeeklyBarChart(
                                                 )
                                             )
                                     ) {
-                                        // Subtle Shine/Highlight at the top
                                         Box(
                                             modifier = Modifier
                                                 .fillMaxWidth()

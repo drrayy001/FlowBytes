@@ -53,15 +53,20 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 
+// Main entry activity. Handles app startup, database/repository initialization,
+// Compose UI hosting, and orchestration of background monitoring and VPN blocking services.
 class MainActivity : ComponentActivity() {
 
     private var currentAppliedLanguage: String = ""
 
+    // --- VPN Permission & Startup Orchestration ---
+    
+    // Result launcher to handle the user's response to the system VPN permission dialog.
     private val vpnRequestLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
             startVpnService()
         } else {
-            // Permission denied, reset the toggle in preferences
+            // Revert the setting if permission was denied by the user.
             val repository = UserPreferencesRepository(applicationContext)
             kotlinx.coroutines.MainScope().launch {
                 repository.setAppBlockingMasterEnabled(false)
@@ -74,6 +79,7 @@ class MainActivity : ComponentActivity() {
         startService(intent)
     }
 
+    // Requests system VPN permission if needed, otherwise starts the VPN directly.
     private fun prepareVpn() {
         val vpnIntent = VpnService.prepare(this)
         if (vpnIntent != null) {
@@ -90,11 +96,12 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Lay out UI components edge-to-edge behind system status/navigation bars.
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         val repository = UserPreferencesRepository(applicationContext)
 
-        // Apply locale in onCreate
+        // Initialize language configuration before setting up the Compose layout.
         lifecycleScope.launch {
             val languageCode = try {
                 repository.language.first()
@@ -111,12 +118,13 @@ class MainActivity : ComponentActivity() {
         val alertRepository = AlertRepository(database.appAlertDao())
         val appLimitRepository = AppLimitRepository(database.appLimitDao())
 
-        // Increment launch count for review dialog
+        // Track launches to evaluate when to prompt the user for an app review/rating.
         lifecycleScope.launch {
             repository.incrementLaunchCount()
         }
 
         setContent {
+            // Load user theme preferences asynchronously before rendering the app theme.
             val themeSettingsState = produceState<ThemeSettings?>(initialValue = null) {
                 val themeMode = repository.themeMode.first()
                 val useMaterialYou = repository.useMaterialYou.first()
@@ -127,6 +135,7 @@ class MainActivity : ComponentActivity() {
 
             val settings = themeSettingsState.value
             if (settings == null) {
+                // Show a matching blank background during the brief preference loading phase to prevent screen flash.
                 val isDark = isSystemInDarkTheme()
                 Box(
                     modifier = Modifier
@@ -134,6 +143,9 @@ class MainActivity : ComponentActivity() {
                         .background(if (isDark) Color(0xFF1A1B1E) else Color(0xFFFDFBFF))
                 )
             } else {
+                // --- ViewModel Provisioning ---
+                // ViewModels are created with custom factories to inject repositories and application contexts.
+                
                 val onboardingViewModel = remember {
                     ViewModelProvider(
                         this@MainActivity,
@@ -223,6 +235,7 @@ class MainActivity : ComponentActivity() {
                     LocalContext provides LocaleHelper.applyLocale(LocalContext.current, languageCode)
                 ) {
                     var isInitialCollect by remember { mutableStateOf(true) }
+                    // Recreate activity to apply runtime language changes if the language changed.
                     LaunchedEffect(languageCode) {
                         if (isInitialCollect) {
                             isInitialCollect = false
@@ -241,6 +254,7 @@ class MainActivity : ComponentActivity() {
                     val userReviewedRated by repository.userReviewedRated.collectAsState(false)
                     val lastVersionCode by repository.lastVersionCode.collectAsState(-1)
 
+                    // Prompt user to rate the app after sufficient launches and time have elapsed.
                     LaunchedEffect(onboardingCompleted, showChangelog, appLaunchCount, firstInstallTime, lastReviewPromptTime, userReviewedRated) {
                         if (onboardingCompleted == true && !showChangelog && !userReviewedRated) {
                             val now = System.currentTimeMillis()
@@ -258,6 +272,7 @@ class MainActivity : ComponentActivity() {
                         }
                     }
 
+                    // Check for version code changes to determine if we should update settings or trigger release changes.
                     LaunchedEffect(onboardingCompleted, lastVersionCode) {
                         if ((onboardingCompleted == true) && (lastVersionCode != -1)) {
                             if (lastVersionCode < currentVersionCode) {
@@ -271,6 +286,7 @@ class MainActivity : ComponentActivity() {
                         val monitoringEnabled by settingsViewModel.monitoringEnabled.collectAsState()
                         val appBlockingMasterEnabled by settingsViewModel.appBlockingMasterEnabled.collectAsState()
 
+                        // Monitor the foreground tracking service lifecycle based on user settings.
                         LaunchedEffect(monitoringEnabled) {
                             if ((onboardingCompleted == true) && (monitoringEnabled != null)) {
                                 val serviceIntent = Intent(this@MainActivity, NetworkMonitoringService::class.java)
@@ -285,6 +301,7 @@ class MainActivity : ComponentActivity() {
                             }
                         }
 
+                        // Automatically start VPN blocking service if master controls are toggled on.
                         LaunchedEffect(monitoringEnabled, appBlockingMasterEnabled) {
                             if ((onboardingCompleted == true) && (monitoringEnabled == true) && (appBlockingMasterEnabled == true)) {
                                 prepareVpn()
@@ -300,7 +317,7 @@ class MainActivity : ComponentActivity() {
                             if (onboardingCompleted == true) {
                                 val (currentIntent, setCurrentIntent) = remember { mutableStateOf(intent) }
 
-                                // Handler for incoming intents
+                                // Listen for resume lifecycle events to update current intent (e.g. user clicked notification while app is running).
                                 val lifecycleOwner = LocalLifecycleOwner.current
                                 DisposableEffect(lifecycleOwner) {
                                     val observer = LifecycleEventObserver { _, event ->
@@ -316,6 +333,7 @@ class MainActivity : ComponentActivity() {
                                     }
                                 }
 
+                                // --- Notification Extra / Deep Link Handling ---
                                 val navigateToAlerts = currentIntent?.getBooleanExtra(NetworkMonitoringService.EXTRA_NAVIGATE_TO_ALERTS, false) ?: false
                                 val navigateToLimits = currentIntent?.getBooleanExtra(NetworkMonitoringService.EXTRA_NAVIGATE_TO_LIMITS, false) ?: false
 
@@ -329,6 +347,7 @@ class MainActivity : ComponentActivity() {
                                 val dismissNotificationId = currentIntent?.getIntExtra(NetworkMonitoringService.EXTRA_DISMISS_NOTIFICATION_ID, -1) ?: -1
                                 val isIgnoreAction = currentIntent?.action == NetworkMonitoringService.ACTION_IGNORE_APP
 
+                                // Process incoming intent actions (such as clicking "Ignore App" directly from an alert notification).
                                 LaunchedEffect(currentIntent) {
                                     if (muteAppName != null) {
                                         if (isIgnoreAction) {
@@ -339,6 +358,7 @@ class MainActivity : ComponentActivity() {
                                         }
                                         alertsViewModel.onMuteRequested(muteAppName)
 
+                                        // Clear extras to avoid re-triggering the action if the activity is recreated.
                                         intent.removeExtra(NetworkMonitoringService.EXTRA_MUTE_APP_NAME)
                                         intent.removeExtra(NetworkMonitoringService.EXTRA_DISMISS_NOTIFICATION_ID)
                                         if (intent.action == NetworkMonitoringService.ACTION_IGNORE_APP) {

@@ -1,3 +1,4 @@
+// Locale manager utility providing context wrapping to dynamically switch language resources at runtime.
 package com.ray.flowmeter.utils
 
 import android.content.Context

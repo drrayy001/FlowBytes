@@ -1,3 +1,5 @@
+// Main dashboard screen displaying daily/monthly usage progress rings,
+// data limit statistics, and a weekly usage chart.
 package com.ray.flowmeter.ui.screens
 
 import androidx.compose.foundation.background
@@ -27,7 +29,6 @@ import com.ray.flowmeter.ui.theme.bounceClick
 import com.ray.flowmeter.ui.viewmodels.HomeViewModel
 import java.util.Calendar
 
-// Main landing screen showing usage summary, weekly activity, and data insights
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel,
@@ -150,7 +151,6 @@ fun HomeScreen(
     }
 }
 
-// Legend item for the usage breakdown chart
 @Composable
 fun LegendItem(label: String, color: Color, isSelected: Boolean, onClick: () -> Unit) {
     Surface(
@@ -190,7 +190,6 @@ data class UsageItemData(
     val icon: ImageVector
 )
 
-// Reusable card component for displaying usage summaries
 @Composable
 fun UsageSummaryCard(
     title: String,
@@ -220,7 +219,6 @@ fun UsageSummaryCard(
     }
 }
 
-// Inner content for UsageSummaryCard
 @Composable
 fun UsageSummaryContent(
     title: String,
@@ -256,7 +254,6 @@ fun UsageSummaryContent(
         Spacer(modifier = Modifier.height(16.dp))
 
         Row(modifier = Modifier.fillMaxWidth()) {
-            // Left Column (Items 1 and 3 - e.g. Download and Mobile)
             Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
                 Column(horizontalAlignment = Alignment.Start) {
                     if (subItems.isNotEmpty()) {
@@ -279,7 +276,6 @@ fun UsageSummaryContent(
                 }
             }
 
-            // Right Column (Items 2 and 4 - e.g. Upload and Wi-Fi)
             Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
                 Column(horizontalAlignment = Alignment.Start) {
                     if (subItems.size >= 2) {

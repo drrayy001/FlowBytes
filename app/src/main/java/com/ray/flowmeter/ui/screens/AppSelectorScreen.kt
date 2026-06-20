@@ -1,3 +1,5 @@
+// Application selection screen used when configuring new individual app limits.
+// Lists installed packages with filtering and search capabilities.
 package com.ray.flowmeter.ui.screens
 
 import android.graphics.drawable.Drawable

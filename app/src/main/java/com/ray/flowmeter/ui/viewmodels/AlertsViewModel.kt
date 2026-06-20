@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
 
+// ViewModel managing user alerts, filter configurations, and custom muting actions.
 class AlertsViewModel(
     private val repository: AlertRepository,
     private val userPrefsRepository: UserPreferencesRepository,
@@ -61,6 +62,7 @@ class AlertsViewModel(
         muteRequestAppName = null
     }
 
+    // Commits mute status to local database and broadcasts it to NetworkMonitoringService.
     fun muteApp(context: Context, appName: String, durationMs: Long) {
         viewModelScope.launch {
             repository.markLastAlertAsMuted(appName)

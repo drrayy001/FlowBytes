@@ -1,3 +1,4 @@
+// Time picker dialog defining daily usage counter rollover times (defaults to midnight).
 package com.ray.flowmeter.ui.dialogs
 
 import androidx.compose.foundation.layout.*

@@ -1,8 +1,7 @@
+// Dialog requesting user feedback and ratings, linked directly to the app store listing.
 package com.ray.flowmeter.ui.dialogs
 
-import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.widget.Toast
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.SizeTransform
@@ -11,7 +10,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -40,7 +38,7 @@ fun ReviewDialog(
     onDismiss: () -> Unit,
     onNeverShowAgain: () -> Unit,
     onLater: () -> Unit,
-    onReviewCompleted: () -> Unit
+    onReviewCompleted: () -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val context = LocalContext.current
@@ -91,7 +89,6 @@ fun ReviewDialog(
                         }
                         targetRating >= 4 -> {
                             PositiveFeedbackStep(
-                                rating = targetRating,
                                 onRateNow = {
                                     val packageName = context.packageName
                                     val intent = Intent(Intent.ACTION_VIEW, "market://details?id=$packageName".toUri())
@@ -100,7 +97,7 @@ fun ReviewDialog(
                                     } catch (_: Exception) {
                                         try {
                                             context.startActivity(Intent(Intent.ACTION_VIEW, "https://play.google.com/store/apps/details?id=$packageName".toUri()))
-                                        } catch (__: Exception) {}
+                                        } catch (_: Exception) {}
                                     }
                                     onReviewCompleted()
                                 },
@@ -110,7 +107,6 @@ fun ReviewDialog(
                         }
                         else -> {
                             NegativeFeedbackStep(
-                                rating = targetRating,
                                 feedbackText = feedbackText,
                                 onFeedbackChange = { feedbackText = it },
                                 onSubmitFeedback = {
@@ -124,7 +120,6 @@ fun ReviewDialog(
                                         try {
                                             context.startActivity(intent)
                                         } catch (_: Exception) {
-                                            // Handle case with no email client
                                         }
                                     }
                                     Toast.makeText(context, toastFeedback, Toast.LENGTH_SHORT).show()
@@ -145,7 +140,7 @@ private fun RatingSelectionStep(
     currentRating: Int,
     onRatingSelected: (Int) -> Unit,
     onLater: () -> Unit,
-    onNever: () -> Unit
+    onNever: () -> Unit,
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
@@ -183,8 +178,7 @@ private fun RatingSelectionStep(
                         .padding(horizontal = 4.dp)
                         .bounceClick(
                             interactionSource = interactionSource,
-                            onClick = { onRatingSelected(i) }
-                        )
+                        ) { onRatingSelected(i) }
                 )
             }
         }
@@ -220,10 +214,9 @@ private fun RatingSelectionStep(
 
 @Composable
 private fun PositiveFeedbackStep(
-    rating: Int,
     onRateNow: () -> Unit,
     onLater: () -> Unit,
-    onNever: () -> Unit
+    onNever: () -> Unit,
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
@@ -293,7 +286,6 @@ private fun PositiveFeedbackStep(
 
 @Composable
 private fun NegativeFeedbackStep(
-    rating: Int,
     feedbackText: String,
     onFeedbackChange: (String) -> Unit,
     onSubmitFeedback: () -> Unit,

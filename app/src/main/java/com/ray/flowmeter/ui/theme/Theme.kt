@@ -1,8 +1,8 @@
+// Main theme definition supporting MD3 dynamic color schemes, custom accent themes, and Amoled black modes.
 package com.ray.flowmeter.ui.theme
 
 import android.app.Activity
 import android.os.Build
-import androidx.compose.animation.*
 import androidx.compose.animation.core.SpringSpec
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
@@ -35,7 +35,6 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import android.graphics.Color as AndroidColor
 
-// Light theme colors
 val PrimaryLight = Color(0xFF0056D2)
 val OnPrimaryLight = Color(0xFFFFFFFF)
 val PrimaryContainerLight = Color(0xFFD8E2FF)
@@ -64,7 +63,6 @@ val SurfaceVariantLight = Color(0xFFE1E2EC)
 val OnSurfaceVariantLight = Color(0xFF44474F)
 val OutlineLight = Color(0xFF74777F)
 
-// Dark theme colors
 val PrimaryDark = Color(0xFFAFC6FF)
 val OnPrimaryDark = Color(0xFF002D6D)
 val PrimaryContainerDark = Color(0xFF00419E)

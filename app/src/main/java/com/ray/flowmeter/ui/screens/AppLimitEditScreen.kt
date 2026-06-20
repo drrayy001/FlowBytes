@@ -1,3 +1,5 @@
+// Form screen allowing user to configure or delete individual app limits,
+// including daily Wi-Fi/mobile data bounds and toggling block behavior.
 package com.ray.flowmeter.ui.screens
 
 import androidx.activity.compose.BackHandler

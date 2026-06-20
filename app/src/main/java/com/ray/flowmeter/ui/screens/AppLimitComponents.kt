@@ -1,3 +1,5 @@
+// Shared UI widgets for individual app limit details, usage progress bars,
+// and action menus on the limit configuration screen.
 package com.ray.flowmeter.ui.screens
 
 import androidx.compose.foundation.background
@@ -17,7 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import java.util.Locale
+import com.ray.flowmeter.utils.SpeedFormatter
 
 @Composable
 fun StatusIcon(
@@ -173,23 +175,4 @@ fun NetworkChip(selected: Boolean, onClick: () -> Unit, label: String, icon: and
     )
 }
 
-fun formatUsage(bytes: Long): String {
-    return when {
-        (bytes >= (1024L * 1024L * 1024L)) -> {
-            val gb = bytes / (1024.0 * 1024.0 * 1024.0)
-            if (gb % 1.0 == 0.0) String.format(Locale.getDefault(), "%.0f GB", gb)
-            else String.format(Locale.getDefault(), "%.2f GB", gb)
-        }
-        (bytes >= (1024L * 1024L)) -> {
-            val mb = bytes / (1024.0 * 1024.0)
-            if (mb % 1.0 == 0.0) String.format(Locale.getDefault(), "%.0f MB", mb)
-            else String.format(Locale.getDefault(), "%.2f MB", mb)
-        }
-        (bytes >= 1024L) -> {
-            val kb = bytes / 1024.0
-            if (kb % 1.0 == 0.0) String.format(Locale.getDefault(), "%.0f KB", kb)
-            else String.format(Locale.getDefault(), "%.2f KB", kb)
-        }
-        else -> "$bytes B"
-    }
-}
+fun formatUsage(bytes: Long): String = SpeedFormatter.formatUsage(bytes)

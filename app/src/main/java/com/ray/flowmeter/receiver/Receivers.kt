@@ -10,6 +10,8 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.ray.flowmeter.service.NetworkMonitoringService
 
+// Broadcast receivers to restart the background monitoring service on system boot
+// or network state wakeups, utilizing WorkManager to handle foreground startup constraints.
 class BootReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action != Intent.ACTION_BOOT_COMPLETED) return
@@ -23,10 +25,8 @@ class NetworkWakeupReceiver : BroadcastReceiver() {
     }
 }
 
-/**
- * Starts the [NetworkMonitoringService] using WorkManager to comply with Android 15
- * foreground service start restrictions from background/boot.
- */
+// Bypasses Android's background service limitations (Oreo and later)
+// by initiating startup through a WorkManager task execution block.
 private fun startServiceViaWorkManager(context: Context) {
     val workRequest = OneTimeWorkRequestBuilder<ServiceStarterWorker>().build()
     WorkManager.getInstance(context).enqueue(workRequest)

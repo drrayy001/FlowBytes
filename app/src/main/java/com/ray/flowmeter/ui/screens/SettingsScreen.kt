@@ -1,3 +1,5 @@
+// System settings screen containing toggle preferences for display, notifications,
+// reset scheduling, background tracking threshold tuning, and app support options.
 package com.ray.flowmeter.ui.screens
 
 import android.app.Activity
@@ -156,7 +158,6 @@ fun SettingsScreen(
             .fillMaxSize()
             .verticalScroll(scrollState)
     ) {
-        // ================== 1. GENERAL ==================
         StaggeredEntrance {
             SettingsGroup(title = stringResource(R.string.settings_section_general)) {
                 SettingsItem(
@@ -196,7 +197,6 @@ fun SettingsScreen(
             }
         }
 
-        // ================== 2. APPEARANCE ==================
         StaggeredEntrance {
             SettingsGroup(title = stringResource(R.string.settings_section_appearance)) {
                 SettingsItem(
@@ -243,7 +243,6 @@ fun SettingsScreen(
                     )
                 }
 
-                // Only show Amoled if in Dark mode
                 if (isDark) {
                     SettingsItem(
                         icon = Icons.Rounded.DarkMode,
@@ -293,7 +292,6 @@ fun SettingsScreen(
             }
         }
 
-        // ================== 3. NOTIFICATIONS ==================
         StaggeredEntrance {
             SettingsGroup(title = stringResource(R.string.settings_section_notifications)) {
                 SettingsItem(
@@ -353,7 +351,6 @@ fun SettingsScreen(
             }
         }
 
-        // ================== 4. WIDGET ==================
         StaggeredEntrance {
             SettingsGroup(title = stringResource(R.string.settings_section_widget)) {
                 SettingsItem(
@@ -381,7 +378,6 @@ fun SettingsScreen(
             }
         }
 
-        // ================== 5. MONITORING & SECURITY ==================
         StaggeredEntrance {
             SettingsGroup(title = stringResource(R.string.settings_section_alerts)) {
                 SettingsItem(
@@ -430,7 +426,6 @@ fun SettingsScreen(
             }
         }
 
-        // ================== 6. SUPPORT ==================
         StaggeredEntrance {
             SettingsGroup(title = stringResource(R.string.settings_section_support)) {
                 SettingsItem(
@@ -493,7 +488,6 @@ fun SettingsScreen(
             }
         }
 
-        // ================== 7. ABOUT ==================
         StaggeredEntrance {
             SettingsGroup(title = stringResource(R.string.settings_section_about)) {
                 SettingsItem(
@@ -537,7 +531,6 @@ fun SettingsScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // ================== DIALOGS ==================
         if (showThemeDialog) {
             ThemeDialog(
                 currentTheme = themeMode,

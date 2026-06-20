@@ -1,3 +1,5 @@
+// Detailed breakdown listing network consumption per-app. Supports sorting/filtering
+// by Wi-Fi/mobile usage and splitting applications into user and system categories.
 package com.ray.flowmeter.ui.screens
 
 import androidx.compose.animation.*
@@ -51,7 +53,6 @@ import com.ray.flowmeter.ui.theme.StaggeredEntrance
 import com.ray.flowmeter.ui.viewmodels.AppUsageViewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -514,7 +515,7 @@ fun AppUsageScreen(
                     targetValue = when {
                         viewModel.isRefreshing -> restingDistance
                         isActivelyPulling -> cappedOffset
-                        else -> -indicatorSize - 20.dp // Hidden completely off-screen
+                        else -> -indicatorSize - 20.dp
                     },
                     animationSpec = spring(
                         dampingRatio = Spring.DampingRatioNoBouncy,
@@ -527,7 +528,6 @@ fun AppUsageScreen(
                     modifier = Modifier
                         .align(Alignment.TopCenter)
                         .size(indicatorSize)
-                        // Uses graphicsLayer to directly manipulate GPU, preventing flashing
                         .graphicsLayer {
                             translationY = animatedOffset.toPx()
                             alpha = if (viewModel.isRefreshing) 1f else (pullFraction * 2f).coerceIn(0f, 1f)
@@ -584,7 +584,6 @@ fun AppUsageScreen(
                             modifier = Modifier.fillMaxWidth(),
                             verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
-                            // Filters at the top - now scrolls with the rest of the content
                             AnimatedVisibility(
                                 visible = showFilters,
                                 enter = expandVertically(animationSpec = premiumSpring()) + fadeIn(),
@@ -596,7 +595,6 @@ fun AppUsageScreen(
                                         .padding(bottom = 4.dp),
                                     verticalArrangement = Arrangement.spacedBy(12.dp)
                                 ) {
-                                    // Filter Buttons Row
                                     Row(
                                         modifier = Modifier.fillMaxWidth(),
                                         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -642,7 +640,6 @@ fun AppUsageScreen(
                                         }
                                     }
 
-                                    // Date Navigation Header
                                     Row(
                                         modifier = Modifier.fillMaxWidth(),
                                         horizontalArrangement = Arrangement.SpaceBetween,
@@ -722,7 +719,6 @@ fun AppUsageScreen(
                                 }
                             }
 
-                            // Redesigned Data summary replacing the circles
                             val displayGlobalDown = when (networkFilter) {
                                 mobileOnlyFilterLabel -> viewModel.globalCellDown
                                 wifiOnlyFilterLabel -> viewModel.globalWifiDown
@@ -739,7 +735,6 @@ fun AppUsageScreen(
                                 totalUsage = displayGlobalTotal,
                                 downUsage = displayGlobalDown,
                                 upUsage = displayGlobalUp,
-                                locale = locale,
                                 modifier = Modifier.padding(horizontal = 0.dp)
                             )
                         }
@@ -788,7 +783,6 @@ fun AppUsageScreen(
                                     appUsage = appUsage,
                                     displayUsage = displayUsage,
                                     maxUsageBytes = maxUsageBytes,
-                                    locale = locale,
                                     onClick = {
                                         if (appUsage.isSystemGroup) {
                                             viewModel.isViewingSystemApps = true
@@ -810,13 +804,12 @@ fun ModernUsageSummary(
     totalUsage: Long,
     downUsage: Long,
     upUsage: Long,
-    locale: Locale,
     modifier: Modifier = Modifier
 ) {
     val downloadColor = MaterialTheme.colorScheme.primary
-    val uploadColor = MaterialTheme.colorScheme.tertiary // Distinguishable from download
+    val uploadColor = MaterialTheme.colorScheme.tertiary
     
-    val totalParts = formatUsage(totalUsage, locale).split(" ")
+    val totalParts = formatUsage(totalUsage).split(" ")
     val downRatio = if (totalUsage > 0) downUsage.toFloat() / totalUsage.toFloat() else 0.5f
     
     Card(
@@ -864,7 +857,6 @@ fun ModernUsageSummary(
             
             Spacer(modifier = Modifier.height(20.dp))
             
-            // Visual Ratio Bar (Infographic style)
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -897,7 +889,7 @@ fun ModernUsageSummary(
             ) {
                 ModernUsageSubItem(
                     label = stringResource(R.string.label_download),
-                    value = formatUsage(downUsage, locale),
+                    value = formatUsage(downUsage),
                     icon = AppIcons.Download,
                     color = downloadColor
                 )
@@ -911,7 +903,7 @@ fun ModernUsageSummary(
                 
                 ModernUsageSubItem(
                     label = stringResource(R.string.label_upload),
-                    value = formatUsage(upUsage, locale),
+                    value = formatUsage(upUsage),
                     icon = AppIcons.Upload,
                     color = uploadColor
                 )
@@ -1047,7 +1039,6 @@ fun AppUsageItem(
     appUsage: AppUsageInfo,
     displayUsage: Long,
     maxUsageBytes: Long,
-    locale: Locale,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
 ) {
@@ -1112,7 +1103,6 @@ fun AppUsageItem(
                     
                     Spacer(modifier = Modifier.height(4.dp))
 
-                    // Progress Pill - Indented under app name
                     Box(
                         modifier = Modifier
                             .fillMaxWidth(0.85f)
@@ -1132,7 +1122,7 @@ fun AppUsageItem(
                 Spacer(modifier = Modifier.width(8.dp))
 
                 Text(
-                    text = formatUsage(displayUsage, locale),
+                    text = formatUsage(displayUsage),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Black,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -1157,7 +1147,6 @@ fun AppUsageItem(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        // Left Column: Download & Wi-Fi
                         Column(
                             modifier = Modifier.weight(1f),
                             horizontalAlignment = Alignment.CenterHorizontally
@@ -1165,21 +1154,20 @@ fun AppUsageItem(
                             Column(horizontalAlignment = Alignment.Start) {
                                 ModernUsageSubItem(
                                     label = stringResource(R.string.label_download),
-                                    value = formatUsage(appUsage.downUsage, locale),
+                                    value = formatUsage(appUsage.downUsage),
                                     icon = AppIcons.Download,
                                     color = downloadColor
                                 )
                                 Spacer(modifier = Modifier.height(20.dp))
                                 ModernUsageSubItem(
                                     label = stringResource(R.string.label_wifi_usage),
-                                    value = formatUsage(appUsage.wifiUsage, locale),
+                                    value = formatUsage(appUsage.wifiUsage),
                                     icon = AppIcons.Wifi,
                                     color = wifiColor
                                 )
                             }
                         }
 
-                        // Central Vertical Divider
                         Box(
                             modifier = Modifier
                                 .height(64.dp)
@@ -1187,7 +1175,6 @@ fun AppUsageItem(
                                 .background(MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                         )
 
-                        // Right Column: Upload & Mobile
                         Column(
                             modifier = Modifier.weight(1f),
                             horizontalAlignment = Alignment.CenterHorizontally
@@ -1195,14 +1182,14 @@ fun AppUsageItem(
                             Column(horizontalAlignment = Alignment.Start) {
                                 ModernUsageSubItem(
                                     label = stringResource(R.string.label_upload),
-                                    value = formatUsage(appUsage.upUsage, locale),
+                                    value = formatUsage(appUsage.upUsage),
                                     icon = AppIcons.Upload,
                                     color = uploadColor
                                 )
                                 Spacer(modifier = Modifier.height(20.dp))
                                 ModernUsageSubItem(
                                     label = stringResource(R.string.label_mobile_usage),
-                                    value = formatUsage(appUsage.cellUsage, locale),
+                                    value = formatUsage(appUsage.cellUsage),
                                     icon = AppIcons.Mobile,
                                     color = uploadColor
                                 )
@@ -1223,11 +1210,3 @@ fun AppUsageItem(
 
 
 
-private fun formatUsage(bytes: Long, locale: Locale): String {
-    return when {
-        bytes >= 1024L * 1024L * 1024L -> String.format(locale, "%.2f GB", bytes / (1024.0 * 1024.0 * 1024.0))
-        bytes >= 1024L * 1024L -> String.format(locale, "%.2f MB", bytes / (1024.0 * 1024.0))
-        bytes >= 1024L -> String.format(locale, "%.2f KB", bytes / 1024.0)
-        else -> "$bytes B"
-    }
-}

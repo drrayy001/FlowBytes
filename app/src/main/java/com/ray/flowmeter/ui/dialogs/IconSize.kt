@@ -1,3 +1,4 @@
+// Slider configuration dialog to customize status bar speed display icon scaling.
 package com.ray.flowmeter.ui.dialogs
 
 import androidx.compose.foundation.BorderStroke

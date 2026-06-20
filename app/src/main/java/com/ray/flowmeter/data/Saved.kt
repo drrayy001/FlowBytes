@@ -28,6 +28,8 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import java.io.IOException
 
+// --- Database Entities & DAOs ---
+
 @Entity(tableName = "app_alerts")
 data class AppAlert(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
@@ -122,6 +124,8 @@ abstract class FlowMeterDatabase : RoomDatabase() {
     }
 }
 
+// --- Repository Layer ---
+
 class AlertRepository(private val appAlertDao: AppAlertDao) {
     val allAlerts: Flow<List<AppAlert>> = appAlertDao.getAllAlerts()
 
@@ -161,6 +165,8 @@ class AppLimitRepository(private val appLimitDao: AppLimitDao) {
         return appLimitDao.getAllAppLimitsList()
     }
 }
+
+// --- User Preferences Storage (DataStore) ---
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
     name = "user_preferences"
@@ -243,6 +249,8 @@ class UserPreferencesRepository(private val context: Context) {
                 throw exception
             }
         }
+
+    // --- Preferences Read Streams (Flows) ---
 
     val onboardingCompleted: Flow<Boolean> = preferencesFlow
         .map { preferences ->
@@ -533,6 +541,8 @@ class UserPreferencesRepository(private val context: Context) {
         .map { preferences ->
             preferences[PreferencesKeys.WIDGET_USAGE_TYPE] ?: "DAILY"
         }.distinctUntilChanged()
+
+    // --- Preferences Write Operations ---
 
     suspend fun setOnboardingCompleted(completed: Boolean) {
         context.dataStore.edit { preferences ->

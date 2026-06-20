@@ -1,3 +1,4 @@
+// Warning disclosure detailing VPN functionality, local loopback routing, and privacy guarantees.
 package com.ray.flowmeter.ui.dialogs
 
 import androidx.compose.foundation.layout.*

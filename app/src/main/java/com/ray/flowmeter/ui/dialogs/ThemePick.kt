@@ -1,3 +1,4 @@
+// Theme mode selector offering system-default, light, or dark display theme switches.
 package com.ray.flowmeter.ui.dialogs
 
 import androidx.compose.foundation.BorderStroke

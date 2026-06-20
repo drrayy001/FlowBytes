@@ -1,3 +1,5 @@
+// Welcome wizard screen displaying introduction steps, baseline permissions setup,
+// and initial monitoring controls.
 package com.ray.flowmeter.ui.screens
 
 import android.annotation.SuppressLint
@@ -67,7 +69,6 @@ fun OnboardingScreen(
         usageAccessGranted = hasUsageAccess(context)
     }
 
-    // Re-check battery optimization status when the user returns
     val batteryOptimizationLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult(),
     ) {
@@ -282,7 +283,6 @@ fun PermissionItem(
     }
 }
 
-// Checks whether the app has been granted usage stats access via AppOps
 private fun hasUsageAccess(context: Context): Boolean {
     val appOps = context.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
     val mode = appOps.checkOpNoThrow(

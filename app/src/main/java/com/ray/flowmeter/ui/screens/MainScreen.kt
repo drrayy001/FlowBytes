@@ -1,3 +1,5 @@
+// Scaffold container coordinating bottom navigation bar destination switching
+// and binding activity-level lifecycle events to screen-level parameters.
 package com.ray.flowmeter.ui.screens
 
 import androidx.activity.compose.BackHandler
@@ -390,7 +392,6 @@ fun MainScreen(
         val isViewingSystemApps = appUsageViewModel.isViewingSystemApps
         val filteredSystemAppList by appUsageViewModel.filteredSystemAppUsageList.collectAsState()
         val systemListState = rememberLazyListState()
-        val locale = LocalConfiguration.current.locales[0]
 
         AnimatedVisibility(
             visible = isViewingSystemApps,
@@ -488,7 +489,6 @@ fun MainScreen(
                                         appUsage = appUsage,
                                         displayUsage = displayUsage,
                                         maxUsageBytes = maxUsageBytes,
-                                        locale = locale,
                                         modifier = Modifier.animateItem()
                                     )
                                 }

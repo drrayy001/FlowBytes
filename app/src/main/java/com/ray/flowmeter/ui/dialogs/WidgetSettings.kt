@@ -1,3 +1,4 @@
+// Widget options dialog managing visible attributes (upload/download speed display and usage reset types).
 package com.ray.flowmeter.ui.dialogs
 
 import androidx.compose.foundation.BorderStroke

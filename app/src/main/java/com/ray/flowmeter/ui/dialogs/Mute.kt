@@ -1,3 +1,4 @@
+// Selection prompt to temporarily mute network notifications for a target application.
 package com.ray.flowmeter.ui.dialogs
 
 import androidx.compose.foundation.background

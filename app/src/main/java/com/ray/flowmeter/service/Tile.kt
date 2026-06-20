@@ -10,6 +10,8 @@ import com.ray.flowmeter.utils.LocaleHelper
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
 
+// Quick Settings Tile Service that allows the user to quickly toggle foreground network monitoring
+// directly from the Android system notification tray.
 class SpeedTileService : TileService() {
 
     override fun attachBaseContext(newBase: Context) {
@@ -38,6 +40,7 @@ class SpeedTileService : TileService() {
         updateTile()
     }
 
+    // Toggles network monitoring status when the user clicks the quick settings tile.
     override fun onClick() {
         super.onClick()
         serviceScope.launch {

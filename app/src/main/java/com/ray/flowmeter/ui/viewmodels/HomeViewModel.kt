@@ -23,6 +23,7 @@ import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import com.ray.flowmeter.utils.SpeedFormatter
 
 // ViewModel for the Home screen, managing usage stats and chart data
 class HomeViewModel(
@@ -194,29 +195,30 @@ class HomeViewModel(
                 }
             }
 
+            // Scale the chart ceiling dynamically based on the highest daily usage recorded.
             val possibleCeilings = listOf(
-                100 * 1024 * 1024L,          // 100 MB
-                250 * 1024 * 1024L,          // 250 MB
-                500 * 1024 * 1024L,          // 500 MB
-                750 * 1024 * 1024L,          // 750 MB
-                1024 * 1024 * 1024L,         // 1 GB
-                1536 * 1024 * 1024L,         // 1.5 GB
-                2 * 1024 * 1024 * 1024L,     // 2 GB
-                3 * 1024 * 1024 * 1024L,     // 3 GB
-                4 * 1024 * 1024 * 1024L,     // 4 GB
-                5 * 1024 * 1024 * 1024L,     // 5 GB
-                6 * 1024 * 1024 * 1024L,     // 6 GB
-                8 * 1024 * 1024 * 1024L,     // 8 GB
-                10 * 1024 * 1024 * 1024L,    // 10 GB
-                12 * 1024 * 1024 * 1024L,    // 12 GB
-                15 * 1024 * 1024 * 1024L,    // 15 GB
-                20 * 1024 * 1024 * 1024L,    // 20 GB
-                25 * 1024 * 1024 * 1024L,    // 25 GB
-                30 * 1024 * 1024 * 1024L,    // 30 GB
-                40 * 1024 * 1024 * 1024L,    // 40 GB
-                50 * 1024 * 1024 * 1024L,    // 50 GB
-                75 * 1024 * 1024 * 1024L,    // 75 GB
-                100 * 1024 * 1024 * 1024L    // 100 GB
+                100 * 1024 * 1024L,
+                250 * 1024 * 1024L,
+                500 * 1024 * 1024L,
+                750 * 1024 * 1024L,
+                1024 * 1024 * 1024L,
+                1536 * 1024 * 1024L,
+                2 * 1024 * 1024 * 1024L,
+                3 * 1024 * 1024 * 1024L,
+                4 * 1024 * 1024 * 1024L,
+                5 * 1024 * 1024 * 1024L,
+                6 * 1024 * 1024 * 1024L,
+                8 * 1024 * 1024 * 1024L,
+                10 * 1024 * 1024 * 1024L,
+                12 * 1024 * 1024 * 1024L,
+                15 * 1024 * 1024 * 1024L,
+                20 * 1024 * 1024 * 1024L,
+                25 * 1024 * 1024 * 1024L,
+                30 * 1024 * 1024 * 1024L,
+                40 * 1024 * 1024 * 1024L,
+                50 * 1024 * 1024 * 1024L,
+                75 * 1024 * 1024 * 1024L,
+                100 * 1024 * 1024 * 1024L
             )
 
             val minCeiling = 100 * 1024 * 1024L
@@ -236,7 +238,7 @@ class HomeViewModel(
                 formatDataUsage((chartCeilingBytes * 0.75).toLong()),
                 formatDataUsage((chartCeilingBytes * 0.5).toLong()),
                 formatDataUsage((chartCeilingBytes * 0.25).toLong()),
-                "0 B",
+                formatDataUsage(0L),
             )
 
             withContext(Dispatchers.Main) {
@@ -265,6 +267,7 @@ class HomeViewModel(
         }
     }
 
+    // Queries and sums total network usage bytes for a specific transport path.
     private fun getSumUsageForTransport(manager: NetworkStatsManager, transportType: Int, startTime: Long, endTime: Long): Long {
         var total = 0L
         try {
@@ -302,24 +305,5 @@ class HomeViewModel(
         return longArrayOf(rxTotal, txTotal)
     }
 
-    private fun formatDataUsage(bytes: Long): String {
-        return when {
-            (bytes >= (1024L * 1024L * 1024L)) -> {
-                val gb = bytes / (1024.0 * 1024.0 * 1024.0)
-                if (gb % 1.0 == 0.0) String.format(Locale.getDefault(), "%.0f GB", gb)
-                else String.format(Locale.getDefault(), "%.2f GB", gb)
-            }
-            (bytes >= (1024L * 1024L)) -> {
-                val mb = bytes / (1024.0 * 1024.0)
-                if (mb % 1.0 == 0.0) String.format(Locale.getDefault(), "%.0f MB", mb)
-                else String.format(Locale.getDefault(), "%.2f MB", mb)
-            }
-            (bytes >= 1024L) -> {
-                val kb = bytes / 1024.0
-                if (kb % 1.0 == 0.0) String.format(Locale.getDefault(), "%.0f KB", kb)
-                else String.format(Locale.getDefault(), "%.2f KB", kb)
-            }
-            else -> "$bytes B"
-        }
-    }
+    private fun formatDataUsage(bytes: Long): String = SpeedFormatter.formatUsage(bytes)
 }

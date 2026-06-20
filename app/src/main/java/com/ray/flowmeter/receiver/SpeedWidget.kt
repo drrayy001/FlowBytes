@@ -16,6 +16,8 @@ import com.ray.flowmeter.utils.SpeedFormatter
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
 
+// AppWidgetProvider that handles rendering and real-time updates of the home screen widget,
+// displaying current upload/download speeds and cumulative network data usage.
 class SpeedWidget : AppWidgetProvider() {
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
@@ -61,6 +63,7 @@ class SpeedWidget : AppWidgetProvider() {
         const val EXTRA_USAGE_TYPE = "extra_usage_type"
         const val EXTRA_SHOW_SPEED = "extra_show_speed"
 
+        // Select either compact or full layout depending on the widget's current vertical span.
         fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
             val options = appWidgetManager.getAppWidgetOptions(appWidgetId)
             val minHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 72)
@@ -87,6 +90,7 @@ class SpeedWidget : AppWidgetProvider() {
             }
         }
 
+        // Populates the widget layout with formatted speeds and usage values received from the broadcast intent.
         private fun updateWidgetData(
             context: Context,
             appWidgetManager: AppWidgetManager,

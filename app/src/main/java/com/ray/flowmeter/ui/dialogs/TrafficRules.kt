@@ -1,3 +1,4 @@
+// Settings dialog to customize traffic spike alert thresholds, check intervals, and cool-down limits.
 package com.ray.flowmeter.ui.dialogs
 
 import androidx.compose.foundation.background

@@ -1,3 +1,4 @@
+// Donation support dialog listing billing tiers for voluntary app contributions.
 package com.ray.flowmeter.ui.dialogs
 
 import androidx.compose.animation.*

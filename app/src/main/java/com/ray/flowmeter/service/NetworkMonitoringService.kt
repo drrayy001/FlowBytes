@@ -50,7 +50,6 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import java.util.Calendar
-import java.util.Locale
 
 class NetworkMonitoringService : Service() {
 
@@ -146,6 +145,7 @@ class NetworkMonitoringService : Service() {
 
     private val ignoredApps = mutableMapOf<String, Long>()
 
+    // Wrap context to apply the selected language to notifications and service elements.
     override fun attachBaseContext(newBase: Context) {
         val repository = UserPreferencesRepository(newBase)
         val languageCode = kotlinx.coroutines.runBlocking {
@@ -230,10 +230,12 @@ class NetworkMonitoringService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        // Ignore app actions are handled in MainActivity's intent callbacks.
         if (intent?.action == ACTION_IGNORE_APP) {
             return START_STICKY
         }
 
+        // Handle temporary muting durations specified by notification action buttons.
         if (intent?.action == ACTION_SET_MUTE_DURATION) {
             val appName = intent.getStringExtra(EXTRA_MUTE_APP_NAME)
             val durationMs = intent.getLongExtra(EXTRA_MUTE_DURATION_MS, 0L)
@@ -255,16 +257,11 @@ class NetworkMonitoringService : Service() {
         initialLayout.setViewVisibility(R.id.layout_usage, View.GONE)
 
         try {
-            // Use "0 KB/s" as initial icon text to avoid "blank space" / transparent icon
             safeStartForeground(createNotification(initialLayout, "0 KB/s"))
             isForeground = true
             
             serviceScope.launch {
-                // Initialize usage immediately
                 updateDailyUsage()
-                
-                // Initial delay to get a proper measurement before first UI update
-                // Reduced from 600ms to 300ms for faster first update
                 delay(300.milliseconds)
                 updateStats(force = true)
             }
@@ -312,14 +309,7 @@ class NetworkMonitoringService : Service() {
 
     private fun formatSpeed(bytesPerSec: Long): String = SpeedFormatter.formatBytes(bytesPerSec)
 
-    private fun formatDataUsage(bytes: Long): String {
-        return when {
-            (bytes >= (1024L * 1024L * 1024L)) -> String.format(Locale.getDefault(), "%.2f GB", bytes / (1024.0 * 1024.0 * 1024.0))
-            (bytes >= (1024L * 1024L)) -> String.format(Locale.getDefault(), "%.2f MB", bytes / (1024.0 * 1024.0))
-            (bytes >= 1024L) -> String.format(Locale.getDefault(), "%.2f KB", bytes / 1024.0)
-            else -> "$bytes B"
-        }
-    }
+    private fun formatDataUsage(bytes: Long): String = SpeedFormatter.formatUsage(bytes)
 
     private suspend fun updateDailyUsage() = withContext(Dispatchers.IO) {
         try {

@@ -20,6 +20,7 @@ object ThemeMode {
     const val DARK = "Dark"
 }
 
+// ViewModel that exposes user settings and coordinates configuration modifications (Theme, Language, Billing).
 class SettingsViewModel(
     private val repository: UserPreferencesRepository,
     initialTheme: String = ThemeMode.SYSTEM,
@@ -29,8 +30,8 @@ class SettingsViewModel(
 ) : ViewModel() {
 
     init {
+        // Migrate legacy configurations to modern options format where applicable.
         viewModelScope.launch {
-            // Migration/Legacy handling
             when (repository.themeMode.first()) {
                 "Material" -> {
                     repository.saveThemeMode(ThemeMode.SYSTEM)
@@ -229,6 +230,7 @@ class SettingsViewModel(
     private val _billingEvents = MutableSharedFlow<BillingEvent>()
     val billingEvents = _billingEvents.asSharedFlow()
 
+    // Initializes Play Billing client connection to handle voluntary user support donations.
     fun initBilling(context: Context) {
         if (billingManager == null) {
             val manager = BillingManager(context.applicationContext, viewModelScope)

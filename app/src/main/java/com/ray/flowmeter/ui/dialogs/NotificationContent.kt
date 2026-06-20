@@ -1,3 +1,4 @@
+// Selector choosing data types (Upload, Download, or Both) to display in the persistent notification.
 package com.ray.flowmeter.ui.dialogs
 
 import androidx.compose.foundation.BorderStroke

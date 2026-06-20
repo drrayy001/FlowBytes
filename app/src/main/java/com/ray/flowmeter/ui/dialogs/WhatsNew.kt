@@ -1,3 +1,4 @@
+// Changelog dialog presenting key features and modifications in version updates.
 package com.ray.flowmeter.ui.dialogs
 
 import androidx.compose.foundation.layout.*

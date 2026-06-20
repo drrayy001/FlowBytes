@@ -1,3 +1,4 @@
+// Shared composable items for rendering standardized preference rows, switch toggles, and slider bars.
 package com.ray.flowmeter.ui.components
 
 import androidx.compose.foundation.BorderStroke

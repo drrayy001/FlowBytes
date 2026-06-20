@@ -1,3 +1,4 @@
+// Helper managing Google Play Billing Client API connections, products query, and purchase lifecycle.
 package com.ray.flowmeter.utils
 
 import android.app.Activity
@@ -55,8 +56,7 @@ class BillingManager(context: Context, private val scope: CoroutineScope) {
                 }
 
                 override fun onBillingServiceDisconnected() {
-                    // Try to restart the connection on the next request to
-                    // Google Play by calling the startConnection() method.
+
                 }
             },
         )

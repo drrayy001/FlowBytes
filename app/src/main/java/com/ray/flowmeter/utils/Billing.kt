@@ -95,9 +95,10 @@ class BillingManager(context: Context, private val scope: CoroutineScope) {
             .setProductList(productList)
             .build()
 
-        billingClient.queryProductDetailsAsync(params) { billingResult, productDetailsList ->
+        billingClient.queryProductDetailsAsync(params) { billingResult, result ->
             scope.launch {
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                    val productDetailsList = result.productDetailsList
                     if (productDetailsList.isNotEmpty()) {
                         val flowParams = BillingFlowParams.newBuilder()
                             .setProductDetailsParamsList(
@@ -114,7 +115,7 @@ class BillingManager(context: Context, private val scope: CoroutineScope) {
                     }
                 } else {
                     val debugMsg = billingResult.debugMessage
-                    val errMsg = if (debugMsg.isNotEmpty()) debugMsg else "Google Play Billing error (Code: ${billingResult.responseCode})"
+                    val errMsg = debugMsg.ifEmpty { "Google Play Billing error (Code: ${billingResult.responseCode})" }
                     _events.emit(BillingEvent.Error(errMsg))
                 }
             }

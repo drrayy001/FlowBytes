@@ -144,9 +144,10 @@ fun MainScreen(
                                         Destination.Limits -> stringResource(R.string.title_limits)
                                         else -> stringResource(R.string.title_settings)
                                     },
+                                    modifier = Modifier.weight(1f),
                                     style = MaterialTheme.typography.headlineSmall,
                                     fontWeight = FontWeight.Black,
-                                    letterSpacing = (-0.5).sp,
+                                    letterSpacing = if (LocalConfiguration.current.locales[0].language == "ar") 0.sp else (-0.5).sp,
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis
                                 )

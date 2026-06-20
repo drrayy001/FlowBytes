@@ -14,6 +14,7 @@ import com.ray.flowmeter.service.NetworkMonitoringService
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 class AlertsViewModel(
     private val repository: AlertRepository,
@@ -38,7 +39,7 @@ class AlertsViewModel(
         if (!isManual) return
         viewModelScope.launch {
             _isRefreshing.value = true
-            delay(500)
+            delay(500.milliseconds)
             _isRefreshing.value = false
         }
     }

@@ -42,6 +42,7 @@ import com.ray.flowmeter.ui.viewmodels.HomeViewModel
 import com.ray.flowmeter.ui.viewmodels.OnboardingViewModel
 import com.ray.flowmeter.ui.viewmodels.SettingsViewModel
 import com.ray.flowmeter.utils.LocaleHelper
+import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -97,7 +98,7 @@ class MainActivity : ComponentActivity() {
         lifecycleScope.launch {
             val languageCode = try {
                 repository.language.first()
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 ""
             }
             if (languageCode != currentAppliedLanguage) {
@@ -251,7 +252,7 @@ class MainActivity : ComponentActivity() {
                             val isLaunchCountOk = appLaunchCount >= 3
 
                             if (isTimeSinceInstallOk && isTimeSinceLastPromptOk && isLaunchCountOk) {
-                                delay(2000)
+                                delay(2000.milliseconds)
                                 setShowReviewDialog(true)
                             }
                         }
@@ -260,7 +261,7 @@ class MainActivity : ComponentActivity() {
                     LaunchedEffect(onboardingCompleted, lastVersionCode) {
                         if ((onboardingCompleted == true) && (lastVersionCode != -1)) {
                             if (lastVersionCode < currentVersionCode) {
-                                delay(1000)
+                                delay(1000.milliseconds)
                                 repository.updateLastVersionCode(currentVersionCode)
                             }
                         }

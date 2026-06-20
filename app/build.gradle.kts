@@ -66,15 +66,14 @@ android {
         buildConfig = true
     }
 
+    @Suppress("UnstableApiUsage")
     bundle {
         language {
             enableSplit = false
         }
     }
 
-    lint {
-        disable.addAll(listOf("UnusedResources", "GradleDependency", "NewerVersionAvailable", "TypographyEllipsis"))
-    }
+
 }
 
 dependencies {

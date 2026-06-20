@@ -1,6 +1,5 @@
 package com.ray.flowmeter.ui.screens
 
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -14,10 +13,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -36,78 +32,6 @@ fun StatusIcon(
         modifier = modifier.size(16.dp),
         tint = color
     )
-}
-
-@Composable
-fun ModernProgressIndicator(
-    label: String? = null,
-    current: Long,
-    limit: Long,
-    progress: Float,
-    isOverLimit: Boolean,
-    color: Color = MaterialTheme.colorScheme.primary
-) {
-    Column(modifier = Modifier.fillMaxWidth()) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                if (label != null) {
-                    Text(
-                        text = label,
-                        style = MaterialTheme.typography.labelSmall,
-                        fontWeight = FontWeight.Black,
-                        color = if (isOverLimit) MaterialTheme.colorScheme.error else color
-                    )
-                    Spacer(Modifier.width(8.dp))
-                }
-                Text(
-                    text = "${(progress * 100).toInt()}%",
-                    style = MaterialTheme.typography.labelSmall,
-                    fontWeight = FontWeight.Black,
-                    color = if (isOverLimit) MaterialTheme.colorScheme.error else color
-                )
-            }
-            Text(
-                text = "${formatUsage(current)} / ${formatUsage(limit)}",
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                fontWeight = FontWeight.Medium
-            )
-        }
-
-        Spacer(modifier = Modifier.height(6.dp))
-
-        val barColor = if (isOverLimit) MaterialTheme.colorScheme.error else color
-        val trackColor = MaterialTheme.colorScheme.surfaceContainerHighest
-
-        Canvas(modifier = Modifier
-            .fillMaxWidth()
-            .height(6.dp)
-            .clip(CircleShape)) {
-            // Track
-            drawLine(
-                color = trackColor,
-                start = Offset(0f, this.size.height / 2),
-                end = Offset(this.size.width, this.size.height / 2),
-                strokeWidth = this.size.height,
-                cap = StrokeCap.Round
-            )
-            // Progress
-            if (progress > 0f) {
-                val progressWidth = this.size.width * progress
-                drawLine(
-                    color = barColor,
-                    start = Offset(0f, this.size.height / 2),
-                    end = Offset(progressWidth, this.size.height / 2),
-                    strokeWidth = this.size.height,
-                    cap = StrokeCap.Round
-                )
-            }
-        }
-    }
 }
 
 @Composable

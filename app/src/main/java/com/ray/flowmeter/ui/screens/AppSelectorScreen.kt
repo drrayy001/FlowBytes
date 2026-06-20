@@ -178,7 +178,6 @@ fun AppPickerScreen(
                             contentPadding = PaddingValues(bottom = 16.dp)
                         ) {
                             items(filtered, key = { it.packageName }) { app ->
-                                val context = LocalContext.current
                                 val appIcon by produceState<Drawable?>(
                                     initialValue = null,
                                     key1 = app.packageName

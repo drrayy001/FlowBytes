@@ -389,13 +389,7 @@ fun <T> premiumSpring(): SpringSpec<T> = spring(
     stiffness = 350f,
 )
 
-object AppTransitions {
-    val ScreenEnter: EnterTransition = fadeIn(premiumSpring())
-    val ScreenExit: ExitTransition = fadeOut(premiumSpring())
 
-    val ScreenPopEnter: EnterTransition = fadeIn(premiumSpring())
-    val ScreenPopExit: ExitTransition = fadeOut(premiumSpring())
-}
 
 fun Modifier.bounceClick(
     enabled: Boolean = true,

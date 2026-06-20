@@ -12,16 +12,8 @@
     <string name="label_alerts">Алерты</string>
 
     <!-- Accessibility Descriptions -->
-    <string name="cd_settings">Открыть настройки</string>
     <string name="cd_back">Назад</string>
-    <string name="cd_prev_month">Предыдущий месяц</string>
-    <string name="cd_next_month">Следующий месяц</string>
-    <string name="cd_prev_year">Предыдущий год</string>
-    <string name="cd_next_year">Следующий год</string>
-    <string name="cd_dropdown">Открыть выпадающее меню</string>
     <string name="cd_pull_to_refresh">Потяните вниз, чтобы обновить</string>
-    <string name="cd_download">Загрузка</string>
-    <string name="cd_upload">Отдача</string>
     <string name="cd_clear_search">Очистить поиск</string>
     <string name="cd_prev_date">Предыдущая дата</string>
     <string name="cd_next_date">Следующая дата</string>
@@ -39,18 +31,12 @@
     <string name="label_download">Загрузка</string>
     <string name="label_upload">Отдача</string>
     <string name="label_this_month">В этом месяце</string>
-    <string name="label_last_7_days">ПОСЛЕДНИЕ 7 ДНЕЙ</string>
     <string name="label_usage_breakdown">Недельная активность</string>
     <string name="label_mobile">Мобильные</string>
     <string name="label_wifi">Wi-Fi</string>
     <string name="label_combined">Всего</string>
     <string name="label_todays_usage">Трафик за сегодня</string>
     <string name="label_usage_summary">Обзор использования</string>
-    <string name="label_usage_insight">Анализ использования</string>
-    <string name="msg_limit_forecast_warning">Вы приближаетесь к суточному лимиту. Рекомендуется снизить потребление данных.</string>
-    <string name="msg_limit_forecast_safe">Использование данных в пределах нормы.</string>
-    <string name="label_projected_upper">ПРОГНОЗ</string>
-    <string name="label_daily_limit_upper">ДНЕВНОЙ ЛИМИТ</string>
     <string name="msg_no_usage_recorded">Данные об использовании отсутствуют</string>
 
     <!-- App Usage Screen -->
@@ -65,7 +51,6 @@
     <string name="btn_delete">Удалить</string>
     <string name="btn_edit">Изменить</string>
     <string name="label_both">Оба</string>
-    <string name="title_select_date_range">Выбор дат</string>
     <string name="label_start_date">С</string>
     <string name="label_end_date">По</string>
     <string name="title_select_month">Выберите месяц</string>
@@ -80,8 +65,6 @@
     <string name="label_system_processes">Системные процессы</string>
     <string name="label_tethering">Режим модема</string>
     <string name="label_removed_apps">Удаленные приложения</string>
-    <string name="label_unattributed">Система / Прочее</string>
-    <string name="label_unknown_app">Неизвестное приложение</string>
     <string name="label_root">Root</string>
     <string name="label_android_system">Android System</string>
     <string name="label_dns_resolver">DNS Resolver</string>
@@ -109,7 +92,6 @@
     <string name="settings_show_daily_usage">Показывать уведомление</string>
     <string name="settings_daily_usage_desc">Отображать скорость и трафик в панели уведомлений</string>
     <string name="settings_notification_content">Содержимое уведомления</string>
-    <string name="settings_notification_content_desc">Выберите информацию для отображения</string>
     <string name="option_speed_only">Только скорость</string>
     <string name="option_daily_only">Только статистика</string>
     <string name="option_both">Скорость и статистика</string>
@@ -117,13 +99,11 @@
     <string name="settings_high_priority_desc">Закрепить индикатор скорости поверх других уведомлений</string>
     <string name="settings_hide_offline">Скрывать без сети</string>
     <string name="settings_hide_offline_desc">Автоматически скрывать индикатор при отсутствии сети</string>
-    <string name="settings_indicator_size_desc">Размер индикатора скорости в статус-баре</string>
 
     <string name="settings_section_widget">Виджет на главном экране</string>
     <string name="settings_widget_show_speed">Показывать скорость</string>
     <string name="settings_widget_show_speed_desc">Отображать скорость загрузки и отдачи в реальном времени на виджете</string>
     <string name="settings_widget_usage_type">Отображение трафика в виджете</string>
-    <string name="settings_widget_usage_type_desc">Выберите между дневным или месячным потреблением данных</string>
 
     <!-- Settings: Alerts & Limits -->
     <string name="settings_section_alerts">Алерты и лимиты</string>
@@ -131,12 +111,6 @@
     <string name="settings_data_alerts_desc">Уведомлять о чрезмерном фоновом потреблении данных</string>
     <string name="settings_mobile_limit">Лимит мобильных данных</string>
     <string name="settings_wifi_limit">Лимит Wi-Fi</string>
-    <string name="label_limit_value">Лимит: %s</string>
-    <string name="label_disabled">Отключено</string>
-    <string name="dialog_set_limit_title">Лимит %1$s на день</string>
-    <string name="label_limit_mb">Лимит (МБ)</string>
-    <string name="msg_limit_desc">Вы получите уведомление при достижении этого порога.</string>
-    <string name="btn_set_limit">Установить лимит</string>
 
     <string name="label_plan_duration">Длительность плана</string>
     <string name="msg_alert_muted">Алерт заглушен</string>
@@ -160,7 +134,6 @@
     <string name="size_medium">Средний</string>
     <string name="size_large">Большой</string>
     <string name="settings_language">Язык</string>
-    <string name="settings_language_desc">Выберите предпочитаемый язык</string>
     <string name="dialog_select_language_title">Выберите язык</string>
     <string name="language_default">Системный</string>
     <string name="language_arabic">Арабский (العربية)</string>
@@ -194,15 +167,12 @@
     <string name="settings_donate">Поддержать проект</string>
     <string name="settings_donate_desc">Помочь FlowBytes оставаться бесплатным и без рекламы</string>
     <string name="dialog_donate_title">Поддержка FlowBytes</string>
-    <string name="dialog_donate_desc">Если вам нравится FlowBytes, вы можете поддержать его развитие. Любая помощь важна!</string>
     <string name="label_donate_amount_1">Чаевые ($1.00)</string>
     <string name="label_donate_amount_2_5">Поддержка проекта ($2.50)</string>
     <string name="label_donate_amount_6">Меценат проекта ($6.00)</string>
     <string name="desc_donate_1">Простой способ выразить благодарность и помочь в поддержке проекта.</string>
     <string name="desc_donate_2_5">Помогает финансировать разработку новых функций и оптимизацию.</string>
     <string name="desc_donate_6">Значительный вклад в развитие открытого и свободного ПО.</string>
-    <string name="title_pick_amount">Выберите сумму</string>
-    <string name="btn_donate">Пожертвовать</string>
     <string name="msg_donation_success_title">Спасибо!</string>
     <string name="msg_donation_success_body">Ваша поддержка очень важна для нас.</string>
     <string name="msg_donation_cancelled">Пожертвование отменено.</string>
@@ -216,23 +186,14 @@
     <string name="settings_privacy_policy">Политика конфиденциальности</string>
     <string name="settings_terms_conditions">Условия использования</string>
     <string name="settings_licenses">Лицензии ПО</string>
-    <string name="label_am">AM</string>
-    <string name="label_pm">PM</string>
 
     <!-- Alerts History -->
     <string name="msg_no_alerts_history">История алертов пуста.</string>
     <string name="btn_clear_history">Очистить историю</string>
-    <string name="label_alert_total">Всего: %1$s</string>
-    <string name="label_alert_speed">Скорость: %1$s</string>
-    <string name="label_alert_down">Загр.: %1$s</string>
-    <string name="label_alert_up">Отд.: %1$s</string>
     <string name="msg_confirm_clear_history">Вы уверены, что хотите безвозвратно очистить историю?</string>
 
     <!-- New Strings extracted from Code -->
-    <string name="msg_enable_detection_hint">Включите алерты трафика, чтобы увидеть историю здесь.</string>
     <string name="label_advanced_settings">Дополнительно</string>
-    <string name="label_trigger_speed">Порог срабатывания</string>
-    <string name="label_total_data">Всего данных</string>
     <string name="title_mute_app">Заглушить %s</string>
     <string name="desc_mute_app">Перестать получать алерты для этого приложения.</string>
     <string name="btn_mute">Заглушить</string>
@@ -248,7 +209,6 @@
     <string name="btn_continue">Продолжить</string>
     <string name="title_custom_color">Настройка цвета</string>
     <string name="btn_apply_globally">Применить везде</string>
-    <string name="btn_reset_default">Сбросить</string>
     <string name="btn_get_started">Начать</string>
     <string name="title_welcome">Добро пожаловать в FlowBytes</string>
     <string name="msg_onboarding_desc">Для работы мониторинга и учета трафика необходимы разрешения.</string>
@@ -281,15 +241,12 @@
     <string name="label_daily_limit_reached">Дневной лимит</string>
     <string name="label_monthly_limit_reached">Месячный лимит</string>
     <string name="label_custom_limit_reached">Особый лимит</string>
-    <string name="msg_no_alerts_custom">Особые алерты отсутствуют.</string>
     <string name="label_start_date_select">С: %s</string>
     <string name="label_end_date_select">По: %s</string>
     <string name="msg_invalid_date_range">Конечная дата должна быть позже начальной</string>
-    <string name="label_high_traffic_detected">Высокий трафик!</string>
     <string name="label_trigger_speed_header">ПОРОГ</string>
     <string name="label_limit_set_header">ЛИМИТ</string>
     <string name="label_usage_recorded_header">РАСХОД</string>
-    <string name="label_history_header">ИСТОРИЯ</string>
     <string name="msg_no_app_limits">Лимиты приложений не настроены.</string>
     <string name="desc_restrict_app_subtitle">Добавьте приложение для управления его трафиком.</string>
     <string name="cd_add_app_limit">Добавить лимит</string>
@@ -297,13 +254,12 @@
     <string name="desc_block_apps">Ограничивать доступ в сеть при превышении лимита</string>
     <string name="title_edit_app_limit">Изменить лимит</string>
     <string name="btn_create_app_limit">Создать</string>
-    <string name="btn_save_changes">Сохранить</string>
     <string name="label_app_limit_selection">Лимит приложения</string>
     <string name="desc_app_limit_selection">Настроить ограничения для приложения</string>
     <string name="title_delete_limit">Удалить лимит</string>
     <string name="msg_confirm_delete_limit">Удалить лимит для %s?</string>
     <string name="msg_no_apps_found">Приложения не найдены.</string>
-    <string name="placeholder_search_apps">Поиск...</string>
+    <string name="placeholder_search_apps">Поиск&#8230;</string>
     <string name="title_select_application">Выберите приложение</string>
     <string name="title_configure_limit">Настройка лимита</string>
     <string name="title_general_limits">Системные планы</string>
@@ -314,15 +270,12 @@
     <string name="title_choose_limit_type">Выберите тип лимита</string>
 
     <!-- Notification Strings -->
-    <string name="notification_limit_reached_title">Превышен лимит %s</string>
-    <string name="notification_limit_reached_msg">Потрачено %s за сегодня.</string>
     <string name="status_not_supported">Мониторинг не поддерживается на этом устройстве</string>
     <string name="channel_speed_monitor_name">Скорость</string>
     <string name="channel_speed_monitor_desc">Индикаторы скорости в реальном времени</string>
     <string name="channel_usage_alerts_name">Алерты трафика</string>
     <string name="channel_usage_alerts_desc">Уведомления о превышении лимитов</string>
     <string name="notification_high_usage_app_msg">%1$s потребляет много трафика: %2$s (всего %3$s).</string>
-    <string name="notification_high_usage_generic_msg">Обнаружено высокое фоновое потребление: %s</string>
     <string name="notification_high_usage_title">Высокий расход данных</string>
     <string name="notification_summary_title">Алерты FlowBytes</string>
     <string name="notification_summary_msg">Нажмите, чтобы просмотреть историю.</string>
@@ -335,7 +288,6 @@
     <!-- Badges -->
     <string name="badge_limit_reached">Превышен</string>
     <string name="badge_blocked">Блокировка</string>
-    <string name="badge_silenced">Заглушен</string>
 
     <!-- App Review Dialog -->
     <string name="review_dialog_title">Нравится FlowBytes?</string>
@@ -346,8 +298,7 @@
     <string name="review_rate_on_play_store">Оценить в Play Store</string>
     <string name="review_feedback_title">Помогите нам стать лучше</string>
     <string name="review_feedback_description">Жаль, что вы не полностью довольны. Расскажите, что нам нужно исправить.</string>
-    <string name="review_feedback_placeholder">Ваши предложения...</string>
-    <string name="review_feedback_thanks">Спасибо за ваш отзыв!</string>
+    <string name="review_feedback_placeholder">Ваши предложения&#8230;</string>
     <string name="review_play_store_title">Спасибо за оценку!</string>
     <string name="review_play_store_description">Будем очень признательны, если вы напишете краткий отзыв в Google Play!</string>
     <string name="review_toast_feedback_submitted">Отзыв успешно отправлен. Спасибо!</string>

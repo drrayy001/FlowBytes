@@ -12,16 +12,8 @@
     <string name="label_alerts">Avvisi</string>
 
     <!-- Accessibility Descriptions -->
-    <string name="cd_settings">Apri impostazioni</string>
     <string name="cd_back">Torna indietro</string>
-    <string name="cd_prev_month">Mese precedente</string>
-    <string name="cd_next_month">Mese successivo</string>
-    <string name="cd_prev_year">Anno precedente</string>
-    <string name="cd_next_year">Anno successivo</string>
-    <string name="cd_dropdown">Apri menu a discesa</string>
     <string name="cd_pull_to_refresh">Trascina per aggiornare i dati di utilizzo</string>
-    <string name="cd_download">Download</string>
-    <string name="cd_upload">Upload</string>
     <string name="cd_clear_search">Cancella ricerca</string>
     <string name="cd_prev_date">Data precedente</string>
     <string name="cd_next_date">Data successiva</string>
@@ -39,18 +31,12 @@
     <string name="label_download">Download</string>
     <string name="label_upload">Upload</string>
     <string name="label_this_month">Questo mese</string>
-    <string name="label_last_7_days">ULTIMI 7 GIORNI</string>
     <string name="label_usage_breakdown">Attività settimanale</string>
     <string name="label_mobile">Mobile</string>
     <string name="label_wifi">Wi-Fi</string>
     <string name="label_combined">Combinato</string>
     <string name="label_todays_usage">Utilizzo odierno</string>
     <string name="label_usage_summary">Riepilogo utilizzo</string>
-    <string name="label_usage_insight">Dettagli utilizzo</string>
-    <string name="msg_limit_forecast_warning">Ti stai avvicinando al tuo limite giornaliero. Prendi in considerazione di ridurre l\'uso dei dati.</string>
-    <string name="msg_limit_forecast_safe">Il tuo utilizzo di dati è ampiamente entro il tuo limite giornaliero.</string>
-    <string name="label_projected_upper">PROIETTATO</string>
-    <string name="label_daily_limit_upper">LIMITE GIORNALIERO</string>
     <string name="msg_no_usage_recorded">Nessun utilizzo di dati registrato</string>
 
     <!-- App Usage Screen -->
@@ -65,7 +51,6 @@
     <string name="btn_delete">Elimina</string>
     <string name="btn_edit">Modifica</string>
     <string name="label_both">Entrambi</string>
-    <string name="title_select_date_range">Scegli date</string>
     <string name="label_start_date">Da</string>
     <string name="label_end_date">A</string>
     <string name="title_select_month">Seleziona mese</string>
@@ -86,8 +71,6 @@
     <string name="label_mdns_responder">Risponditore mDNS</string>
     <string name="label_media_service">Servizio multimediale</string>
     <string name="label_system_update">Aggiornamento di sistema</string>
-    <string name="label_unattributed">Sistema / Non attribuito</string>
-    <string name="label_unknown_app">App sconosciuta</string>
 
     <string name="tile_monitoring_on">Monitoraggio ATTIVO</string>
     <string name="tile_monitoring_off">Monitoraggio DISATTIVATO</string>
@@ -109,7 +92,6 @@
     <string name="settings_show_daily_usage">Mostra notifica</string>
     <string name="settings_daily_usage_desc">Visualizza velocità e utilizzo in tempo reale nell\'area di notifica</string>
     <string name="settings_notification_content">Contenuto notifica</string>
-    <string name="settings_notification_content_desc">Scegli quali informazioni visualizzare nella notifica</string>
     <string name="option_speed_only">Solo velocità</string>
     <string name="option_daily_only">Solo statistiche giornaliere</string>
     <string name="option_both">Velocità e statistiche giornaliere</string>
@@ -117,13 +99,11 @@
     <string name="settings_high_priority_desc">Mantieni l\'indicatore di velocità visibile in cima alle notifiche</string>
     <string name="settings_hide_offline">Nascondi quando offline</string>
     <string name="settings_hide_offline_desc">Nascondi automaticamente l\'indicatore di velocità quando disconnesso</string>
-    <string name="settings_indicator_size_desc">Regola le dimensioni dell\'indicatore di velocità nella barra di stato</string>
 
     <string name="settings_section_widget">Widget Home</string>
     <string name="settings_widget_show_speed">Mostra velocità</string>
     <string name="settings_widget_show_speed_desc">Visualizza le velocità di download e upload in tempo reale sul widget</string>
     <string name="settings_widget_usage_type">Visualizzazione consumo widget</string>
-    <string name="settings_widget_usage_type_desc">Scegli tra consumo dati giornaliero o mensile</string>
 
     <!-- Settings: Alerts & Limits -->
     <string name="settings_section_alerts">Avvisi e Limiti</string>
@@ -131,12 +111,6 @@
     <string name="settings_data_alerts_desc">Ricevi notifiche quando le app consumano troppi dati in background</string>
     <string name="settings_mobile_limit">Limite dati mobili</string>
     <string name="settings_wifi_limit">Limite dati Wi-Fi</string>
-    <string name="label_limit_value">Limite: %s</string>
-    <string name="label_disabled">Disabilitato</string>
-    <string name="dialog_set_limit_title">Imposta limite giornaliero %1$s</string>
-    <string name="label_limit_mb">Limite (MB)</string>
-    <string name="msg_limit_desc">Riceverai una notifica al raggiungimento di questo limite.</string>
-    <string name="btn_set_limit">Imposta limite</string>
 
     <string name="label_plan_duration">Durata piano</string>
     <string name="msg_alert_muted">Avviso silenziato</string>
@@ -160,7 +134,6 @@
     <string name="size_medium">Medio</string>
     <string name="size_large">Grande</string>
     <string name="settings_language">Lingua</string>
-    <string name="settings_language_desc">Scegli la tua lingua preferita</string>
     <string name="dialog_select_language_title">Seleziona lingua</string>
     <string name="language_default">Predefinita di sistema</string>
     <string name="language_arabic">Arabo (العربية)</string>
@@ -194,15 +167,12 @@
     <string name="settings_donate">Dona</string>
     <string name="settings_donate_desc">Contribuisci a mantenere FlowBytes privo di pubblicità e open source</string>
     <string name="dialog_donate_title">Supporta FlowBytes</string>
-    <string name="dialog_donate_desc">Se trovi FlowBytes utile, considera di supportare lo sviluppo. Qualsiasi contributo aiuta!</string>
     <string name="label_donate_amount_1">Piccola mancia ($1.00)</string>
     <string name="label_donate_amount_2_5">Sostenitore del progetto ($2.50)</string>
     <string name="label_donate_amount_6">Patrono del progetto ($6.00)</string>
     <string name="desc_donate_1">Un modo semplice per mostrare il tuo apprezzamento e supportare la manutenzione del progetto.</string>
     <string name="desc_donate_2_5">Aiuta a finanziare lo sviluppo continuo di nuove funzionalità e miglioramenti delle prestazioni.</string>
     <string name="desc_donate_6">Un contributo significativo per aiutare a mantenere FlowBytes open-source, senza pubblicità e indipendente.</string>
-    <string name="title_pick_amount">Seleziona importo</string>
-    <string name="btn_donate">Dona</string>
     <string name="msg_donation_success_title">Grazie!</string>
     <string name="msg_donation_success_body">Il tuo supporto è molto apprezzato e aiuta a tenere in vita il progetto.</string>
     <string name="msg_donation_cancelled">Donazione annullata.</string>
@@ -216,23 +186,14 @@
     <string name="settings_privacy_policy">Informativa sulla privacy</string>
     <string name="settings_terms_conditions">Termini e condizioni</string>
     <string name="settings_licenses">Licenze open source</string>
-    <string name="label_am">AM</string>
-    <string name="label_pm">PM</string>
 
     <!-- Alerts History -->
     <string name="msg_no_alerts_history">Nessuna cronologia avvisi trovata.</string>
     <string name="btn_clear_history">Cancella cronologia</string>
-    <string name="label_alert_total">Totale: %1$s</string>
-    <string name="label_alert_speed">Velocità: %1$s</string>
-    <string name="label_alert_down">Giù: %1$s</string>
-    <string name="label_alert_up">Su: %1$s</string>
     <string name="msg_confirm_clear_history">Sei sicuro di voler cancellare permanentemente la cronologia degli avvisi?</string>
 
     <!-- New Strings extracted from Code -->
-    <string name="msg_enable_detection_hint">Abilita gli avvisi di consumo elevato per vedere la tua cronologia qui.</string>
     <string name="label_advanced_settings">Impostazioni avanzate</string>
-    <string name="label_trigger_speed">Velocità di attivazione</string>
-    <string name="label_total_data">Dati totali</string>
     <string name="title_mute_app">Silenzia %s</string>
     <string name="desc_mute_app">Smetti di ricevere avvisi di consumo dati elevato per questa applicazione.</string>
     <string name="btn_mute">Silenzia</string>
@@ -248,7 +209,6 @@
     <string name="btn_continue">Continua</string>
     <string name="title_custom_color">Personalizza colore</string>
     <string name="btn_apply_globally">Applica a livello globale</string>
-    <string name="btn_reset_default">Ripristina predefinito</string>
     <string name="btn_get_started">Inizia</string>
     <string name="title_welcome">Benvenuto in FlowBytes</string>
     <string name="msg_onboarding_desc">Per fornire un monitoraggio accurato dei dati e della velocità in tempo reale, abbiamo bisogno di alcune autorisations.</string>
@@ -281,15 +241,12 @@
     <string name="label_daily_limit_reached">Limite giornaliero raggiunto</string>
     <string name="label_monthly_limit_reached">Limite mensile raggiunto</string>
     <string name="label_custom_limit_reached">Limite personalizzato raggiunto</string>
-    <string name="msg_no_alerts_custom">Nessun avviso per limiti personalizzati registrato.</string>
     <string name="label_start_date_select">Data di inizio: %s</string>
     <string name="label_end_date_select">Data di fine: %s</string>
     <string name="msg_invalid_date_range">La data di fine deve essere uguale o successiva alla data di inizio</string>
-    <string name="label_high_traffic_detected">Traffico elevato rilevato</string>
     <string name="label_trigger_speed_header">VELOCITÀ DI ATTIVAZIONE</string>
     <string name="label_limit_set_header">LIMITE IMPOSTATO</string>
     <string name="label_usage_recorded_header">UTILIZZO REGISTRATO</string>
-    <string name="label_history_header">CRONOLOGIA</string>
     <string name="msg_no_app_limits">Nessun limite app configurato.</string>
     <string name="desc_restrict_app_subtitle">Aggiungi un\'applicazione per iniziare a gestire il suo utilizzo di dati.</string>
     <string name="cd_add_app_limit">Aggiungi limite app</string>
@@ -297,7 +254,6 @@
     <string name="desc_block_apps">Limita automaticamente l\'accesso a Internet per le app che raggiungono il proprio limite</string>
     <string name="title_edit_app_limit">Modifica limite app</string>
     <string name="btn_create_app_limit">Crea limite</string>
-    <string name="btn_save_changes">Salva modifiche</string>
     <string name="label_app_limit_selection">Limite app</string>
     <string name="desc_app_limit_selection">Imposta restrizioni per un\'applicazione specifica</string>
     <string name="title_delete_limit">Elimina limite</string>
@@ -314,15 +270,12 @@
     <string name="title_choose_limit_type">Scegli tipo di limite</string>
 
     <!-- Notification Strings -->
-    <string name="notification_limit_reached_title">Limite giornaliero %s raggiunto</string>
-    <string name="notification_limit_reached_msg">Hai consumato %s oggi.</string>
     <string name="status_not_supported">Il monitoraggio della velocità non è supportato su questo dispositivo</string>
     <string name="channel_speed_monitor_name">Monitoraggio velocità</string>
     <string name="channel_speed_monitor_desc">Indicatori della velocità di rete in tempo reale</string>
     <string name="channel_usage_alerts_name">Avvisi dati elevati</string>
     <string name="channel_usage_alerts_desc">Notifiche per le soglie dei limiti di dati</string>
     <string name="notification_high_usage_app_msg">%1$s sta consumando molti dati: %2$s (%3$s usati).</string>
-    <string name="notification_high_usage_generic_msg">Rilevato consumo elevato di dati in background: %s</string>
     <string name="notification_high_usage_title">Consumo dati elevato</string>
     <string name="notification_summary_title">Avvisi dati elevati</string>
     <string name="notification_summary_msg">Tocca per visualizzare la cronologia degli avvisi per consumo dati elevato.</string>
@@ -335,7 +288,6 @@
     <!-- Badges -->
     <string name="badge_limit_reached">Limite raggiunto</string>
     <string name="badge_blocked">Bloccato</string>
-    <string name="badge_silenced">Silenziato</string>
 
     <!-- App Review Dialog -->
     <string name="review_dialog_title">Ti piace FlowBytes?</string>
@@ -347,7 +299,6 @@
     <string name="review_feedback_title">Aiutaci a migliorare</string>
     <string name="review_feedback_description">Ci dispiace sapere che non sei del tutto soddisfatto. Facci sapere come possiamo rendere FlowBytes migliore per te.</string>
     <string name="review_feedback_placeholder">Inserisci qui i tuoi suggerimenti o feedback&#8230;</string>
-    <string name="review_feedback_thanks">Grazie per il tuo feedback!</string>
     <string name="review_play_store_title">Grazie per la valutazione!</string>
     <string name="review_play_store_description">Ti saremmo davvero grati se potessi scrivere una rapida recensione su Google Play. Aiuta molto!</string>
     <string name="review_toast_feedback_submitted">Feedback inviato con successo. Grazie!</string>

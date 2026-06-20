@@ -12,16 +12,8 @@
     <string name="label_alerts">التنبيهات</string>
 
     <!-- Accessibility Descriptions -->
-    <string name="cd_settings">افتح الإعدادات</string>
     <string name="cd_back">رجوع</string>
-    <string name="cd_prev_month">الشهر السابق</string>
-    <string name="cd_next_month">الشهر التالي</string>
-    <string name="cd_prev_year">السنة السابقة</string>
-    <string name="cd_next_year">السنة التالية</string>
-    <string name="cd_dropdown">افتح القائمة المنسدلة</string>
     <string name="cd_pull_to_refresh">اسحب للأسفل لتحديث البيانات</string>
-    <string name="cd_download">تنزيل</string>
-    <string name="cd_upload">رفع</string>
     <string name="cd_clear_search">مسح البحث</string>
     <string name="cd_prev_date">التاريخ السابق</string>
     <string name="cd_next_date">التاريخ التالي</string>
@@ -39,18 +31,12 @@
     <string name="label_download">تنزيل</string>
     <string name="label_upload">رفع</string>
     <string name="label_this_month">هذا الشهر</string>
-    <string name="label_last_7_days">آخر 7 أيام</string>
     <string name="label_usage_breakdown">النشاط الأسبوعي</string>
     <string name="label_mobile">جوال</string>
     <string name="label_wifi">واي فاي</string>
     <string name="label_combined">مشترك</string>
     <string name="label_todays_usage">استخدام اليوم</string>
     <string name="label_usage_summary">ملخص الاستخدام</string>
-    <string name="label_usage_insight">نظرة على الاستخدام</string>
-    <string name="msg_limit_forecast_warning">أنت تقترب من حدك اليومي. يرجى تقليل استخدام البيانات.</string>
-    <string name="msg_limit_forecast_safe">استخدامك للبيانات ضمن الحد اليومي المسموح به.</string>
-    <string name="label_projected_upper">المتوقع</string>
-    <string name="label_daily_limit_upper">الحد اليومي</string>
     <string name="msg_no_usage_recorded">لم يتم تسجيل استخدام للبيانات بعد</string>
 
     <!-- App Usage Screen -->
@@ -63,7 +49,6 @@
     <string name="btn_delete">حذف</string>
     <string name="btn_edit">تعديل</string>
     <string name="label_both">كلاهما</string>
-    <string name="title_select_date_range">اختر التواريخ</string>
     <string name="label_start_date">من</string>
     <string name="label_end_date">إلى</string>
     <string name="title_select_month">اختر الشهر</string>
@@ -84,8 +69,6 @@
     <string name="label_mdns_responder">مستجيب mDNS</string>
     <string name="label_media_service">خدمة الوسائط</string>
     <string name="label_system_update">تحديث النظام</string>
-    <string name="label_unattributed">النظام / غير محدد</string>
-    <string name="label_unknown_app">تطبيق غير معروف</string>
 
     <string name="tile_monitoring_on">المراقبة قيد التشغيل</string>
     <string name="tile_monitoring_off">المراقبة متوقفة</string>
@@ -107,7 +90,6 @@
     <string name="settings_show_daily_usage">عرض الإشعار</string>
     <string name="settings_daily_usage_desc">عرض السرعة والاستخدام في الوقت الفعلي في منطقة الإشعارات</string>
     <string name="settings_notification_content">محتوى الإشعار</string>
-    <string name="settings_notification_content_desc">اختر المعلومات التي تريد عرضها في الإشعار</string>
     <string name="option_speed_only">السرعة فقط</string>
     <string name="option_daily_only">الإحصاءات اليومية فقط</string>
     <string name="option_both">السرعة والإحصاءات اليومية</string>
@@ -115,13 +97,11 @@
     <string name="settings_high_priority_desc">إبقاء مؤشر السرعة مرئياً في الجزء العلوي من إشعاراتك</string>
     <string name="settings_hide_offline">إخفاء عند عدم الاتصال</string>
     <string name="settings_hide_offline_desc">إخفاء مؤشر السرعة تلقائياً عند قطع الاتصال</string>
-    <string name="settings_indicator_size_desc">ضبط حجم مؤشر السرعة في شريط الحالة</string>
 
     <string name="settings_section_widget">أداة الشاشة الرئيسية</string>
     <string name="settings_widget_show_speed">إظهار السرعة</string>
     <string name="settings_widget_show_speed_desc">عرض سرعات التحميل والرفع في الوقت الفعلي على الأداة</string>
     <string name="settings_widget_usage_type">عرض الاستهلاك في الأداة</string>
-    <string name="settings_widget_usage_type_desc">اختر بين استهلاك البيانات اليومي أو الشهري</string>
 
     <!-- Settings: Alerts & Limits -->
     <string name="settings_section_alerts">التنبيهات والحدود</string>
@@ -129,12 +109,6 @@
     <string name="settings_data_alerts_desc">احصل على إشعار عندما تستهلك التطبيقات بيانات زائدة في الخلفية</string>
     <string name="settings_mobile_limit">Mobile Data Limit</string> <!-- Use existing key -->
     <string name="settings_wifi_limit">Wi-Fi Data Limit</string> <!-- Use existing key -->
-    <string name="label_limit_value">الحد الأقصى: %s</string>
-    <string name="label_disabled">معطل</string>
-    <string name="dialog_set_limit_title">تعيين حد %1$s اليومي</string>
-    <string name="label_limit_mb">الحد (ميغابايت)</string>
-    <string name="msg_limit_desc">ستتلقى إشعاراً عند الوصول إلى هذا الحد.</string>
-    <string name="btn_set_limit">تعيين الحد</string>
 
     <string name="label_plan_duration">مدة الخطة</string>
     <string name="msg_alert_muted">تم كتم التنبيه</string>
@@ -158,7 +132,6 @@
     <string name="size_medium">متوسط</string>
     <string name="size_large">كبير</string>
     <string name="settings_language">اللغة</string>
-    <string name="settings_language_desc">اختر لغتك المفضلة</string>
     <string name="dialog_select_language_title">اختر اللغة</string>
     <string name="language_default">افتراضي النظام</string>
     <string name="language_arabic">العربية</string>
@@ -192,15 +165,12 @@
     <string name="settings_donate">تبرع</string>
     <string name="settings_donate_desc">ساهم في إبقاء التطبيق خالياً من الإعلانات ومفتوح المصدر</string>
     <string name="dialog_donate_title">دعم FlowBytes</string>
-    <string name="dialog_donate_desc">إذا كنت تجد FlowBytes مفيداً، يرجى دعم تطويره. كل مساهمة تساعد!</string>
     <string name="label_donate_amount_1">إكرامية صغيرة ($1.00)</string>
     <string name="label_donate_amount_2_5">داعم المشروع ($2.50)</string>
     <string name="label_donate_amount_6">راعي المشروع ($6.00)</string>
     <string name="desc_donate_1">طريقة بسيطة للتعبير عن تقديرك ودعم صيانة المشروع.</string>
     <string name="desc_donate_2_5">يساعد في تمويل التطوير المستمر للميزات الجديدة وتحسين الأداء.</string>
     <string name="desc_donate_6">مساهمة كبيرة للمساعدة في إبقاء FlowBytes مفتوح المصدر وخالٍ من الإعلانات ومستقل.</string>
-    <string name="title_pick_amount">اختر المبلغ</string>
-    <string name="btn_donate">تبرع</string>
     <string name="msg_donation_success_title">شكرًا لك!</string>
     <string name="msg_donation_success_body">تقديرنا الكبير لدعمك الذي يساعد في إبقاء المشروع حياً.</string>
     <string name="msg_donation_cancelled">تم إلغاء التبرع.</string>
@@ -214,23 +184,14 @@
     <string name="settings_privacy_policy">سياسة الخصوصية</string>
     <string name="settings_terms_conditions">الشروط والأحكام</string>
     <string name="settings_licenses">تراخيص البرمجيات الحرة</string>
-    <string name="label_am">ص</string>
-    <string name="label_pm">م</string>
 
     <!-- Alerts History -->
     <string name="msg_no_alerts_history">لم يتم العثور على سجل تنبيهات.</string>
     <string name="btn_clear_history">مسح السجل</string>
-    <string name="label_alert_total">الإجمالي: %1$s</string>
-    <string name="label_alert_speed">السرعة: %1$s</string>
-    <string name="label_alert_down">تنزيل: %1$s</string>
-    <string name="label_alert_up">رفع: %1$s</string>
     <string name="msg_confirm_clear_history">هل أنت متأكد من رغبتك في حذف سجل التنبيهات نهائياً؟</string>
 
     <!-- New Strings extracted from Code -->
-    <string name="msg_enable_detection_hint">قم بتفعيل تنبيهات البيانات العالية لرؤية سجلك هنا.</string>
     <string name="label_advanced_settings">إعدادات متقدمة</string>
-    <string name="label_trigger_speed">سرعة التحفيز</string>
-    <string name="label_total_data">إجمالي البيانات</string>
     <string name="title_mute_app">كتم %s</string>
     <string name="desc_mute_app">إيقاف تلقي تنبيهات البيانات العالية لهذا التطبيق.</string>
     <string name="btn_mute">كتم</string>
@@ -245,7 +206,6 @@
     <string name="btn_continue">متابعة</string>
     <string name="title_custom_color">تخصيص اللون</string>
     <string name="btn_apply_globally">تطبيق عالمياً</string>
-    <string name="btn_reset_default">إعادة تعيين الافتراضي</string>
     <string name="btn_get_started">ابدأ الآن</string>
     <string name="title_welcome">مرحباً بك في FlowBytes</string>
     <string name="msg_onboarding_desc">لتقديم تتبع دقيق للبيانات ومراقبة حية للسرعة، نحتاج إلى بعض الأذونات.</string>
@@ -273,13 +233,10 @@
     <string name="msg_no_alerts_all">لم يتم تسجيل أي تنبيهات.</string>
     <string name="msg_no_alerts_traffic">لم يتم تسجيل أي تنبيهات لحركة المرور العالية.</string>
     <string name="label_app_limit_reached">تم الوصول لحد التطبيق</string>
-    <string name="label_high_traffic_detected">تم كشف حركة مرور عالية</string>
     <string name="label_trigger_speed_header">سرعة التحفيز</string>
     <string name="label_usage_recorded_header">الاستخدام المسجل</string>
-    <string name="label_history_header">السجل</string>
     <string name="desc_restrict_app_subtitle">أضف تطبيقاً للبدء في إدارة استخدام البيانات الخاص به.</string>
     <string name="label_block_apps">حظر التطبيقات</string>
-    <string name="btn_save_changes">حفظ التغييرات</string>
     <string name="msg_no_apps_found">لم يتم العثور على تطبيقات.</string>
     <string name="placeholder_search_apps">بحث عن تطبيقات</string>
     <string name="title_select_application">اختر التطبيق</string>
@@ -288,15 +245,12 @@
     <string name="msg_invalid_date_range">يجب أن يكون تاريخ الانتهاء بعد تاريخ البدء أو فيه</string>
 
     <!-- Notification Strings -->
-    <string name="notification_limit_reached_title">تم الوصول لحد %s اليومي</string>
-    <string name="notification_limit_reached_msg">لقد استهلكت %s اليوم.</string>
     <string name="status_not_supported">مراقبة السرعة غير مدعومة على هذا الجهاز</string>
     <string name="channel_speed_monitor_name">مراقب السرعة</string>
     <string name="channel_speed_monitor_desc">مؤشرات سرعة الشبكة في الوقت الفعلي</string>
     <string name="channel_usage_alerts_name">تنبيهات الاستهلاك العالي</string>
     <string name="channel_usage_alerts_desc">إشعارات لحدود استهلاك البيانات</string>
     <string name="notification_high_usage_app_msg">يستهلك %1$s قدراً كبيراً من البيانات: %2$s (تم استخدام %3$s).</string>
-    <string name="notification_high_usage_generic_msg">تم كشف استهلاك بيانات عالٍ في الخلفية: %s</string>
     <string name="notification_high_usage_title">استهلاك بيانات عالٍ</string>
     <string name="notification_summary_title">تنبيهات الاستهلاك العالي</string>
     <string name="notification_summary_msg">انقر لعرض سجل تنبيهات البيانات العالية.</string>
@@ -309,7 +263,6 @@
     <!-- Badges -->
     <string name="badge_limit_reached">تم الوصول للحد</string>
     <string name="badge_blocked">محظور</string>
-    <string name="badge_silenced">مكتوم</string>
 
     <!-- App Review Dialog -->
     <string name="review_dialog_title">هل تستمتع بـ FlowBytes؟</string>
@@ -320,8 +273,7 @@
     <string name="review_rate_on_play_store">تقييم في متجر بلاي</string>
     <string name="review_feedback_title">ساعدنا على التحسين</string>
     <string name="review_feedback_description">نأسف لسماع أنك لست راضياً تماماً. يرجى إعلامنا بكيفية تحسين FlowBytes بالنسبة لك.</string>
-    <string name="review_feedback_placeholder">أدخل اقتراحاتك أو ملاحظاتك هنا...</string>
-    <string name="review_feedback_thanks">شكراً لك على ملاحظاتك!</string>
+    <string name="review_feedback_placeholder">أدخل اقتراحاتك أو ملاحظاتك هنا&#8230;</string>
     <string name="review_play_store_title">شكراً لك على التقييم!</string>
     <string name="review_play_store_description">سنكون ممتنين لو كتبت مراجعة سريعة على متجر جوجل بلاي. هذا يساعدنا كثيراً!</string>
     <string name="review_toast_feedback_submitted">تم إرسال الملاحظات بنجاح. شكراً لك!</string>
@@ -363,7 +315,6 @@
     <string name="label_daily_limit_reached">تم الوصول للحد اليومي</string>
     <string name="label_monthly_limit_reached">تم الوصول للحد الشهري</string>
     <string name="label_custom_limit_reached">تم الوصول للحد المخصص</string>
-    <string name="msg_no_alerts_custom">لم يتم تسجيل تنبيهات للحد المخصص.</string>
     <string name="label_limit_set_header">الحد المعين</string>
     <string name="msg_no_app_limits">لم يتم تكوين أي حدود للتطبيقات.</string>
     <string name="cd_add_app_limit">إضافة حد لتطبيق</string>

@@ -12,16 +12,8 @@
     <string name="label_alerts">警报</string>
 
     <!-- Accessibility Descriptions -->
-    <string name="cd_settings">打开设置</string>
     <string name="cd_back">返回</string>
-    <string name="cd_prev_month">上个月</string>
-    <string name="cd_next_month">下个月</string>
-    <string name="cd_prev_year">上一年</string>
-    <string name="cd_next_year">下一年</string>
-    <string name="cd_dropdown">打开下拉菜单</string>
     <string name="cd_pull_to_refresh">下拉以刷新使用数据</string>
-    <string name="cd_download">下载</string>
-    <string name="cd_upload">上传</string>
     <string name="cd_clear_search">清空搜索</string>
     <string name="cd_prev_date">上一个日期</string>
     <string name="cd_next_date">下一个日期</string>
@@ -39,18 +31,12 @@
     <string name="label_download">下载</string>
     <string name="label_upload">上传</string>
     <string name="label_this_month">本月</string>
-    <string name="label_last_7_days">最近7天</string>
     <string name="label_usage_breakdown">每周活动</string>
     <string name="label_mobile">移动网络</string>
     <string name="label_wifi">Wi-Fi</string>
     <string name="label_combined">合并</string>
     <string name="label_todays_usage">今日使用量</string>
     <string name="label_usage_summary">使用量摘要</string>
-    <string name="label_usage_insight">使用量详情</string>
-    <string name="msg_limit_forecast_warning">您即将达到每日限额。请考虑减少数据使用。</string>
-    <string name="msg_limit_forecast_safe">您的数据使用量在每日限额内。</string>
-    <string name="label_projected_upper">预测量</string>
-    <string name="label_daily_limit_upper">每日限额</string>
     <string name="msg_no_usage_recorded">尚无数据使用记录</string>
 
     <!-- App Usage Screen -->
@@ -65,7 +51,6 @@
     <string name="btn_delete">删除</string>
     <string name="btn_edit">编辑</string>
     <string name="label_both">双网</string>
-    <string name="title_select_date_range">选择日期范围</string>
     <string name="label_start_date">开始日期</string>
     <string name="label_end_date">结束日期</string>
     <string name="title_select_month">选择月份</string>
@@ -86,8 +71,6 @@
     <string name="label_mdns_responder">mDNS 响应器</string>
     <string name="label_media_service">媒体服务</string>
     <string name="label_system_update">系统更新</string>
-    <string name="label_unattributed">系统 / 未归类</string>
-    <string name="label_unknown_app">未知应用</string>
 
     <string name="tile_monitoring_on">流量监控已开启</string>
     <string name="tile_monitoring_off">流量监控已关闭</string>
@@ -109,7 +92,6 @@
     <string name="settings_show_daily_usage">显示通知</string>
     <string name="settings_daily_usage_desc">在通知栏中实时显示网速和流量使用情况</string>
     <string name="settings_notification_content">通知内容</string>
-    <string name="settings_notification_content_desc">选择要在通知中显示的信息类型</string>
     <string name="option_speed_only">仅显示网速</string>
     <string name="option_daily_only">仅显示今日统计</string>
     <string name="option_both">同时显示网速与今日统计</string>
@@ -117,13 +99,11 @@
     <string name="settings_high_priority_desc">使网速指示器一直固定显示在通知顶部</string>
     <string name="settings_hide_offline">离线时隐藏</string>
     <string name="settings_hide_offline_desc">断开连接时自动隐藏网速指示器</string>
-    <string name="settings_indicator_size_desc">调整状态栏中网速指示图标的大小</string>
 
     <string name="settings_section_widget">主屏幕小部件</string>
     <string name="settings_widget_show_speed">显示速度</string>
     <string name="settings_widget_show_speed_desc">在小部件上显示实时的下载和上传速度</string>
     <string name="settings_widget_usage_type">小部件用量显示</string>
-    <string name="settings_widget_usage_type_desc">选择显示每日或每月的数据消耗量</string>
 
     <!-- Settings: Alerts & Limits -->
     <string name="settings_section_alerts">警报与额度限制</string>
@@ -131,12 +111,6 @@
     <string name="settings_data_alerts_desc">当应用在后台消耗过多流量时接收通知</string>
     <string name="settings_mobile_limit">移动数据限额</string>
     <string name="settings_wifi_limit">Wi-Fi 数据限额</string>
-    <string name="label_limit_value">限额：%s</string>
-    <string name="label_disabled">已禁用</string>
-    <string name="dialog_set_limit_title">设置每日 %1$s 流量限额</string>
-    <string name="label_limit_mb">流量限额 (MB)</string>
-    <string name="msg_limit_desc">达到此限额时，您将收到通知警报。</string>
-    <string name="btn_set_limit">设置限额</string>
 
     <string name="label_plan_duration">套餐时长</string>
     <string name="msg_alert_muted">警报已静音</string>
@@ -160,7 +134,6 @@
     <string name="size_medium">中等</string>
     <string name="size_large">偏大</string>
     <string name="settings_language">应用语言</string>
-    <string name="settings_language_desc">选择您偏好的语言</string>
     <string name="dialog_select_language_title">选择语言</string>
     <string name="language_default">系统默认</string>
     <string name="language_arabic">阿拉伯语 (العربية)</string>
@@ -194,15 +167,12 @@
     <string name="settings_donate">赞助支持</string>
     <string name="settings_donate_desc">赞助我们以支持 FlowBytes 保持无广告且完全开源</string>
     <string name="dialog_donate_title">赞助 FlowBytes</string>
-    <string name="dialog_donate_desc">如果您觉得 FlowBytes 对您有所帮助，请考虑支持其开发。您的每一份支持都至关重要！</string>
     <string name="label_donate_amount_1">微薄支持 ($1.00)</string>
     <string name="label_donate_amount_2_5">项目支持者 ($2.50)</string>
     <string name="label_donate_amount_6">项目赞助人 ($6.00)</string>
     <string name="desc_donate_1">对项目维护表达感谢的简单方式。</string>
     <string name="desc_donate_2_5">帮助资助新功能和性能改进的持续开发。</string>
     <string name="desc_donate_6">重大贡献，有助于使 FlowBytes 保持开源、无广告和独立。</string>
-    <string name="title_pick_amount">选择金额</string>
-    <string name="btn_donate">赞助</string>
     <string name="msg_donation_success_title">非常感谢！</string>
     <string name="msg_donation_success_body">非常感谢您的支持，它能够帮助我们维持项目的持续运营。</string>
     <string name="msg_donation_cancelled">赞助已取消。</string>
@@ -216,23 +186,14 @@
     <string name="settings_privacy_policy">隐私政策</string>
     <string name="settings_terms_conditions">服务条款</string>
     <string name="settings_licenses">开源许可证</string>
-    <string name="label_am">上午</string>
-    <string name="label_pm">下午</string>
 
     <!-- Alerts History -->
     <string name="msg_no_alerts_history">未找到警报记录。</string>
     <string name="btn_clear_history">清空记录</string>
-    <string name="label_alert_total">总计：%1$s</string>
-    <string name="label_alert_speed">网速：%1$s</string>
-    <string name="label_alert_down">下载：%1$s</string>
-    <string name="label_alert_up">上传：%1$s</string>
     <string name="msg_confirm_clear_history">您确定要永久清空所有警报历史记录吗？</string>
 
     <!-- New Strings extracted from Code -->
-    <string name="msg_enable_detection_hint">启用高流量警报后，您将在此处看到相关记录。</string>
     <string name="label_advanced_settings">高级设置</string>
-    <string name="label_trigger_speed">触发网速</string>
-    <string name="label_total_data">流量总计</string>
     <string name="title_mute_app">静音 %s</string>
     <string name="desc_mute_app">不再接收此应用的高流量警报。</string>
     <string name="btn_mute">静音</string>
@@ -248,7 +209,6 @@
     <string name="btn_continue">继续</string>
     <string name="title_custom_color">自定义颜色</string>
     <string name="btn_apply_globally">全局应用</string>
-    <string name="btn_reset_default">重置为默认</string>
     <string name="btn_get_started">立即开始</string>
     <string name="title_welcome">欢迎使用 FlowBytes</string>
     <string name="msg_onboarding_desc">为了提供精准的流量使用统计和实时网速监控，我们需要您授予一些必要的权限。</string>
@@ -281,15 +241,12 @@
     <string name="label_daily_limit_reached">今日流量已达上限</string>
     <string name="label_monthly_limit_reached">本月流量已达上限</string>
     <string name="label_custom_limit_reached">自定义流量已达上限</string>
-    <string name="msg_no_alerts_custom">尚无自定义限额警报记录。</string>
     <string name="label_start_date_select">开始日期：%s</string>
     <string name="label_end_date_select">结束日期：%s</string>
     <string name="msg_invalid_date_range">结束日期必须等于或晚于开始日期</string>
-    <string name="label_high_traffic_detected">检测到网络高流量消耗</string>
     <string name="label_trigger_speed_header">触发网速</string>
     <string name="label_limit_set_header">额度限额</string>
     <string name="label_usage_recorded_header">已记录使用量</string>
-    <string name="label_history_header">历史记录</string>
     <string name="msg_no_app_limits">尚无应用额度限制配置。</string>
     <string name="desc_restrict_app_subtitle">添加并配置应用以开始管理其数据网络流量使用。</string>
     <string name="cd_add_app_limit">添加应用流量限额</string>
@@ -297,7 +254,6 @@
     <string name="desc_block_apps">当应用流量消耗超出限额时，自动拦截限制其网络访问</string>
     <string name="title_edit_app_limit">编辑应用流量限额</string>
     <string name="btn_create_app_limit">创建限额</string>
-    <string name="btn_save_changes">保存修改</string>
     <string name="label_app_limit_selection">应用限额</string>
     <string name="desc_app_limit_selection">针对特定应用设置限额和限制</string>
     <string name="title_delete_limit">删除流量限额</string>
@@ -314,15 +270,12 @@
     <string name="title_choose_limit_type">选择额度限额类型</string>
 
     <!-- Notification Strings -->
-    <string name="notification_limit_reached_title">每日 %s 流量超额警报</string>
-    <string name="notification_limit_reached_msg">您今天已消耗了 %s 的数据流量。</string>
     <string name="status_not_supported">此设备不支持网速监控功能</string>
     <string name="channel_speed_monitor_name">实时网速监控</string>
     <string name="channel_speed_monitor_desc">状态栏实时显示网速和连接指示</string>
     <string name="channel_usage_alerts_name">高流量超额警报</string>
     <string name="channel_usage_alerts_desc">网络限额超额的提醒通知</string>
     <string name="notification_high_usage_app_msg">%1$s 正在大量消耗流量：%2$s（已使用 %3$s）。</string>
-    <string name="notification_high_usage_generic_msg">检测到高额后台数据使用量：%s</string>
     <string name="notification_high_usage_title">后台数据高流量消耗</string>
     <string name="notification_summary_title">流量限制警报</string>
     <string name="notification_summary_msg">点击以查看高流量限制警报的历史历史记录。</string>
@@ -335,7 +288,6 @@
     <!-- Badges -->
     <string name="badge_limit_reached">流量超额</string>
     <string name="badge_blocked">网络已封锁</string>
-    <string name="badge_silenced">警报已静音</string>
 
     <!-- App Review Dialog -->
     <string name="review_dialog_title">觉得 FlowBytes 怎么样？</string>
@@ -346,8 +298,7 @@
     <string name="review_rate_on_play_store">前往应用商店评分</string>
     <string name="review_feedback_title">协助我们持续改进</string>
     <string name="review_feedback_description">未能让您完全满意，我们深感抱歉。请告诉我们我们可以如何改进 FlowBytes，为您带来更好的使用体验。</string>
-    <string name="review_feedback_placeholder">在此输入您的意见或反馈建议...</string>
-    <string name="review_feedback_thanks">非常感谢您的反馈！</string>
+    <string name="review_feedback_placeholder">在此输入您的意见或反馈建议&#8230;</string>
     <string name="review_play_store_title">感谢您的评分！</string>
     <string name="review_play_store_description">如果您能在 Google Play 应用商店撰写简短的评价，我们将万分感激。这真的能帮我们大忙！</string>
     <string name="review_toast_feedback_submitted">反馈提交成功。非常感谢！</string>

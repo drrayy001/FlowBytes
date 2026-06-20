@@ -12,16 +12,8 @@
     <string name="label_alerts">알림</string>
 
     <!-- Accessibility Descriptions -->
-    <string name="cd_settings">설정 열기</string>
     <string name="cd_back">뒤로 가기</string>
-    <string name="cd_prev_month">이전 달</string>
-    <string name="cd_next_month">다음 달</string>
-    <string name="cd_prev_year">이전 해</string>
-    <string name="cd_next_year">다음 해</string>
-    <string name="cd_dropdown">드롭다운 메뉴 열기</string>
     <string name="cd_pull_to_refresh">아래로 당겨 데이터 새로고침</string>
-    <string name="cd_download">다운로드</string>
-    <string name="cd_upload">업로드</string>
     <string name="cd_clear_search">검색 지우기</string>
     <string name="cd_prev_date">이전 날짜</string>
     <string name="cd_next_date">다음 날짜</string>
@@ -39,18 +31,12 @@
     <string name="label_download">다운로드</string>
     <string name="label_upload">업로드</string>
     <string name="label_this_month">이번 달</string>
-    <string name="label_last_7_days">최근 7일</string>
     <string name="label_usage_breakdown">주간 활동</string>
     <string name="label_mobile">모바일</string>
     <string name="label_wifi">Wi-Fi</string>
     <string name="label_combined">결합</string>
     <string name="label_todays_usage">오늘의 사용량</string>
     <string name="label_usage_summary">사용량 요약</string>
-    <string name="label_usage_insight">사용량 통찰</string>
-    <string name="msg_limit_forecast_warning">일일 한도에 가까워지고 있습니다. 데이터 사용량을 줄이는 것을 고려해 보세요.</string>
-    <string name="msg_limit_forecast_safe">데이터 사용량이 일일 한도 내에 있습니다.</string>
-    <string name="label_projected_upper">예상</string>
-    <string name="label_daily_limit_upper">일일 한도</string>
     <string name="msg_no_usage_recorded">기록된 데이터 사용량이 없습니다</string>
 
     <!-- App Usage Screen -->
@@ -65,7 +51,6 @@
     <string name="btn_delete">삭제</string>
     <string name="btn_edit">편집</string>
     <string name="label_both">둘 다</string>
-    <string name="title_select_date_range">날짜 범위 선택</string>
     <string name="label_start_date">시작</string>
     <string name="label_end_date">종료</string>
     <string name="title_select_month">월 선택</string>
@@ -80,8 +65,6 @@
     <string name="label_system_processes">시스템 프로세스</string>
     <string name="label_tethering">테더링 및 핫스팟</string>
     <string name="label_removed_apps">삭제된 앱</string>
-    <string name="label_unattributed">시스템 / 미분류</string>
-    <string name="label_unknown_app">알 수 없는 앱</string>
     <string name="label_root">루트</string>
     <string name="label_android_system">Android 시스템</string>
     <string name="label_dns_resolver">DNS 리졸버</string>
@@ -109,7 +92,6 @@
     <string name="settings_show_daily_usage">알림 표시</string>
     <string name="settings_daily_usage_desc">알림 영역에 실시간 속도 및 사용량을 표시합니다</string>
     <string name="settings_notification_content">알림 내용</string>
-    <string name="settings_notification_content_desc">알림에 표시할 정보를 선택하세요</string>
     <string name="option_speed_only">속도만</string>
     <string name="option_daily_only">일간 통계만</string>
     <string name="option_both">속도 및 일간 통계 모두</string>
@@ -117,13 +99,11 @@
     <string name="settings_high_priority_desc">알림 상단에 속도 표시기를 유지합니다</string>
     <string name="settings_hide_offline">오프라인 시 숨기기</string>
     <string name="settings_hide_offline_desc">연결이 끊겼을 때 속도 표시기를 자동으로 숨깁니다</string>
-    <string name="settings_indicator_size_desc">상태 표시줄의 속도 표시기 크기를 조절합니다</string>
 
     <string name="settings_section_widget">홈 위젯</string>
     <string name="settings_widget_show_speed">속도 표시</string>
     <string name="settings_widget_show_speed_desc">위젯에 실시간 다운로드 및 업로드 속도를 표시합니다</string>
     <string name="settings_widget_usage_type">위젯 사용량 표시</string>
-    <string name="settings_widget_usage_type_desc">일간 또는 월간 데이터 소비량 중에서 선택하세요</string>
 
     <!-- Settings: Alerts & Limits -->
     <string name="settings_section_alerts">알림 및 한도</string>
@@ -131,12 +111,6 @@
     <string name="settings_data_alerts_desc">앱이 과도한 백그라운드 데이터를 사용할 때 알림을 받습니다</string>
     <string name="settings_mobile_limit">모바일 데이터 한도</string>
     <string name="settings_wifi_limit">Wi-Fi 데이터 한도</string>
-    <string name="label_limit_value">한도: %s</string>
-    <string name="label_disabled">비활성화됨</string>
-    <string name="dialog_set_limit_title">일일 %1$s 한도 설정</string>
-    <string name="label_limit_mb">한도 (MB)</string>
-    <string name="msg_limit_desc">이 한도에 도달하면 알림을 받게 됩니다.</string>
-    <string name="btn_set_limit">한도 설정</string>
 
     <string name="label_plan_duration">요금제 기간</string>
     <string name="msg_alert_muted">알림 음소거됨</string>
@@ -160,7 +134,6 @@
     <string name="size_medium">중간</string>
     <string name="size_large">크게</string>
     <string name="settings_language">언어</string>
-    <string name="settings_language_desc">원하는 언어를 선택하세요</string>
     <string name="dialog_select_language_title">언어 선택</string>
     <string name="language_default">시스템 기본값</string>
     <string name="language_arabic">아랍어 (العربية)</string>
@@ -194,15 +167,12 @@
     <string name="settings_donate">후원하기</string>
     <string name="settings_donate_desc">FlowBytes를 광고 없이 오픈 소스로 유지하는 데 기여해 주세요</string>
     <string name="dialog_donate_title">FlowBytes 지원</string>
-    <string name="dialog_donate_desc">FlowBytes가 유용하다면 개발 지원을 고려해 주세요. 모든 기여가 큰 힘이 됩니다!</string>
     <string name="label_donate_amount_1">소액 후원 ($1.00)</string>
     <string name="label_donate_amount_2_5">프로젝트 서포터 ($2.50)</string>
     <string name="label_donate_amount_6">프로젝트 패트런 ($6.00)</string>
     <string name="desc_donate_1">감사의 마음을 전하고 프로젝트 유지 관리를 지원하는 간단한 방법입니다.</string>
     <string name="desc_donate_2_5">새로운 기능 개발 및 성능 개선을 지원합니다.</string>
     <string name="desc_donate_6">FlowBytes를 오픈 소스, 광고 없음, 독립적인 상태로 유지하는 데 중요한 기여입니다.</string>
-    <string name="title_pick_amount">금액 선택</string>
-    <string name="btn_donate">후원하기</string>
     <string name="msg_donation_success_title">감사합니다!</string>
     <string name="msg_donation_success_body">여러분의 지원에 깊이 감사드리며, 프로젝트를 지속하는 데 큰 도움이 됩니다.</string>
     <string name="msg_donation_cancelled">후원이 취소되었습니다.</string>
@@ -216,23 +186,14 @@
     <string name="settings_privacy_policy">개인정보 처리방침</string>
     <string name="settings_terms_conditions">이용 약관</string>
     <string name="settings_licenses">오픈 소스 라이선스</string>
-    <string name="label_am">오전</string>
-    <string name="label_pm">오후</string>
 
     <!-- Alerts History -->
     <string name="msg_no_alerts_history">알림 기록이 없습니다.</string>
     <string name="btn_clear_history">기록 삭제</string>
-    <string name="label_alert_total">합계: %1$s</string>
-    <string name="label_alert_speed">속도: %1$s</string>
-    <string name="label_alert_down">다운: %1$s</string>
-    <string name="label_alert_up">업: %1$s</string>
     <string name="msg_confirm_clear_history">알림 기록을 영구적으로 삭제하시겠습니까?</string>
 
     <!-- New Strings extracted from Code -->
-    <string name="msg_enable_detection_hint">여기에서 기록을 확인하려면 높은 데이터 알림을 활성화하세요.</string>
     <string name="label_advanced_settings">고급 설정</string>
-    <string name="label_trigger_speed">트리거 속도</string>
-    <string name="label_total_data">총 데이터</string>
     <string name="title_mute_app">%s 음소거</string>
     <string name="desc_mute_app">이 애플리케이션에 대한 높은 데이터 알림 수신을 중단합니다.</string>
     <string name="btn_mute">음소거</string>
@@ -248,7 +209,6 @@
     <string name="btn_continue">계속</string>
     <string name="title_custom_color">색상 지정</string>
     <string name="btn_apply_globally">전체 적용</string>
-    <string name="btn_reset_default">기본값으로 초기화</string>
     <string name="btn_get_started">시작하기</string>
     <string name="title_welcome">FlowBytes에 오신 것을 환영합니다</string>
     <string name="msg_onboarding_desc">정확한 데이터 추적 및 실시간 속도 모니터링을 위해 몇 가지 권한이 필요합니다.</string>
@@ -281,15 +241,12 @@
     <string name="label_daily_limit_reached">일일 한도 도달</string>
     <string name="label_monthly_limit_reached">월간 한도 도달</string>
     <string name="label_custom_limit_reached">사용자 지정 한도 도달</string>
-    <string name="msg_no_alerts_custom">기록된 사용자 지정 한도 알림이 없습니다.</string>
     <string name="label_start_date_select">시작 날짜: %s</string>
     <string name="label_end_date_select">종료 날짜: %s</string>
     <string name="msg_invalid_date_range">종료 날짜는 시작 날짜와 같거나 이후여야 합니다</string>
-    <string name="label_high_traffic_detected">높은 트래픽 감지됨</string>
     <string name="label_trigger_speed_header">트리거 속도</string>
     <string name="label_limit_set_header">설정된 한도</string>
     <string name="label_usage_recorded_header">기록된 사용량</string>
-    <string name="label_history_header">기록</string>
     <string name="msg_no_app_limits">구성된 앱 한도가 없습니다.</string>
     <string name="desc_restrict_app_subtitle">데이터 사용량 관리를 시작할 앱을 추가하세요.</string>
     <string name="cd_add_app_limit">앱 한도 추가</string>
@@ -297,7 +254,6 @@
     <string name="desc_block_apps">한도에 도달한 앱의 인터넷 접속을 자동으로 제한합니다</string>
     <string name="title_edit_app_limit">앱 한도 편집</string>
     <string name="btn_create_app_limit">한도 생성</string>
-    <string name="btn_save_changes">변경 사항 저장</string>
     <string name="label_app_limit_selection">앱 한도</string>
     <string name="desc_app_limit_selection">특정 애플리케이션에 대한 제한을 설정합니다</string>
     <string name="title_delete_limit">한도 삭제</string>
@@ -314,15 +270,12 @@
     <string name="title_choose_limit_type">한도 유형 선택</string>
 
     <!-- Notification Strings -->
-    <string name="notification_limit_reached_title">일일 %s 한도 도달</string>
-    <string name="notification_limit_reached_msg">오늘 %s를 사용했습니다.</string>
     <string name="status_not_supported">이 기기에서는 속도 모니터링이 지원되지 않습니다</string>
     <string name="channel_speed_monitor_name">속도 모니터</string>
     <string name="channel_speed_monitor_desc">실시간 네트워크 속도 표시</string>
     <string name="channel_usage_alerts_name">높은 데이터 알림</string>
     <string name="channel_usage_alerts_desc">데이터 한도 임계값에 대한 알림</string>
     <string name="notification_high_usage_app_msg">%1$s이(가) 상당한 데이터를 사용 중입니다: %2$s (%3$s 사용).</string>
-    <string name="notification_high_usage_generic_msg">높은 백그라운드 데이터 사용 감지: %s</string>
     <string name="notification_high_usage_title">높은 데이터 사용량</string>
     <string name="notification_summary_title">높은 데이터 알림</string>
     <string name="notification_summary_msg">높은 데이터 알림 기록을 보려면 탭하세요.</string>
@@ -335,7 +288,6 @@
     <!-- Badges -->
     <string name="badge_limit_reached">한도 도달</string>
     <string name="badge_blocked">차단됨</string>
-    <string name="badge_silenced">음소거됨</string>
 
     <!-- App Review Dialog -->
     <string name="review_dialog_title">FlowBytes가 마음에 드시나요?</string>
@@ -346,8 +298,7 @@
     <string name="review_rate_on_play_store">Play 스토어에서 평가</string>
     <string name="review_feedback_title">개선에 도움을 주세요</string>
     <string name="review_feedback_description">만족스럽지 않으셨다니 유감입니다. 어떻게 하면 FlowBytes를 더 좋게 만들 수 있을지 알려주세요.</string>
-    <string name="review_feedback_placeholder">제안이나 의견을 여기에 입력하세요...</string>
-    <string name="review_feedback_thanks">의견을 보내주셔서 감사합니다!</string>
+    <string name="review_feedback_placeholder">제안이나 의견을 여기에 입력하세요&#8230;</string>
     <string name="review_play_store_title">평가해 주셔서 감사합니다!</string>
     <string name="review_play_store_description">Google Play에 짧은 리뷰를 남겨주시면 큰 힘이 됩니다! 정말 감사합니다.</string>
     <string name="review_toast_feedback_submitted">피드백이 성공적으로 제출되었습니다. 감사합니다!</string>

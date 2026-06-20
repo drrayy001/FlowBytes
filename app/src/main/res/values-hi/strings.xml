@@ -12,16 +12,8 @@
     <string name="label_alerts">अलर्ट</string>
 
     <!-- Accessibility Descriptions -->
-    <string name="cd_settings">सेटिंग्स खोलें</string>
     <string name="cd_back">पीछे जाएँ</string>
-    <string name="cd_prev_month">पिछला महीना</string>
-    <string name="cd_next_month">अगला महीना</string>
-    <string name="cd_prev_year">पिछला वर्ष</string>
-    <string name="cd_next_year">अगला वर्ष</string>
-    <string name="cd_dropdown">ड्रॉपडाउन मेनू खोलें</string>
     <string name="cd_pull_to_refresh">उपयोग डेटा रीफ्रेश करने के लिए नीचे खींचें</string>
-    <string name="cd_download">डाउनलोड</string>
-    <string name="cd_upload">अपलोड</string>
     <string name="cd_clear_search">खोज साफ करें</string>
     <string name="cd_prev_date">पिछली तारीख</string>
     <string name="cd_next_date">अगली तारीख</string>
@@ -39,18 +31,12 @@
     <string name="label_download">डाउनलोड</string>
     <string name="label_upload">अपलोड</string>
     <string name="label_this_month">इस महीने</string>
-    <string name="label_last_7_days">पिछले 7 दिन</string>
     <string name="label_usage_breakdown">साप्ताहिक गतिविधि</string>
     <string name="label_mobile">मोबाइल</string>
     <string name="label_wifi">वाई-फाई</string>
     <string name="label_combined">संयुक्त</string>
     <string name="label_todays_usage">आज का उपयोग</string>
     <string name="label_usage_summary">उपयोग सारांश</string>
-    <string name="label_usage_insight">उपयोग अंतर्दृष्टि</string>
-    <string name="msg_limit_forecast_warning">आप अपनी दैनिक सीमा के करीब पहुंच रहे हैं। डेटा उपयोग कम करने पर विचार करें।</string>
-    <string name="msg_limit_forecast_safe">आपका डेटा उपयोग आपकी दैनिक सीमा के भीतर है।</string>
-    <string name="label_projected_upper">अनुमानित</string>
-    <string name="label_daily_limit_upper">दैनिक सीमा</string>
     <string name="msg_no_usage_recorded">अभी तक कोई डेटा उपयोग रिकॉर्ड नहीं किया गया है</string>
 
     <!-- App Usage Screen -->
@@ -65,7 +51,6 @@
     <string name="btn_delete">हटाएं</string>
     <string name="btn_edit">संपादित करें</string>
     <string name="label_both">दोनों</string>
-    <string name="title_select_date_range">तारीख सीमा चुनें</string>
     <string name="label_start_date">से</string>
     <string name="label_end_date">तक</string>
     <string name="title_select_month">महीना चुनें</string>
@@ -80,8 +65,6 @@
     <string name="label_system_processes">सिस्टम प्रक्रियाएं</string>
     <string name="label_tethering">टेदरिंग और हॉटस्पॉट</string>
     <string name="label_removed_apps">हटाए गए ऐप्स</string>
-    <string name="label_unattributed">सिस्टम / अवर्गीकृत</string>
-    <string name="label_unknown_app">अज्ञात ऐप</string>
     <string name="label_root">रूट</string>
     <string name="label_android_system">एंड्रॉइड सिस्टम</string>
     <string name="label_dns_resolver">DNS रिज़ॉल्वर</string>
@@ -109,7 +92,6 @@
     <string name="settings_show_daily_usage">सूचना दिखाएं</string>
     <string name="settings_daily_usage_desc">सूचना क्षेत्र में वास्तविक समय की गति और उपयोग प्रदर्शित करें</string>
     <string name="settings_notification_content">सूचना सामग्री</string>
-    <string name="settings_notification_content_desc">चुनें कि सूचना में क्या जानकारी प्रदर्शित करनी है</string>
     <string name="option_speed_only">केवल गति</string>
     <string name="option_daily_only">केवल दैनिक आंकड़े</string>
     <string name="option_both">गति और दैनिक आंकड़े दोनों</string>
@@ -117,13 +99,11 @@
     <string name="settings_high_priority_desc">गति संकेतक को अपनी सूचनाओं में सबसे ऊपर रखें</string>
     <string name="settings_hide_offline">ऑफ़लाइन होने पर छुपाएं</string>
     <string name="settings_hide_offline_desc">डिस्कनेक्ट होने पर स्वचालित रूप से गति संकेतक छुपाएं</string>
-    <string name="settings_indicator_size_desc">स्टेटस बार में गति संकेतक का आकार समायोजित करें</string>
 
     <string name="settings_section_widget">होम विजेट</string>
     <string name="settings_widget_show_speed">गति दिखाएं</string>
     <string name="settings_widget_show_speed_desc">विजेट पर वास्तविक समय की डाउनलोड और अपलोड गति प्रदर्शित करें</string>
     <string name="settings_widget_usage_type">विजेट उपयोग प्रदर्शन</string>
-    <string name="settings_widget_usage_type_desc">दैनिक या मासिक डेटा खपत के बीच चयन करें</string>
 
     <!-- Settings: Alerts & Limits -->
     <string name="settings_section_alerts">अलर्ट और सीमाएं</string>
@@ -131,12 +111,6 @@
     <string name="settings_data_alerts_desc">जब ऐप्स अत्यधिक पृष्ठभूमि डेटा का उपभोग करते हैं तो सूचित हों</string>
     <string name="settings_mobile_limit">मोबाइल डेटा सीमा</string>
     <string name="settings_wifi_limit">वाई-फाई डेटा सीमा</string>
-    <string name="label_limit_value">सीमा: %s</string>
-    <string name="label_disabled">विकलांग</string>
-    <string name="dialog_set_limit_title">दैनिक %1$s सीमा सेट करें</string>
-    <string name="label_limit_mb">सीमा (MB)</string>
-    <string name="msg_limit_desc">इस सीमा तक पहुँचने पर आपको एक सूचना प्राप्त होगी।</string>
-    <string name="btn_set_limit">सीमा सेट करें</string>
 
     <string name="label_plan_duration">प्लान अवधि</string>
     <string name="msg_alert_muted">अलर्ट म्यूट किया गया</string>
@@ -160,7 +134,6 @@
     <string name="size_medium">मध्यम</string>
     <string name="size_large">बड़ा</string>
     <string name="settings_language">भाषा</string>
-    <string name="settings_language_desc">अपनी पसंदीदा भाषा चुनें</string>
     <string name="dialog_select_language_title">भाषा चुनें</string>
     <string name="language_default">सिस्टम डिफ़ॉल्ट</string>
     <string name="language_arabic">अरबी (العربية)</string>
@@ -194,15 +167,12 @@
     <string name="settings_donate">दान करें</string>
     <string name="settings_donate_desc">फ्लोबाइट्स को विज्ञापन-मुक्त और ओपन सोर्स रखने में योगदान दें</string>
     <string name="dialog_donate_title">फ्लोबाइट्स का समर्थन करें</string>
-    <string name="dialog_donate_desc">यदि आपको फ्लोबाइट्स उपयोगी लगता है, तो इसके विकास का समर्थन करने पर विचार करें। हर योगदान मदद करता है!</string>
     <string name="label_donate_amount_1">छोटी टिप ($1.00)</string>
     <string name="label_donate_amount_2_5">प्रोजेक्ट समर्थक ($2.50)</string>
     <string name="label_donate_amount_6">प्रोजेक्ट संरक्षक ($6.00)</string>
     <string name="desc_donate_1">आपकी प्रशंसा दिखाने और परियोजना के रखरखाव का समर्थन करने का एक आसान तरीका।</string>
     <string name="desc_donate_2_5">नई सुविधाओं और प्रदर्शन सुधारों के चल रहे विकास को निधि देने में मदद करता है।</string>
     <string name="desc_donate_6">फ्लोबाइट्स को ओपन-सोर्स, विज्ञापन-मुक्त और स्वतंत्र रखने में मदद करने के लिए एक महत्वपूर्ण योगदान।</string>
-    <string name="title_pick_amount">राशि चुनें</string>
-    <string name="btn_donate">दान करें</string>
     <string name="msg_donation_success_title">धन्यवाद!</string>
     <string name="msg_donation_success_body">आपके समर्थन की बहुत सराहना की जाती है और यह परियोजना को जीवित रखने में मदद करता है।</string>
     <string name="msg_donation_cancelled">दान रद्द कर दिया गया।</string>
@@ -216,23 +186,14 @@
     <string name="settings_privacy_policy">गोपनीयता नीति</string>
     <string name="settings_terms_conditions">नियम और शर्तें</string>
     <string name="settings_licenses">ओपन सोर्स लाइसेंस</string>
-    <string name="label_am">पूर्वाह्न</string>
-    <string name="label_pm">अपराह्न</string>
 
     <!-- Alerts History -->
     <string name="msg_no_alerts_history">कोई अलर्ट इतिहास नहीं मिला।</string>
     <string name="btn_clear_history">इतिहास साफ करें</string>
-    <string name="label_alert_total">कुल: %1$s</string>
-    <string name="label_alert_speed">गति: %1$s</string>
-    <string name="label_alert_down">डाउन: %1$s</string>
-    <string name="label_alert_up">अप: %1$s</string>
     <string name="msg_confirm_clear_history">क्या आप वाकई अपना अलर्ट इतिहास स्थायी रूप से साफ़ करना चाहते हैं?</string>
 
     <!-- New Strings extracted from Code -->
-    <string name="msg_enable_detection_hint">अपना इतिहास यहां देखने के लिए उच्च डेटा अलर्ट सक्षम करें।</string>
     <string name="label_advanced_settings">उन्नत सेटिंग्स</string>
-    <string name="label_trigger_speed">ट्रिगर गति</string>
-    <string name="label_total_data">कुल डेटा</string>
     <string name="title_mute_app">%s को म्यूट करें</string>
     <string name="desc_mute_app">इस एप्लिकेशन के लिए उच्च डेटा अलर्ट प्राप्त करना बंद करें।</string>
     <string name="btn_mute">म्यूट करें</string>
@@ -248,7 +209,6 @@
     <string name="btn_continue">जारी रखें</string>
     <string name="title_custom_color">रंग अनुकूलित करें</string>
     <string name="btn_apply_globally">विश्व स्तर पर लागू करें</string>
-    <string name="btn_reset_default">डिफ़ॉल्ट पर रीसेट करें</string>
     <string name="btn_get_started">शुरू करें</string>
     <string name="title_welcome">फ्लोबाइट्स में आपका स्वागत है</string>
     <string name="msg_onboarding_desc">सटीक डेटा ट्रैकिंग और लाइव स्पीड निगरानी प्रदान करने के लिए, हमें कुछ अनुमतियों की आवश्यकता है।</string>
@@ -281,15 +241,12 @@
     <string name="label_daily_limit_reached">दैनिक सीमा समाप्त</string>
     <string name="label_monthly_limit_reached">मासिक सीमा समाप्त</string>
     <string name="label_custom_limit_reached">कस्टम सीमा समाप्त</string>
-    <string name="msg_no_alerts_custom">कोई कस्टम सीमा अलर्ट रिकॉर्ड नहीं किया गया।</string>
     <string name="label_start_date_select">प्रारंभ तिथि: %s</string>
     <string name="label_end_date_select">अंतिम तिथि: %s</string>
     <string name="msg_invalid_date_range">अंतिम तिथि प्रारंभ तिथि के बाद या उसी दिन होनी चाहिए</string>
-    <string name="label_high_traffic_detected">उच्च यातायात का पता चला</string>
     <string name="label_trigger_speed_header">ट्रिगर गति</string>
     <string name="label_limit_set_header">सीमा निर्धारित</string>
     <string name="label_usage_recorded_header">रिकॉर्ड किया गया उपयोग</string>
-    <string name="label_history_header">इतिहास</string>
     <string name="msg_no_app_limits">कोई ऐप सीमा कॉन्फ़िगर नहीं की गई।</string>
     <string name="desc_restrict_app_subtitle">इसका डेटा उपयोग प्रबंधित करना शुरू करने के लिए एक एप्लिकेशन जोड़ें।</string>
     <string name="cd_add_app_limit">ऐप सीमा जोड़ें</string>
@@ -297,7 +254,6 @@
     <string name="desc_block_apps">उन ऐप्स के लिए इंटरनेट एक्सेस को स्वचालित रूप से प्रतिबंधित करें जो अपनी सीमा तक पहुँचते हैं</string>
     <string name="title_edit_app_limit">ऐप सीमा संपादित करें</string>
     <string name="btn_create_app_limit">सीमा बनाएं</string>
-    <string name="btn_save_changes">परिवर्तन सहेजें</string>
     <string name="label_app_limit_selection">ऐप सीमा</string>
     <string name="desc_app_limit_selection">किसी विशिष्ट एप्लिकेशन के लिए प्रतिबंध सेट करें</string>
     <string name="title_delete_limit">सीमा हटाएं</string>
@@ -314,15 +270,12 @@
     <string name="title_choose_limit_type">सीमा प्रकार चुनें</string>
 
     <!-- Notification Strings -->
-    <string name="notification_limit_reached_title">दैनिक %s सीमा समाप्त</string>
-    <string name="notification_limit_reached_msg">आपने आज %s का उपभोग किया है।</string>
     <string name="status_not_supported">इस डिवाइस पर गति निगरानी समर्थित नहीं है</string>
     <string name="channel_speed_monitor_name">गति मॉनिटर</string>
     <string name="channel_speed_monitor_desc">वास्तविक समय नेटवर्क गति संकेतक</string>
     <string name="channel_usage_alerts_name">उच्च डेटा अलर्ट</string>
     <string name="channel_usage_alerts_desc">डेटा सीमा थ्रेशोल्ड के लिए सूचनाएं</string>
     <string name="notification_high_usage_app_msg">%1$s महत्वपूर्ण डेटा का उपभोग कर रहा है: %2$s (%3$s उपयोग किया गया)।</string>
-    <string name="notification_high_usage_generic_msg">उच्च पृष्ठभूमि डेटा उपयोग का पता चला: %s</string>
     <string name="notification_high_usage_title">उच्च डेटा उपयोग</string>
     <string name="notification_summary_title">उच्च डेटा अलर्ट</string>
     <string name="notification_summary_msg">अपने उच्च डेटा अलर्ट इतिहास को देखने के लिए टैप करें।</string>
@@ -335,7 +288,6 @@
     <!-- Badges -->
     <string name="badge_limit_reached">सीमा समाप्त</string>
     <string name="badge_blocked">अवरुद्ध</string>
-    <string name="badge_silenced">मौन</string>
 
     <!-- App Review Dialog -->
     <string name="review_dialog_title">फ्लोबाइट्स का आनंद ले रहे हैं?</string>
@@ -346,8 +298,7 @@
     <string name="review_rate_on_play_store">प्ले स्टोर पर रेट करें</string>
     <string name="review_feedback_title">हमें सुधारने में मदद करें</string>
     <string name="review_feedback_description">हमें यह सुनकर खेद है कि आप पूरी तरह से संतुष्ट नहीं हैं। कृपया हमें बताएं कि हम आपके लिए फ्लोबाइट्स को कैसे बेहतर बना सकते हैं।</string>
-    <string name="review_feedback_placeholder">अपने सुझाव या प्रतिक्रिया यहाँ दर्ज करें...</string>
-    <string name="review_feedback_thanks">आपकी प्रतिक्रिया के लिए धन्यवाद!</string>
+    <string name="review_feedback_placeholder">अपने सुझाव या प्रतिक्रिया यहाँ दर्ज करें&#8230;</string>
     <string name="review_play_store_title">रेटिंग के लिए धन्यवाद!</string>
     <string name="review_play_store_description">यदि आप Google Play पर त्वरित समीक्षा लिख सकें तो हम इसकी सराहना करेंगे। यह वास्तव में बहुत मदद करता है!</string>
     <string name="review_toast_feedback_submitted">प्रतिक्रिया सफलतापूर्वक सबमिट की गई। धन्यवाद!</string>

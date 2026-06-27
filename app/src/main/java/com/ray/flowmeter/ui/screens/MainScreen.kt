@@ -219,7 +219,9 @@ fun MainScreen(
                 }
             },
             bottomBar = {
-                NavigationBar {
+                NavigationBar(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainer
+                ) {
                     NavigationBarItem(
                         icon = {
                             Icon(
@@ -255,22 +257,6 @@ fun MainScreen(
                     NavigationBarItem(
                         icon = {
                             Icon(
-                                imageVector = if (currentDestination == Destination.Alerts) Icons.Filled.Notifications else Icons.Outlined.Notifications,
-                                contentDescription = stringResource(R.string.title_alerts)
-                            )
-                        },
-                        label = { Text(stringResource(R.string.label_alerts), maxLines = 1, overflow = TextOverflow.Ellipsis) },
-                        selected = currentDestination == Destination.Alerts,
-                        onClick = {
-                            if (currentDestination != Destination.Alerts) {
-                                backStack.clear()
-                                backStack.add(Destination.Alerts)
-                            }
-                        }
-                    )
-                    NavigationBarItem(
-                        icon = {
-                            Icon(
                                 imageVector = if (currentDestination == Destination.Limits) Icons.Filled.Timer else Icons.Outlined.Timer,
                                 contentDescription = stringResource(R.string.title_limits)
                             )
@@ -281,6 +267,22 @@ fun MainScreen(
                             if (currentDestination != Destination.Limits) {
                                 backStack.clear()
                                 backStack.add(Destination.Limits)
+                            }
+                        }
+                    )
+                    NavigationBarItem(
+                        icon = {
+                            Icon(
+                                imageVector = if (currentDestination == Destination.Alerts) Icons.Filled.Notifications else Icons.Outlined.Notifications,
+                                contentDescription = stringResource(R.string.title_alerts)
+                            )
+                        },
+                        label = { Text(stringResource(R.string.label_alerts), maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                        selected = currentDestination == Destination.Alerts,
+                        onClick = {
+                            if (currentDestination != Destination.Alerts) {
+                                backStack.clear()
+                                backStack.add(Destination.Alerts)
                             }
                         }
                     )

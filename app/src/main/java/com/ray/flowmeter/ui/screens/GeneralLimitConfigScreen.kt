@@ -22,6 +22,10 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
+import com.ray.flowmeter.ui.dialogs.AnimatedDialogContent
+
 @Composable
 private fun formatDate(timestamp: Long): String {
     if (timestamp == 0L) return stringResource(R.string.label_select_date)
@@ -121,148 +125,174 @@ fun GeneralLimitConfigScreen(
     }
     val titleText = "$periodText $networkText"
 
-    BackHandler { onBack() }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(titleText, fontWeight = FontWeight.Black, maxLines = 1, overflow = TextOverflow.Ellipsis) },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = stringResource(R.string.cd_back))
-                    }
-                },
-                windowInsets = TopAppBarDefaults.windowInsets
-            )
-        }
-    ) { padding ->
-        Column(
-            modifier = Modifier
-                .padding(padding)
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 24.dp, vertical = 12.dp)
-        ) {
-            Text(
-                text = stringResource(R.string.desc_configure_limit_format, titleText),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-
-            Spacer(Modifier.height(32.dp))
-
-            if (isDateRangeInvalid) {
-                Card(
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer),
-                    modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp)
+    ModalBottomSheet(
+        onDismissRequest = onBack,
+        sheetState = sheetState,
+        dragHandle = { BottomSheetDefaults.DragHandle() },
+        containerColor = MaterialTheme.colorScheme.surfaceContainer,
+        shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
+        properties = ModalBottomSheetProperties(shouldDismissOnBackPress = false)
+    ) {
+        AnimatedDialogContent(onBack = onBack) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp)
+                    .padding(bottom = 32.dp)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Row(
-                        modifier = Modifier.padding(16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            Icons.Rounded.Warning,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onErrorContainer
-                        )
-                        Spacer(Modifier.width(12.dp))
-                        Text(
-                            text = stringResource(R.string.msg_invalid_date_range),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onErrorContainer,
-                            fontWeight = FontWeight.Medium
-                        )
+                    Text(
+                        text = titleText,
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Black,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f)
+                    )
+                    IconButton(onClick = onBack) {
+                        Icon(Icons.Rounded.Close, contentDescription = null)
                     }
                 }
-            }
 
-            Text(
-                text = stringResource(R.string.title_configure_limit),
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.primary
-            )
-            Spacer(Modifier.height(8.dp))
-            LimitInputRow(
-                value = limitInput,
-                onValueChange = setLimitInput,
-                unit = limitUnit,
-                onUnitChange = setLimitUnit
-            )
-            Spacer(Modifier.height(16.dp))
+                Spacer(Modifier.height(16.dp))
 
-            if (isCustom) {
                 Text(
-                    text = stringResource(R.string.label_plan_duration),
+                    text = stringResource(R.string.desc_configure_limit_format, titleText),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+
+                Spacer(Modifier.height(24.dp))
+
+                if (isDateRangeInvalid) {
+                    Card(
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer),
+                        modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(12.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                Icons.Rounded.Warning,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onErrorContainer
+                            )
+                            Spacer(Modifier.width(8.dp))
+                            Text(
+                                text = stringResource(R.string.msg_invalid_date_range),
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onErrorContainer,
+                                fontWeight = FontWeight.Medium
+                            )
+                        }
+                    }
+                }
+
+                Text(
+                    text = stringResource(R.string.title_configure_limit),
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(Modifier.height(8.dp))
+                LimitInputRow(
+                    value = limitInput,
+                    onValueChange = setLimitInput,
+                    unit = limitUnit,
+                    onUnitChange = setLimitUnit
+                )
+
+                if (isCustom) {
+                    Spacer(Modifier.height(20.dp))
+                    Text(
+                        text = stringResource(R.string.label_plan_duration),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(Modifier.height(8.dp))
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Button(
+                            onClick = { activeDatePicker = "start" },
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                                contentColor = MaterialTheme.colorScheme.onSurface
+                            ),
+                            shape = RoundedCornerShape(12.dp),
+                            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp)
+                        ) {
+                            Icon(Icons.Rounded.CalendarToday, contentDescription = null, modifier = Modifier.size(18.dp))
+                            Spacer(Modifier.width(8.dp))
+                            Text(
+                                text = stringResource(R.string.label_start_date_select, formatDate(customStart)),
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.Medium
+                            )
+                        }
+                        Button(
+                            onClick = { activeDatePicker = "end" },
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                                contentColor = MaterialTheme.colorScheme.onSurface
+                            ),
+                            shape = RoundedCornerShape(12.dp),
+                            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp)
+                        ) {
+                            Icon(Icons.Rounded.Event, contentDescription = null, modifier = Modifier.size(18.dp))
+                            Spacer(Modifier.width(8.dp))
+                            Text(
+                                text = stringResource(R.string.label_end_date_select, formatDate(customEnd)),
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.Medium
+                            )
+                        }
+                    }
+                }
+
+                Spacer(Modifier.height(32.dp))
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Button(
-                        onClick = { activeDatePicker = "start" },
-                        modifier = Modifier.weight(1f),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-                            contentColor = MaterialTheme.colorScheme.onSurface
-                        )
-                    ) {
-                        Icon(Icons.Rounded.CalendarToday, contentDescription = null, modifier = Modifier.size(18.dp))
-                        Spacer(Modifier.width(8.dp))
-                        Text(
-                            text = stringResource(R.string.label_start_date_select, formatDate(customStart)),
-                            style = MaterialTheme.typography.bodyMedium,
-                            fontWeight = FontWeight.Medium
-                        )
+                    TextButton(onClick = onBack) {
+                        Text(stringResource(R.string.btn_cancel))
                     }
+                    Spacer(Modifier.width(8.dp))
                     Button(
-                        onClick = { activeDatePicker = "end" },
-                        modifier = Modifier.weight(1f),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-                            contentColor = MaterialTheme.colorScheme.onSurface
-                        )
+                        onClick = {
+                            val v = limitInput.toLongOrNull() ?: 0L
+                            val multiplier = if (limitUnit == "GB") 1024L * 1024L * 1024L else 1024L * 1024L
+                            onConfirm(
+                                v * multiplier,
+                                if (isCustom) customStart else 0L,
+                                if (isCustom) customEnd else 0L
+                            )
+                        },
+                        enabled = !isFormInvalid,
+                        shape = RoundedCornerShape(12.dp)
                     ) {
-                        Icon(Icons.Rounded.Event, contentDescription = null, modifier = Modifier.size(18.dp))
-                        Spacer(Modifier.width(8.dp))
                         Text(
-                            text = stringResource(R.string.label_end_date_select, formatDate(customEnd)),
-                            style = MaterialTheme.typography.bodyMedium,
-                            fontWeight = FontWeight.Medium
+                            text = stringResource(R.string.btn_save_config),
+                            fontWeight = FontWeight.Bold
                         )
                     }
                 }
-                Spacer(Modifier.height(16.dp))
             }
-
-            Spacer(modifier = Modifier.weight(1f))
-            Spacer(Modifier.height(32.dp))
-
-            Button(
-                onClick = {
-                    val v = limitInput.toLongOrNull() ?: 0L
-                    val multiplier = if (limitUnit == "GB") 1024L * 1024L * 1024L else 1024L * 1024L
-                    onConfirm(
-                        v * multiplier,
-                        if (isCustom) customStart else 0L,
-                        if (isCustom) customEnd else 0L
-                    )
-                },
-                enabled = !isFormInvalid,
-                modifier = Modifier.fillMaxWidth().height(60.dp),
-                shape = RoundedCornerShape(20.dp)
-            ) {
-                Text(
-                    text = stringResource(R.string.btn_save_config),
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }

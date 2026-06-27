@@ -9,8 +9,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.*
@@ -25,8 +27,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.core.graphics.drawable.toBitmap
 import com.ray.flowmeter.R
+import com.ray.flowmeter.ui.dialogs.AnimatedDialogContent
 import com.ray.flowmeter.ui.viewmodels.AppLimitsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -67,11 +72,7 @@ fun AppPickerScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = if (isPickerOpen == null) {
-                            stringResource(R.string.title_select_application)
-                        } else {
-                            stringResource(R.string.title_configure_limit)
-                        },
+                        text = stringResource(R.string.title_select_application),
                         fontWeight = FontWeight.Black,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -79,13 +80,7 @@ fun AppPickerScreen(
                 },
                 navigationIcon = {
                     IconButton(
-                        onClick = {
-                            if (isPickerOpen != null) {
-                                isPickerOpen = null
-                            } else {
-                                onBack()
-                            }
-                        }
+                        onClick = onBack
                     ) {
                         Icon(
                             Icons.AutoMirrored.Rounded.ArrowBack,
@@ -105,177 +100,198 @@ fun AppPickerScreen(
                 .padding(padding)
                 .fillMaxSize()
         ) {
-            if (isPickerOpen == null) {
-                OutlinedTextField(
-                    value = viewModel.searchQuery,
-                    onValueChange = { viewModel.searchQuery = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp, top = 0.dp, bottom = 8.dp),
-                    placeholder = {
-                        Text(stringResource(R.string.placeholder_search_apps))
-                    },
-                    leadingIcon = {
-                        Icon(
-                            Icons.Rounded.Search,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    },
-                    trailingIcon = {
-                        if (viewModel.searchQuery.isNotEmpty()) {
-                            IconButton(
-                                onClick = { viewModel.searchQuery = "" }
-                            ) {
-                                Icon(
-                                    Icons.Rounded.Close,
-                                    contentDescription = stringResource(R.string.cd_clear_search)
-                                )
-                            }
-                        }
-                    },
-                    singleLine = true,
-                    shape = RoundedCornerShape(28.dp),
-                    textStyle = MaterialTheme.typography.bodyLarge,
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                        unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
-                        cursorColor = MaterialTheme.colorScheme.primary,
-                        focusedBorderColor = MaterialTheme.colorScheme.primary,
-                        unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
-                        focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-                        unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-                        focusedLeadingIconColor = MaterialTheme.colorScheme.primary,
-                        unfocusedLeadingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        focusedTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        unfocusedTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        focusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant
+            OutlinedTextField(
+                value = viewModel.searchQuery,
+                onValueChange = { viewModel.searchQuery = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp, top = 0.dp, bottom = 8.dp),
+                placeholder = {
+                    Text(stringResource(R.string.placeholder_search_apps))
+                },
+                leadingIcon = {
+                    Icon(
+                        Icons.Rounded.Search,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
+                },
+                trailingIcon = {
+                    if (viewModel.searchQuery.isNotEmpty()) {
+                        IconButton(
+                            onClick = { viewModel.searchQuery = "" }
+                        ) {
+                            Icon(
+                                Icons.Rounded.Close,
+                                contentDescription = stringResource(R.string.cd_clear_search)
+                            )
+                        }
+                    }
+                },
+                singleLine = true,
+                shape = RoundedCornerShape(28.dp),
+                textStyle = MaterialTheme.typography.bodyLarge,
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                    cursorColor = MaterialTheme.colorScheme.primary,
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
+                    focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                    focusedLeadingIconColor = MaterialTheme.colorScheme.primary,
+                    unfocusedLeadingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    focusedTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    unfocusedTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    focusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+            )
 
-                if (viewModel.isLoadingApps) {
+            if (viewModel.isLoadingApps) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(strokeCap = StrokeCap.Round)
+                }
+            } else {
+                val filtered = viewModel.filteredApps
+
+                if (filtered.isEmpty()) {
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        CircularProgressIndicator(strokeCap = StrokeCap.Round)
+                        Text(
+                            text = stringResource(R.string.msg_no_apps_found),
+                            color = MaterialTheme.colorScheme.outline
+                        )
                     }
                 } else {
-                    val filtered = viewModel.filteredApps
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(bottom = 16.dp)
+                    ) {
+                        items(filtered, key = { it.packageName }) { app ->
+                            val appIcon by produceState<Drawable?>(
+                                initialValue = null,
+                                key1 = app.packageName
+                            ) {
+                                value = viewModel.getAppIcon(app.packageName)
+                            }
 
-                    if (filtered.isEmpty()) {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = stringResource(R.string.msg_no_apps_found),
-                                color = MaterialTheme.colorScheme.outline
-                            )
-                        }
-                    } else {
-                        LazyColumn(
-                            modifier = Modifier.fillMaxSize(),
-                            contentPadding = PaddingValues(bottom = 16.dp)
-                        ) {
-                            items(filtered, key = { it.packageName }) { app ->
-                                val appIcon by produceState<Drawable?>(
-                                    initialValue = null,
-                                    key1 = app.packageName
-                                ) {
-                                    value = viewModel.getAppIcon(app.packageName)
-                                }
-
-                                ListItem(
-                                    headlineContent = {
-                                        Text(
-                                            text = app.name,
-                                            fontWeight = FontWeight.Bold
-                                        )
-                                    },
-                                    supportingContent = {
-                                        Text(
-                                            text = app.packageName,
-                                            style = MaterialTheme.typography.bodySmall,
-                                            maxLines = 1,
-                                            overflow = TextOverflow.Ellipsis
-                                        )
-                                    },
-                                    leadingContent = {
-                                        Surface(
-                                            shape = CircleShape,
-                                            color = MaterialTheme.colorScheme.surfaceContainerHigh,
-                                            modifier = Modifier.size(48.dp)
-                                        ) {
-                                            Box(modifier = Modifier.padding(8.dp)) {
-                                                if (appIcon != null) {
-                                                    Image(
-                                                        bitmap = appIcon!!.toBitmap().asImageBitmap(),
-                                                        contentDescription = null,
-                                                        modifier = Modifier.fillMaxSize()
-                                                    )
-                                                } else {
-                                                    Icon(
-                                                        Icons.Rounded.Apps,
-                                                        contentDescription = null,
-                                                        tint = MaterialTheme.colorScheme.primary,
-                                                        modifier = Modifier.fillMaxSize()
-                                                    )
-                                                }
+                            ListItem(
+                                headlineContent = {
+                                    Text(
+                                        text = app.name,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                },
+                                supportingContent = {
+                                    Text(
+                                        text = app.packageName,
+                                        style = MaterialTheme.typography.bodySmall,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+                                },
+                                leadingContent = {
+                                    Surface(
+                                        shape = CircleShape,
+                                        color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                                        modifier = Modifier.size(48.dp)
+                                    ) {
+                                        Box(modifier = Modifier.padding(8.dp)) {
+                                            if (appIcon != null) {
+                                                Image(
+                                                    bitmap = appIcon!!.toBitmap().asImageBitmap(),
+                                                    contentDescription = null,
+                                                    modifier = Modifier.fillMaxSize()
+                                                )
+                                            } else {
+                                                Icon(
+                                                    Icons.Rounded.Apps,
+                                                    contentDescription = null,
+                                                    tint = MaterialTheme.colorScheme.primary,
+                                                    modifier = Modifier.fillMaxSize()
+                                                )
                                             }
                                         }
-                                    },
-                                    modifier = Modifier.clickable {
-                                        isPickerOpen = app
                                     }
-                                )
-                            }
+                                },
+                                modifier = Modifier.clickable {
+                                    isPickerOpen = app
+                                }
+                            )
                         }
                     }
                 }
-            } else {
-                ConfigurationContent(
-                    selectedApp = isPickerOpen,
-                    limitInput = limitInput,
-                    onLimitInputChange = { limitInput = it },
-                    limitUnit = limitUnit,
-                    onLimitUnitChange = { limitUnit = it },
-                    limitType = limitType,
-                    onLimitTypeChange = { limitType = it },
-                    networkType = networkType,
-                    onNetworkTypeChange = { networkType = it },
-                    wifiLimitInput = wifiLimitInput,
-                    onWifiLimitInputChange = { wifiLimitInput = it },
-                    wifiLimitUnit = wifiLimitUnit,
-                    onWifiLimitUnitChange = { wifiLimitUnit = it },
-                    mobileLimitInput = mobileLimitInput,
-                    onMobileLimitInputChange = { mobileLimitInput = it },
-                    mobileLimitUnit = mobileLimitUnit,
-                    onMobileLimitUnitChange = { mobileLimitUnit = it },
-                    onConfirm = {
-                        val value = limitInput.toLongOrNull() ?: 0L
-                        val multiplier =
-                            if (limitUnit == "GB") 1024L * 1024L * 1024L else 1024L * 1024L
+            }
+        }
 
-                        val wifiValue = wifiLimitInput.toLongOrNull() ?: 0L
-                        val wifiMultiplier =
-                            if (wifiLimitUnit == "GB") 1024L * 1024L * 1024L else 1024L * 1024L
+        if (isPickerOpen != null) {
+            val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-                        val mobileValue = mobileLimitInput.toLongOrNull() ?: 0L
-                        val mobileMultiplier =
-                            if (mobileLimitUnit == "GB") 1024L * 1024L * 1024L else 1024L * 1024L
+            ModalBottomSheet(
+                onDismissRequest = { isPickerOpen = null },
+                sheetState = sheetState,
+                dragHandle = { BottomSheetDefaults.DragHandle() },
+                containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
+                properties = ModalBottomSheetProperties(shouldDismissOnBackPress = false)
+            ) {
+                AnimatedDialogContent(onBack = { isPickerOpen = null }) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 24.dp)
+                            .padding(bottom = 32.dp)
+                    ) {
+                        ConfigurationContent(
+                            selectedApp = isPickerOpen,
+                            limitInput = limitInput,
+                            onLimitInputChange = { limitInput = it },
+                            limitUnit = limitUnit,
+                            onLimitUnitChange = { limitUnit = it },
+                            limitType = limitType,
+                            onLimitTypeChange = { limitType = it },
+                            networkType = networkType,
+                            onNetworkTypeChange = { networkType = it },
+                            wifiLimitInput = wifiLimitInput,
+                            onWifiLimitInputChange = { wifiLimitInput = it },
+                            wifiLimitUnit = wifiLimitUnit,
+                            onWifiLimitUnitChange = { wifiLimitUnit = it },
+                            mobileLimitInput = mobileLimitInput,
+                            onMobileLimitInputChange = { mobileLimitInput = it },
+                            mobileLimitUnit = mobileLimitUnit,
+                            onMobileLimitUnitChange = { mobileLimitUnit = it },
+                            onCancel = { isPickerOpen = null },
+                            onConfirm = {
+                                val value = limitInput.toLongOrNull() ?: 0L
+                                val multiplier =
+                                    if (limitUnit == "GB") 1024L * 1024L * 1024L else 1024L * 1024L
 
-                        onAppSelected(
-                            isPickerOpen!!,
-                            value * multiplier,
-                            limitType,
-                            networkType,
-                            wifiValue * wifiMultiplier,
-                            mobileValue * mobileMultiplier
+                                val wifiValue = wifiLimitInput.toLongOrNull() ?: 0L
+                                val wifiMultiplier =
+                                    if (wifiLimitUnit == "GB") 1024L * 1024L * 1024L else 1024L * 1024L
+
+                                val mobileValue = mobileLimitInput.toLongOrNull() ?: 0L
+                                val mobileMultiplier =
+                                    if (mobileLimitUnit == "GB") 1024L * 1024L * 1024L else 1024L * 1024L
+
+                                onAppSelected(
+                                    isPickerOpen!!,
+                                    value * multiplier,
+                                    limitType,
+                                    networkType,
+                                    wifiValue * wifiMultiplier,
+                                    mobileValue * mobileMultiplier
+                                )
+                            }
                         )
                     }
-                )
+                }
             }
         }
     }
@@ -302,12 +318,13 @@ fun ConfigurationContent(
     mobileLimitUnit: String = "MB",
     onMobileLimitUnitChange: (String) -> Unit = {},
     confirmButtonText: String = stringResource(R.string.btn_create_app_limit),
+    onCancel: () -> Unit = {},
     onConfirm: () -> Unit
 ) {
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 24.dp, vertical = 12.dp)
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
     ) {
         if (selectedAppHeader != null) {
             selectedAppHeader()
@@ -321,13 +338,13 @@ fun ConfigurationContent(
                 }
             }
 
-            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(bottom = 32.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(bottom = 24.dp)) {
                 Surface(
                     shape = CircleShape,
                     color = MaterialTheme.colorScheme.surfaceVariant,
-                    modifier = Modifier.size(64.dp)
+                    modifier = Modifier.size(56.dp)
                 ) {
-                    Box(Modifier.padding(12.dp)) {
+                    Box(Modifier.padding(10.dp)) {
                         if (appIcon != null) {
                             Image(
                                 bitmap = appIcon.toBitmap().asImageBitmap(),
@@ -339,7 +356,7 @@ fun ConfigurationContent(
                 }
                 Spacer(modifier = Modifier.width(16.dp))
                 Column {
-                    Text(selectedApp.name, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Black)
+                    Text(selectedApp.name, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Black)
                     Text(selectedApp.packageName, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
@@ -364,18 +381,24 @@ fun ConfigurationContent(
             onMobileLimitUnitChange = onMobileLimitUnitChange
         )
 
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.height(24.dp))
 
-        Button(
-            onClick = onConfirm,
-            modifier = Modifier.fillMaxWidth().height(60.dp),
-            shape = RoundedCornerShape(20.dp),
-            elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(confirmButtonText, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            TextButton(onClick = onCancel) {
+                Text(stringResource(R.string.btn_cancel))
+            }
+            Spacer(Modifier.width(8.dp))
+            Button(
+                onClick = onConfirm,
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Text(confirmButtonText, fontWeight = FontWeight.Bold)
+            }
         }
-
-        Spacer(modifier = Modifier.height(16.dp))
     }
 }
 

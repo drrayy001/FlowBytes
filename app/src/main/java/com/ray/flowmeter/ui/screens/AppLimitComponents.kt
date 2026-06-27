@@ -21,6 +21,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.ray.flowmeter.utils.SpeedFormatter
 
+import androidx.compose.ui.text.style.TextAlign
+
 @Composable
 fun StatusIcon(
     icon: androidx.compose.ui.graphics.vector.ImageVector,
@@ -37,41 +39,98 @@ fun StatusIcon(
 }
 
 @Composable
-fun EmptyLimitsPlaceholder(title: String, subtitle: String) {
+fun EmptyLimitsPlaceholder(
+    title: String,
+    subtitle: String,
+    actionLabel: String? = null,
+    onActionClick: (() -> Unit)? = null
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp),
+            .padding(horizontal = 24.dp),
         contentAlignment = Alignment.Center
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Surface(
-                modifier = Modifier.size(120.dp),
-                color = MaterialTheme.colorScheme.surfaceContainerHigh,
-                shape = CircleShape
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Box(
+                modifier = Modifier.size(140.dp),
+                contentAlignment = Alignment.Center
             ) {
-                Box(contentAlignment = Alignment.Center) {
+                // Outer glowing/soft ring
+                Surface(
+                    modifier = Modifier.size(130.dp),
+                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.05f),
+                    shape = CircleShape
+                ) {}
+                // Inner ring
+                Surface(
+                    modifier = Modifier.size(100.dp),
+                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+                    shape = CircleShape
+                ) {}
+                // Center icon background
+                Box(
+                    modifier = Modifier
+                        .size(70.dp)
+                        .background(
+                            color = MaterialTheme.colorScheme.primaryContainer,
+                            shape = CircleShape
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
                     Icon(
-                        Icons.Rounded.Block,
+                        imageVector = Icons.Rounded.Block,
                         contentDescription = null,
-                        modifier = Modifier.size(60.dp),
-                        tint = MaterialTheme.colorScheme.outline.copy(alpha = 0.6f)
+                        modifier = Modifier.size(32.dp),
+                        tint = MaterialTheme.colorScheme.primary
                     )
                 }
             }
             Spacer(modifier = Modifier.height(24.dp))
             Text(
-                title,
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Black,
-                color = MaterialTheme.colorScheme.onSurface
+                text = title,
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface,
+                textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                subtitle,
+                text = subtitle,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.outline
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(horizontal = 16.dp)
             )
+            if (actionLabel != null && onActionClick != null) {
+                Spacer(modifier = Modifier.height(24.dp))
+                Button(
+                    onClick = onActionClick,
+                    shape = RoundedCornerShape(16.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
+                    ),
+                    contentPadding = PaddingValues(horizontal = 24.dp, vertical = 12.dp),
+                    modifier = Modifier.height(48.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.Check,
+                        contentDescription = null,
+                        modifier = Modifier.size(18.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = actionLabel,
+                        style = MaterialTheme.typography.labelLarge,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
         }
     }
 }

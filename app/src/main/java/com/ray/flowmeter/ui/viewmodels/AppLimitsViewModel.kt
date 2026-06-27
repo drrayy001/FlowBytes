@@ -448,6 +448,10 @@ class AppLimitsViewModel(
         viewModelScope.launch { preferencesRepository.setWifiCustomLimitRange(start, end) }
     }
 
+    fun setAppBlockingMasterEnabled(enabled: Boolean) {
+        viewModelScope.launch { preferencesRepository.setAppBlockingMasterEnabled(enabled) }
+    }
+
     data class AppInfo(
         val packageName: String,
         val name: String,

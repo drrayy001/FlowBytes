@@ -31,10 +31,24 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
 import com.ray.flowmeter.R
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.ui.unit.Dp
 import com.ray.flowmeter.data.AppLimit
 import com.ray.flowmeter.ui.theme.StaggeredEntrance
 import com.ray.flowmeter.ui.theme.bounceClick
+import com.ray.flowmeter.ui.theme.premiumSpring
 import com.ray.flowmeter.ui.viewmodels.AppLimitsViewModel
+
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.draw.drawBehind
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun AppLimitsScreen(
@@ -44,7 +58,6 @@ fun AppLimitsScreen(
     onTabChange: (Int) -> Unit = {}
 ) {
     var limitToDelete by remember { mutableStateOf<AppLimit?>(null) }
-    val (showTypeSelector, setShowTypeSelector) = remember { mutableStateOf(value = false) }
     var showAddGeneralLimitDialog by remember { mutableStateOf(false) }
 
     val dataDailyLimitConfigured by viewModel.dataDailyLimitConfigured.collectAsState()
@@ -54,16 +67,34 @@ fun AppLimitsScreen(
     val dataCustomLimitConfigured by viewModel.dataCustomLimitConfigured.collectAsState()
     val wifiCustomLimitConfigured by viewModel.wifiCustomLimitConfigured.collectAsState()
 
-    val (internalTab, setInternalTab) = remember { mutableIntStateOf(currentTab) }
-    
-    LaunchedEffect(currentTab) {
-        setInternalTab(currentTab)
-    }
+    val dataDailyLimitEnabled by viewModel.dataDailyLimitEnabled.collectAsState()
+    val dataMonthlyLimitEnabled by viewModel.dataMonthlyLimitEnabled.collectAsState()
+    val wifiDailyLimitEnabled by viewModel.wifiDailyLimitEnabled.collectAsState()
+    val wifiMonthlyLimitEnabled by viewModel.wifiMonthlyLimitEnabled.collectAsState()
+    val dataCustomLimitEnabled by viewModel.dataCustomLimitEnabled.collectAsState()
+    val wifiCustomLimitEnabled by viewModel.wifiCustomLimitEnabled.collectAsState()
 
-    val updateTab = { index: Int ->
-        onTabChange(index)
-        setInternalTab(index)
-    }
+    val dataDailyLimit by viewModel.dataDailyLimit.collectAsState()
+    val wifiDailyLimit by viewModel.wifiDailyLimit.collectAsState()
+    val dataMonthlyLimit by viewModel.dataMonthlyLimit.collectAsState()
+    val wifiMonthlyLimit by viewModel.wifiMonthlyLimit.collectAsState()
+    val dataCustomLimit by viewModel.dataCustomLimit.collectAsState()
+    val wifiCustomLimit by viewModel.wifiCustomLimit.collectAsState()
+
+    val dataCustomLimitStart by viewModel.dataCustomLimitStart.collectAsState()
+    val dataCustomLimitEnd by viewModel.dataCustomLimitEnd.collectAsState()
+    val wifiCustomLimitStart by viewModel.wifiCustomLimitStart.collectAsState()
+    val wifiCustomLimitEnd by viewModel.wifiCustomLimitEnd.collectAsState()
+
+    val currentMobileUsage by viewModel.currentMobileUsage.collectAsState()
+    val currentWifiUsage by viewModel.currentWifiUsage.collectAsState()
+    val currentMonthlyMobileUsage by viewModel.currentMonthlyMobileUsage.collectAsState()
+    val currentMonthlyWifiUsage by viewModel.currentMonthlyWifiUsage.collectAsState()
+    val currentCustomMobileUsage by viewModel.currentCustomMobileUsage.collectAsState()
+    val currentCustomWifiUsage by viewModel.currentCustomWifiUsage.collectAsState()
+
+    val appLimits by viewModel.appLimits.collectAsState()
+    val appBlockingMasterEnabled by viewModel.appBlockingMasterEnabled.collectAsState()
 
     val unconfiguredPlans = remember(dataDailyLimitConfigured, dataMonthlyLimitConfigured, wifiDailyLimitConfigured, wifiMonthlyLimitConfigured, dataCustomLimitConfigured, wifiCustomLimitConfigured) {
         buildList {
@@ -89,83 +120,265 @@ fun AppLimitsScreen(
         )
     }
 
-    Box(modifier = modifier) {
-        Column(modifier = Modifier.fillMaxSize()) {
-            MinimalPillsRow(
-                selectedTab = internalTab,
-                onTabChange = updateTab,
-                modifier = Modifier.padding(top = 8.dp, bottom = 12.dp)
-            )
-
-            AnimatedContent(
-                targetState = internalTab,
-                modifier = Modifier.weight(1f),
-                transitionSpec = {
-                    EnterTransition.None togetherWith ExitTransition.None using SizeTransform(clip = false) { _, _ -> snap() }
-                },
-                label = "SubTabTransition"
-            ) { page ->
-                when (page) {
-                    0 -> GeneralLimitsList(
-                        viewModel = viewModel,
-                        onEdit = { planType -> viewModel.configuringGeneralLimitType = planType },
-                        onDelete = { limitToDelete = it }
-                    )
-                    1 -> AppLimitsList(
-                        viewModel = viewModel,
-                        onEdit = { viewModel.editingLimit = it },
-                        onDelete = { limitToDelete = it }
-                    )
-                }
-            }
-        }
-
-        val showFab = if (internalTab == 0) !allGeneralLimitsConfigured else true
-
-        if (showFab) {
-            FloatingActionButton(
-                onClick = {
-                    if (internalTab == 1) {
-                        viewModel.loadInstalledApps()
-                        viewModel.isPickerOpen = true
-                    } else {
-                        if (unconfiguredPlans.size == 1) {
-                            viewModel.configuringGeneralLimitType = unconfiguredPlans.first()
-                        } else {
-                            showAddGeneralLimitDialog = true
-                        }
-                    }
-                },
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(16.dp),
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary,
-                shape = RoundedCornerShape(20.dp),
-                elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 4.dp)
-            ) {
-                Icon(Icons.Rounded.Add, contentDescription = stringResource(R.string.cd_add_app_limit))
+    val filteredAppLimits = remember(appLimits, viewModel.searchQuery) {
+        if (viewModel.searchQuery.isBlank()) {
+            appLimits.asReversed()
+        } else {
+            appLimits.asReversed().filter {
+                it.appName.contains(viewModel.searchQuery, ignoreCase = true) ||
+                it.packageName.contains(viewModel.searchQuery, ignoreCase = true)
             }
         }
     }
 
-    if (showTypeSelector) {
-        LimitTypeSelectionDialog(
-            onDismiss = { setShowTypeSelector(false) },
-            onAppLimitSelected = {
-                viewModel.loadInstalledApps()
-                viewModel.isPickerOpen = true
-                setShowTypeSelector(false)
-            },
-            onGeneralLimitSelected = {
-                if (unconfiguredPlans.size == 1) {
-                    viewModel.configuringGeneralLimitType = unconfiguredPlans.first()
-                } else {
-                    showAddGeneralLimitDialog = true
-                }
-                setShowTypeSelector(false)
+    fun formatRange(start: Long, end: Long): String {
+        val sdf = java.text.SimpleDateFormat("MMM dd, yyyy", java.util.Locale.getDefault())
+        return "${sdf.format(java.util.Date(start))} - ${sdf.format(java.util.Date(end))}"
+    }
+
+    data class SystemPlanItem(
+        val type: String,
+        val title: String,
+        val limit: Long,
+        val usage: Long,
+        val enabled: Boolean,
+        val isWifi: Boolean,
+        val subtitle: String? = null,
+        val onToggle: (Boolean) -> Unit,
+    )
+
+    val activePlansList = remember(
+        dataDailyLimitConfigured, dataMonthlyLimitConfigured, wifiDailyLimitConfigured, wifiMonthlyLimitConfigured, dataCustomLimitConfigured, wifiCustomLimitConfigured,
+        dataDailyLimitEnabled, dataMonthlyLimitEnabled, wifiDailyLimitEnabled, wifiMonthlyLimitEnabled, dataCustomLimitEnabled, wifiCustomLimitEnabled,
+        dataDailyLimit, wifiDailyLimit, dataMonthlyLimit, wifiMonthlyLimit, dataCustomLimit, wifiCustomLimit,
+        currentMobileUsage, currentWifiUsage, currentMonthlyMobileUsage, currentMonthlyWifiUsage, currentCustomMobileUsage, currentCustomWifiUsage,
+        wifiCustomLimitStart, wifiCustomLimitEnd, dataCustomLimitStart, dataCustomLimitEnd
+    ) {
+        buildList<SystemPlanItem> {
+            if (wifiDailyLimitConfigured) {
+                add(
+                    SystemPlanItem(
+                        type = "daily_wifi",
+                        title = "Daily Wi-Fi",
+                        limit = wifiDailyLimit,
+                        usage = currentWifiUsage,
+                        enabled = wifiDailyLimitEnabled,
+                        isWifi = true,
+                        onToggle = { viewModel.setWifiDailyLimitEnabled(it) }
+                    )
+                )
             }
-        )
+            if (dataDailyLimitConfigured) {
+                add(
+                    SystemPlanItem(
+                        type = "daily_mobile",
+                        title = "Daily Mobile",
+                        limit = dataDailyLimit,
+                        usage = currentMobileUsage,
+                        enabled = dataDailyLimitEnabled,
+                        isWifi = false,
+                        onToggle = { viewModel.setDataDailyLimitEnabled(it) }
+                    )
+                )
+            }
+            if (wifiMonthlyLimitConfigured) {
+                add(
+                    SystemPlanItem(
+                        type = "monthly_wifi",
+                        title = "Monthly Wi-Fi",
+                        limit = wifiMonthlyLimit,
+                        usage = currentMonthlyWifiUsage,
+                        enabled = wifiMonthlyLimitEnabled,
+                        isWifi = true,
+                        onToggle = { viewModel.setWifiMonthlyLimitEnabled(it) }
+                    )
+                )
+            }
+            if (dataMonthlyLimitConfigured) {
+                add(
+                    SystemPlanItem(
+                        type = "monthly_mobile",
+                        title = "Monthly Mobile",
+                        limit = dataMonthlyLimit,
+                        usage = currentMonthlyMobileUsage,
+                        enabled = dataMonthlyLimitEnabled,
+                        isWifi = false,
+                        onToggle = { viewModel.setDataMonthlyLimitEnabled(it) }
+                    )
+                )
+            }
+            if (wifiCustomLimitConfigured) {
+                add(
+                    SystemPlanItem(
+                        type = "custom_wifi",
+                        title = "Custom Wi-Fi",
+                        limit = wifiCustomLimit,
+                        usage = currentCustomWifiUsage,
+                        enabled = wifiCustomLimitEnabled,
+                        isWifi = true,
+                        subtitle = formatRange(wifiCustomLimitStart, wifiCustomLimitEnd),
+                        onToggle = { viewModel.setWifiCustomLimitEnabled(it) }
+                    )
+                )
+            }
+            if (dataCustomLimitConfigured) {
+                add(
+                    SystemPlanItem(
+                        type = "custom_mobile",
+                        title = "Custom Mobile",
+                        limit = dataCustomLimit,
+                        usage = currentCustomMobileUsage,
+                        enabled = dataCustomLimitEnabled,
+                        isWifi = false,
+                        subtitle = formatRange(dataCustomLimitStart, dataCustomLimitEnd),
+                        onToggle = { viewModel.setDataCustomLimitEnabled(it) }
+                    )
+                )
+            }
+        }
+    }
+
+    Box(modifier = modifier.fillMaxSize()) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(bottom = 90.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            item {
+                Box(modifier = Modifier.padding(top = 16.dp)) {
+                    VpnMasterCard(
+                        checked = appBlockingMasterEnabled,
+                        onCheckedChange = { viewModel.setAppBlockingMasterEnabled(it) }
+                    )
+                }
+            }
+
+            item {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "System Plans",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    
+                    if (!allGeneralLimitsConfigured) {
+                        TextButton(
+                            onClick = {
+                                if (unconfiguredPlans.size == 1) {
+                                    viewModel.configuringGeneralLimitType = unconfiguredPlans.first()
+                                } else {
+                                    showAddGeneralLimitDialog = true
+                                }
+                            }
+                        ) {
+                            Icon(Icons.Rounded.Add, contentDescription = null, modifier = Modifier.size(16.dp))
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Text("Add Plan", style = MaterialTheme.typography.labelMedium)
+                        }
+                    }
+                }
+            }
+
+            if (activePlansList.isEmpty()) {
+                item {
+                    Box(modifier = Modifier.padding(horizontal = 20.dp)) {
+                        SetupPlanPlaceholderTile(
+                            onClick = { showAddGeneralLimitDialog = true }
+                        )
+                    }
+                }
+            } else {
+                items(activePlansList) { plan ->
+                    Box(modifier = Modifier.padding(horizontal = 20.dp)) {
+                        SystemPlanCard(
+                            title = plan.title,
+                            usage = plan.usage,
+                            limit = plan.limit,
+                            enabled = plan.enabled,
+                            isWifi = plan.isWifi,
+                            subtitle = plan.subtitle,
+                            onToggle = plan.onToggle,
+                            onCardClick = { viewModel.configuringGeneralLimitType = plan.type },
+                            onDelete = {
+                                val title = plan.title
+                                val pType = plan.type
+                                val limitVal = plan.limit
+                                val netType = if (plan.isWifi) "wifi" else "mobile"
+                                val periodType = if (pType.startsWith("daily")) "daily" else if (pType.startsWith("monthly")) "monthly" else "custom"
+                                limitToDelete = AppLimit(
+                                    packageName = "system.${netType}.${periodType}",
+                                    appName = title,
+                                    dataLimit = limitVal,
+                                    limitType = periodType,
+                                    networkType = netType
+                                )
+                            }
+                        )
+                    }
+                }
+            }
+
+            item {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "App Limits",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    
+                    TextButton(
+                        onClick = {
+                            viewModel.loadInstalledApps()
+                            viewModel.isPickerOpen = true
+                        }
+                    ) {
+                        Icon(Icons.Rounded.Add, contentDescription = null, modifier = Modifier.size(16.dp))
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text("Add App Limit", style = MaterialTheme.typography.labelMedium)
+                    }
+                }
+            }
+
+            if (appLimits.isEmpty()) {
+                item {
+                    EmptyAppLimitsPlaceholder(
+                        onAddClick = {
+                            viewModel.loadInstalledApps()
+                            viewModel.isPickerOpen = true
+                        }
+                    )
+                }
+            } else {
+                items(appLimits.asReversed()) { limit ->
+                    Box(modifier = Modifier.padding(horizontal = 20.dp)) {
+                        StaggeredEntrance {
+                            AppLimitItem(
+                                limit = limit,
+                                onToggle = { enabled -> viewModel.updateAppLimit(limit.copy(isEnabled = enabled)) },
+                                onDelete = { limitToDelete = limit },
+                                onEdit = { viewModel.editingLimit = limit },
+                                appBlockingMasterEnabled = appBlockingMasterEnabled
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
     }
 
     if (limitToDelete != null) {
@@ -223,12 +436,9 @@ fun AppLimitsScreen(
 
 @Composable
 fun AppLimitsOverlay(viewModel: AppLimitsViewModel) {
-    val currentView = when {
-        viewModel.isPickerOpen -> "picker"
-        viewModel.editingLimit != null -> "edit"
-        viewModel.configuringGeneralLimitType != null -> "general"
-        else -> "list"
-    }
+    val showPicker = viewModel.isPickerOpen
+    val editingLimit = viewModel.editingLimit
+    val configuringGeneralLimitType = viewModel.configuringGeneralLimitType
 
     val dataDailyLimit by viewModel.dataDailyLimit.collectAsState()
     val wifiDailyLimit by viewModel.wifiDailyLimit.collectAsState()
@@ -242,7 +452,7 @@ fun AppLimitsOverlay(viewModel: AppLimitsViewModel) {
     val wifiCustomLimitEnd by viewModel.wifiCustomLimitEnd.collectAsState()
 
     AnimatedVisibility(
-        visible = currentView != "list",
+        visible = showPicker,
         enter = fadeIn(animationSpec = androidx.compose.animation.core.tween(300)),
         exit = fadeOut(animationSpec = androidx.compose.animation.core.tween(300))
     ) {
@@ -255,113 +465,100 @@ fun AppLimitsOverlay(viewModel: AppLimitsViewModel) {
                     indication = null
                 ) {}
         ) {
-            AnimatedContent(
-                targetState = currentView,
-                transitionSpec = {
-                    fadeIn(animationSpec = androidx.compose.animation.core.tween(300)) togetherWith
-                            fadeOut(animationSpec = androidx.compose.animation.core.tween(300)) using SizeTransform(clip = false) { _, _ -> snap() }
-                },
-                label = "OverlayContent"
-            ) { viewState ->
-                when (viewState) {
-                    "picker" -> {
-                        AppPickerScreen(
-                            viewModel = viewModel,
-                            onBack = { viewModel.isPickerOpen = false },
-                        ) { appInfo, limitBytes, limitType, networkType, wifiLimitBytes, mobileLimitBytes ->
-                            viewModel.addAppLimit(
-                                packageName = appInfo.packageName,
-                                appName = appInfo.name,
-                                limitBytes = limitBytes,
-                                limitType = limitType,
-                                networkType = networkType,
-                                wifiLimitBytes = wifiLimitBytes,
-                                mobileLimitBytes = mobileLimitBytes,
-                            )
-                            viewModel.isPickerOpen = false
-                        }
-                    }
-                    "edit" -> {
-                        if (viewModel.editingLimit != null) {
-                            AppLimitEditScreen(
-                                limit = viewModel.editingLimit!!,
-                                onBack = { viewModel.editingLimit = null },
-                            ) { updatedLimit ->
-                                viewModel.updateAppLimit(updatedLimit)
-                                viewModel.editingLimit = null
-                            }
-                        }
-                    }
-                    "general" -> {
-                        val planType = viewModel.configuringGeneralLimitType ?: ""
-                        val initialLimit = when (planType) {
-                            "daily_wifi" -> wifiDailyLimit
-                            "daily_mobile" -> dataDailyLimit
-                            "monthly_wifi" -> wifiMonthlyLimit
-                            "monthly_mobile" -> dataMonthlyLimit
-                            "custom_wifi" -> wifiCustomLimit
-                            "custom_mobile" -> dataCustomLimit
-                            else -> 0L
-                        }
-                        val initialStart = when (planType) {
-                            "custom_wifi" -> wifiCustomLimitStart
-                            "custom_mobile" -> dataCustomLimitStart
-                            else -> 0L
-                        }
-                        val initialEnd = when (planType) {
-                            "custom_wifi" -> wifiCustomLimitEnd
-                            "custom_mobile" -> dataCustomLimitEnd
-                            else -> 0L
-                        }
-
-                        GeneralLimitConfigScreen(
-                            planType = planType,
-                            initialLimit = initialLimit,
-                            initialStart = initialStart,
-                            initialEnd = initialEnd,
-                            onBack = { viewModel.configuringGeneralLimitType = null },
-                            onConfirm = { limitBytes, start, end ->
-                                when (planType) {
-                                    "daily_wifi" -> {
-                                        viewModel.setWifiDailyLimit(limitBytes)
-                                        viewModel.setWifiDailyLimitEnabled(enabled = true)
-                                        viewModel.setWifiDailyLimitConfigured(configured = true)
-                                    }
-                                    "daily_mobile" -> {
-                                        viewModel.setDataDailyLimit(limitBytes)
-                                        viewModel.setDataDailyLimitEnabled(enabled = true)
-                                        viewModel.setDataDailyLimitConfigured(configured = true)
-                                    }
-                                    "monthly_wifi" -> {
-                                        viewModel.setWifiMonthlyLimit(limitBytes)
-                                        viewModel.setWifiMonthlyLimitEnabled(enabled = true)
-                                        viewModel.setWifiMonthlyLimitConfigured(configured = true)
-                                    }
-                                    "monthly_mobile" -> {
-                                        viewModel.setDataMonthlyLimit(limitBytes)
-                                        viewModel.setDataMonthlyLimitEnabled(enabled = true)
-                                        viewModel.setDataMonthlyLimitConfigured(configured = true)
-                                    }
-                                    "custom_wifi" -> {
-                                        viewModel.setWifiCustomLimit(limitBytes)
-                                        viewModel.setWifiCustomLimitRange(start, end)
-                                        viewModel.setWifiCustomLimitEnabled(enabled = true)
-                                        viewModel.setWifiCustomLimitConfigured(configured = true)
-                                    }
-                                    "custom_mobile" -> {
-                                        viewModel.setDataCustomLimit(limitBytes)
-                                        viewModel.setDataCustomLimitRange(start, end)
-                                        viewModel.setDataCustomLimitEnabled(enabled = true)
-                                        viewModel.setDataCustomLimitConfigured(configured = true)
-                                    }
-                                }
-                                viewModel.configuringGeneralLimitType = null
-                            }
-                        )
-                    }
-                }
+            AppPickerScreen(
+                viewModel = viewModel,
+                onBack = { viewModel.isPickerOpen = false },
+            ) { appInfo, limitBytes, limitType, networkType, wifiLimitBytes, mobileLimitBytes ->
+                viewModel.addAppLimit(
+                    packageName = appInfo.packageName,
+                    appName = appInfo.name,
+                    limitBytes = limitBytes,
+                    limitType = limitType,
+                    networkType = networkType,
+                    wifiLimitBytes = wifiLimitBytes,
+                    mobileLimitBytes = mobileLimitBytes,
+                )
+                viewModel.isPickerOpen = false
             }
         }
+    }
+
+    if (editingLimit != null) {
+        AppLimitEditScreen(
+            limit = editingLimit,
+            onBack = { viewModel.editingLimit = null },
+        ) { updatedLimit ->
+            viewModel.updateAppLimit(updatedLimit)
+            viewModel.editingLimit = null
+        }
+    }
+
+    if (configuringGeneralLimitType != null) {
+        val planType = configuringGeneralLimitType
+        val initialLimit = when (planType) {
+            "daily_wifi" -> wifiDailyLimit
+            "daily_mobile" -> dataDailyLimit
+            "monthly_wifi" -> wifiMonthlyLimit
+            "monthly_mobile" -> dataMonthlyLimit
+            "custom_wifi" -> wifiCustomLimit
+            "custom_mobile" -> dataCustomLimit
+            else -> 0L
+        }
+        val initialStart = when (planType) {
+            "custom_wifi" -> wifiCustomLimitStart
+            "custom_mobile" -> dataCustomLimitStart
+            else -> 0L
+        }
+        val initialEnd = when (planType) {
+            "custom_wifi" -> wifiCustomLimitEnd
+            "custom_mobile" -> dataCustomLimitEnd
+            else -> 0L
+        }
+
+        GeneralLimitConfigScreen(
+            planType = planType,
+            initialLimit = initialLimit,
+            initialStart = initialStart,
+            initialEnd = initialEnd,
+            onBack = { viewModel.configuringGeneralLimitType = null },
+            onConfirm = { limitBytes, start, end ->
+                when (planType) {
+                    "daily_wifi" -> {
+                        viewModel.setWifiDailyLimit(limitBytes)
+                        viewModel.setWifiDailyLimitEnabled(enabled = true)
+                        viewModel.setWifiDailyLimitConfigured(configured = true)
+                    }
+                    "daily_mobile" -> {
+                        viewModel.setDataDailyLimit(limitBytes)
+                        viewModel.setDataDailyLimitEnabled(enabled = true)
+                        viewModel.setDataDailyLimitConfigured(configured = true)
+                    }
+                    "monthly_wifi" -> {
+                        viewModel.setWifiMonthlyLimit(limitBytes)
+                        viewModel.setWifiMonthlyLimitEnabled(enabled = true)
+                        viewModel.setWifiMonthlyLimitConfigured(configured = true)
+                    }
+                    "monthly_mobile" -> {
+                        viewModel.setDataMonthlyLimit(limitBytes)
+                        viewModel.setDataMonthlyLimitEnabled(enabled = true)
+                        viewModel.setDataMonthlyLimitConfigured(configured = true)
+                    }
+                    "custom_wifi" -> {
+                        viewModel.setWifiCustomLimit(limitBytes)
+                        viewModel.setWifiCustomLimitRange(start, end)
+                        viewModel.setWifiCustomLimitEnabled(enabled = true)
+                        viewModel.setWifiCustomLimitConfigured(configured = true)
+                    }
+                    "custom_mobile" -> {
+                        viewModel.setDataCustomLimit(limitBytes)
+                        viewModel.setDataCustomLimitRange(start, end)
+                        viewModel.setDataCustomLimitEnabled(enabled = true)
+                        viewModel.setDataCustomLimitConfigured(configured = true)
+                    }
+                }
+                viewModel.configuringGeneralLimitType = null
+            }
+        )
     }
 }
 
@@ -371,47 +568,71 @@ fun MinimalPillsRow(
     onTabChange: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Row(
+    val tabs = listOf(
+        stringResource(R.string.title_general_limits),
+        stringResource(R.string.label_app_limits)
+    )
+
+    BoxWithConstraints(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start),
-        verticalAlignment = Alignment.CenterVertically
+            .padding(horizontal = 16.dp)
+            .height(48.dp)
+            .clip(RoundedCornerShape(24.dp))
+            .background(MaterialTheme.colorScheme.surfaceContainerHigh)
+            .padding(4.dp)
     ) {
-        val tabs = listOf(
-            stringResource(R.string.title_general_limits),
-            stringResource(R.string.label_app_limits)
+        val width = maxWidth
+        val indicatorWidth = width / 2
+        val targetOffset = if (selectedTab == 0) 0.dp else indicatorWidth
+        val animatedOffset by animateDpAsState(
+            targetValue = targetOffset,
+            animationSpec = premiumSpring<Dp>(),
+            label = "TabIndicatorOffset"
         )
 
-        tabs.forEachIndexed { index, label ->
-            val selected = selectedTab == index
-            val contentColor by animateColorAsState(
-                if (selected) MaterialTheme.colorScheme.onSecondaryContainer
-                else MaterialTheme.colorScheme.onSurfaceVariant,
-                label = "TabContentColor"
-            )
-            val containerColor by animateColorAsState(
-                if (selected) MaterialTheme.colorScheme.secondaryContainer
-                else MaterialTheme.colorScheme.surfaceContainerHigh,
-                label = "TabContainerColor"
-            )
+        Box(
+            modifier = Modifier
+                .fillMaxHeight()
+                .width(indicatorWidth)
+                .offset(x = animatedOffset)
+                .clip(RoundedCornerShape(20.dp))
+                .background(MaterialTheme.colorScheme.primaryContainer)
+        )
 
-            Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(containerColor)
-                    .clickable {
-                        onTabChange(index)
-                    }
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = label,
-                    style = MaterialTheme.typography.labelLarge,
-                    fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
-                    color = contentColor
+        Row(
+            modifier = Modifier.fillMaxSize(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            tabs.forEachIndexed { index, label ->
+                val selected = selectedTab == index
+                val textColor by animateColorAsState(
+                    targetValue = if (selected) MaterialTheme.colorScheme.onPrimaryContainer
+                                  else MaterialTheme.colorScheme.onSurfaceVariant,
+                    animationSpec = premiumSpring(),
+                    label = "TabTextColor"
                 )
+
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
+                        .clip(RoundedCornerShape(20.dp))
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null
+                        ) {
+                            onTabChange(index)
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = label,
+                        style = MaterialTheme.typography.labelLarge,
+                        fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
+                        color = textColor
+                    )
+                }
             }
         }
     }
@@ -421,7 +642,8 @@ fun MinimalPillsRow(
 fun GeneralLimitsList(
     viewModel: AppLimitsViewModel,
     onEdit: (String) -> Unit,
-    onDelete: (AppLimit) -> Unit
+    onDelete: (AppLimit) -> Unit,
+    onAddPlanClick: () -> Unit
 ) {
     val dataDailyLimitEnabled by viewModel.dataDailyLimitEnabled.collectAsState()
     val dataMonthlyLimitEnabled by viewModel.dataMonthlyLimitEnabled.collectAsState()
@@ -469,7 +691,9 @@ fun GeneralLimitsList(
         if (!anyLimitConfigured) {
             EmptyLimitsPlaceholder(
                 title = stringResource(R.string.msg_no_general_limits),
-                subtitle = stringResource(R.string.desc_add_general_limit_subtitle)
+                subtitle = stringResource(R.string.desc_add_general_limit_subtitle),
+                actionLabel = stringResource(R.string.label_general_limit_selection),
+                onActionClick = onAddPlanClick
             )
         } else {
             LazyColumn(
@@ -578,7 +802,8 @@ fun GeneralLimitsList(
 fun AppLimitsList(
     viewModel: AppLimitsViewModel,
     onEdit: (AppLimit) -> Unit,
-    onDelete: (AppLimit) -> Unit
+    onDelete: (AppLimit) -> Unit,
+    onAddLimitClick: () -> Unit
 ) {
     val appLimits by viewModel.appLimits.collectAsState()
     val appBlockingMasterEnabled by viewModel.appBlockingMasterEnabled.collectAsState()
@@ -586,8 +811,10 @@ fun AppLimitsList(
     Box(modifier = Modifier.fillMaxSize()) {
         if (appLimits.isEmpty()) {
             EmptyLimitsPlaceholder(
-                stringResource(R.string.msg_no_app_limits),
-                stringResource(R.string.desc_restrict_app_subtitle)
+                title = stringResource(R.string.msg_no_app_limits),
+                subtitle = stringResource(R.string.desc_restrict_app_subtitle),
+                actionLabel = stringResource(R.string.cd_add_app_limit),
+                onActionClick = onAddLimitClick
             )
         } else {
             LazyColumn(
@@ -638,46 +865,53 @@ fun GeneralLimitItem(
             .fillMaxWidth()
             .animateContentSize()
             .bounceClick { expanded = !expanded },
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(
-            containerColor = if (enabled) MaterialTheme.colorScheme.surfaceContainerLow else MaterialTheme.colorScheme.surfaceContainerLowest
+            containerColor = if (enabled) MaterialTheme.colorScheme.surfaceContainer
+                            else MaterialTheme.colorScheme.surfaceContainerLow.copy(alpha = 0.5f)
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         border = BorderStroke(
-            1.dp,
-            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
+            width = if (enabled) 1.5.dp else 1.dp,
+            color = if (enabled) accentColor.copy(alpha = 0.25f)
+                    else MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
         )
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Row(verticalAlignment = Alignment.Top) {
+        Column(modifier = Modifier.padding(20.dp)) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 Box(
                     modifier = Modifier
-                        .size(40.dp)
+                        .size(44.dp)
                         .background(
-                            color = accentColor.copy(alpha = 0.12f),
-                            shape = CircleShape
+                            color = if (enabled) accentColor.copy(alpha = 0.12f)
+                                    else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.06f),
+                            shape = RoundedCornerShape(12.dp)
                         ),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        icon, null,
+                        imageVector = icon,
+                        contentDescription = null,
                         tint = if (enabled) accentColor else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(22.dp)
                     )
                 }
                 
-                Spacer(Modifier.width(12.dp))
+                Spacer(Modifier.width(16.dp))
                 
                 Column(modifier = Modifier.weight(1f)) {
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
                             text = title,
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
-                            color = if (enabled) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                            color = if (enabled) MaterialTheme.colorScheme.onSurface
+                                    else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             modifier = Modifier.weight(1f, fill = false)
@@ -701,49 +935,84 @@ fun GeneralLimitItem(
                             overflow = TextOverflow.Ellipsis
                         )
                     }
-                    
-                    if (enabled) {
-                        Spacer(modifier = Modifier.height(6.dp))
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth(0.95f)
-                                .height(6.dp)
-                                .clip(CircleShape)
-                                .background(accentColor.copy(alpha = 0.08f))
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxHeight()
-                                    .fillMaxWidth(progress)
-                                    .background(if (isOverLimitValue) MaterialTheme.colorScheme.error else accentColor)
-                            )
-                        }
-                        Row(
-                            modifier = Modifier.fillMaxWidth(0.95f).padding(top = 4.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = "${(progress * 100).toInt()}%",
-                                style = MaterialTheme.typography.labelSmall,
-                                fontWeight = FontWeight.Black,
-                                color = if (isOverLimitValue) MaterialTheme.colorScheme.error else accentColor
-                            )
-                            Text(
-                                text = "${formatUsage(currentUsage)} / ${formatUsage(limit)}",
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
                 }
+
+                Spacer(Modifier.width(8.dp))
 
                 Switch(
                     checked = enabled,
                     onCheckedChange = onToggle,
-                    modifier = Modifier.scale(0.7f).padding(top = 2.dp)
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = MaterialTheme.colorScheme.onPrimary,
+                        checkedTrackColor = accentColor,
+                        uncheckedThumbColor = MaterialTheme.colorScheme.outline,
+                        uncheckedTrackColor = MaterialTheme.colorScheme.surfaceContainerHigh
+                    ),
+                    modifier = Modifier.scale(0.8f)
                 )
+            }
+
+            if (enabled) {
+                Spacer(modifier = Modifier.height(20.dp))
+                
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(8.dp)
+                        .clip(CircleShape)
+                        .background(accentColor.copy(alpha = 0.15f))
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .fillMaxWidth(progress)
+                            .background(
+                                color = if (isOverLimitValue) MaterialTheme.colorScheme.error else accentColor,
+                                shape = CircleShape
+                            )
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .background(
+                                color = if (isOverLimitValue) MaterialTheme.colorScheme.errorContainer
+                                        else accentColor.copy(alpha = 0.1f),
+                                shape = RoundedCornerShape(8.dp)
+                            )
+                            .padding(horizontal = 8.dp, vertical = 4.dp)
+                    ) {
+                        Text(
+                            text = "${(progress * 100).toInt()}%",
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.Bold,
+                            color = if (isOverLimitValue) MaterialTheme.colorScheme.onErrorContainer else accentColor
+                        )
+                    }
+
+                    Row(verticalAlignment = Alignment.Bottom) {
+                        Text(
+                            text = formatUsage(currentUsage),
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Text(
+                            text = " / ${formatUsage(limit)}",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            fontWeight = FontWeight.Medium,
+                            modifier = Modifier.padding(bottom = 1.dp)
+                        )
+                    }
+                }
             }
 
             AnimatedVisibility(
@@ -752,28 +1021,36 @@ fun GeneralLimitItem(
                 exit = fadeOut() + shrinkVertically()
             ) {
                 Column {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
+                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.25f))
+                    Spacer(modifier = Modifier.height(14.dp))
                     
-                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                        TextButton(
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End)
+                    ) {
+                        FilledTonalButton(
                             onClick = onEdit,
-                            modifier = Modifier.height(32.dp),
-                            contentPadding = PaddingValues(horizontal = 12.dp)
+                            shape = RoundedCornerShape(12.dp),
+                            contentPadding = PaddingValues(horizontal = 14.dp, vertical = 8.dp),
+                            modifier = Modifier.height(36.dp)
                         ) {
-                            Icon(Icons.Rounded.Edit, null, modifier = Modifier.size(14.dp))
+                            Icon(Icons.Rounded.Edit, null, modifier = Modifier.size(16.dp))
                             Spacer(Modifier.width(6.dp))
                             Text(stringResource(R.string.btn_edit), style = MaterialTheme.typography.labelLarge)
                         }
-                        Spacer(Modifier.width(4.dp))
-                        TextButton(
+
+                        FilledTonalButton(
                             onClick = onDelete,
-                            modifier = Modifier.height(32.dp),
-                            colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error),
-                            contentPadding = PaddingValues(horizontal = 12.dp)
+                            shape = RoundedCornerShape(12.dp),
+                            colors = ButtonDefaults.filledTonalButtonColors(
+                                containerColor = MaterialTheme.colorScheme.errorContainer,
+                                contentColor = MaterialTheme.colorScheme.onErrorContainer
+                            ),
+                            contentPadding = PaddingValues(horizontal = 14.dp, vertical = 8.dp),
+                            modifier = Modifier.height(36.dp)
                         ) {
-                            Icon(Icons.Rounded.Delete, null, modifier = Modifier.size(14.dp))
+                            Icon(Icons.Rounded.Delete, null, modifier = Modifier.size(16.dp))
                             Spacer(Modifier.width(6.dp))
                             Text(stringResource(R.string.btn_delete), style = MaterialTheme.typography.labelLarge)
                         }
@@ -808,51 +1085,67 @@ fun AppLimitItem(
     val wifiColor = MaterialTheme.colorScheme.secondary
     val mobileColor = MaterialTheme.colorScheme.tertiary
 
+    val isWifiOver = limit.isEnabled && limit.wifiDataLimit > 0 && limit.currentWifiUsage >= limit.wifiDataLimit
+    val isMobileOver = limit.isEnabled && limit.mobileDataLimit > 0 && limit.currentMobileUsage >= limit.mobileDataLimit
+    val isBlocked = appBlockingMasterEnabled && limit.isEnabled && (limit.isBlocked || limit.isWifiBlocked || limit.isMobileBlocked)
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .animateContentSize()
             .bounceClick { expanded = !expanded },
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(
-            containerColor = if (limit.isEnabled) MaterialTheme.colorScheme.surfaceContainerLow else MaterialTheme.colorScheme.surfaceContainerLowest
+            containerColor = if (limit.isEnabled) MaterialTheme.colorScheme.surfaceContainer
+                            else MaterialTheme.colorScheme.surfaceContainerLow.copy(alpha = 0.5f)
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         border = BorderStroke(
-            1.dp,
-            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
+            width = if (limit.isEnabled) 1.5.dp else 1.dp,
+            color = if (limit.isEnabled) MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
+                    else MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
         )
     ) {
-        val isWifiOver = limit.isEnabled && limit.wifiDataLimit > 0 && limit.currentWifiUsage >= limit.wifiDataLimit
-        val isMobileOver = limit.isEnabled && limit.mobileDataLimit > 0 && limit.currentMobileUsage >= limit.mobileDataLimit
-        val isBlocked = appBlockingMasterEnabled && limit.isEnabled && (limit.isBlocked || limit.isWifiBlocked || limit.isMobileBlocked)
-
-        Column(modifier = Modifier.padding(16.dp)) {
-            Row(verticalAlignment = Alignment.Top) {
+        Column(modifier = Modifier.padding(20.dp)) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 if (appIcon != null) {
                     Image(
                         bitmap = appIcon.toBitmap().asImageBitmap(),
                         contentDescription = null,
                         modifier = Modifier
-                            .size(40.dp)
-                            .clip(RoundedCornerShape(8.dp)),
+                            .size(44.dp)
+                            .clip(RoundedCornerShape(12.dp)),
                         contentScale = ContentScale.Fit,
                         alpha = if (limit.isEnabled) 1f else 0.5f,
                     )
                 } else {
-                    Icon(
-                        Icons.Rounded.Apps, null,
-                        tint = if (limit.isEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
-                        modifier = Modifier.size(40.dp)
-                    )
+                    Box(
+                        modifier = Modifier
+                            .size(44.dp)
+                            .background(
+                                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.06f),
+                                shape = RoundedCornerShape(12.dp)
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.Apps,
+                            contentDescription = null,
+                            tint = if (limit.isEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
+                            modifier = Modifier.size(22.dp)
+                        )
+                    }
                 }
 
-                Spacer(modifier = Modifier.width(12.dp))
+                Spacer(modifier = Modifier.width(16.dp))
 
                 Column(modifier = Modifier.weight(1f)) {
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(
                             text = limit.appName,
@@ -863,84 +1156,229 @@ fun AppLimitItem(
                             color = if (limit.isEnabled) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                             modifier = Modifier.weight(1f, fill = false)
                         )
-                        if (isWifiOver || isMobileOver) {
-                            Spacer(Modifier.width(8.dp))
-                            StatusIcon(
-                                icon = Icons.Rounded.Error,
-                                color = MaterialTheme.colorScheme.error,
-                                contentDescription = stringResource(R.string.badge_limit_reached)
-                            )
-                        }
-                        if (isBlocked) {
-                            Spacer(Modifier.width(6.dp))
-                            StatusIcon(
-                                icon = Icons.Rounded.Block,
-                                color = MaterialTheme.colorScheme.error,
-                                contentDescription = stringResource(R.string.badge_blocked)
-                            )
-                        }
                     }
                     
-                    if (limit.isEnabled) {
-                        if ((limit.networkType == "both") || (limit.networkType == "wifi")) {
-                            Spacer(modifier = Modifier.height(10.dp))
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth(0.95f)
-                                    .height(6.dp)
-                                    .clip(CircleShape)
-                                    .background(wifiColor.copy(alpha = 0.08f))
-                            ) {
+                    if (limit.isEnabled && (isWifiOver || isMobileOver || isBlocked)) {
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(6.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            if (isWifiOver || isMobileOver) {
                                 Box(
                                     modifier = Modifier
-                                        .fillMaxHeight()
-                                        .fillMaxWidth(wifiProgress)
-                                        .background(if (limit.wifiDataLimit > 0 && limit.currentWifiUsage >= limit.wifiDataLimit) MaterialTheme.colorScheme.error else wifiColor)
-                                )
+                                        .background(
+                                            color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.8f),
+                                            shape = RoundedCornerShape(6.dp)
+                                        )
+                                        .padding(horizontal = 6.dp, vertical = 2.dp)
+                                ) {
+                                    Text(
+                                        text = stringResource(R.string.badge_limit_reached),
+                                        style = MaterialTheme.typography.labelSmall,
+                                        fontWeight = FontWeight.Bold,
+                                        color = MaterialTheme.colorScheme.onErrorContainer
+                                    )
+                                }
                             }
-                            Row(
-                                modifier = Modifier.fillMaxWidth(0.95f).padding(top = 4.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Text("${(wifiProgress * 100).toInt()}%", style = MaterialTheme.typography.labelSmall, color = wifiColor, fontWeight = FontWeight.Black)
-                                Text("${formatUsage(limit.currentWifiUsage)} / ${formatUsage(limit.wifiDataLimit)}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Bold)
-                            }
-                        }
-
-                        if ((limit.networkType == "both") || (limit.networkType == "mobile")) {
-                            Spacer(modifier = Modifier.height(if (limit.networkType == "both") 16.dp else 10.dp))
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth(0.95f)
-                                    .height(6.dp)
-                                    .clip(CircleShape)
-                                    .background(mobileColor.copy(alpha = 0.08f))
-                            ) {
+                            if (isBlocked) {
                                 Box(
                                     modifier = Modifier
-                                        .fillMaxHeight()
-                                        .fillMaxWidth(mobileProgress)
-                                        .background(if (limit.mobileDataLimit > 0 && limit.currentMobileUsage >= limit.mobileDataLimit) MaterialTheme.colorScheme.error else mobileColor)
-                                )
-                            }
-                            Row(
-                                modifier = Modifier.fillMaxWidth(0.95f).padding(top = 4.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Text("${(mobileProgress * 100).toInt()}%", style = MaterialTheme.typography.labelSmall, color = mobileColor, fontWeight = FontWeight.Black)
-                                Text("${formatUsage(limit.currentMobileUsage)} / ${formatUsage(limit.mobileDataLimit)}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Bold)
+                                        .background(
+                                            color = MaterialTheme.colorScheme.error,
+                                            shape = RoundedCornerShape(6.dp)
+                                        )
+                                        .padding(horizontal = 6.dp, vertical = 2.dp)
+                                ) {
+                                    Text(
+                                        text = stringResource(R.string.badge_blocked),
+                                        style = MaterialTheme.typography.labelSmall,
+                                        fontWeight = FontWeight.Bold,
+                                        color = MaterialTheme.colorScheme.onError
+                                    )
+                                }
                             }
                         }
                     }
                 }
 
+                Spacer(Modifier.width(8.dp))
+
                 Switch(
                     checked = limit.isEnabled,
                     onCheckedChange = onToggle,
-                    modifier = Modifier.scale(0.7f).padding(top = 2.dp)
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = MaterialTheme.colorScheme.onPrimary,
+                        checkedTrackColor = MaterialTheme.colorScheme.primary,
+                        uncheckedThumbColor = MaterialTheme.colorScheme.outline,
+                        uncheckedTrackColor = MaterialTheme.colorScheme.surfaceContainerHigh
+                    ),
+                    modifier = Modifier.scale(0.8f)
                 )
+            }
+
+            if (limit.isEnabled) {
+                if ((limit.networkType == "both") || (limit.networkType == "wifi")) {
+                    Spacer(modifier = Modifier.height(20.dp))
+                    
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.Rounded.Wifi,
+                            contentDescription = null,
+                            tint = wifiColor,
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(
+                            text = stringResource(R.string.label_wifi),
+                            style = MaterialTheme.typography.labelMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = wifiColor
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+                    
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(8.dp)
+                            .clip(CircleShape)
+                            .background(wifiColor.copy(alpha = 0.15f))
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .fillMaxWidth(wifiProgress)
+                                .background(
+                                    color = if (limit.wifiDataLimit > 0 && limit.currentWifiUsage >= limit.wifiDataLimit) MaterialTheme.colorScheme.error else wifiColor,
+                                    shape = CircleShape
+                                )
+                        )
+                    }
+                    
+                    Spacer(modifier = Modifier.height(8.dp))
+                    
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .background(
+                                    color = if (limit.wifiDataLimit > 0 && limit.currentWifiUsage >= limit.wifiDataLimit) MaterialTheme.colorScheme.errorContainer
+                                            else wifiColor.copy(alpha = 0.1f),
+                                shape = RoundedCornerShape(8.dp)
+                            )
+                            .padding(horizontal = 8.dp, vertical = 4.dp)
+                        ) {
+                            Text(
+                                text = "${(wifiProgress * 100).toInt()}%",
+                                style = MaterialTheme.typography.labelSmall,
+                                fontWeight = FontWeight.Bold,
+                                color = if (limit.wifiDataLimit > 0 && limit.currentWifiUsage >= limit.wifiDataLimit) MaterialTheme.colorScheme.onErrorContainer else wifiColor
+                            )
+                        }
+                        
+                        Row(verticalAlignment = Alignment.Bottom) {
+                            Text(
+                                text = formatUsage(limit.currentWifiUsage),
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.ExtraBold,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                            Text(
+                                text = " / ${formatUsage(limit.wifiDataLimit)}",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                fontWeight = FontWeight.Medium,
+                                modifier = Modifier.padding(bottom = 1.dp)
+                            )
+                        }
+                    }
+                }
+
+                if ((limit.networkType == "both") || (limit.networkType == "mobile")) {
+                    Spacer(modifier = Modifier.height(20.dp))
+                    
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.Rounded.SignalCellularAlt,
+                            contentDescription = null,
+                            tint = mobileColor,
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(
+                            text = stringResource(R.string.label_mobile),
+                            style = MaterialTheme.typography.labelMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = mobileColor
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+                    
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(8.dp)
+                            .clip(CircleShape)
+                            .background(mobileColor.copy(alpha = 0.15f))
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .fillMaxWidth(mobileProgress)
+                                .background(
+                                    color = if (limit.mobileDataLimit > 0 && limit.currentMobileUsage >= limit.mobileDataLimit) MaterialTheme.colorScheme.error else mobileColor,
+                                    shape = CircleShape
+                                )
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+                    
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .background(
+                                    color = if (limit.mobileDataLimit > 0 && limit.currentMobileUsage >= limit.mobileDataLimit) MaterialTheme.colorScheme.errorContainer
+                                            else mobileColor.copy(alpha = 0.1f),
+                                    shape = RoundedCornerShape(8.dp)
+                                )
+                                .padding(horizontal = 8.dp, vertical = 4.dp)
+                        ) {
+                            Text(
+                                text = "${(mobileProgress * 100).toInt()}%",
+                                style = MaterialTheme.typography.labelSmall,
+                                fontWeight = FontWeight.Bold,
+                                color = if (limit.mobileDataLimit > 0 && limit.currentMobileUsage >= limit.mobileDataLimit) MaterialTheme.colorScheme.onErrorContainer else mobileColor
+                            )
+                        }
+                        
+                        Row(verticalAlignment = Alignment.Bottom) {
+                            Text(
+                                text = formatUsage(limit.currentMobileUsage),
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.ExtraBold,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                            Text(
+                                text = " / ${formatUsage(limit.mobileDataLimit)}",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                fontWeight = FontWeight.Medium,
+                                modifier = Modifier.padding(bottom = 1.dp)
+                            )
+                        }
+                    }
+                }
             }
 
             AnimatedVisibility(
@@ -949,28 +1387,36 @@ fun AppLimitItem(
                 exit = fadeOut() + shrinkVertically()
             ) {
                 Column {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
+                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.25f))
+                    Spacer(modifier = Modifier.height(14.dp))
                     
-                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                        TextButton(
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End)
+                    ) {
+                        FilledTonalButton(
                             onClick = onEdit,
-                            modifier = Modifier.height(32.dp),
-                            contentPadding = PaddingValues(horizontal = 12.dp)
+                            shape = RoundedCornerShape(12.dp),
+                            contentPadding = PaddingValues(horizontal = 14.dp, vertical = 8.dp),
+                            modifier = Modifier.height(36.dp)
                         ) {
-                            Icon(Icons.Rounded.Edit, null, modifier = Modifier.size(14.dp))
+                            Icon(Icons.Rounded.Edit, null, modifier = Modifier.size(16.dp))
                             Spacer(Modifier.width(6.dp))
                             Text(stringResource(R.string.btn_edit), style = MaterialTheme.typography.labelLarge)
                         }
-                        Spacer(Modifier.width(4.dp))
-                        TextButton(
+
+                        FilledTonalButton(
                             onClick = onDelete,
-                            modifier = Modifier.height(32.dp),
-                            colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error),
-                            contentPadding = PaddingValues(horizontal = 12.dp)
+                            shape = RoundedCornerShape(12.dp),
+                            colors = ButtonDefaults.filledTonalButtonColors(
+                                containerColor = MaterialTheme.colorScheme.errorContainer,
+                                contentColor = MaterialTheme.colorScheme.onErrorContainer
+                            ),
+                            contentPadding = PaddingValues(horizontal = 14.dp, vertical = 8.dp),
+                            modifier = Modifier.height(36.dp)
                         ) {
-                            Icon(Icons.Rounded.Delete, null, modifier = Modifier.size(14.dp))
+                            Icon(Icons.Rounded.Delete, null, modifier = Modifier.size(16.dp))
                             Spacer(Modifier.width(6.dp))
                             Text(stringResource(R.string.btn_delete), style = MaterialTheme.typography.labelLarge)
                         }
@@ -1091,15 +1537,18 @@ fun AddGeneralLimitDialog(
                         ) {
                             Box(
                                 modifier = Modifier
-                                    .size(36.dp)
-                                    .background(accentColor.copy(alpha = 0.12f), CircleShape),
+                                    .size(40.dp)
+                                    .background(
+                                        color = accentColor.copy(alpha = 0.08f),
+                                        shape = RoundedCornerShape(12.dp)
+                                    ),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Icon(
                                     imageVector = icon,
                                     contentDescription = null,
                                     tint = accentColor,
-                                    modifier = Modifier.size(18.dp)
+                                    modifier = Modifier.size(20.dp)
                                 )
                             }
                             Spacer(modifier = Modifier.width(16.dp))
@@ -1122,4 +1571,394 @@ fun AddGeneralLimitDialog(
         },
         shape = RoundedCornerShape(28.dp)
     )
+}
+
+@Composable
+fun SystemPlanCard(
+    title: String,
+    usage: Long,
+    limit: Long,
+    enabled: Boolean,
+    isWifi: Boolean,
+    subtitle: String? = null,
+    onToggle: (Boolean) -> Unit,
+    onCardClick: () -> Unit,
+    onDelete: () -> Unit
+) {
+    val progress = if (limit > 0) (usage.toFloat() / limit).coerceIn(0f, 1f) else 0f
+    val isOverLimit = enabled && (limit > 0) && (usage >= limit)
+    
+    val accentColor = MaterialTheme.colorScheme.secondary
+    
+    val backgroundBrush = if (enabled) {
+        Brush.linearGradient(
+            colors = listOf(
+                MaterialTheme.colorScheme.secondary,
+                MaterialTheme.colorScheme.secondaryContainer
+            )
+        )
+    } else {
+        Brush.linearGradient(
+            colors = listOf(
+                MaterialTheme.colorScheme.surfaceContainerLow,
+                MaterialTheme.colorScheme.surfaceContainerLow
+            )
+        )
+    }
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(145.dp)
+            .bounceClick { onCardClick() },
+        shape = RoundedCornerShape(24.dp),
+        border = BorderStroke(
+            width = if (enabled) 2.dp else 1.dp,
+            color = if (enabled) accentColor.copy(alpha = 0.35f) else MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f)
+        ),
+        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(backgroundBrush)
+                .padding(20.dp)
+        ) {
+            if (enabled) {
+                Box(
+                    modifier = Modifier
+                        .size(100.dp)
+                        .offset(x = 180.dp, y = (-40).dp)
+                        .background(Color.White.copy(alpha = 0.06f), CircleShape)
+                )
+                Box(
+                    modifier = Modifier
+                        .size(60.dp)
+                        .offset(x = 210.dp, y = 60.dp)
+                        .background(Color.White.copy(alpha = 0.08f), CircleShape)
+                )
+            }
+
+            Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Box(
+                            modifier = Modifier
+                                .size(36.dp)
+                                .background(
+                                    color = if (enabled) Color.White.copy(alpha = 0.15f)
+                                            else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f),
+                                    shape = RoundedCornerShape(10.dp)
+                                ),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                imageVector = if (isWifi) Icons.Rounded.Wifi else Icons.Rounded.SignalCellularAlt,
+                                contentDescription = null,
+                                tint = if (enabled) Color.White else MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.size(18.dp)
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Column {
+                            Text(
+                                text = title,
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = if (enabled) Color.White else MaterialTheme.colorScheme.onSurface
+                            )
+                            if (subtitle != null) {
+                                Text(
+                                    text = subtitle,
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = if (enabled) Color.White.copy(alpha = 0.7f) else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                                )
+                            }
+                        }
+                    }
+
+                    Switch(
+                        checked = enabled,
+                        onCheckedChange = onToggle,
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = if (enabled) Color.White else MaterialTheme.colorScheme.outline,
+                            checkedTrackColor = if (enabled) Color.White.copy(alpha = 0.35f) else MaterialTheme.colorScheme.surfaceContainerHigh,
+                            uncheckedThumbColor = MaterialTheme.colorScheme.outline,
+                            uncheckedTrackColor = MaterialTheme.colorScheme.surfaceContainerHigh
+                        ),
+                        modifier = Modifier.scale(0.7f)
+                    )
+                }
+
+                if (enabled) {
+                    Column(modifier = Modifier.fillMaxWidth()) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Row(verticalAlignment = Alignment.Bottom) {
+                                Text(
+                                    text = formatUsage(usage),
+                                    style = MaterialTheme.typography.titleLarge,
+                                    fontWeight = FontWeight.Black,
+                                    color = Color.White
+                                )
+                                Text(
+                                    text = " / ${formatUsage(limit)}",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = Color.White.copy(alpha = 0.8f),
+                                    modifier = Modifier.padding(bottom = 2.dp)
+                                )
+                            }
+                            Text(
+                                text = "${(progress * 100).toInt()}%",
+                                style = MaterialTheme.typography.labelMedium,
+                                fontWeight = FontWeight.ExtraBold,
+                                color = if (isOverLimit) MaterialTheme.colorScheme.error else Color.White
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(6.dp)
+                                .clip(CircleShape)
+                                .background(Color.White.copy(alpha = 0.2f))
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxHeight()
+                                    .fillMaxWidth(progress)
+                                    .background(
+                                        color = if (isOverLimit) MaterialTheme.colorScheme.error else Color.White,
+                                        shape = CircleShape
+                                    )
+                            )
+                        }
+                    }
+                } else {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Inactive",
+                            style = MaterialTheme.typography.labelLarge,
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                        )
+                        IconButton(
+                            onClick = onDelete,
+                            modifier = Modifier.size(36.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Rounded.Delete,
+                                contentDescription = "Delete Plan",
+                                tint = MaterialTheme.colorScheme.error,
+                                modifier = Modifier.size(18.dp)
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun SetupPlanPlaceholderTile(
+    onClick: () -> Unit
+) {
+    val outlineColor = MaterialTheme.colorScheme.outlineVariant
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(145.dp)
+            .bounceClick { onClick() },
+        shape = RoundedCornerShape(24.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .drawBehind {
+                    val stroke = Stroke(
+                        width = 4f,
+                        pathEffect = PathEffect.dashPathEffect(floatArrayOf(15f, 15f), 0f)
+                    )
+                    drawRoundRect(
+                        color = outlineColor,
+                        style = stroke,
+                        cornerRadius = CornerRadius(24.dp.toPx(), 24.dp.toPx())
+                    )
+                }
+                .background(MaterialTheme.colorScheme.surfaceContainerLow.copy(alpha = 0.4f), RoundedCornerShape(24.dp))
+                .padding(20.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Box(
+                    modifier = Modifier
+                        .size(44.dp)
+                        .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.08f), CircleShape),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.Add,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(22.dp)
+                    )
+                }
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(
+                    text = "Configure Network Plan",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = "Prevent network usage overages.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun VpnMasterCard(
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp),
+        shape = RoundedCornerShape(24.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainer
+        ),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(44.dp)
+                    .background(
+                        color = if (checked) MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
+                                else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.06f),
+                        shape = RoundedCornerShape(12.dp)
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.Block,
+                    contentDescription = null,
+                    tint = if (checked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(22.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = stringResource(R.string.label_block_apps),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Spacer(modifier = Modifier.height(2.dp))
+                Text(
+                    text = stringResource(R.string.desc_block_apps),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            Switch(
+                checked = checked,
+                onCheckedChange = onCheckedChange,
+                colors = SwitchDefaults.colors(
+                    checkedThumbColor = MaterialTheme.colorScheme.onPrimary,
+                    checkedTrackColor = MaterialTheme.colorScheme.primary,
+                    uncheckedThumbColor = MaterialTheme.colorScheme.outline,
+                    uncheckedTrackColor = MaterialTheme.colorScheme.surfaceContainerHigh
+                ),
+                modifier = Modifier.scale(0.8f)
+            )
+        }
+    }
+}
+
+@Composable
+fun EmptyAppLimitsPlaceholder(
+    onAddClick: () -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp),
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow.copy(alpha = 0.4f)),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Icon(
+                imageVector = Icons.Rounded.Apps,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f),
+                modifier = Modifier.size(40.dp)
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = "No Restricted Apps",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = "Restrict specific applications from utilizing data in the background.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(
+                onClick = onAddClick,
+                shape = RoundedCornerShape(12.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+            ) {
+                Icon(Icons.Rounded.Add, contentDescription = null, modifier = Modifier.size(16.dp))
+                Spacer(modifier = Modifier.width(6.dp))
+                Text("Add App Limit", style = MaterialTheme.typography.labelLarge)
+            }
+        }
+    }
 }

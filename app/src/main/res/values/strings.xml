@@ -5,7 +5,7 @@
     <string name="title_app_usage">App Usage</string>
     <string name="title_settings">Settings</string>
     <string name="title_home">Home</string>
-    <string name="title_limits">Data Plans</string>
+    <string name="title_limits">Plan Limits</string>
     <string name="title_alerts">Alerts History</string>
     <string name="label_usage">Usage</string>
     <string name="label_plans">Plans</string>
@@ -226,7 +226,7 @@
     <string name="label_alert_cooldown">Notification Cooldown</string>
     <string name="label_reset_speed_threshold">Reset Threshold</string>
     <string name="label_time_below_reset">Duration Below Threshold</string>
-    <string name="btn_save_config">Save Configuration</string>
+    <string name="btn_save_config">Save</string>
     <string name="label_app_limits">App Limits</string>
     <string name="filter_all">All</string>
     <string name="label_daily_limits">Daily Limits</string>
@@ -250,8 +250,8 @@
     <string name="msg_no_app_limits">No app limits configured.</string>
     <string name="desc_restrict_app_subtitle">Add an application to start managing its data usage.</string>
     <string name="cd_add_app_limit">Add app limit</string>
-    <string name="label_block_apps">Block Apps</string>
-    <string name="desc_block_apps">Automatically restrict internet access for apps that reach their limit</string>
+    <string name="label_block_apps">Firewall</string>
+    <string name="desc_block_apps">Blocks internet access when limits are exceeded</string>
     <string name="title_edit_app_limit">Edit App Limit</string>
     <string name="btn_create_app_limit">Create Limit</string>
     <string name="label_app_limit_selection">App Limit</string>

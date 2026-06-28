@@ -476,16 +476,8 @@ fun AppLimitsOverlay(viewModel: AppLimitsViewModel) {
             AppPickerScreen(
                 viewModel = viewModel,
                 onBack = { viewModel.isPickerOpen = false },
-            ) { appInfo, limitBytes, limitType, networkType, wifiLimitBytes, mobileLimitBytes ->
-                viewModel.addAppLimit(
-                    packageName = appInfo.packageName,
-                    appName = appInfo.name,
-                    limitBytes = limitBytes,
-                    limitType = limitType,
-                    networkType = networkType,
-                    wifiLimitBytes = wifiLimitBytes,
-                    mobileLimitBytes = mobileLimitBytes,
-                )
+            ) { limits ->
+                viewModel.addAppLimits(limits)
                 viewModel.isPickerOpen = false
             }
         }

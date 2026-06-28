@@ -355,6 +355,30 @@ class AppLimitsViewModel(
             }
         }
     }
+
+    fun addAppLimits(limits: List<AppLimit>) {
+        viewModelScope.launch {
+            limits.forEach { limit ->
+                val existing = repository.getAppLimit(limit.packageName)
+                if (existing == null) {
+                    repository.insert(limit)
+                } else {
+                    repository.update(
+                        existing.copy(
+                            dataLimit = limit.dataLimit,
+                            limitType = limit.limitType,
+                            networkType = limit.networkType,
+                            wifiDataLimit = limit.wifiDataLimit,
+                            mobileDataLimit = limit.mobileDataLimit,
+                            isBlocked = false,
+                            isWifiBlocked = false,
+                            isMobileBlocked = false,
+                        ),
+                    )
+                }
+            }
+        }
+    }
     
     fun updateAppLimit(appLimit: AppLimit) {
         viewModelScope.launch {

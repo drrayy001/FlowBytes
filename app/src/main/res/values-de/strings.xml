@@ -220,12 +220,17 @@
     <string name="desc_battery_optimization">Erforderlich, um die Geschwindigkeitsüberwachung im Hintergrund laufen zu lassen.</string>
     <string name="label_granted">Erteilt</string>
     <string name="btn_grant">Gewähren</string>
-    <string name="title_traffic_settings">Alarmkonfiguration</string>
-    <string name="label_speed_threshold">Erkennungsschwelle</string>
-    <string name="label_time_above_threshold">Dauer über Limit</string>
-    <string name="label_alert_cooldown">Benachrichtigungs-Cooldown</string>
-    <string name="label_reset_speed_threshold">Zurücksetzungsschwelle</string>
-    <string name="label_time_below_reset">Dauer unter Schwelle</string>
+    <string name="title_traffic_settings">Einstellungen für Datenwarnungen</string>
+    <string name="label_speed_threshold">Auslösegeschwindigkeit</string>
+    <string name="desc_speed_threshold">Die Warnung wird ausgelöst, wenn die Netzwerkgeschwindigkeit diesen Grenzwert überschreitet.</string>
+    <string name="label_time_above_threshold">Dauer über Geschwindigkeit</string>
+    <string name="desc_time_above_threshold">Die Geschwindigkeit muss so lange über dem Grenzwert bleiben, bevor eine Benachrichtigung erfolgt.</string>
+    <string name="label_alert_cooldown">Zeit zwischen Warnungen</string>
+    <string name="desc_alert_cooldown">Mindestzeit, die gewartet werden muss, bevor eine weitere Warnung gesendet wird.</string>
+    <string name="label_reset_speed_threshold">Zurücksetzungsgeschwindigkeit</string>
+    <string name="desc_reset_speed_threshold">Das Warnsystem wird zurückgesetzt, wenn die Geschwindigkeit unter diesen Wert fällt.</string>
+    <string name="label_time_below_reset">Dauer unter Zurücksetzungsgeschwindigkeit</string>
+    <string name="desc_time_below_reset">Die Geschwindigkeit muss so lange unter der Zurücksetzungsgeschwindigkeit bleiben, um die Warnung zu löschen.</string>
     <string name="btn_save_config">Konfiguration speichern</string>
     <string name="label_app_limits">App-Limits</string>
     <string name="filter_all">Alle</string>
@@ -263,6 +268,14 @@
     <string name="title_select_application">Anwendung auswählen</string>
     <string name="title_configure_limit">Limit konfigurieren</string>
     <string name="title_general_limits">Systempläne</string>
+    <string name="btn_add_plan">Plan hinzufügen</string>
+    <string name="btn_add_app_limit">App-Limit hinzufügen</string>
+    <string name="msg_no_restricted_apps">Keine eingeschränkten Apps</string>
+    <string name="desc_restrict_app_placeholder">Bestimmte Anwendungen daran hindern, Daten im Hintergrund zu nutzen.</string>
+    <string name="label_inactive">Inaktiv</string>
+    <string name="cd_delete_plan">Plan löschen</string>
+    <string name="label_configure_network_plan">Netzwerkplan konfigurieren</string>
+    <string name="desc_prevent_overages">Überschreitungen der Netzwerknutzung verhindern.</string>
     <string name="msg_no_general_limits">Keine Systempläne konfiguriert.</string>
     <string name="desc_add_general_limit_subtitle">Legen Sie einen geräteweiten Datenplan fest, um die Kontrolle zu behalten.</string>
     <string name="label_general_limit_selection">Systemplan</string>
@@ -311,14 +324,14 @@
     <string name="label_monthly_mobile">Monatliches Mobil</string>
     <string name="label_custom_wifi">Benutzerdefiniertes WLAN</string>
     <string name="label_custom_mobile">Benutzerdefiniertes Mobil</string>
-    <string name="settings_traffic_threshold_subtitle">Schwellenwerte für die Erkennung von Datenverkehr konfigurieren</string>
+    <string name="settings_traffic_threshold_subtitle">Geschwindigkeits- und Zeitlimits für Warnungen konfigurieren</string>
     <string name="whats_new_custom_limits_title">Limits für benutzerdefinierte Zeiträume</string>
     <string name="whats_new_custom_limits_desc">Sie können jetzt Datenlimits für bestimmte Zeiträume sowohl für Mobilfunk- als auch für WLAN-Netzwerke festlegen.</string>
     <string name="whats_new_reset_day_title">Monatlicher Zurücksetzungstag</string>
     <string name="whats_new_reset_day_desc">Unterstützung für benutzerdefinierte Abrechnungszyklen. Wählen Sie einen bestimmten Tag des Monats aus, an dem Ihre Nutzung zurückgesetzt wird.</string>
     <string name="feedback_email_subject">FlowBytes Feedback - %1$d Sterne</string>
 
-    <string name="legal_privacy_policy" formatted="false">Datenschutzerklärung\nInkrafttreten: 29. April 2026\n\nIch, der Entwickler von FlowBytes (die \"App\"), stelle diese Anwendung kostenlos zur Verfügung. Die App wird im Ist-Zustand angeboten und ist für die Nutzung ohne Gewährleistung oder Garantien bestimmt.\n\n1. Erfassung und Verwendung von Informationen\nFlowBytes überwacht die Netzwerkgeschwindigkeiten und die Datennutzung Ihres Geräts (WLAN und Mobilfunk), um Ihnen zu helfen, die Kontrolle über Ihr Internet zu behalten. Alle Überwachungen, Berechnungen der Datennutzung und Blockierungsaktionen werden lokal auf Ihrem Gerät durchgeführt. Wir erfassen, speichern oder übertragen keine personenbezogenen Daten, einschließlich:\n- Browserverlauf\n- Inhalt des Netzwerkverkehrs\n- IP-Adresse\n- Alle persönlich identifizierbaren Informationen\n\n2. Erforderliche Berechtigungen\nUm ordnungsgemäß zu funktionieren, benötigt die App die folgenden Berechtigungen:\n- Nutzungszugriff (Netzwerkstatistiken): Wird verwendet, um auf Netzwerknutzungsstatistiken zuzugreifen, um Download-/Upload-Geschwindigkeiten zu berechnen und die Datennutzung pro App zu verfolgen.\n- Vordergrunddienst: Ermöglicht es der App, einen Hintergrunddienst auszuführen, um die Netzwerkgeschwindigkeit in Echtzeit in der Benachrichtigungsleiste anzuzeigen und eine konsistente Überwachung zu gewährleisten.\n- VPN-Dienst (Lokales VPN): FlowBytes verwendet ein lokales VPN, um den Internetzugang für Apps zu verwalten, die ihr Limit überschreiten. Dieses VPN ist zu 100% lokal; Ihr Datenverkehr verlässt niemals Ihr Gerät und wird niemals von uns abgefangen.\n\nAlle Daten, auf die über diese Berechtigungen zugegriffen wird, verbleiben auf Ihrem Gerät und werden ausschließlich zur Bereitstellung der Überwachungs- und Steuerungsfunktionen innerhalb der App verwendet.\n\n3. Dienste von Drittanbietern\nDie App verwendet keine Dienste von Drittanbietern, Analysetools oder Werbenetzwerke, die Informationen erfassen, mit denen Sie identifiziert werden können.\n\n4. Sicherheit\nDa die gesamte Datenverarbeitung lokal auf Ihrem Gerät erfolgt, ist das Risiko von Datenschutzverletzungen unsererseits minimal. Keine Methode der elektronischen Speicherung oder Übertragung über das Internet ist jedoch absolut sicher, und wir können keine absolute Sicherheit garantieren.\n\n5. Privatsphäre von Kindern\nDieser Dienst ist nicht für Personen unter 13 Jahren bestimmt. Wir erfassen wissentlich keine personenbezogenen Daten von Kindern unter 13 Jahren.\n\n6. Änderungen an dieser Datenschutzerklärung\nWir können diese Datenschutzerklärung von Zeit zu Zeit aktualisieren. Alle Änderungen werden auf dieser Seite veröffentlicht. Es wird empfohlen, diese Seite regelmäßig auf Aktualisierungen zu überprüfen.\n\n7. Kontaktieren Sie uns\nWenn Sie Fragen oder Anregungen zu dieser Datenschutzerklärung haben, können Sie uns kontaktieren unter:\nE-Mail: drrayy001@gmail.com</string>
+    <string name="legal_privacy_policy" formatted="false">Datenschutzerklärung\nInkrafttreten: 29. April 2026\n\nIch, der Entwickler von FlowBytes (die \"App\"), stelle diese Anwendung kostenlos zur Verfügung. Die App wird im Ist-Zustand angeboten und ist für die Nutzung ohne Gewährleistung oder Garantien bestimmt.\n\n1. Erfassung und Verwendung von Informationen\nFlowBytes überwacht die Netzwerkgeschwindigkeiten und die Datennutzung Ihres Geräts (WLAN und Mobilfunk), um Ihnen zu helfen, die Kontrolle über Ihr Internet zu behalten. Alle Überwachungen, Berechnungen der Datennutzung und Blockierungsaktionen werden lokal auf Ihrem Gerät durchgeführt. Wir erfassen, speichern oder übertragen keine personenbezogenen Daten, einschließlich:\n- Browserverlauf\n- Inhalt des Netzwerkverkehrs\n- IP-Adresse\n- Alle persönlich identifizierbaren Informationen\n\n2. Erforderliche Berechtigungen\nUm ordnungsgemäß zu funktionieren, benötigt die App die folgenden Berechtigungen:\n- Nutzungszugriff (Netzwerkstatistiken): Wird verwendet, um auf Netzwerknutzungsstatistiken zuzugreifen, um Download-/Upload-Geschwindigkeiten zu berechnen und die Datennutzung pro App zu verfolgen.\n- Vordergrunddienst: Ermöglicht es der App, einen Hintergrunddienst auszuführen, um die Netzwerkgeschwindigkeit in Echtzeit in der Benachrichtigungsleiste anzuzeigen und eine konsistente Überwachung zu gewährleisten.\n- VPN-Dienst (Lokales VPN): FlowBytes verwendet ein lokales VPN, um den Internetzugang für Apps zu verwalten, die ihr Limit überschreiten. Dieses VPN ist zu 100% lokal; Ihr Datenverkehr verlässt niemals Ihr Gerät und wird niemals von uns abgefangen.\n\nAlle Daten, auf die über diese Berechtigungen zugegriffen wird, verbleiben auf Ihrem Gerät und werden ausschließlich zur Bereitstellung der Überwachungs- und Steuerungsfunktionen innerhalb der App verwendet.\n\n3. Dienste von Drittanbietern\nDie App verwendet keine Dienste von Drittanbietern, Analysetools oder Werbenetzwerke, die Informationen erfassen, mit denen Sie identifiziert werden können.\n\n4. Sicherheit\nDa die gesamte Datenverarbeitung lokal auf Ihrem Gerät erfolgt, ist das Risiko von Datenschutzverletzungen unsererseits minimal. Keine Methode der elektronischen Speicherung oder Übertragung über das Internet ist jedoch absolut sicher, und wir können keine absolute Sicherheit garantieren.\n\n5. Privatsphäre von Kindern\nDieser Dienst ist nicht für Personen unter 13 Jahren bestimmt. Wir erfassen wissentlich keine personenbezogenen Daten von Kindern unter 13 Jahren.\n\n6. Änderungen an dieser Datenschutzerklärung\nWir können diese Datenschutzerklärung von Zeit zu Zeit aktualisieren. Alle Änderungen werden auf dieser Seite veröffentlicht. Es wird empfohlen, diese Seite regelmäßig auf Aktualisierungen zu überprüfen.\n\n7. Kontaktieren Sie uns\nWenn Sie Fragen oder Anregungen zu dieser Datenschutzerklärung haben, können Sie uns kontaktieren unter:\nE-Mail: support.rayapps@gmail.com</string>
     <string name="legal_terms_conditions">Allgemeine Geschäftsbedingungen\n\n1. Annahme der Bedingungen\nDurch die Nutzung von FlowBytes erklären Sie sich mit diesen Bedingungen einverstanden. Wenn Sie nicht einverstanden sind, nutzen Sie die App bitte nicht.\n\n2. Haftungsausschluss für den Dienst\nFlowBytes stellt Netzwerkstatistiken zu Informationszwecken zur Verfügung. Obwohl wir uns um Genauigkeit bemühen, sind Geschwindigkeitsmessungen und Berechnungen der Datennutzung Schätzungen und können von den offiziellen Abrechnungsunterlagen Ihres Mobilfunkanbieters abweichen.\n\n3. Akku und Leistung\nDiese App führt einen Hintergrunddienst aus, um den Netzwerkverkehr zu überwachen. Obwohl die App auf Effizienz optimiert ist, kann sie geringfügige Auswirkungen auf die Akkulaufzeit haben.\n\n4. Haftungsbeschränkung\nWir sind nicht verantwortlich für Datenüberschreitungen, Datenverlust oder Geräteprobleme, die sich aus der Nutzung dieser Anwendung ergeben.</string>
     <string name="legal_licenses">Open-Source-Lizenzen\n\n- Jetpack Compose: Apache License 2.0\n- Kotlin Coroutines: Apache License 2.0\n- Android Jetpack-Bibliotheken (Room, DataStore, Lifecycle): Apache License 2.0\n- Material Components für Android: Apache License 2.0\n- Kotlin-Standardbibliothek: Apache License 2.0\n\nDiese Software wird im Ist-Zustand ohne jegliche ausdrückliche oder stillschweigende Gewährleistung bereitgestellt.</string>
 
@@ -326,6 +339,8 @@
     <string name="label_monthly_wifi_limit">Monatliches WLAN-Limit</string>
     <string name="label_daily_mobile_limit">Tägliches Mobil-Limit</string>
     <string name="label_monthly_mobile_limit">Monatliches Mobil-Limit</string>
+    <string name="label_custom_wifi_limit">Benutzerdefiniertes WLAN-Limit</string>
+    <string name="label_custom_mobile_limit">Benutzerdefiniertes Mobilfunk-Limit</string>
     <string name="label_unknown">Unbekannt</string>
     <string name="desc_configure_limit_format">Konfigurieren Sie das Limit für Ihren %1$s-Plan.</string>
     <string name="label_select_date">Datum auswählen</string>

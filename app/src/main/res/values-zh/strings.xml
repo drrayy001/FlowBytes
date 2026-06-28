@@ -220,12 +220,17 @@
     <string name="desc_battery_optimization">允许网速和流量监控服务在后台持续稳定运行。</string>
     <string name="label_granted">已授予</string>
     <string name="btn_grant">去授予</string>
-    <string name="title_traffic_settings">警报参数配置</string>
-    <string name="label_speed_threshold">检测阈值</string>
-    <string name="label_time_above_threshold">超出限制持续时间</string>
-    <string name="label_alert_cooldown">警报冷却时间</string>
-    <string name="label_reset_speed_threshold">重置阈值</string>
-    <string name="label_time_below_reset">低于阈值持续时间</string>
+    <string name="title_traffic_settings">高流量警报设置</string>
+    <string name="label_speed_threshold">触发速度</string>
+    <string name="desc_speed_threshold">当网络速度超过此限制时触发警报。</string>
+    <string name="label_time_above_threshold">持续超速时间</string>
+    <string name="desc_time_above_threshold">速度必须在此限制之上保持此时间才会发出通知。</string>
+    <string name="label_alert_cooldown">警报发送间隔</string>
+    <string name="desc_alert_cooldown">发送另一个警报之前的最小等待时间。</string>
+    <string name="label_reset_speed_threshold">重置速度</string>
+    <string name="desc_reset_speed_threshold">当速度降至此水平以下时，警报系统重置。</string>
+    <string name="label_time_below_reset">持续低于重置速度时间</string>
+    <string name="desc_time_below_reset">速度必须在此重置水平之下保持此时间才能清除警报。</string>
     <string name="btn_save_config">保存参数配置</string>
     <string name="label_app_limits">应用限额</string>
     <string name="filter_all">全部</string>
@@ -263,6 +268,14 @@
     <string name="title_select_application">选择应用</string>
     <string name="title_configure_limit">配置限额参数</string>
     <string name="title_general_limits">系统额度计划</string>
+    <string name="btn_add_plan">添加计划</string>
+    <string name="btn_add_app_limit">添加应用限额</string>
+    <string name="msg_no_restricted_apps">无受限应用</string>
+    <string name="desc_restrict_app_placeholder">限制特定应用在后台消耗网络流量。</string>
+    <string name="label_inactive">未激活</string>
+    <string name="cd_delete_plan">删除计划</string>
+    <string name="label_configure_network_plan">配置网络计划</string>
+    <string name="desc_prevent_overages">防止网络流量超额使用。</string>
     <string name="msg_no_general_limits">尚无全局设备额度计划配置。</string>
     <string name="desc_add_general_limit_subtitle">设置全局设备数据流量额度计划以保持全局控制。</string>
     <string name="label_general_limit_selection">全局设备额度计划</string>
@@ -311,14 +324,14 @@
     <string name="label_monthly_mobile">每月移动网络</string>
     <string name="label_custom_wifi">自定义 Wi-Fi</string>
     <string name="label_custom_mobile">自定义移动网络</string>
-    <string name="settings_traffic_threshold_subtitle">配置高流量检测触发的阈值</string>
+    <string name="settings_traffic_threshold_subtitle">配置警报的速度和时间限制</string>
     <string name="whats_new_custom_limits_title">自定义日期限制限额</string>
     <string name="whats_new_custom_limits_desc">您现在可以针对特定的自定义日期范围（跨越移动和 Wi-Fi 网络）设定独立的流量使用限制。</string>
     <string name="whats_new_reset_day_title">每月计费周期重置日</string>
     <string name="whats_new_reset_day_desc">支持自定义的每月月结账日。自由选择当月流量统计计费周期的重置日期。</string>
     <string name="feedback_email_subject">FlowBytes 反馈 - %1$d 星评级</string>
 
-    <string name="legal_privacy_policy" formatted="false">隐私政策\n生效日期：2026年4月29日\n\n我，FlowBytes（下称“本应用”）的开发者，免费提供本应用。本应用按“原样”提供，且不提供任何形式的担保或保证。\n\n1. 信息收集与使用\nFlowBytes 会监控您设备的网络速度和流量使用情况（Wi-Fi 和蜂窝网络），以帮助您掌控网络。所有监控、流量计算以及拦截操作均在您的设备本地处理。我们绝对不会收集、存储或传输您的任何个人数据，包括：\n- 网页浏览历史记录\n- 网络流量传输内容\n- IP 地址\n- 任何其他个人身份信息\n\n2. 所需的特殊权限\n为保证功能正常运作，本应用需要您授予以下特殊权限：\n- 应用使用情况访问权限（网络状态统计）：用于访问系统底层的流量使用情况数据（通过 NetworkStatsManager 和 TrafficStats），以此计算下载/上传速度并按应用统计每日/每月的流量消耗数据。\n- 前台服务权限：允许本应用在后台运行系统服务，以便在系统通知栏中实时刷新网络速度指示器并维持连续的流量监控。\n- VPN 服务权限（本地虚拟网络）：FlowBytes 会使用系统 VPN 框架在本地建立流量拦截服务，以便拦截已超出限额的网络流量访问。此 VPN 服务 100% 在您设备本地独立运行；流量绝不会上传至外部，我们也绝不会拦截窃听您的隐私内容。\n\n通过上述权限访问的所有数据都将安全地保留在您的设备本地，并且仅用于提供本应用内置的监控与控制功能。\n\n3. 第三方服务与 SDK\n本应用不接入任何可能收集您的个人身份信息的第三方数据分析服务、广告联盟 SDK 或推送跟踪组件。\n\n4. 数据安全保障\n由于所有的流量计算和拦截都完全在您设备本地独立完成，因此我们这边不存在任何服务器端泄露数据的隐私风险。但考虑到互联网和电子存储环境的局限性，我们无法做出绝对零风险的数据安全承诺。\n\n5. 儿童隐私保护\n本应用不面向 13 岁以下的儿童。我们绝不会有意收集 13 岁以下儿童的任何个人身份信息。\n\n6. 隐私政策的更新\n我们可能会随时更新本隐私政策。任何更新都将在此页面公布。建议您定期查看此页面以了解最新的隐私条款。\n\n7. 联系我们\n如果您对本隐私政策有任何疑问或改进建议，可以通过以下方式与我们取得联系：\n电子邮件：drrayy001@gmail.com</string>
+    <string name="legal_privacy_policy" formatted="false">隐私政策\n生效日期：2026年4月29日\n\n我，FlowBytes（下称“本应用”）的开发者，免费提供本应用。本应用按“原样”提供，且不提供任何形式的担保或保证。\n\n1. 信息收集与使用\nFlowBytes 会监控您设备的网络速度和流量使用情况（Wi-Fi 和蜂窝网络），以帮助您掌控网络。所有监控、流量计算以及拦截操作均在您的设备本地处理。我们绝对不会收集、存储或传输您的任何个人数据，包括：\n- 网页浏览历史记录\n- 网络流量传输内容\n- IP 地址\n- 任何其他个人身份信息\n\n2. 所需的特殊权限\n为保证功能正常运作，本应用需要您授予以下特殊权限：\n- 应用使用情况访问权限（网络状态统计）：用于访问系统底层的流量使用情况数据（通过 NetworkStatsManager 和 TrafficStats），以此计算下载/上传速度并按应用统计每日/每月的流量消耗数据。\n- 前台服务权限：允许本应用在后台运行系统服务，以便在系统通知栏中实时刷新网络速度指示器并维持连续的流量监控。\n- VPN 服务权限（本地虚拟网络）：FlowBytes 会使用系统 VPN 框架在本地建立流量拦截服务，以便拦截已超出限额的网络流量访问。此 VPN 服务 100% 在您设备本地独立运行；流量绝不会上传至外部，我们也绝不会拦截窃听您的隐私内容。\n\n通过上述权限访问的所有数据都将安全地保留在您的设备本地，并且仅用于提供本应用内置的监控与控制功能。\n\n3. 第三方服务与 SDK\n本应用不接入任何可能收集您的个人身份信息的第三方数据分析服务、广告联盟 SDK 或推送跟踪组件。\n\n4. 数据安全保障\n由于所有的流量计算和拦截都完全在您设备本地独立完成，因此我们这边不存在任何服务器端泄露数据的隐私风险。但考虑到互联网和电子存储环境的局限性，我们无法做出绝对零风险的数据安全承诺。\n\n5. 儿童隐私保护\n本应用不面向 13 岁以下的儿童。我们绝不会有意收集 13 岁以下儿童的任何个人身份信息。\n\n6. 隐私政策的更新\n我们可能会随时更新本隐私政策。任何更新都将在此页面公布。建议您定期查看此页面以了解最新的隐私条款。\n\n7. 联系我们\n如果您对本隐私政策有任何疑问或改进建议，可以通过以下方式与我们取得联系：\n电子邮件：support.rayapps@gmail.com</string>
     <string name="legal_terms_conditions">服务条款\n\n1. 条款的接受与同意\n一旦您开始使用 FlowBytes，即表示您已阅读并完全同意遵守本服务条款。如果您不同意这些条款，请立即停止使用并卸载本应用。\n\n2. 服务与免责声明\nFlowBytes 提供的网速统计和流量消耗数据仅供参考。虽然我们极力确保统计数据的准确性，但网速测量和流量计算可能会受系统广播延迟等因素影响而存在一定偏差，其结果不能作为与您的运营商官方账单对账的最终凭据。\n\n3. 电池能耗与整机性能\n本应用需要运行后台监控服务来测量网络带宽。虽然我们已对后台服务运行时的功耗做出了最大程度的算法优化，但在部分设备上它仍可能会对电池能耗造成极其细微的影响。\n\n4. 责任限制与索赔免除\n对于因使用本应用（或因其流量统计存在偏差等原因）而造成的任何超出套餐外的额外扣费、数据丢失或设备故障，开发者概不承担任何直接或间接的赔偿责任。</string>
     <string name="legal_licenses">开源许可声明\n\n- Jetpack Compose: Apache License 2.0\n- Kotlin Coroutines: Apache License 2.0\n- Android Jetpack Libraries (Room, DataStore, Lifecycle): Apache License 2.0\n- Material Components for Android: Apache License 2.0\n- Kotlin Standard Library: Apache License 2.0\n\n本软件按“原样”提供，不提供任何明示或暗示的保证。</string>
 
@@ -326,6 +339,8 @@
     <string name="label_monthly_wifi_limit">每月 Wi-Fi 限额</string>
     <string name="label_daily_mobile_limit">每日移动网络限额</string>
     <string name="label_monthly_mobile_limit">每月移动网络限额</string>
+    <string name="label_custom_wifi_limit">自定义 Wi-Fi 限额</string>
+    <string name="label_custom_mobile_limit">自定义移动网络限额</string>
     <string name="label_unknown">未知</string>
     <string name="desc_configure_limit_format">配置您的 %1$s 计划限额。</string>
     <string name="label_select_date">选择日期</string>

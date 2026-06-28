@@ -220,12 +220,17 @@
     <string name="desc_battery_optimization">Richiesto per mantenere attivo il monitoraggio della velocità in background.</string>
     <string name="label_granted">Concesso</string>
     <string name="btn_grant">Concedi</string>
-    <string name="title_traffic_settings">Configurazione avviso</string>
-    <string name="label_speed_threshold">Soglia di rilevamento</string>
-    <string name="label_time_above_threshold">Durata sopra il limite</string>
-    <string name="label_alert_cooldown">Cooldown di notifica</string>
-    <string name="label_reset_speed_threshold">Soglia di ripristino</string>
-    <string name="label_time_below_reset">Durata sotto la soglia</string>
+    <string name="title_traffic_settings">Impostazioni avvisi dati elevati</string>
+    <string name="label_speed_threshold">Velocità di attivazione</string>
+    <string name="desc_speed_threshold">L\'avviso viene attivato quando la velocità della rete supera questo limite.</string>
+    <string name="label_time_above_threshold">Durata sopra la velocità</string>
+    <string name="desc_time_above_threshold">La velocità deve rimanere superiore al limite per questo periodo prima di inviare la notifica.</string>
+    <string name="label_alert_cooldown">Tempo tra gli avvisi</string>
+    <string name="desc_alert_cooldown">Tempo minimo di attesa prima di inviare un altro avviso.</string>
+    <string name="label_reset_speed_threshold">Velocità di ripristino</string>
+    <string name="desc_reset_speed_threshold">Il sistema di avvisi si ripristina quando la velocità scende al di sotto di questo livello.</string>
+    <string name="label_time_below_reset">Durata sotto la velocità di ripristino</string>
+    <string name="desc_time_below_reset">La velocità deve rimanere al di sotto del livello di ripristino per questo periodo per annullare l\'avviso.</string>
     <string name="btn_save_config">Salva configurazione</string>
     <string name="label_app_limits">Limiti app</string>
     <string name="filter_all">Tutti</string>
@@ -263,6 +268,14 @@
     <string name="title_select_application">Seleziona applicazione</string>
     <string name="title_configure_limit">Configura limite</string>
     <string name="title_general_limits">Piani di sistema</string>
+    <string name="btn_add_plan">Aggiungi piano</string>
+    <string name="btn_add_app_limit">Aggiungi limite app</string>
+    <string name="msg_no_restricted_apps">Nessuna app limitata</string>
+    <string name="desc_restrict_app_placeholder">Limita l\'uso dei dati in background per applicazioni specifiche.</string>
+    <string name="label_inactive">Inattivo</string>
+    <string name="cd_delete_plan">Elimina piano</string>
+    <string name="label_configure_network_plan">Configura piano di rete</string>
+    <string name="desc_prevent_overages">Previeni il superamento dell\'uso della rete.</string>
     <string name="msg_no_general_limits">Nessun piano di sistema configurato.</string>
     <string name="desc_add_general_limit_subtitle">Imposta un piano dati per l\'intero dispositivo per mantenere il controllo.</string>
     <string name="label_general_limit_selection">Piano di sistema</string>
@@ -311,14 +324,14 @@
     <string name="label_monthly_mobile">Mobile mensile</string>
     <string name="label_custom_wifi">Wi-Fi personalizzato</string>
     <string name="label_custom_mobile">Mobile personalizzato</string>
-    <string name="settings_traffic_threshold_subtitle">Configura le soglie di rilevamento del traffico</string>
+    <string name="settings_traffic_threshold_subtitle">Configura i limiti di velocità e durata per gli avvisi</string>
     <string name="whats_new_custom_limits_title">Limiti con intervallo personalizzato</string>
     <string name="whats_new_custom_limits_desc">Ora puoi impostare limiti di dati per intervalli di tempo specifici sia su reti mobili che Wi-Fi.</string>
     <string name="whats_new_reset_day_title">Giorno di ripristino mensile</string>
     <string name="whats_new_reset_day_desc">Supporto per cicli di fatturazione personalizzati. Scegli un giorno specifico del mese per il ripristino dei dati.</string>
     <string name="feedback_email_subject">Feedback FlowBytes - %1$d Stelle</string>
 
-    <string name="legal_privacy_policy" formatted="false">Informativa sulla privacy\nData di entrata in vigore: 29 aprile 2026\n\nIo, lo sviluppatore di FlowBytes (l\'\"App\"), fornisco questa applicazione gratuitamente. L\'App viene offerta così com\'è ed è destinata all\'uso senza alcuna garanzia.\n\n1. Raccolta e utilizzo delle informazioni\nFlowBytes monitora la velocità di rete e l\'utilizzo dei dati del dispositivo (Wi-Fi e cellulare) per aiutarti a mantenere il controllo della tua connessione Internet. Tutte le azioni di monitoraggio, i calcoli sull\'utilizzo dei dati e il blocco del traffico vengono eseguiti localmente sul dispositivo. Non raccogliamo, memorizziamo o trasmettiamo dati personali, tra cui:\n- Cronologia di navigazione\n- Contenuto del traffico di rete\n- Indirizzo IP\n- Qualsiasi informazione di identificazione personale\n\n2. Autorizzazioni richieste\nPer funzionare correttamente, l\'App richiede le seguenti autorizzazioni:\n- Accesso di utilizzo (statistiche di rete): utilizzato per accedere alle statistiche sull\'utilizzo della rete (tramite NetworkStatsManager e TrafficStats) per calcolare la velocità di download/upload e tracciare l\'utilizzo dei dati per app.\n- Servizio in primo piano: consente all\'App di eseguire un servizio in background per mostrare la velocità di rete in tempo reale nella barra delle notifiche e garantire un monitoraggio costante.\n- Servizio VPN (VPN locale): FlowBytes utilizza una VPN locale per gestire l\'accesso a Internet per le app che superano i propri limites. Questa VPN è locale al 100%; il tuo traffico non lascia mai il dispositivo e non viene mai intercettato da noi.\n\nTutti i dati a cui si accede tramite queste autorizzazioni rimangono sul dispositivo e vengono utilizzati esclusivamente per fornire le funzioni di monitoraggio e controllo all\'interno dell\'App.\n\n3. Servizi di terze parti\nL\'App non utilizza servizi di terze parti, strumenti di analisi o reti pubblicitarie che raccolgono informazioni utilizzate per identificarti.\n\n4. Sicurezza\nPoiché l\'elaborazione dei dati avviene localmente sul dispositivo, il rischio di violazioni dei dati da parte nostra è minimo. Tuttavia, nessun metodo di memorizzazione elettronica o trasmissione su Internet è sicuro al 100% e non possiamo garantire la sicurezza assoluta.\n\n5. Privacy dei bambini\nQuesto servizio non è destinato a minori di 13 anni. Non raccogliamo consapevolmente informazioni di identificazione personale da bambini sotto i 13 anni.\n\n6. Modifiche alla presente Informativa sulla privacy\nPotremmo aggiornare periodicamente la presente Informativa sulla privacy. Eventuali modifiche saranno pubblicate su questa pagina. Si consiglia di rivedere periodicamente questa pagina per verificare la presenza di aggiornamenti.\n\n7. Contattaci\nIn caso di domande o suggerimenti sulla presente Informativa sulla privacy, puoi contattarci all\'indirizzo:\nEmail: drrayy001@gmail.com</string>
+    <string name="legal_privacy_policy" formatted="false">Informativa sulla privacy\nData di entrata in vigore: 29 aprile 2026\n\nIo, lo sviluppatore di FlowBytes (l\'\"App\"), fornisco questa applicazione gratuitamente. L\'App viene offerta così com\'è ed è destinata all\'uso senza alcuna garanzia.\n\n1. Raccolta e utilizzo delle informazioni\nFlowBytes monitora la velocità di rete e l\'utilizzo dei dati del dispositivo (Wi-Fi e cellulare) per aiutarti a mantenere il controllo della tua connessione Internet. Tutte le azioni di monitoraggio, i calcoli sull\'utilizzo dei dati e il blocco del traffico vengono eseguiti localmente sul dispositivo. Non raccogliamo, memorizziamo o trasmettiamo dati personali, tra cui:\n- Cronologia di navigazione\n- Contenuto del traffico di rete\n- Indirizzo IP\n- Qualsiasi informazione di identificazione personale\n\n2. Autorizzazioni richieste\nPer funzionare correttamente, l\'App richiede le seguenti autorizzazioni:\n- Accesso di utilizzo (statistiche di rete): utilizzato per accedere alle statistiche sull\'utilizzo della rete (tramite NetworkStatsManager e TrafficStats) per calcolare la velocità di download/upload e tracciare l\'utilizzo dei dati per app.\n- Servizio in primo piano: consente all\'App di eseguire un servizio in background per mostrare la velocità di rete in tempo reale nella barra delle notifiche e garantire un monitoraggio costante.\n- Servizio VPN (VPN locale): FlowBytes utilizza una VPN locale per gestire l\'accesso a Internet per le app che superano i propri limites. Questa VPN è locale al 100%; il tuo traffico non lascia mai il dispositivo e non viene mai intercettato da noi.\n\nTutti i dati a cui si accede tramite queste autorizzazioni rimangono sul dispositivo e vengono utilizzati esclusivamente per fornire le funzioni di monitoraggio e controllo all\'interno dell\'App.\n\n3. Servizi di terze parti\nL\'App non utilizza servizi di terze parti, strumenti di analisi o reti pubblicitarie che raccolgono informazioni utilizzate per identificarti.\n\n4. Sicurezza\nPoiché l\'elaborazione dei dati avviene localmente sul dispositivo, il rischio di violazioni dei dati da parte nostra è minimo. Tuttavia, nessun metodo di memorizzazione elettronica o trasmissione su Internet è sicuro al 100% e non possiamo garantire la sicurezza assoluta.\n\n5. Privacy dei bambini\nQuesto servizio non è destinato a minori di 13 anni. Non raccogliamo consapevolmente informazioni di identificazione personale da bambini sotto i 13 anni.\n\n6. Modifiche alla presente Informativa sulla privacy\nPotremmo aggiornare periodicamente la presente Informativa sulla privacy. Eventuali modifiche saranno pubblicate su questa pagina. Si consiglia di rivedere periodicamente questa pagina per verificare la presenza di aggiornamenti.\n\n7. Contattaci\nIn caso di domande o suggerimenti sulla presente Informativa sulla privacy, puoi contattarci all\'indirizzo:\nEmail: support.rayapps@gmail.com</string>
     <string name="legal_terms_conditions">Termini e condizioni\n\n1. Accettazione dei termini\nUtilizzando FlowBytes, l\'utente accetta i presenti termini. Se non si accettano, si prega di non utilizzare l\'applicazione.\n\n2. Esclusione di responsabilità del servizio\nFlowBytes fornisce statistiche di rete a scopo informativo. Sebbene ci sforziamo di essere precisi, le misurazioni della velocità e i calcoli sull\'utilizzo dei dati sono stime e possono variare rispetto dai dati di fatturazione ufficiali dell\'operatore telefonico.\n\n3. Batteria e prestazioni\nQuesta app esegue un servizio in background per monitorare il traffico di rete. Sebbene ottimizzato per l\'efficienza, potrebbe influire leggermente sulla durata della batteria.\n\n4. Limitazione di responsabilità\nNon siamo responsabili per eventuali costi dovuti al superamento del limite dati, perdita di dati o problemi al dispositivo derivanti dall\'uso di questa applicazione.\n\n5. Errori e Omissioni\nGli errori riscontrati nelle traduzioni devono essere segnalati tramite i canali ufficiali di feedback.</string>
     <string name="legal_licenses">Licenze open source\n\n- Jetpack Compose: Apache License 2.0\n- Kotlin Coroutines: Apache License 2.0\n- Librerie Android Jetpack (Room, DataStore, Lifecycle): Apache License 2.0\n- Componenti Material per Android: Apache License 2.0\n- Libreria standard Kotlin: Apache License 2.0\n\nQuesto software viene fornito \"così com\'è\", senza garanzie di alcun tipo.</string>
 
@@ -326,6 +339,8 @@
     <string name="label_monthly_wifi_limit">Limite Wi-Fi mensile</string>
     <string name="label_daily_mobile_limit">Limite mobile giornaliero</string>
     <string name="label_monthly_mobile_limit">Limite mobile mensile</string>
+    <string name="label_custom_wifi_limit">Limite Wi-Fi personalizzato</string>
+    <string name="label_custom_mobile_limit">Limite dati moduli personalizzato</string>
     <string name="label_unknown">Sconosciuto</string>
     <string name="desc_configure_limit_format">Configura il limite per il tuo piano %1$s.</string>
     <string name="label_select_date">Seleziona data</string>

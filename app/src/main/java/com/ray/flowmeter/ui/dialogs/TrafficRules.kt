@@ -96,6 +96,7 @@ fun TrafficSettingsDialog(
                     value = speedInput,
                     onValueChange = { speedInput = it.filter { char -> char.isDigit() } },
                     label = { Text(stringResource(R.string.label_speed_threshold)) },
+                    supportingText = { Text(stringResource(R.string.desc_speed_threshold)) },
                     trailingIcon = {
                         UnitSelector(
                             selectedUnit = speedUnit,
@@ -112,6 +113,7 @@ fun TrafficSettingsDialog(
                     value = timeInput,
                     onValueChange = { timeInput = it.filter { char -> char.isDigit() } },
                     label = { Text(stringResource(R.string.label_time_above_threshold)) },
+                    supportingText = { Text(stringResource(R.string.desc_time_above_threshold)) },
                     trailingIcon = {
                         UnitSelector(
                             selectedUnit = timeUnit,
@@ -128,6 +130,7 @@ fun TrafficSettingsDialog(
                     value = cooldownInput,
                     onValueChange = { cooldownInput = it.filter { char -> char.isDigit() } },
                     label = { Text(stringResource(R.string.label_alert_cooldown)) },
+                    supportingText = { Text(stringResource(R.string.desc_alert_cooldown)) },
                     trailingIcon = {
                         UnitSelector(
                             selectedUnit = cooldownUnit,
@@ -144,6 +147,7 @@ fun TrafficSettingsDialog(
                     value = resetSpeedInput,
                     onValueChange = { resetSpeedInput = it.filter { char -> char.isDigit() } },
                     label = { Text(stringResource(R.string.label_reset_speed_threshold)) },
+                    supportingText = { Text(stringResource(R.string.desc_reset_speed_threshold)) },
                     trailingIcon = {
                         UnitSelector(
                             selectedUnit = resetSpeedUnit,
@@ -160,6 +164,7 @@ fun TrafficSettingsDialog(
                     value = resetTimeInput,
                     onValueChange = { resetTimeInput = it.filter { char -> char.isDigit() } },
                     label = { Text(stringResource(R.string.label_time_below_reset)) },
+                    supportingText = { Text(stringResource(R.string.desc_time_below_reset)) },
                     trailingIcon = {
                         UnitSelector(
                             selectedUnit = resetTimeUnit,

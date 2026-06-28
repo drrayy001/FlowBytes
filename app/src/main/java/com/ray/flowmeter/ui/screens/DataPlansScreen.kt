@@ -147,19 +147,27 @@ fun AppLimitsScreen(
         val onToggle: (Boolean) -> Unit,
     )
 
+    val dailyWifiTitle = stringResource(R.string.label_daily_wifi)
+    val dailyMobileTitle = stringResource(R.string.label_daily_mobile)
+    val monthlyWifiTitle = stringResource(R.string.label_monthly_wifi)
+    val monthlyMobileTitle = stringResource(R.string.label_monthly_mobile)
+    val customWifiTitle = stringResource(R.string.label_custom_wifi)
+    val customMobileTitle = stringResource(R.string.label_custom_mobile)
+
     val activePlansList = remember(
         dataDailyLimitConfigured, dataMonthlyLimitConfigured, wifiDailyLimitConfigured, wifiMonthlyLimitConfigured, dataCustomLimitConfigured, wifiCustomLimitConfigured,
         dataDailyLimitEnabled, dataMonthlyLimitEnabled, wifiDailyLimitEnabled, wifiMonthlyLimitEnabled, dataCustomLimitEnabled, wifiCustomLimitEnabled,
         dataDailyLimit, wifiDailyLimit, dataMonthlyLimit, wifiMonthlyLimit, dataCustomLimit, wifiCustomLimit,
         currentMobileUsage, currentWifiUsage, currentMonthlyMobileUsage, currentMonthlyWifiUsage, currentCustomMobileUsage, currentCustomWifiUsage,
-        wifiCustomLimitStart, wifiCustomLimitEnd, dataCustomLimitStart, dataCustomLimitEnd
+        wifiCustomLimitStart, wifiCustomLimitEnd, dataCustomLimitStart, dataCustomLimitEnd,
+        dailyWifiTitle, dailyMobileTitle, monthlyWifiTitle, monthlyMobileTitle, customWifiTitle, customMobileTitle
     ) {
         buildList<SystemPlanItem> {
             if (wifiDailyLimitConfigured) {
                 add(
                     SystemPlanItem(
                         type = "daily_wifi",
-                        title = "Daily Wi-Fi",
+                        title = dailyWifiTitle,
                         limit = wifiDailyLimit,
                         usage = currentWifiUsage,
                         enabled = wifiDailyLimitEnabled,
@@ -172,7 +180,7 @@ fun AppLimitsScreen(
                 add(
                     SystemPlanItem(
                         type = "daily_mobile",
-                        title = "Daily Mobile",
+                        title = dailyMobileTitle,
                         limit = dataDailyLimit,
                         usage = currentMobileUsage,
                         enabled = dataDailyLimitEnabled,
@@ -185,7 +193,7 @@ fun AppLimitsScreen(
                 add(
                     SystemPlanItem(
                         type = "monthly_wifi",
-                        title = "Monthly Wi-Fi",
+                        title = monthlyWifiTitle,
                         limit = wifiMonthlyLimit,
                         usage = currentMonthlyWifiUsage,
                         enabled = wifiMonthlyLimitEnabled,
@@ -198,7 +206,7 @@ fun AppLimitsScreen(
                 add(
                     SystemPlanItem(
                         type = "monthly_mobile",
-                        title = "Monthly Mobile",
+                        title = monthlyMobileTitle,
                         limit = dataMonthlyLimit,
                         usage = currentMonthlyMobileUsage,
                         enabled = dataMonthlyLimitEnabled,
@@ -211,7 +219,7 @@ fun AppLimitsScreen(
                 add(
                     SystemPlanItem(
                         type = "custom_wifi",
-                        title = "Custom Wi-Fi",
+                        title = customWifiTitle,
                         limit = wifiCustomLimit,
                         usage = currentCustomWifiUsage,
                         enabled = wifiCustomLimitEnabled,
@@ -225,7 +233,7 @@ fun AppLimitsScreen(
                 add(
                     SystemPlanItem(
                         type = "custom_mobile",
-                        title = "Custom Mobile",
+                        title = customMobileTitle,
                         limit = dataCustomLimit,
                         usage = currentCustomMobileUsage,
                         enabled = dataCustomLimitEnabled,
@@ -262,7 +270,7 @@ fun AppLimitsScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "System Plans",
+                        text = stringResource(R.string.title_general_limits),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.primary
@@ -280,7 +288,7 @@ fun AppLimitsScreen(
                         ) {
                             Icon(Icons.Rounded.Add, contentDescription = null, modifier = Modifier.size(16.dp))
                             Spacer(modifier = Modifier.width(4.dp))
-                            Text("Add Plan", style = MaterialTheme.typography.labelMedium)
+                            Text(stringResource(R.string.btn_add_plan), style = MaterialTheme.typography.labelMedium)
                         }
                     }
                 }
@@ -334,7 +342,7 @@ fun AppLimitsScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "App Limits",
+                        text = stringResource(R.string.label_app_limits),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.primary
@@ -348,7 +356,7 @@ fun AppLimitsScreen(
                     ) {
                         Icon(Icons.Rounded.Add, contentDescription = null, modifier = Modifier.size(16.dp))
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text("Add App Limit", style = MaterialTheme.typography.labelMedium)
+                        Text(stringResource(R.string.btn_add_app_limit), style = MaterialTheme.typography.labelMedium)
                     }
                 }
             }
@@ -1749,7 +1757,7 @@ fun SystemPlanCard(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "Inactive",
+                            text = stringResource(R.string.label_inactive),
                             style = MaterialTheme.typography.labelLarge,
                             fontWeight = FontWeight.SemiBold,
                             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
@@ -1760,7 +1768,7 @@ fun SystemPlanCard(
                         ) {
                             Icon(
                                 imageVector = Icons.Rounded.Delete,
-                                contentDescription = "Delete Plan",
+                                contentDescription = stringResource(R.string.cd_delete_plan),
                                 tint = MaterialTheme.colorScheme.error,
                                 modifier = Modifier.size(18.dp)
                             )
@@ -1780,7 +1788,7 @@ fun SetupPlanPlaceholderTile(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(145.dp)
+            .heightIn(min = 145.dp)
             .bounceClick { onClick() },
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = Color.Transparent),
@@ -1788,7 +1796,8 @@ fun SetupPlanPlaceholderTile(
     ) {
         Box(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
+                .heightIn(min = 145.dp)
                 .drawBehind {
                     val stroke = Stroke(
                         width = 4f,
@@ -1820,14 +1829,14 @@ fun SetupPlanPlaceholderTile(
                 }
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    text = "Configure Network Plan",
+                    text = stringResource(R.string.label_configure_network_plan),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "Prevent network usage overages.",
+                    text = stringResource(R.string.desc_prevent_overages),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center
@@ -1870,7 +1879,7 @@ fun VpnMasterCard(
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    imageVector = Icons.Rounded.Block,
+                    imageVector = Icons.Rounded.Security,
                     contentDescription = null,
                     tint = if (checked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.size(22.dp)
@@ -1915,49 +1924,64 @@ fun VpnMasterCard(
 fun EmptyAppLimitsPlaceholder(
     onAddClick: () -> Unit
 ) {
+    val outlineColor = MaterialTheme.colorScheme.outlineVariant
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 20.dp),
-        shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow.copy(alpha = 0.4f)),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
+            .heightIn(min = 145.dp)
+            .padding(horizontal = 20.dp)
+            .bounceClick { onAddClick() },
+        shape = RoundedCornerShape(24.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .heightIn(min = 145.dp)
+                .drawBehind {
+                    val stroke = Stroke(
+                        width = 4f,
+                        pathEffect = PathEffect.dashPathEffect(floatArrayOf(15f, 15f), 0f)
+                    )
+                    drawRoundRect(
+                        color = outlineColor,
+                        style = stroke,
+                        cornerRadius = CornerRadius(24.dp.toPx(), 24.dp.toPx())
+                    )
+                }
+                .background(MaterialTheme.colorScheme.surfaceContainerLow.copy(alpha = 0.4f), RoundedCornerShape(24.dp))
+                .padding(20.dp),
+            contentAlignment = Alignment.Center
         ) {
-            Icon(
-                imageVector = Icons.Rounded.Apps,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f),
-                modifier = Modifier.size(40.dp)
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-            Text(
-                text = "No Restricted Apps",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = "Restrict specific applications from utilizing data in the background.",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Button(
-                onClick = onAddClick,
-                shape = RoundedCornerShape(12.dp),
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
-            ) {
-                Icon(Icons.Rounded.Add, contentDescription = null, modifier = Modifier.size(16.dp))
-                Spacer(modifier = Modifier.width(6.dp))
-                Text("Add App Limit", style = MaterialTheme.typography.labelLarge)
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Box(
+                    modifier = Modifier
+                        .size(44.dp)
+                        .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.08f), CircleShape),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.Apps,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(22.dp)
+                    )
+                }
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(
+                    text = stringResource(R.string.msg_no_restricted_apps),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = stringResource(R.string.desc_restrict_app_placeholder),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center
+                )
             }
         }
     }

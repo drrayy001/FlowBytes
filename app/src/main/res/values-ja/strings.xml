@@ -220,12 +220,17 @@
     <string name="desc_battery_optimization">速度モニターをバックグラウンドで実行し続けるために必要です。</string>
     <string name="label_granted">許可済み</string>
     <string name="btn_grant">許可する</string>
-    <string name="title_traffic_settings">アラート設定</string>
-    <string name="label_speed_threshold">検出しきい値</string>
-    <string name="label_time_above_threshold">制限超過の継続時間</string>
-    <string name="label_alert_cooldown">通知のクールダウン</string>
-    <string name="label_reset_speed_threshold">リセットしきい値</string>
-    <string name="label_time_below_reset">しきい値を下回る継続時間</string>
+    <string name="title_traffic_settings">高データ使用量アラート設定</string>
+    <string name="label_speed_threshold">トリガー速度</string>
+    <string name="desc_speed_threshold">ネットワーク速度がこの制限を超えるとアラートがトリガーされます。</string>
+    <string name="label_time_above_threshold">速度超過の継続時間</string>
+    <string name="desc_time_above_threshold">通知される前に、速度がこの制限をこの時間維持する必要があります。</string>
+    <string name="label_alert_cooldown">アラートの間隔</string>
+    <string name="desc_alert_cooldown">次のアラートを送信するまでの最小待機時間です。</string>
+    <string name="label_reset_speed_threshold">リセット速度</string>
+    <string name="desc_reset_speed_threshold">速度がこのレベルを下回ると、アラートシステムがリセットされます。</string>
+    <string name="label_time_below_reset">リセット速度未満の継続時間</string>
+    <string name="desc_time_below_reset">アラートをクリアするには、速度がこのリセットレベルをこの時間下回る必要があります。</string>
     <string name="btn_save_config">設定を保存</string>
     <string name="label_app_limits">アプリ制限</string>
     <string name="filter_all">すべて</string>
@@ -263,6 +268,14 @@
     <string name="title_select_application">アプリを選択</string>
     <string name="title_configure_limit">制限を設定</string>
     <string name="title_general_limits">システムプラン</string>
+    <string name="btn_add_plan">プランを追加</string>
+    <string name="btn_add_app_limit">アプリ制限を追加</string>
+    <string name="msg_no_restricted_apps">制限されたアプリはありません</string>
+    <string name="desc_restrict_app_placeholder">特定のアプリがバックグラウンドでデータを使用するのを制限します。</string>
+    <string name="label_inactive">無効</string>
+    <string name="cd_delete_plan">プランを削除</string>
+    <string name="label_configure_network_plan">ネットワークプランを設定</string>
+    <string name="desc_prevent_overages">ネットワーク使用量の超過を防ぎます。</string>
     <string name="msg_no_general_limits">システムプランが設定されていません。</string>
     <string name="desc_add_general_limit_subtitle">デバイス全体のデータプランを設定して管理します。</string>
     <string name="label_general_limit_selection">システムプラン</string>
@@ -311,14 +324,14 @@
     <string name="label_monthly_mobile">月次 モバイル</string>
     <string name="label_custom_wifi">カスタム Wi-Fi</string>
     <string name="label_custom_mobile">カスタム モバイル</string>
-    <string name="settings_traffic_threshold_subtitle">トラフィック検出のしきい値を設定します</string>
+    <string name="settings_traffic_threshold_subtitle">アラートの速度と時間の制限を設定します</string>
     <string name="whats_new_custom_limits_title">カスタム期間の制限</string>
     <string name="whats_new_custom_limits_desc">モバイルとWi-Fiの両方で、特定の期間に対するデータ制限を設定できるようになりました。</string>
     <string name="whats_new_reset_day_title">月次リセット日</string>
     <string name="whats_new_reset_day_desc">カスタムの請求サイクルをサポートしました。使用量がリセットされる日を自由に選択できます。</string>
     <string name="feedback_email_subject">FlowBytes フィードバック - 星 %1$d 個</string>
 
-    <string name="legal_privacy_policy">プライバシーポリシー\n発効日：2026年4月29日\n\nFlowBytes（以下「本アプリ」）の開発者は、本アプリを無料で提供します。本アプリは現状有姿で提供され、いかなる保証もありません。\n\n1. 情報の収集と利用\nFlowBytesは、デバイスのネットワーク速度とデータ使用量（Wi-Fiおよびモバイル通信）を監視し、インターネット利用の管理を支援します。監視、データ使用量の計算、およびブロックのアクションはすべてデバイス内でローカルに実行されます。以下を含む個人データを収集、保存、または送信することはありません：\n- 閲覧履歴\n- ネットワーク通信の内容\n- IPアドレス\n- 個人を特定できる情報\n\n2. 必要な権限\n正しく機能するために、本アプリは以下の権限を必要とします：\n- 使用状況へのアクセス（ネットワーク統計）：NetworkStatsManagerおよびTrafficStatsを介してネットワーク使用統計にアクセスし、ダウンロード/アップロード速度の計算およびアプリごとのデータ使用量を追跡するために使用します。\n- フォアグラウンドサービス：通知バーにリアルタイムのネットワーク速度を表示し、継続的な監視を確保するために、バックグラウンドでサービスを実行することを許可します。\n- VPNサービス（ローカルVPN）：制限を超えたアプリのインターネットアクセスを管理するためにローカルVPNを使用します。このVPNは100%ローカルであり、通信データがデバイスの外に出ることや、開発者が傍受することはありません。\n\nこれらの権限を通じてアクセスされるすべてのデータはデバイス内に留まり、本アプリ内の監視および制御機能を提供するためだけに利用されます。\n\n3. 第三者サービス\n本アプリは、個人を特定するために利用される情報を収集する第三者サービス、分析ツール、または広告ネットワークを使用していません。\n\n4. セキュリティ\nすべてのデータ処理はデバイス内でローカルに実行されるため、開発者側からのデータ漏洩のリスクは最小限です。ただし、電子的な保存方法やインターネット経由の送信方法に完全に安全なものはなく、絶対的なセキュリティを保証することはできません。\n\n5. 子供のプライバシー\n本サービスは13歳未満の方を対象としていません。13歳未満の子供から個人を特定できる情報を意図的に収集することはありません。\n\n6. プライバシーポリシーの変更\nプライバシーポリシーは随時更新されることがあります。変更はこのページに掲載されます。定期的にこのページを確認することをお勧めします。\n\n7. お問い合わせ\n本プライバシーポリシーに関するご質問やご提案がある場合は、以下までご連絡ください：\nメール： drrayy001@gmail.com</string>
+    <string name="legal_privacy_policy">プライバシーポリシー\n発効日：2026年4月29日\n\nFlowBytes（以下「本アプリ」）の開発者は、本アプリを無料で提供します。本アプリは現状有姿で提供され、いかなる保証もありません。\n\n1. 情報の収集と利用\nFlowBytesは、デバイスのネットワーク速度とデータ使用量（Wi-Fiおよびモバイル通信）を監視し、インターネット利用の管理を支援します。監視、データ使用量の計算、およびブロックのアクションはすべてデバイス内でローカルに実行されます。以下を含む個人データを収集、保存、または送信することはありません：\n- 閲覧履歴\n- ネットワーク通信の内容\n- IPアドレス\n- 個人を特定できる情報\n\n2. 必要な権限\n正しく機能するために、本アプリは以下の権限を必要とします：\n- 使用状況へのアクセス（ネットワーク統計）：NetworkStatsManagerおよびTrafficStatsを介してネットワーク使用統計にアクセスし、ダウンロード/アップロード速度の計算およびアプリごとのデータ使用量を追跡するために使用します。\n- フォアグラウンドサービス：通知バーにリアルタイムのネットワーク速度を表示し、継続的な監視を確保するために、バックグラウンドでサービスを実行することを許可します。\n- VPNサービス（ローカルVPN）：制限を超えたアプリのインターネットアクセスを管理するためにローカルVPNを使用します。このVPNは100%ローカルであり、通信データがデバイスの外に出ることや、開発者が傍受することはありません。\n\nこれらの権限を通じてアクセスされるすべてのデータはデバイス内に留まり、本アプリ内の監視および制御機能を提供するためだけに利用されます。\n\n3. 第三者サービス\n本アプリは、個人を特定するために利用される情報を収集する第三者サービス、分析ツール、または広告ネットワークを使用していません。\n\n4. セキュリティ\nすべてのデータ処理はデバイス内でローカルに実行されるため、開発者側からのデータ漏洩のリスクは最小限です。ただし、電子的な保存方法やインターネット経由の送信方法に完全に安全なものはなく、絶対的なセキュリティを保証することはできません。\n\n5. 子供のプライバシー\n本サービスは13歳未満の方を対象としていません。13歳未満の子供から個人を特定できる情報を意図的に収集することはありません。\n\n6. プライバシーポリシーの変更\nプライバシーポリシーは随時更新されることがあります。変更はこのページに掲載されます。定期的にこのページを確認することをお勧めします。\n\n7. お問い合わせ\n本プライバシーポリシーに関するご質問やご提案がある場合は、以下までご連絡ください：\nメール： support.rayapps@gmail.com</string>
     <string name="legal_terms_conditions">利用規約\n\n1. 規約への同意\nFlowBytesを利用することで、本規約に同意したものとみなされます。同意いただけない場合は、アプリを利用しないでください。\n\n2. サービス免責事項\nFlowBytesは情報提供を目的としてネットワーク統計を提供します。正確を期しておりますが、速度計測やデータ使用量の計算は推定値であり、通信事業者の公式な記録とは異なる場合があります。\n\n3. バッテリーとパフォーマンス\n本アプリは通信監視のためにバックグラウンドで動作します。効率化されていますが、バッテリー消費にわずかな影響を与える可能性があります。\n\n4. 責任の制限\n本アプリの利用に起因するデータの超過、データの紛失、またはデバイスの問題について、開発者は一切の責任を負いません。</string>
     <string name="legal_licenses">オープンソースライセンス\n\n- Jetpack Compose: Apache License 2.0\n- Kotlin Coroutines: Apache License 2.0\n- Android Jetpack Libraries (Room, DataStore, Lifecycle): Apache License 2.0\n- Material Components for Android: Apache License 2.0\n- Kotlin Standard Library: Apache License 2.0\n\n本ソフトウェアは、いかなる保証もなく「現状有姿」で提供されます。</string>
 
@@ -326,6 +339,8 @@
     <string name="label_monthly_wifi_limit">月間のWi-Fi制限</string>
     <string name="label_daily_mobile_limit">1日のモバイル制限</string>
     <string name="label_monthly_mobile_limit">月間のモバイル制限</string>
+    <string name="label_custom_wifi_limit">カスタムWi-Fi制限</string>
+    <string name="label_custom_mobile_limit">カスタムモバイル制限</string>
     <string name="label_unknown">不明</string>
     <string name="desc_configure_limit_format">%1$s プランの制限を設定します。</string>
     <string name="label_select_date">日付を選択</string>

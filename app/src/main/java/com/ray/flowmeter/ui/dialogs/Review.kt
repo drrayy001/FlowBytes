@@ -113,7 +113,7 @@ fun ReviewDialog(
                                     if (feedbackText.isNotBlank()) {
                                         val intent = Intent(Intent.ACTION_SENDTO).apply {
                                             data = "mailto:".toUri()
-                                            putExtra(Intent.EXTRA_EMAIL, arrayOf("drrayy001@gmail.com"))
+                                            putExtra(Intent.EXTRA_EMAIL, arrayOf("support.rayapps@gmail.com"))
                                             putExtra(Intent.EXTRA_SUBJECT, feedbackSubject)
                                             putExtra(Intent.EXTRA_TEXT, feedbackText)
                                         }

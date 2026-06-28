@@ -276,15 +276,99 @@ fun AlertItemFront(alert: AppAlert) {
     val monthlyWifiLimit = stringResource(R.string.label_monthly_wifi_limit)
     val dailyMobileLimit = stringResource(R.string.label_daily_mobile_limit)
     val monthlyMobileLimit = stringResource(R.string.label_monthly_mobile_limit)
+    val customWifiLimit = stringResource(R.string.label_custom_wifi_limit)
+    val customMobileLimit = stringResource(R.string.label_custom_mobile_limit)
     val unknownLabel = stringResource(R.string.label_unknown)
 
-    val displayAppName = remember(alert.appName, dailyWifiLimit, monthlyWifiLimit, dailyMobileLimit, monthlyMobileLimit, unknownLabel) {
-        when (alert.appName) {
-            "Wi-Fi (Daily)", "Daily Wi-Fi Limit" -> dailyWifiLimit
-            "Wi-Fi (Monthly)", "Monthly Wi-Fi Limit" -> monthlyWifiLimit
-            "Mobile (Daily)", "Daily Mobile Limit" -> dailyMobileLimit
-            "Mobile (Monthly)", "Monthly Mobile Limit" -> monthlyMobileLimit
-            else -> alert.appName ?: unknownLabel
+    val displayAppName = remember(alert.packageName, alert.appName, dailyWifiLimit, monthlyWifiLimit, dailyMobileLimit, monthlyMobileLimit, customWifiLimit, customMobileLimit, unknownLabel) {
+        val packageName = alert.packageName
+        val appName = alert.appName ?: ""
+        
+        when {
+            packageName == "system.wifi.daily" -> dailyWifiLimit
+            packageName == "system.mobile.daily" -> dailyMobileLimit
+            packageName == "system.wifi.monthly" -> monthlyWifiLimit
+            packageName == "system.mobile.monthly" -> monthlyMobileLimit
+            packageName == "system.wifi.custom" -> customWifiLimit
+            packageName == "system.mobile.custom" -> customMobileLimit
+            packageName != null && packageName.startsWith("system.") -> {
+                val isWifi = packageName.contains("wifi")
+                val isDaily = packageName.contains("daily")
+                val isMonthly = packageName.contains("monthly")
+                if (isWifi) {
+                    when {
+                        isDaily -> dailyWifiLimit
+                        isMonthly -> monthlyWifiLimit
+                        else -> customWifiLimit
+                    }
+                } else {
+                    when {
+                        isDaily -> dailyMobileLimit
+                        isMonthly -> monthlyMobileLimit
+                        else -> customMobileLimit
+                    }
+                }
+            }
+            else -> {
+                val isWifi = appName.contains("Wi-Fi", ignoreCase = true) || 
+                             appName.contains("WLAN", ignoreCase = true) || 
+                             appName.contains("واي فاي") || 
+                             appName.contains("वाई-फाई")
+                
+                val isMobile = appName.contains("Mobile", ignoreCase = true) || 
+                               appName.contains("Mobil", ignoreCase = true) || 
+                               appName.contains("جوال") || 
+                               appName.contains("मोबाइल") || 
+                               appName.contains("dati", ignoreCase = true) || 
+                               appName.contains("móveis", ignoreCase = true) || 
+                               appName.contains("Мобильные", ignoreCase = true) || 
+                               appName.contains("移动") || 
+                               appName.contains("모바일") || 
+                               appName.contains("datos", ignoreCase = true) || 
+                               appName.contains("données", ignoreCase = true)
+
+                if (isWifi || isMobile) {
+                    val isDaily = appName.contains("Daily", ignoreCase = true) || 
+                                  appName.contains("Tägliches", ignoreCase = true) || 
+                                  appName.contains("اليومي") || 
+                                  appName.contains("Diario", ignoreCase = true) || 
+                                  appName.contains("Quotidienne", ignoreCase = true) || 
+                                  appName.contains("दैनिक") || 
+                                  appName.contains("Giornaliero", ignoreCase = true) || 
+                                  appName.contains("1日の") || 
+                                  appName.contains("일일") || 
+                                  appName.contains("Дневной", ignoreCase = true) || 
+                                  appName.contains("每日")
+
+                    val isMonthly = appName.contains("Monthly", ignoreCase = true) || 
+                                    appName.contains("Monatliches", ignoreCase = true) || 
+                                    appName.contains("الشهري") || 
+                                    appName.contains("Mensual", ignoreCase = true) || 
+                                    appName.contains("Mensuelle", ignoreCase = true) || 
+                                    appName.contains("मासिक") || 
+                                    appName.contains("Mensile", ignoreCase = true) || 
+                                    appName.contains("月間の") || 
+                                    appName.contains("월간") || 
+                                    appName.contains("Месячный", ignoreCase = true) || 
+                                    appName.contains("每月")
+
+                    if (isWifi) {
+                        when {
+                            isDaily -> dailyWifiLimit
+                            isMonthly -> monthlyWifiLimit
+                            else -> customWifiLimit
+                        }
+                    } else {
+                        when {
+                            isDaily -> dailyMobileLimit
+                            isMonthly -> monthlyMobileLimit
+                            else -> customMobileLimit
+                        }
+                    }
+                } else {
+                    alert.appName ?: unknownLabel
+                }
+            }
         }
     }
 

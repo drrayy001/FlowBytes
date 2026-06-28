@@ -217,12 +217,17 @@
     <string name="desc_battery_optimization">Requerido para mantener el monitor activo en segundo plano.</string>
     <string name="label_granted">Concedido</string>
     <string name="btn_grant">Conceder</string>
-    <string name="title_traffic_settings">Configuración de alertas</string>
-    <string name="label_speed_threshold">Umbral de detección</string>
-    <string name="label_time_above_threshold">Duración por encima del límite</string>
-    <string name="label_alert_cooldown">Enfriamiento de alerta</string>
-    <string name="label_reset_speed_threshold">Umbral de reinicio</string>
-    <string name="label_time_below_reset">Tiempo bajo umbral</string>
+    <string name="title_traffic_settings">Ajustes de alertas de datos altos</string>
+    <string name="label_speed_threshold">Velocidad de activación</string>
+    <string name="desc_speed_threshold">La alerta se activa cuando la velocidad de la red supera este límite.</string>
+    <string name="label_time_above_threshold">Duración sobre la velocidad</string>
+    <string name="desc_time_above_threshold">La velocidad debe permanecer por encima del límite durante este tiempo antes de notificar.</string>
+    <string name="label_alert_cooldown">Tiempo entre alertas</string>
+    <string name="desc_alert_cooldown">Tiempo mínimo de espera antes de enviar otra alerta.</string>
+    <string name="label_reset_speed_threshold">Velocidad de reinicio</string>
+    <string name="desc_reset_speed_threshold">El sistema de alertas se reinicia cuando la velocidad cae por debajo de este nivel.</string>
+    <string name="label_time_below_reset">Duración bajo la velocidad de reinicio</string>
+    <string name="desc_time_below_reset">La velocidad debe permanecer por debajo del nivel de reinicio durante este tiempo para borrar la alerta.</string>
 
     <string name="btn_save_config">Guardar configuración</string>
     <string name="label_app_limits">Límites de aplicación</string>
@@ -287,7 +292,7 @@
     <string name="label_monthly_mobile">Datos móviles mensuales</string>
     <string name="label_custom_wifi">Wi-Fi personalizado</string>
     <string name="label_custom_mobile">Datos móviles personalizados</string>
-    <string name="settings_traffic_threshold_subtitle">Configurar umbrales de detección de tráfico</string>
+    <string name="settings_traffic_threshold_subtitle">Configurar límites de velocidad y duración para alertas</string>
     <string name="whats_new_custom_limits_title">Límites de rango de fechas personalizados</string>
     <string name="whats_new_custom_limits_desc">Ahora puede establecer límites de datos para rangos de fechas específicos en redes móviles y Wi-Fi.</string>
     <string name="whats_new_reset_day_title">Día de reinicio mensual</string>
@@ -296,13 +301,15 @@
 
     <string name="btn_done">Aceptar</string>
     <string name="desc_block_apps">Restringir automáticamente el acceso a Internet para las aplicaciones que alcancen su límite</string>
-    <string name="legal_privacy_policy">Política de privacidad\nFecha de vigencia: 29 de abril de 2026\n\nYo, el desarrollador de FlowBytes (la \"Aplicación\"), proporciono esta aplicación de forma gratuita. La Aplicación se ofrece tal cual y está destinada a ser utilizada sin ningún tipo de garantía.\n\n1. Recopilación y uso de información\nFlowBytes monitorea las velocidades de red de su dispositivo y el uso de datos (Wi-Fi y datos móviles) para ayudarlo a mantener el control de su Internet. Todas las acciones de monitoreo, cálculo de uso de datos y bloqueo se realizan localmente en su dispositivo. No recopilamos, almacenamos ni transmitimos ningún dato personal, incluidos:\n- Historial de navegación\n- Contenido del tráfico de red\n- Dirección IP\n- Cualquier información de identificación personal\n\n2. Permisos requeridos\nPara funcionar correctamente, la Aplicación requiere los siguientes permisos:\n- Acceso de uso (Estadísticas de red): Se usa para acceder a las estadísticas de uso de la red (a través de NetworkStatsManager y TrafficStats) para calcular las velocidades de descarga/carga y realizar un seguimiento del uso de datos por aplicación.\n- Servicio de primer plano: Permite que la Aplicación ejecute un servicio en segundo plano para mostrar la velocidad del red en tiempo real en la barra de notificaciones y garantizar un monitoreo constante.\n- Servicio VPN (VPN local): FlowBytes utiliza una VPN local para administrar el acceso a Internet de las aplicaciones que superan sus límites. Esta VPN es 100% local; su tráfico nunca sale de su dispositivo y nunca lo interceptamos.\n\nTodos los datos a los que se accede a través de estos permisos permanecen en su dispositivo y se utilizan únicamente para proporcionar las funciones de monitoreo y control dentro de la Aplicación.\n\n3. Servicios de terceros\nLa Aplicación no utiliza ningún servicio de terceros, herramientas de análisis o redes publicitarias que recopilen información utilizada para identificarlo.\n\n4. Seguridad\nGado que todo el procesamiento de datos ocurre localmente en su dispositivo, el riesgo de violaciones de datos por nuestra parte es mínimo. Sin embargo, ningún método de almacenamiento electrónico o transmisión a través de Internet es completamente seguro y no podemos garantizar una seguridad absoluta.\n\n5. Privacidad de los niños\nEste servicio no está dirigido a personas menores de 13 años. No recopilamos a sabiendas información de identificación personal de niños menores de 13 años.\n\n6. Cambios a esta Política de Privacidad\nEs posible que actualicemos nuestra Política de Privacidad de vez en cuando. Cualquier cambio se publicará en esta página. Se le aconseja que revise esta página periódicamente para ver si hay actualizaciones.\n\n7. Contáctenos\nSi tiene alguna pregunta o sugerencia sobre esta Política de Privacidad, puede contactarnos en:\nCorreo electrónico: drrayy001@gmail.com</string>
+    <string name="legal_privacy_policy">Política de privacidad\nFecha de vigencia: 29 de abril de 2026\n\nYo, el desarrollador de FlowBytes (la \"Aplicación\"), proporciono esta aplicación de forma gratuita. La Aplicación se ofrece tal cual y está destinada a ser utilizada sin ningún tipo de garantía.\n\n1. Recopilación y uso de información\nFlowBytes monitorea las velocidades de red de su dispositivo y el uso de datos (Wi-Fi y datos móviles) para ayudarlo a mantener el control de su Internet. Todas las acciones de monitoreo, cálculo de uso de datos y bloqueo se realizan localmente en su dispositivo. No recopilamos, almacenamos ni transmitimos ningún dato personal, incluidos:\n- Historial de navegación\n- Contenido del tráfico de red\n- Dirección IP\n- Cualquier información de identificación personal\n\n2. Permisos requeridos\nPara funcionar correctamente, la Aplicación requiere los siguientes permisos:\n- Acceso de uso (Estadísticas de red): Se usa para acceder a las estadísticas de uso de la red (a través de NetworkStatsManager y TrafficStats) para calcular las velocidades de descarga/carga y realizar un seguimiento del uso de datos por aplicación.\n- Servicio de primer plano: Permite que la Aplicación ejecute un servicio en segundo plano para mostrar la velocidad del red en tiempo real en la barra de notificaciones y garantizar un monitoreo constante.\n- Servicio VPN (VPN local): FlowBytes utiliza una VPN local para administrar el acceso a Internet de las aplicaciones que superan sus límites. Esta VPN es 100% local; su tráfico nunca sale de su dispositivo y nunca lo interceptamos.\n\nTodos los datos a los que se accede a través de estos permisos permanecen en su dispositivo y se utilizan únicamente para proporcionar las funciones de monitoreo y control dentro de la Aplicación.\n\n3. Servicios de terceros\nLa Aplicación no utiliza ningún servicio de terceros, herramientas de análisis o redes publicitarias que recopilen información utilizada para identificarlo.\n\n4. Seguridad\nGado que todo el procesamiento de datos ocurre localmente en su dispositivo, el riesgo de violaciones de datos por nuestra parte es mínimo. Sin embargo, ningún método de almacenamiento electrónico o transmisión a través de Internet es completamente seguro y no podemos garantizar una seguridad absoluta.\n\n5. Privacidad de los niños\nEste servicio no está dirigido a personas menores de 13 años. No recopilamos a sabiendas información de identificación personal de niños menores de 13 años.\n\n6. Cambios a esta Política de Privacidad\nEs posible que actualicemos nuestra Política de Privacidad de vez en cuando. Cualquier cambio se publicará en esta página. Se le aconseja que revise esta página periódicamente para ver si hay actualizaciones.\n\n7. Contáctenos\nSi tiene alguna pregunta o sugerencia sobre esta Política de Privacidad, puede contactarnos en:\nCorreo electrónico: support.rayapps@gmail.com</string>
     <string name="legal_terms_conditions">Términos y condiciones\n\n1. Aceptación de los términos\nAl utilizar FlowBytes, acepta estos términos. Si no está de acuerdo, no utilice la aplicación.\n\n2. Descargo de responsabilidad del servicio\nFlowBytes proporciona estadísticas de red con fines informativos. Si bien nos esforzamos por lograr la precisión, las mediciones de velocidad y los cálculos de uso de datos son estimaciones y pueden diferir de los registros de facturación oficiales de su proveedor de servicios de Internet.\n\n3. Batería y rendimiento\nEsta aplicación ejecuta un servicio en segundo plano para monitorear el tráfico de red. Aunque está optimizada para la eficiencia, puede tener un impacto menor en la duración de la batería.\n\n4. Limitación de responsabilidad\nNo nos hacemos responsables de ningún excedente de datos, pérdida de datos o problemas en el dispositivo resultantes del uso de esta aplicación.</string>
     <string name="legal_licenses">Licencias de código abierto\n\n- Jetpack Compose: Licencia Apache 2.0\n- Corrutinas de Kotlin: Licencia Apache 2.0\n- Bibliotecas de Android Jetpack (Room, DataStore, Lifecycle): Licencia Apache 2.0\n- Componentes de Material para Android: Licencia Apache 2.0\n- Biblioteca estándar de Kotlin: Licencia Apache 2.0\n\nEste software se proporciona \"tal cual\" sin garantía de ningún tipo.</string>
     <string name="label_daily_wifi_limit">Límite diario de Wi-Fi</string>
     <string name="label_monthly_wifi_limit">Límite mensual de Wi-Fi</string>
     <string name="label_daily_mobile_limit">Límite diario de datos móviles</string>
     <string name="label_monthly_mobile_limit">Límite mensual de datos móviles</string>
+    <string name="label_custom_wifi_limit">Límite personalizado de Wi-Fi</string>
+    <string name="label_custom_mobile_limit">Límite personalizado de datos móviles</string>
     <string name="label_unknown">Desconocido</string>
     <string name="desc_configure_limit_format">Configure el límite para su plan %1$s.</string>
     <string name="label_select_date">Seleccionar fecha</string>
@@ -326,6 +333,14 @@
     <string name="msg_confirm_delete_limit">¿Está seguro de que desea eliminar el límite para %s?</string>
     <string name="title_configure_limit">Configurar límite</string>
     <string name="title_general_limits">Planes del sistema</string>
+    <string name="btn_add_plan">Añadir plan</string>
+    <string name="btn_add_app_limit">Añadir límite de aplicación</string>
+    <string name="msg_no_restricted_apps">Sin aplicaciones restringidas</string>
+    <string name="desc_restrict_app_placeholder">Restringe aplicaciones específicas para que no usen datos en segundo plano.</string>
+    <string name="label_inactive">Inactivo</string>
+    <string name="cd_delete_plan">Eliminar plan</string>
+    <string name="label_configure_network_plan">Configurar plan de red</string>
+    <string name="desc_prevent_overages">Evita el exceso de uso de la red.</string>
     <string name="msg_no_general_limits">No hay planes del sistema configurados.</string>
     <string name="desc_add_general_limit_subtitle">Establezca un plan de datos para todo el dispositivo para mantener el control.</string>
     <string name="label_general_limit_selection">Plan del sistema</string>

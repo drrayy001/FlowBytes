@@ -411,7 +411,7 @@ class NetworkMonitoringService : Service() {
 
         // 1. Check Daily Mobile
         if (dataDailyEnabled && (cachedMobileUsage > dataDailyLimit) && !hasAlertedData) {
-            sendLimitAlert(getString(R.string.label_mobile), cachedMobileUsage, "daily", dataDailyLimit)
+            sendLimitAlert("mobile", cachedMobileUsage, "daily", dataDailyLimit)
             hasAlertedData = true
         } else if (cachedMobileUsage < dataDailyLimit) {
             hasAlertedData = false
@@ -419,7 +419,7 @@ class NetworkMonitoringService : Service() {
 
         // 2. Check Monthly Mobile
         if (dataMonthlyEnabled && (cachedMonthlyMobileUsage > dataMonthlyLimit) && !hasAlertedMonthlyData) {
-            sendLimitAlert(getString(R.string.label_mobile), cachedMonthlyMobileUsage, "monthly", dataMonthlyLimit)
+            sendLimitAlert("mobile", cachedMonthlyMobileUsage, "monthly", dataMonthlyLimit)
             hasAlertedMonthlyData = true
         } else if (cachedMonthlyMobileUsage < dataMonthlyLimit) {
             hasAlertedMonthlyData = false
@@ -427,7 +427,7 @@ class NetworkMonitoringService : Service() {
 
         // 3. Check Daily Wi-Fi
         if (wifiDailyEnabled && (cachedWifiUsage > wifiDailyLimit) && !hasAlertedWifi) {
-            sendLimitAlert(getString(R.string.label_wifi), cachedWifiUsage, "daily", wifiDailyLimit)
+            sendLimitAlert("wifi", cachedWifiUsage, "daily", wifiDailyLimit)
             hasAlertedWifi = true
         } else if (cachedWifiUsage < wifiDailyLimit) {
             hasAlertedWifi = false
@@ -435,7 +435,7 @@ class NetworkMonitoringService : Service() {
 
         // 4. Check Monthly Wi-Fi
         if (wifiMonthlyEnabled && (cachedMonthlyWifiUsage > wifiMonthlyLimit) && !hasAlertedMonthlyWifi) {
-            sendLimitAlert(getString(R.string.label_wifi), cachedMonthlyWifiUsage, "monthly", wifiMonthlyLimit)
+            sendLimitAlert("wifi", cachedMonthlyWifiUsage, "monthly", wifiMonthlyLimit)
             hasAlertedMonthlyWifi = true
         } else if (cachedMonthlyWifiUsage < wifiMonthlyLimit) {
             hasAlertedMonthlyWifi = false
@@ -445,7 +445,7 @@ class NetworkMonitoringService : Service() {
         val dataCustomEnabled = repository.dataCustomLimitEnabled.first()
         val dataCustomLimit = repository.dataCustomLimit.first()
         if (dataCustomEnabled && (cachedCustomMobileUsage > dataCustomLimit) && !hasAlertedCustomData) {
-            sendLimitAlert(getString(R.string.label_mobile), cachedCustomMobileUsage, "custom", dataCustomLimit)
+            sendLimitAlert("mobile", cachedCustomMobileUsage, "custom", dataCustomLimit)
             hasAlertedCustomData = true
         } else if (cachedCustomMobileUsage < dataCustomLimit) {
             hasAlertedCustomData = false
@@ -455,14 +455,14 @@ class NetworkMonitoringService : Service() {
         val wifiCustomEnabled = repository.wifiCustomLimitEnabled.first()
         val wifiCustomLimit = repository.wifiCustomLimit.first()
         if (wifiCustomEnabled && (cachedCustomWifiUsage > wifiCustomLimit) && !hasAlertedCustomWifi) {
-            sendLimitAlert(getString(R.string.label_wifi), cachedCustomWifiUsage, "custom", wifiCustomLimit)
+            sendLimitAlert("wifi", cachedCustomWifiUsage, "custom", wifiCustomLimit)
             hasAlertedCustomWifi = true
         } else if (cachedCustomWifiUsage < wifiCustomLimit) {
             hasAlertedCustomWifi = false
         }
     }
 
-    private fun sendLimitAlert(type: String, currentUsage: Long, period: String, limitValue: Long) {
+    private fun sendLimitAlert(networkType: String, currentUsage: Long, period: String, limitValue: Long) {
         val manager = getSystemService(NotificationManager::class.java)
         val alertType = when (period) {
             "monthly" -> "MONTHLY_LIMIT"
@@ -475,14 +475,16 @@ class NetworkMonitoringService : Service() {
             "monthly" -> "Monthly"
             else -> "Custom"
         }
-        val appNameForAlert = "$displayPeriod $type Limit"
+        val displayNetworkType = if (networkType == "wifi") "Wi-Fi" else "Mobile"
+        val appNameForAlert = "$displayPeriod $displayNetworkType Limit"
+        val packageNameForAlert = "system.$networkType.$period"
 
         serviceScope.launch(Dispatchers.IO) {
             alertRepository.insert(
                 AppAlert(
                     timestamp = System.currentTimeMillis(),
                     appName = appNameForAlert,
-                    packageName = null,
+                    packageName = packageNameForAlert,
                     rxBytes = currentUsage,
                     txBytes = 0L,
                     speed = 0L,
@@ -495,7 +497,7 @@ class NetworkMonitoringService : Service() {
         val intent = Intent(this, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
             this,
-            (type + period).hashCode(),
+            (networkType + period).hashCode(),
             intent,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
         )
@@ -505,7 +507,8 @@ class NetworkMonitoringService : Service() {
             "monthly" -> getString(R.string.filter_monthly).lowercase()
             else -> getString(R.string.filter_custom).lowercase()
         }
-        val message = getString(R.string.msg_reached_limit, periodLabel, type, formatDataUsage(currentUsage))
+        val typeLabel = if (networkType == "wifi") getString(R.string.label_wifi) else getString(R.string.label_mobile)
+        val message = getString(R.string.msg_reached_limit, periodLabel, typeLabel, formatDataUsage(currentUsage))
 
         val title = when (period) {
             "daily" -> getString(R.string.label_daily_limit_reached)
@@ -525,7 +528,7 @@ class NetworkMonitoringService : Service() {
             .setGroup(ALERT_GROUP_KEY)
             .build()
 
-        manager.notify(ALERT_NOTIFICATION_ID + (type + period).hashCode(), notification)
+        manager.notify(ALERT_NOTIFICATION_ID + (networkType + period).hashCode(), notification)
         sendSummaryNotification()
     }
 

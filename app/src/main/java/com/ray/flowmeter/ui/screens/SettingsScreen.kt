@@ -682,7 +682,7 @@ fun SettingsScreen(
                 },
                 onEmailClick = {
                     val intent = Intent(Intent.ACTION_SENDTO).apply {
-                        data = "mailto:drrayy001@gmail.com".toUri()
+                        data = "mailto:support.rayapps@gmail.com".toUri()
                         putExtra(Intent.EXTRA_SUBJECT, "Feedback: FlowBytes (v$versionName)")
                     }
                     val activity = context.findActivity()

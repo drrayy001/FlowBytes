@@ -276,7 +276,13 @@ fun PermissionItem(
                         .bounceClick(interactionSource = interactionSource),
                     shape = RoundedCornerShape(12.dp)
                 ) {
-                    Text(stringResource(R.string.btn_grant), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
+                    Text(
+                        text = stringResource(R.string.btn_grant), 
+                        style = MaterialTheme.typography.labelLarge, 
+                        fontWeight = FontWeight.Bold,
+                        maxLines = 1,
+                        softWrap = false
+                    )
                 }
             }
         }

@@ -270,7 +270,10 @@ fun AppPickerScreen(
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier.weight(1f)
+                                ) {
                                     IconButton(
                                         onClick = { selectedApps.clear() },
                                         colors = IconButtonDefaults.iconButtonColors(
@@ -291,15 +294,20 @@ fun AppPickerScreen(
                                             text = stringResource(R.string.label_selected_count, selectedApps.size),
                                             style = MaterialTheme.typography.titleSmall,
                                             fontWeight = FontWeight.Bold,
-                                            color = MaterialTheme.colorScheme.onSurface
+                                            color = MaterialTheme.colorScheme.onSurface,
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis
                                         )
                                         Text(
                                             text = stringResource(R.string.label_app_limits_pending),
                                             style = MaterialTheme.typography.bodySmall,
-                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis
                                         )
                                     }
                                 }
+                                Spacer(modifier = Modifier.width(12.dp))
                                 Button(
                                     onClick = { isConfigSheetOpen = true },
                                     shape = RoundedCornerShape(16.dp),
@@ -307,9 +315,15 @@ fun AppPickerScreen(
                                         containerColor = MaterialTheme.colorScheme.primary,
                                         contentColor = MaterialTheme.colorScheme.onPrimary
                                     ),
-                                    contentPadding = PaddingValues(horizontal = 20.dp, vertical = 10.dp)
+                                    contentPadding = PaddingValues(horizontal = 20.dp, vertical = 10.dp),
+                                    modifier = Modifier.wrapContentWidth()
                                 ) {
-                                    Text(stringResource(R.string.btn_configure), fontWeight = FontWeight.Bold)
+                                    Text(
+                                        text = stringResource(R.string.btn_configure),
+                                        fontWeight = FontWeight.Bold,
+                                        maxLines = 1,
+                                        softWrap = false
+                                    )
                                 }
                             }
                         }
@@ -399,10 +413,17 @@ fun BatchConfigurationScreen(
                             onClick = onBack,
                             colors = ButtonDefaults.textButtonColors(
                                 contentColor = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
+                            ),
+                            modifier = Modifier.wrapContentWidth()
                         ) {
-                            Text(stringResource(R.string.btn_cancel), fontWeight = FontWeight.Bold)
+                            Text(
+                                text = stringResource(R.string.btn_cancel),
+                                fontWeight = FontWeight.Bold,
+                                maxLines = 1,
+                                softWrap = false
+                            )
                         }
+                        Spacer(modifier = Modifier.width(12.dp))
                         Button(
                             onClick = { triggerConfirm?.invoke() },
                             shape = RoundedCornerShape(16.dp),
@@ -410,9 +431,15 @@ fun BatchConfigurationScreen(
                                 containerColor = MaterialTheme.colorScheme.primary,
                                 contentColor = MaterialTheme.colorScheme.onPrimary
                             ),
-                            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 10.dp)
+                            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 10.dp),
+                            modifier = Modifier.wrapContentWidth()
                         ) {
-                            Text(stringResource(R.string.btn_create_app_limit), fontWeight = FontWeight.Bold)
+                            Text(
+                                text = stringResource(R.string.btn_create_app_limit),
+                                fontWeight = FontWeight.Bold,
+                                maxLines = 1,
+                                softWrap = false
+                            )
                         }
                     }
                 }
@@ -873,7 +900,9 @@ fun MiniChip(
                 text = label,
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
-                color = if (selected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant
+                color = if (selected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1,
+                softWrap = false
             )
         }
     }
@@ -970,15 +999,28 @@ fun ConfigurationContent(
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            TextButton(onClick = onCancel) {
-                Text(stringResource(R.string.btn_cancel))
+            TextButton(
+                onClick = onCancel,
+                modifier = Modifier.wrapContentWidth()
+            ) {
+                Text(
+                    text = stringResource(R.string.btn_cancel),
+                    maxLines = 1,
+                    softWrap = false
+                )
             }
             Spacer(Modifier.width(8.dp))
             Button(
                 onClick = onConfirm,
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(12.dp),
+                modifier = Modifier.wrapContentWidth()
             ) {
-                Text(confirmButtonText, fontWeight = FontWeight.Bold)
+                Text(
+                    text = confirmButtonText,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1,
+                    softWrap = false
+                )
             }
         }
     }

@@ -269,8 +269,15 @@ fun GeneralLimitConfigScreen(
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    TextButton(onClick = onBack) {
-                        Text(stringResource(R.string.btn_cancel))
+                    TextButton(
+                        onClick = onBack,
+                        modifier = Modifier.wrapContentWidth()
+                    ) {
+                        Text(
+                            text = stringResource(R.string.btn_cancel),
+                            maxLines = 1,
+                            softWrap = false
+                        )
                     }
                     Spacer(Modifier.width(8.dp))
                     Button(
@@ -284,11 +291,14 @@ fun GeneralLimitConfigScreen(
                             )
                         },
                         enabled = !isFormInvalid,
-                        shape = RoundedCornerShape(12.dp)
+                        shape = RoundedCornerShape(12.dp),
+                        modifier = Modifier.wrapContentWidth()
                     ) {
                         Text(
                             text = stringResource(R.string.btn_save_config),
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+                            maxLines = 1,
+                            softWrap = false
                         )
                     }
                 }

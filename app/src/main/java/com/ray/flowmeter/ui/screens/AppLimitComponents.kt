@@ -190,7 +190,14 @@ fun PeriodChip(selected: Boolean, onClick: () -> Unit, label: String) {
     FilterChip(
         selected = selected,
         onClick = onClick,
-        label = { Text(label, fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium) },
+        label = { 
+            Text(
+                text = label, 
+                fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
+                maxLines = 1,
+                softWrap = false
+            ) 
+        },
         shape = RoundedCornerShape(12.dp),
         leadingIcon = if (selected) { { Icon(Icons.Rounded.Check, null, modifier = Modifier.size(16.dp)) } } else null,
         colors = FilterChipDefaults.filterChipColors(
@@ -215,7 +222,14 @@ fun NetworkChip(selected: Boolean, onClick: () -> Unit, label: String, icon: and
     FilterChip(
         selected = selected,
         onClick = onClick,
-        label = { Text(label, fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium) },
+        label = { 
+            Text(
+                text = label, 
+                fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
+                maxLines = 1,
+                softWrap = false
+            ) 
+        },
         shape = RoundedCornerShape(12.dp),
         leadingIcon = { Icon(icon, null, modifier = Modifier.size(16.dp)) },
         colors = FilterChipDefaults.filterChipColors(

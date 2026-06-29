@@ -33,6 +33,9 @@ import androidx.compose.ui.unit.sp
 import kotlinx.serialization.Serializable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 import com.ray.flowmeter.R
 import com.ray.flowmeter.ui.theme.StaggeredEntrance
 import androidx.compose.material3.adaptive.layout.calculatePaneScaffoldDirective
@@ -53,7 +56,6 @@ import android.content.Context
 import android.content.ContextWrapper
 import com.ray.flowmeter.ui.dialogs.DonateDialog
 import com.ray.flowmeter.utils.BillingEvent
-import androidx.window.core.layout.WindowWidthSizeClass
 @Serializable
 sealed interface Destination {
     @Serializable
@@ -147,9 +149,9 @@ fun MainScreen(
 
     LaunchedEffect(supportBannerDismissed, appLaunchCount, firstInstallTime) {
         if (!supportBannerDismissed && appLaunchCount >= 5 && firstInstallTime > 0L) {
-            val threeDays = 3 * 24 * 60 * 60 * 1000L
-            if ((System.currentTimeMillis() - firstInstallTime) >= threeDays) {
-                delay(3000L)
+            val threeDays = 3.days
+            if ((System.currentTimeMillis() - firstInstallTime).milliseconds >= threeDays) {
+                delay(3.seconds)
                 settingsViewModel.dismissSupportBanner()
                 val result = snackbarHostState.showSnackbar(
                     message = supportPromptMessage,
@@ -174,7 +176,7 @@ fun MainScreen(
     }
 
     val windowAdaptiveInfo = currentWindowAdaptiveInfoV2()
-    val isWideScreen = windowAdaptiveInfo.windowSizeClass.windowWidthSizeClass != WindowWidthSizeClass.COMPACT
+    val isWideScreen = windowAdaptiveInfo.windowSizeClass.isWidthAtLeastBreakpoint(600)
 
     Box(modifier = Modifier.fillMaxSize()) {
         Row(modifier = Modifier.fillMaxSize()) {
@@ -358,7 +360,7 @@ fun MainScreen(
                                                         duration = SnackbarDuration.Indefinite
                                                     )
                                                 }
-                                                delay(800)
+                                                delay(800.milliseconds)
                                                 job.cancel()
                                             }
                                         },
@@ -523,7 +525,6 @@ fun MainScreen(
             }
         ) { innerPadding ->
 
-            val windowAdaptiveInfo = currentWindowAdaptiveInfoV2()
             val directive = calculatePaneScaffoldDirective(windowAdaptiveInfo)
             val listDetailStrategy = rememberListDetailSceneStrategy<Destination>(directive = directive)
 
@@ -588,7 +589,6 @@ fun MainScreen(
                         Destination.Settings -> NavEntry(key) {
                             SettingsScreen(
                                 viewModel = settingsViewModel,
-                                snackbarHostState = snackbarHostState,
                                 onDonateClick = { showDonateDialog = true },
                                 modifier = Modifier.fillMaxSize().padding(innerPadding).nestedScroll(settingsScrollBehavior.nestedScrollConnection)
                             )

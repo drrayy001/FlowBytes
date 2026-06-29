@@ -15,7 +15,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -27,7 +26,6 @@ import com.ray.flowmeter.ui.dialogs.*
 import com.ray.flowmeter.ui.theme.StaggeredEntrance
 import com.ray.flowmeter.ui.theme.ThemeMode
 import com.ray.flowmeter.ui.viewmodels.SettingsViewModel
-import com.ray.flowmeter.utils.BillingEvent
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -35,7 +33,6 @@ import java.util.Locale
 @Composable
 fun SettingsScreen(
     viewModel: SettingsViewModel,
-    snackbarHostState: SnackbarHostState,
     onDonateClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -99,7 +96,6 @@ fun SettingsScreen(
     var showAccentColorDialog by remember { mutableStateOf(value = false) }
 
     val context = LocalContext.current
-    val locale = LocalConfiguration.current.locales[0]
 
     val versionName = remember {
         try {

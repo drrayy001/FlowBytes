@@ -126,7 +126,7 @@ fun AlertsScreen(
                     horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    items(categories) { (id, label) ->
+                    items(categories, key = { it.first }) { (id, label) ->
                         val selected = selectedCategory == id
                         val contentColor by animateColorAsState(
                             if (selected) MaterialTheme.colorScheme.onSecondaryContainer 
@@ -218,7 +218,7 @@ fun AlertsScreen(
                         contentPadding = PaddingValues(bottom = 100.dp),
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        items(alerts) { alert ->
+                        items(alerts, key = { it.id }) { alert ->
                             AlertItem(alert)
                         }
                     }

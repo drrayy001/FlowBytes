@@ -53,6 +53,7 @@ import android.content.Context
 import android.content.ContextWrapper
 import com.ray.flowmeter.ui.dialogs.DonateDialog
 import com.ray.flowmeter.utils.BillingEvent
+import androidx.window.core.layout.WindowWidthSizeClass
 @Serializable
 sealed interface Destination {
     @Serializable
@@ -172,11 +173,104 @@ fun MainScreen(
         }
     }
 
+    val windowAdaptiveInfo = currentWindowAdaptiveInfoV2()
+    val isWideScreen = windowAdaptiveInfo.windowSizeClass.windowWidthSizeClass != WindowWidthSizeClass.COMPACT
+
     Box(modifier = Modifier.fillMaxSize()) {
-        Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            snackbarHost = { SnackbarHost(snackbarHostState) },
-            topBar = {
+        Row(modifier = Modifier.fillMaxSize()) {
+            if (isWideScreen) {
+                NavigationRail(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainer
+                ) {
+                    Spacer(modifier = Modifier.weight(1f))
+                    NavigationRailItem(
+                        icon = {
+                            Icon(
+                                imageVector = if (currentDestination == Destination.Home) Icons.Filled.Home else Icons.Outlined.Home,
+                                contentDescription = stringResource(R.string.title_home)
+                            )
+                        },
+                        label = { Text(stringResource(R.string.title_home), maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                        selected = currentDestination == Destination.Home,
+                        onClick = {
+                            if (currentDestination != Destination.Home) {
+                                backStack.clear()
+                                backStack.add(Destination.Home)
+                            }
+                        }
+                    )
+                    NavigationRailItem(
+                        icon = {
+                            Icon(
+                                imageVector = if (currentDestination == Destination.Usage) Icons.Filled.Assessment else Icons.Outlined.Assessment,
+                                contentDescription = stringResource(R.string.title_app_usage)
+                            )
+                        },
+                        label = { Text(stringResource(R.string.label_usage), maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                        selected = currentDestination == Destination.Usage,
+                        onClick = {
+                            if (currentDestination != Destination.Usage) {
+                                backStack.clear()
+                                backStack.add(Destination.Usage)
+                            }
+                        }
+                    )
+                    NavigationRailItem(
+                        icon = {
+                            Icon(
+                                imageVector = if (currentDestination == Destination.Alerts) Icons.Filled.Notifications else Icons.Outlined.Notifications,
+                                contentDescription = stringResource(R.string.title_alerts)
+                            )
+                        },
+                        label = { Text(stringResource(R.string.label_alerts), maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                        selected = currentDestination == Destination.Alerts,
+                        onClick = {
+                            if (currentDestination != Destination.Alerts) {
+                                backStack.clear()
+                                backStack.add(Destination.Alerts)
+                            }
+                        }
+                    )
+                    NavigationRailItem(
+                        icon = {
+                            Icon(
+                                imageVector = if (currentDestination == Destination.Limits) Icons.Filled.Security else Icons.Outlined.Security,
+                                contentDescription = stringResource(R.string.title_limits)
+                            )
+                        },
+                        label = { Text(stringResource(R.string.title_limits), maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                        selected = currentDestination == Destination.Limits,
+                        onClick = {
+                            if (currentDestination != Destination.Limits) {
+                                backStack.clear()
+                                backStack.add(Destination.Limits)
+                            }
+                        }
+                    )
+                    NavigationRailItem(
+                        icon = {
+                            Icon(
+                                imageVector = if (currentDestination == Destination.Settings) Icons.Filled.Settings else Icons.Outlined.Settings,
+                                contentDescription = stringResource(R.string.title_settings)
+                            )
+                        },
+                        label = { Text(stringResource(R.string.title_settings), maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                        selected = currentDestination == Destination.Settings,
+                        onClick = {
+                            if (currentDestination != Destination.Settings) {
+                                backStack.clear()
+                                backStack.add(Destination.Settings)
+                            }
+                        }
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                }
+            }
+
+            Scaffold(
+                modifier = Modifier.weight(1f),
+                snackbarHost = { SnackbarHost(snackbarHostState) },
+                topBar = {
                 val containerColor by animateColorAsState(
                     targetValue = if (currentScrollBehavior.state.contentOffset < -1f) {
                         MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp)
@@ -340,9 +434,10 @@ fun MainScreen(
                 }
             },
             bottomBar = {
-                NavigationBar(
-                    containerColor = MaterialTheme.colorScheme.surfaceContainer
-                ) {
+                if (!isWideScreen) {
+                    NavigationBar(
+                        containerColor = MaterialTheme.colorScheme.surfaceContainer
+                    ) {
                     NavigationBarItem(
                         icon = {
                             Icon(
@@ -424,6 +519,7 @@ fun MainScreen(
                         }
                     )
                 }
+                }
             }
         ) { innerPadding ->
 
@@ -435,6 +531,9 @@ fun MainScreen(
                 backStack = backStack,
                 sceneStrategies = listOf(listDetailStrategy),
                 modifier = Modifier.background(MaterialTheme.colorScheme.background),
+                transitionSpec = {
+                    fadeIn(animationSpec = tween(220)) togetherWith fadeOut(animationSpec = tween(220))
+                },
                 entryProvider = { key ->
                     when (key) {
                         Destination.Home -> NavEntry(key) {
@@ -621,6 +720,7 @@ fun MainScreen(
                     }
                 }
             }
+        }
         }
 
         if (showDonateDialog) {

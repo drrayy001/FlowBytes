@@ -7,8 +7,10 @@ import android.app.PendingIntent
 import android.app.Service
 import android.app.usage.NetworkStats
 import android.app.usage.NetworkStatsManager
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.ServiceInfo
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -128,6 +130,22 @@ class NetworkMonitoringService : Service() {
     private var widgetUsageType = "DAILY"
     private var widgetShowSpeed = true
 
+    private var isScreenOn = true
+
+    private val screenStateReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            when (intent?.action) {
+                Intent.ACTION_SCREEN_ON -> {
+                    isScreenOn = true
+                    startMonitoring()
+                }
+                Intent.ACTION_SCREEN_OFF -> {
+                    isScreenOn = false
+                }
+            }
+        }
+    }
+
     private var trafficTimer: Long = 0
     private var uidSnapshot: Map<Int, Pair<Long, Long>> = emptyMap()
     private var lastTrafficNotificationTime: Long = 0
@@ -227,6 +245,12 @@ class NetworkMonitoringService : Service() {
 
         iconBitmap = createBitmap(64, 64)
         iconCanvas = Canvas(iconBitmap!!)
+
+        val filter = IntentFilter().apply {
+            addAction(Intent.ACTION_SCREEN_ON)
+            addAction(Intent.ACTION_SCREEN_OFF)
+        }
+        registerReceiver(screenStateReceiver, filter)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -285,8 +309,13 @@ class NetworkMonitoringService : Service() {
                     checkAppLimits()
                 }
 
-                updateStats()
-                delay(1000.milliseconds)
+                if (isScreenOn) {
+                    updateStats()
+                    delay(1000.milliseconds)
+                } else {
+                    // Slow down loop when screen is off to save battery
+                    delay(15000.milliseconds)
+                }
             }
         }
     }
@@ -300,6 +329,9 @@ class NetworkMonitoringService : Service() {
         serviceJob.cancel()
         iconBitmap?.recycle()
         iconBitmap = null
+        try {
+            unregisterReceiver(screenStateReceiver)
+        } catch (_: Exception) {}
     }
 
     private fun isNetworkConnected(): Boolean {

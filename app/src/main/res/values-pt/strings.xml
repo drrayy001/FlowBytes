@@ -257,6 +257,8 @@
     <string name="cd_add_app_limit">Adicionar limite de aplicativo</string>
     <string name="label_block_apps">Bloquear aplicativos</string>
     <string name="desc_block_apps">Restringir automaticamente o acesso à internet para aplicativos que atingirem seu limite</string>
+    <string name="msg_firewall_enabled">Firewall ativado</string>
+    <string name="msg_firewall_disabled">Firewall desativado</string>
     <string name="title_edit_app_limit">Editar limite do aplicativo</string>
     <string name="btn_create_app_limit">Criar limite</string>
     <string name="label_app_limit_selection">Limite de aplicativo</string>

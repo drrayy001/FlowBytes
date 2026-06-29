@@ -257,6 +257,8 @@
     <string name="cd_add_app_limit">添加应用流量限额</string>
     <string name="label_block_apps">自动拦截超额应用</string>
     <string name="desc_block_apps">当应用流量消耗超出限额时，自动拦截限制其网络访问</string>
+    <string name="msg_firewall_enabled">防火墙已启用</string>
+    <string name="msg_firewall_disabled">防火墙已禁用</string>
     <string name="title_edit_app_limit">编辑应用流量限额</string>
     <string name="btn_create_app_limit">创建限额</string>
     <string name="label_app_limit_selection">应用限额</string>

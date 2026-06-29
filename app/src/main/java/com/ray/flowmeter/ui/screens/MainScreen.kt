@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.draw.clip
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.filled.*
@@ -29,6 +31,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.serialization.Serializable
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import com.ray.flowmeter.R
 import com.ray.flowmeter.ui.theme.StaggeredEntrance
 import androidx.compose.material3.adaptive.layout.calculatePaneScaffoldDirective
@@ -166,6 +170,64 @@ fun MainScreen(
                                             contentDescription = stringResource(R.string.cd_toggle_filters),
                                             tint = if (showUsageFilters) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
                                         )
+                                    }
+                                }
+
+                                if (currentDestination == Destination.Limits) {
+                                    val appBlockingMasterEnabled by appLimitsViewModel.appBlockingMasterEnabled.collectAsState()
+                                    val scope = rememberCoroutineScope()
+                                    val firewallEnabledMsg = stringResource(R.string.msg_firewall_enabled)
+                                    val firewallDisabledMsg = stringResource(R.string.msg_firewall_disabled)
+                                    
+                                    val buttonBgColor by animateColorAsState(
+                                        targetValue = if (appBlockingMasterEnabled) MaterialTheme.colorScheme.primaryContainer
+                                                      else Color.Transparent,
+                                        animationSpec = tween(300),
+                                        label = "FirewallBgColor"
+                                    )
+                                    val buttonContentColor by animateColorAsState(
+                                        targetValue = if (appBlockingMasterEnabled) MaterialTheme.colorScheme.onPrimaryContainer
+                                                      else MaterialTheme.colorScheme.onSurfaceVariant,
+                                        animationSpec = tween(300),
+                                        label = "FirewallContentColor"
+                                    )
+                                    
+                                    IconButton(
+                                        onClick = {
+                                            val targetState = !appBlockingMasterEnabled
+                                            appLimitsViewModel.setAppBlockingMasterEnabled(targetState)
+                                            scope.launch {
+                                                snackbarHostState.currentSnackbarData?.dismiss()
+                                                val msg = if (targetState) firewallEnabledMsg else firewallDisabledMsg
+                                                val job = launch {
+                                                    snackbarHostState.showSnackbar(
+                                                        message = msg,
+                                                        duration = SnackbarDuration.Indefinite
+                                                    )
+                                                }
+                                                delay(800)
+                                                job.cancel()
+                                            }
+                                        },
+                                        colors = IconButtonDefaults.iconButtonColors(
+                                            containerColor = buttonBgColor,
+                                            contentColor = buttonContentColor
+                                        ),
+                                        modifier = Modifier
+                                            .size(40.dp)
+                                            .clip(CircleShape)
+                                    ) {
+                                        Crossfade(
+                                            targetState = appBlockingMasterEnabled,
+                                            animationSpec = tween(200),
+                                            label = "FirewallIconTransition"
+                                        ) { enabled ->
+                                            Icon(
+                                                imageVector = if (enabled) Icons.Rounded.Security else Icons.Rounded.Shield,
+                                                contentDescription = stringResource(R.string.label_block_apps),
+                                                modifier = Modifier.size(20.dp)
+                                            )
+                                        }
                                     }
                                 }
                             }

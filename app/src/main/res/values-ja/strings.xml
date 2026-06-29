@@ -257,6 +257,8 @@
     <string name="cd_add_app_limit">アプリ制限を追加</string>
     <string name="label_block_apps">アプリをブロック</string>
     <string name="desc_block_apps">制限に達したアプリのインターネットアクセスを自動的に制限します</string>
+    <string name="msg_firewall_enabled">ファイアウォール有効</string>
+    <string name="msg_firewall_disabled">ファイアウォール無効</string>
     <string name="title_edit_app_limit">アプリ制限を編集</string>
     <string name="btn_create_app_limit">制限を作成</string>
     <string name="label_app_limit_selection">アプリ制限</string>

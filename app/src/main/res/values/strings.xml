@@ -257,6 +257,8 @@
     <string name="cd_add_app_limit">Add app limit</string>
     <string name="label_block_apps">Firewall</string>
     <string name="desc_block_apps">Blocks internet access when limits are exceeded</string>
+    <string name="msg_firewall_enabled">Firewall enabled</string>
+    <string name="msg_firewall_disabled">Firewall disabled</string>
     <string name="title_edit_app_limit">Edit App Limit</string>
     <string name="btn_create_app_limit">Create Limit</string>
     <string name="label_app_limit_selection">App Limit</string>

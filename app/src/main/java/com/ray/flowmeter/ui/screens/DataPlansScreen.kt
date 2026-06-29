@@ -249,18 +249,9 @@ fun AppLimitsScreen(
     Box(modifier = modifier.fillMaxSize()) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(bottom = 90.dp),
+            contentPadding = PaddingValues(top = 16.dp, bottom = 90.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            item {
-                Box(modifier = Modifier.padding(top = 16.dp)) {
-                    VpnMasterCard(
-                        checked = appBlockingMasterEnabled,
-                        onCheckedChange = { viewModel.setAppBlockingMasterEnabled(it) }
-                    )
-                }
-            }
-
             item {
                 Row(
                     modifier = Modifier

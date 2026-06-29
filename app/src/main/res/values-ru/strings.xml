@@ -257,6 +257,8 @@
     <string name="cd_add_app_limit">Добавить лимит</string>
     <string name="label_block_apps">Блокировка</string>
     <string name="desc_block_apps">Ограничивать доступ в сеть при превышении лимита</string>
+    <string name="msg_firewall_enabled">Брандмауэр включен</string>
+    <string name="msg_firewall_disabled">Брандмауэр выключен</string>
     <string name="title_edit_app_limit">Изменить лимит</string>
     <string name="btn_create_app_limit">Создать</string>
     <string name="label_app_limit_selection">Лимит приложения</string>

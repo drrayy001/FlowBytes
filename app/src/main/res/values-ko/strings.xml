@@ -257,6 +257,8 @@
     <string name="cd_add_app_limit">앱 한도 추가</string>
     <string name="label_block_apps">앱 차단</string>
     <string name="desc_block_apps">한도에 도달한 앱의 인터넷 접속을 자동으로 제한합니다</string>
+    <string name="msg_firewall_enabled">방화벽 활성화됨</string>
+    <string name="msg_firewall_disabled">방화벽 비활성화됨</string>
     <string name="title_edit_app_limit">앱 한도 편집</string>
     <string name="btn_create_app_limit">한도 생성</string>
     <string name="label_app_limit_selection">앱 한도</string>

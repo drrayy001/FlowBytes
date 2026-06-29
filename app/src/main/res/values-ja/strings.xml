@@ -344,4 +344,16 @@
     <string name="label_unknown">不明</string>
     <string name="desc_configure_limit_format">%1$s プランの制限を設定します。</string>
     <string name="label_select_date">日付を選択</string>
+    <string name="btn_configure">設定</string>
+    <string name="label_selected_count">%1$d件選択済み</string>
+    <string name="label_app_limits_pending">アプリ制限が保留中</string>
+    <string name="cd_clear_selection">選択をクリア</string>
+    <string name="title_configure_limits">制限を設定</string>
+    <string name="desc_configure_limits_count">選択された%1$d個のアプリの制限を設定します。</string>
+    <string name="title_global_settings">グローバル設定</string>
+    <string name="desc_global_settings_subtitle">選択されたすべてのアプリの基準となる network type と期間を設定します。</string>
+    <string name="title_default_limits">デフォルト制限（クイックフィル）</string>
+    <string name="desc_default_limits_subtitle">これを設定すると、下のすべてのアプリエディタに自動入力されます。</string>
+    <string name="title_individual_app_limits">個別アプリ制限</string>
+    <string name="desc_individual_app_limits_subtitle">各アプリのネットワークの種類、期間、または制限値をカスタマイズします。</string>
 </resources>

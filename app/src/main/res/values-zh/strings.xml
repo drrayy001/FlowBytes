@@ -344,4 +344,16 @@
     <string name="label_unknown">未知</string>
     <string name="desc_configure_limit_format">配置您的 %1$s 计划限额。</string>
     <string name="label_select_date">选择日期</string>
+    <string name="btn_configure">配置</string>
+    <string name="label_selected_count">已选择 %1$d 个</string>
+    <string name="label_app_limits_pending">应用限制待定</string>
+    <string name="cd_clear_selection">清除选择</string>
+    <string name="title_configure_limits">配置限额</string>
+    <string name="desc_configure_limits_count">为 %1$d 个已选择的应用配置限额参数。</string>
+    <string name="title_global_settings">全局设置</string>
+    <string name="desc_global_settings_subtitle">为所有选定应用设置基准网络类型和计费周期。</string>
+    <string name="title_default_limits">默认限制 (快速填充)</string>
+    <string name="desc_default_limits_subtitle">设置这些数值将自动填充下方所有的应用编辑器。</string>
+    <string name="title_individual_app_limits">个人应用限制</string>
+    <string name="desc_individual_app_limits_subtitle">为每个应用自定义网络类型、计费周期或限额参数。</string>
 </resources>

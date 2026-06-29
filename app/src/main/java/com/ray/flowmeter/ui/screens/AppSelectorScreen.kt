@@ -281,20 +281,20 @@ fun AppPickerScreen(
                                     ) {
                                         Icon(
                                             Icons.Rounded.Close,
-                                            contentDescription = "Clear Selection",
+                                            contentDescription = stringResource(R.string.cd_clear_selection),
                                             modifier = Modifier.size(18.dp)
                                         )
                                     }
                                     Spacer(modifier = Modifier.width(12.dp))
                                     Column {
                                         Text(
-                                            text = "${selectedApps.size} selected",
+                                            text = stringResource(R.string.label_selected_count, selectedApps.size),
                                             style = MaterialTheme.typography.titleSmall,
                                             fontWeight = FontWeight.Bold,
                                             color = MaterialTheme.colorScheme.onSurface
                                         )
                                         Text(
-                                            text = "App limits pending",
+                                            text = stringResource(R.string.label_app_limits_pending),
                                             style = MaterialTheme.typography.bodySmall,
                                             color = MaterialTheme.colorScheme.onSurfaceVariant
                                         )
@@ -309,7 +309,7 @@ fun AppPickerScreen(
                                     ),
                                     contentPadding = PaddingValues(horizontal = 20.dp, vertical = 10.dp)
                                 ) {
-                                    Text("Configure", fontWeight = FontWeight.Bold)
+                                    Text(stringResource(R.string.btn_configure), fontWeight = FontWeight.Bold)
                                 }
                             }
                         }
@@ -334,7 +334,7 @@ fun BatchConfigurationScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = "Configure Limits",
+                        text = stringResource(R.string.title_configure_limits),
                         fontWeight = FontWeight.Black,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -521,7 +521,7 @@ fun BatchConfigurationContent(
             .verticalScroll(rememberScrollState())
     ) {
         Text(
-            text = "Configure limits for ${selectedApps.size} selected apps.",
+            text = stringResource(R.string.desc_configure_limits_count, selectedApps.size),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(vertical = 12.dp)
@@ -538,13 +538,13 @@ fun BatchConfigurationContent(
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
-                    text = "Global Settings",
+                    text = stringResource(R.string.title_global_settings),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = "Set baseline network type and period for all selected apps.",
+                    text = stringResource(R.string.desc_global_settings_subtitle),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(bottom = 16.dp)
@@ -618,13 +618,13 @@ fun BatchConfigurationContent(
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
-                    text = "Default Limits (Quick Fill)",
+                    text = stringResource(R.string.title_default_limits),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = "Setting these will auto-fill all app editors below.",
+                    text = stringResource(R.string.desc_default_limits_subtitle),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(bottom = 16.dp)
@@ -688,13 +688,13 @@ fun BatchConfigurationContent(
 
         // Individual app override list heading
         Text(
-            text = "Individual App Limits",
+            text = stringResource(R.string.title_individual_app_limits),
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onSurface
         )
         Text(
-            text = "Customize network types, periods, or limit values for each app.",
+            text = stringResource(R.string.desc_individual_app_limits_subtitle),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(bottom = 8.dp)
@@ -765,40 +765,40 @@ fun BatchConfigurationContent(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Column(modifier = Modifier.weight(1.2f)) {
-                            Text("Network Type", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Bold)
+                            Text(stringResource(R.string.label_network_type), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Bold)
                             Spacer(modifier = Modifier.height(4.dp))
                             Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                                 MiniChip(
                                     selected = currentAppNetworkType == "both",
                                     onClick = { appNetworkTypes[app.packageName] = "both" },
-                                    label = "Both"
+                                    label = stringResource(R.string.label_both)
                                 )
                                 MiniChip(
                                     selected = currentAppNetworkType == "wifi",
                                     onClick = { appNetworkTypes[app.packageName] = "wifi" },
-                                    label = "Wi-Fi"
+                                    label = stringResource(R.string.label_wifi)
                                 )
                                 MiniChip(
                                     selected = currentAppNetworkType == "mobile",
                                     onClick = { appNetworkTypes[app.packageName] = "mobile" },
-                                    label = "Mobile"
+                                    label = stringResource(R.string.label_mobile)
                                 )
                             }
                         }
                         Spacer(modifier = Modifier.width(8.dp))
                         Column(modifier = Modifier.weight(0.8f)) {
-                            Text("Period", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Bold)
+                            Text(stringResource(R.string.label_limit_period), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Bold)
                             Spacer(modifier = Modifier.height(4.dp))
                             Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                                 MiniChip(
                                     selected = currentAppLimitType == "daily",
                                     onClick = { appLimitTypes[app.packageName] = "daily" },
-                                    label = "Daily"
+                                    label = stringResource(R.string.filter_daily)
                                 )
                                 MiniChip(
                                     selected = currentAppLimitType == "monthly",
                                     onClick = { appLimitTypes[app.packageName] = "monthly" },
-                                    label = "Monthly"
+                                    label = stringResource(R.string.filter_monthly)
                                 )
                             }
                         }
@@ -809,7 +809,7 @@ fun BatchConfigurationContent(
                     if (currentAppNetworkType == "both") {
                         Row(modifier = Modifier.fillMaxWidth()) {
                             Column(modifier = Modifier.weight(1f)) {
-                                Text("Wi-Fi Limit", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
+                                Text(stringResource(R.string.settings_wifi_limit), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
                                 Spacer(modifier = Modifier.height(4.dp))
                                 LimitInputRow(
                                     value = appWifiLimitsInput[app.packageName] ?: "100",
@@ -820,7 +820,7 @@ fun BatchConfigurationContent(
                             }
                             Spacer(modifier = Modifier.width(12.dp))
                             Column(modifier = Modifier.weight(1f)) {
-                                Text("Mobile Limit", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
+                                Text(stringResource(R.string.settings_mobile_limit), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
                                 Spacer(modifier = Modifier.height(4.dp))
                                 LimitInputRow(
                                     value = appMobileLimitsInput[app.packageName] ?: "50",
@@ -831,7 +831,7 @@ fun BatchConfigurationContent(
                             }
                         }
                     } else {
-                        val dynamicLabel = if (currentAppNetworkType == "wifi") "Wi-Fi Limit" else "Mobile Limit"
+                        val dynamicLabel = if (currentAppNetworkType == "wifi") stringResource(R.string.settings_wifi_limit) else stringResource(R.string.settings_mobile_limit)
                         Text(dynamicLabel, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
                         Spacer(modifier = Modifier.height(4.dp))
                         LimitInputRow(

@@ -344,4 +344,16 @@
     <string name="label_unknown">Desconhecido</string>
     <string name="desc_configure_limit_format">Configurar limite para seu plano %1$s.</string>
     <string name="label_select_date">Selecionar data</string>
+    <string name="btn_configure">Configurar</string>
+    <string name="label_selected_count">%1$d selecionados</string>
+    <string name="label_app_limits_pending">Limites de aplicativos pendentes</string>
+    <string name="cd_clear_selection">Limpar seleção</string>
+    <string name="title_configure_limits">Configurar limites</string>
+    <string name="desc_configure_limits_count">Configurar limites para %1$d aplicativos selecionados.</string>
+    <string name="title_global_settings">Configurações globais</string>
+    <string name="desc_global_settings_subtitle">Definir tipo de rede e período base para todos os aplicativos selecionados.</string>
+    <string name="title_default_limits">Limites padrão (Preenchimento rápido)</string>
+    <string name="desc_default_limits_subtitle">Definir estes valores preencherá automaticamente todos os editores de aplicativos abaixo.</string>
+    <string name="title_individual_app_limits">Limites de aplicativos individuais</string>
+    <string name="desc_individual_app_limits_subtitle">Personalize tipos de rede, períodos ou valores limite para cada aplicativo.</string>
 </resources>

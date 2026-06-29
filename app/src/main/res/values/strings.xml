@@ -346,4 +346,16 @@
     <string name="label_select_date">Select Date</string>
     <string name="placeholder_usage" translatable="false">0.00 MB</string>
     <string name="placeholder_speed" translatable="false">0 KB/s</string>
+    <string name="btn_configure">Configure</string>
+    <string name="label_selected_count">%1$d selected</string>
+    <string name="label_app_limits_pending">App limits pending</string>
+    <string name="cd_clear_selection">Clear Selection</string>
+    <string name="title_configure_limits">Configure Limits</string>
+    <string name="desc_configure_limits_count">Configure limits for %1$d selected apps.</string>
+    <string name="title_global_settings">Global Settings</string>
+    <string name="desc_global_settings_subtitle">Set baseline network type and period for all selected apps.</string>
+    <string name="title_default_limits">Default Limits (Quick Fill)</string>
+    <string name="desc_default_limits_subtitle">Setting these will auto-fill all app editors below.</string>
+    <string name="title_individual_app_limits">Individual App Limits</string>
+    <string name="desc_individual_app_limits_subtitle">Customize network types, periods, or limit values for each app.</string>
 </resources>

@@ -344,4 +344,16 @@
     <string name="label_unknown">अज्ञात</string>
     <string name="desc_configure_limit_format">अपने %1$s प्लान के लिए सीमा कॉन्फ़िगर करें।</string>
     <string name="label_select_date">तारीख चुनें</string>
+    <string name="btn_configure">कॉन्फ़िगर करें</string>
+    <string name="label_selected_count">%1$d चयनित</string>
+    <string name="label_app_limits_pending">एप्लिकेशन सीमाएं लंबित हैं</string>
+    <string name="cd_clear_selection">चयन साफ़ करें</string>
+    <string name="title_configure_limits">सीमाएं कॉन्फ़िगर करें</string>
+    <string name="desc_configure_limits_count">चयनित %1$d ऐप्स के लिए सीमाएं कॉन्फ़िगर करें।</string>
+    <string name="title_global_settings">वैश्विक सेटिंग्स</string>
+    <string name="desc_global_settings_subtitle">सभी चयनित ऐप्स के लिए बेसलाइन नेटवर्क प्रकार और अवधि सेट करें।</string>
+    <string name="title_default_limits">डिफ़ॉल्ट सीमाएं (त्वरित भरें)</string>
+    <string name="desc_default_limits_subtitle">इन्हें सेट करने से नीचे दिए गए सभी ऐप संपादक स्वतः भर जाएंगे।</string>
+    <string name="title_individual_app_limits">व्यक्तिगत ऐप सीमाएं</string>
+    <string name="desc_individual_app_limits_subtitle">प्रत्येक ऐप के लिए नेटवर्क प्रकार, अवधि या सीमा मान अनुकूलित करें।</string>
 </resources>

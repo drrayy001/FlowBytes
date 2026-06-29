@@ -344,4 +344,16 @@
     <string name="label_unknown">Неизвестно</string>
     <string name="desc_configure_limit_format">Настройте лимит для плана %1$s.</string>
     <string name="label_select_date">Выберите дату</string>
+    <string name="btn_configure">Настроить</string>
+    <string name="label_selected_count">%1$d выбрано</string>
+    <string name="label_app_limits_pending">Ожидание лимитов приложений</string>
+    <string name="cd_clear_selection">Очистить выбор</string>
+    <string name="title_configure_limits">Настройка лимитов</string>
+    <string name="desc_configure_limits_count">Настройте лимиты для %1$d выбранных приложений.</string>
+    <string name="title_global_settings">Общие настройки</string>
+    <string name="desc_global_settings_subtitle">Укажите базовый тип сети и период лимита для всех выбранных приложений.</string>
+    <string name="title_default_limits">Лимиты по умолчанию (Быстрое заполнение)</string>
+    <string name="desc_default_limits_subtitle">Установка этих значений автоматически заполнит все редакторы приложений ниже.</string>
+    <string name="title_individual_app_limits">Индивидуальные лимиты приложений</string>
+    <string name="desc_individual_app_limits_subtitle">Настройте типы сетей, периоды или значения лимитов для каждого приложения.</string>
 </resources>

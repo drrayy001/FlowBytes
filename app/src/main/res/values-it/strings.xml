@@ -344,4 +344,16 @@
     <string name="label_unknown">Sconosciuto</string>
     <string name="desc_configure_limit_format">Configura il limite per il tuo piano %1$s.</string>
     <string name="label_select_date">Seleziona data</string>
+    <string name="btn_configure">Configura</string>
+    <string name="label_selected_count">%1$d selezionati</string>
+    <string name="label_app_limits_pending">Limiti dell\'app in sospeso</string>
+    <string name="cd_clear_selection">Cancella selezione</string>
+    <string name="title_configure_limits">Configura limiti</string>
+    <string name="desc_configure_limits_count">Configura i limiti per %1$d app selezionate.</string>
+    <string name="title_global_settings">Impostazioni generali</string>
+    <string name="desc_global_settings_subtitle">Imposta il tipo di rete e il periodo di base per tutte le app selezionate.</string>
+    <string name="title_default_limits">Limiti predefiniti (Riempimento rapido)</string>
+    <string name="desc_default_limits_subtitle">L\'impostazione di questi valori compilerà automaticamente tutti gli editor delle app in basso.</string>
+    <string name="title_individual_app_limits">Limiti delle singole app</string>
+    <string name="desc_individual_app_limits_subtitle">Personalizza tipi di rete, periodi o valori limite per ciascuna app.</string>
 </resources>

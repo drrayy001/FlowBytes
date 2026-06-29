@@ -107,8 +107,8 @@
     <string name="settings_section_alerts">التنبيهات والحدود</string>
     <string name="settings_data_alerts">تنبيهات الاستهلاك العالي</string>
     <string name="settings_data_alerts_desc">احصل على إشعار عندما تستهلك التطبيقات بيانات زائدة في الخلفية</string>
-    <string name="settings_mobile_limit">Mobile Data Limit</string> <!-- Use existing key -->
-    <string name="settings_wifi_limit">Wi-Fi Data Limit</string> <!-- Use existing key -->
+    <string name="settings_mobile_limit">حد بيانات الجوال</string>
+    <string name="settings_wifi_limit">حد بيانات واي فاي</string>
 
     <string name="label_plan_duration">مدة الخطة</string>
     <string name="msg_alert_muted">تم كتم التنبيه</string>
@@ -346,4 +346,16 @@
     <string name="label_general_limit_selection">خطة النظام</string>
     <string name="desc_general_limit_selection">تكوين حدود البيانات اليومية على مستوى الجهاز</string>
     <string name="title_choose_limit_type">اختر نوع الحد</string>
+    <string name="btn_configure">تكوين</string>
+    <string name="label_selected_count">%1$d تم تحديدها</string>
+    <string name="label_app_limits_pending">حدود التطبيقات قيد الانتظار</string>
+    <string name="cd_clear_selection">مسح التحديد</string>
+    <string name="title_configure_limits">تهيئة الحدود</string>
+    <string name="desc_configure_limits_count">تكوين الحدود لـ %1$d من التطبيقات المحددة.</string>
+    <string name="title_global_settings">الإعدادات العامة</string>
+    <string name="desc_global_settings_subtitle">اضبط نوع الشبكة وفترة الحد الأساسية لجميع التطبيقات المحددة.</string>
+    <string name="title_default_limits">الحدود الافتراضية (التعبئة السريعة)</string>
+    <string name="desc_default_limits_subtitle">سيؤدي ضبط هذه الحدود إلى تعبئة جميع محرري التطبيقات أدناه تلقائيًا.</string>
+    <string name="title_individual_app_limits">حدود التطبيقات الفردية</string>
+    <string name="desc_individual_app_limits_subtitle">تخصيص أنواع الشبكات أو الفترات أو قيم الحدود لكل تطبيق.</string>
 </resources>

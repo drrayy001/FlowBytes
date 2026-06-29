@@ -107,8 +107,8 @@
     <string name="settings_section_alerts">Alertes &amp; Limites</string>
     <string name="settings_data_alerts">Alertes de données élevées</string>
     <string name="settings_data_alerts_desc">Recevoir des notifications en cas d\'utilisation excessive en arrière-plan</string>
-    <string name="settings_mobile_limit">Mobile Data Limit</string> <!-- Use existing key -->
-    <string name="settings_wifi_limit">Wi-Fi Data Limit</string> <!-- Use existing key -->
+    <string name="settings_mobile_limit">Limite de données mobiles</string>
+    <string name="settings_wifi_limit">Limite de données Wi-Fi</string>
 
     <string name="label_plan_duration">Durée du plan</string>
     <string name="msg_alert_muted">Alerte désactivée</string>
@@ -346,4 +346,16 @@
     <string name="label_general_limit_selection">Forfait système</string>
     <string name="desc_general_limit_selection">Configurer les limites quotidiennes de données globales</string>
     <string name="title_choose_limit_type">Choisir le type de limite</string>
+    <string name="btn_configure">Configurer</string>
+    <string name="label_selected_count">%1$d sélectionnés</string>
+    <string name="label_app_limits_pending">Limites d\'application en attente</string>
+    <string name="cd_clear_selection">Effacer la sélection</string>
+    <string name="title_configure_limits">Configurer les limites</string>
+    <string name="desc_configure_limits_count">Configurer les limites pour %1$d applications sélectionnées.</string>
+    <string name="title_global_settings">Paramètres globaux</string>
+    <string name="desc_global_settings_subtitle">Définir le type de réseau et la période de base pour toutes les applications sélectionnées.</string>
+    <string name="title_default_limits">Limites par défaut (Remplissage rapide)</string>
+    <string name="desc_default_limits_subtitle">La configuration de ces éléments remplira automatiquement tous les éditeurs d\'applications ci-dessous.</string>
+    <string name="title_individual_app_limits">Limites d\'application individuelles</string>
+    <string name="desc_individual_app_limits_subtitle">Personnaliser les types de réseau, les périodes ou les valeurs limites pour chaque application.</string>
 </resources>

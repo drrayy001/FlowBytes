@@ -344,4 +344,16 @@
     <string name="label_unknown">알 수 없음</string>
     <string name="desc_configure_limit_format">%1$s 요금제에 대한 한도를 구성합니다.</string>
     <string name="label_select_date">날짜 선택</string>
+    <string name="btn_configure">설정</string>
+    <string name="label_selected_count">%1$d개 선택됨</string>
+    <string name="label_app_limits_pending">앱 한도 대기 중</string>
+    <string name="cd_clear_selection">선택 해제</string>
+    <string name="title_configure_limits">한도 설정</string>
+    <string name="desc_configure_limits_count">선택한 %1$d개 앱에 대한 한도를 구성합니다.</string>
+    <string name="title_global_settings">전체 설정</string>
+    <string name="desc_global_settings_subtitle">선택한 모든 앱에 대한 기본 네트워크 유형 및 한도 기간을 설정합니다.</string>
+    <string name="title_default_limits">기본 한도 (빠른 채우기)</string>
+    <string name="desc_default_limits_subtitle">이 항목을 설정하면 아래의 모든 앱 편집기가 자동으로 채워집니다.</string>
+    <string name="title_individual_app_limits">개별 앱 한도</string>
+    <string name="desc_individual_app_limits_subtitle">각 앱별로 네트워크 유형, 한도 기간 또는 한도 값을 맞춤설정합니다.</string>
 </resources>

@@ -344,4 +344,16 @@
     <string name="label_unknown">Unbekannt</string>
     <string name="desc_configure_limit_format">Konfigurieren Sie das Limit für Ihren %1$s-Plan.</string>
     <string name="label_select_date">Datum auswählen</string>
+    <string name="btn_configure">Konfigurieren</string>
+    <string name="label_selected_count">%1$d ausgewählt</string>
+    <string name="label_app_limits_pending">App-Limits ausstehend</string>
+    <string name="cd_clear_selection">Auswahl aufheben</string>
+    <string name="title_configure_limits">Limits konfigurieren</string>
+    <string name="desc_configure_limits_count">Konfigurieren Sie Limits für %1$d ausgewählte Apps.</string>
+    <string name="title_global_settings">Globale Einstellungen</string>
+    <string name="desc_global_settings_subtitle">Legen Sie den Standard-Netzwerktyp und -Zeitraum für alle ausgewählten Apps fest.</string>
+    <string name="title_default_limits">Standardgrenzen (Schnellfüllung)</string>
+    <string name="desc_default_limits_subtitle">Durch das Festlegen dieser Optionen werden alle App-Editoren unten automatisch ausgefüllt.</string>
+    <string name="title_individual_app_limits">Individuelle App-Limits</string>
+    <string name="desc_individual_app_limits_subtitle">Passen Sie Netzwerktypen, Zeiträume oder Limitwerte für jede App an.</string>
 </resources>

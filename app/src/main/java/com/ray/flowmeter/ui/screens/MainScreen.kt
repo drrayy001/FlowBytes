@@ -72,6 +72,9 @@ sealed interface Destination {
 
     @Serializable
     data object Settings : Destination
+
+    @Serializable
+    data object AppPicker : Destination
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3AdaptiveApi::class)
@@ -100,11 +103,16 @@ fun MainScreen(
         Destination.Alerts -> alertsScrollBehavior
         Destination.Limits -> limitsScrollBehavior
         Destination.Settings -> settingsScrollBehavior
+        Destination.AppPicker -> limitsScrollBehavior
     }
 
     BackHandler(enabled = (currentDestination != Destination.Home)) {
-        backStack.clear()
-        backStack.add(Destination.Home)
+        if (currentDestination == Destination.AppPicker) {
+            appLimitsViewModel.isPickerOpen = false
+        } else {
+            backStack.clear()
+            backStack.add(Destination.Home)
+        }
     }
 
     val snackbarHostState = remember { SnackbarHostState() }
@@ -178,9 +186,21 @@ fun MainScreen(
     val windowAdaptiveInfo = currentWindowAdaptiveInfoV2()
     val isWideScreen = windowAdaptiveInfo.windowSizeClass.isWidthAtLeastBreakpoint(600)
 
+    LaunchedEffect(appLimitsViewModel.isPickerOpen) {
+        if (appLimitsViewModel.isPickerOpen) {
+            if (currentDestination != Destination.AppPicker) {
+                backStack.add(Destination.AppPicker)
+            }
+        } else {
+            if (currentDestination == Destination.AppPicker) {
+                backStack.removeLastOrNull()
+            }
+        }
+    }
+
     Box(modifier = Modifier.fillMaxSize()) {
         Row(modifier = Modifier.fillMaxSize()) {
-            if (isWideScreen) {
+            if (isWideScreen && currentDestination != Destination.AppPicker) {
                 NavigationRail(
                     containerColor = MaterialTheme.colorScheme.surfaceContainer
                 ) {
@@ -436,7 +456,7 @@ fun MainScreen(
                 }
             },
             bottomBar = {
-                if (!isWideScreen) {
+                if (!isWideScreen && currentDestination != Destination.AppPicker) {
                     NavigationBar(
                         containerColor = MaterialTheme.colorScheme.surfaceContainer
                     ) {
@@ -592,6 +612,18 @@ fun MainScreen(
                                 onDonateClick = { showDonateDialog = true },
                                 modifier = Modifier.fillMaxSize().padding(innerPadding).nestedScroll(settingsScrollBehavior.nestedScrollConnection)
                             )
+                        }
+
+                        Destination.AppPicker -> NavEntry(key) {
+                            AppPickerScreen(
+                                viewModel = appLimitsViewModel,
+                                onBack = {
+                                    appLimitsViewModel.isPickerOpen = false
+                                }
+                            ) { limits ->
+                                appLimitsViewModel.addAppLimits(limits)
+                                appLimitsViewModel.isPickerOpen = false
+                            }
                         }
                     }
                 }

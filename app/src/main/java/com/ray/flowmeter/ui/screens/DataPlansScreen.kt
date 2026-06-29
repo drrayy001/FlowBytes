@@ -450,29 +450,7 @@ fun AppLimitsOverlay(viewModel: AppLimitsViewModel) {
     val wifiCustomLimitStart by viewModel.wifiCustomLimitStart.collectAsState()
     val wifiCustomLimitEnd by viewModel.wifiCustomLimitEnd.collectAsState()
 
-    AnimatedVisibility(
-        visible = showPicker,
-        enter = fadeIn(animationSpec = androidx.compose.animation.core.tween(300)),
-        exit = fadeOut(animationSpec = androidx.compose.animation.core.tween(300))
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null
-                ) {}
-        ) {
-            AppPickerScreen(
-                viewModel = viewModel,
-                onBack = { viewModel.isPickerOpen = false },
-            ) { limits ->
-                viewModel.addAppLimits(limits)
-                viewModel.isPickerOpen = false
-            }
-        }
-    }
+
 
     if (editingLimit != null) {
         AppLimitEditScreen(

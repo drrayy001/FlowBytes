@@ -27,15 +27,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import androidx.core.graphics.drawable.toBitmap
 import com.ray.flowmeter.R
-import com.ray.flowmeter.ui.dialogs.AnimatedDialogContent
 import com.ray.flowmeter.ui.viewmodels.AppLimitsViewModel
 import androidx.compose.foundation.BorderStroke
 import com.ray.flowmeter.data.AppLimit
-import androidx.compose.ui.text.style.TextAlign
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

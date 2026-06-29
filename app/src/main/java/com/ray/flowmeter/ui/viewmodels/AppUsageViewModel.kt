@@ -480,9 +480,22 @@ class AppUsageViewModel(
             1061, 2904 -> return ResolvedInfo("android.ota_$uid", applicationContext.getString(R.string.label_system_update), systemIcon, isSystem = true, isProcess = true)
         }
 
-        val packages = packageManager.getPackagesForUid(uid)
+        val packages = try {
+            packageManager.getPackagesForUid(uid)
+        } catch (_: SecurityException) {
+            null
+        } catch (_: Exception) {
+            null
+        }
+
         if (packages.isNullOrEmpty()) {
-            val systemName = packageManager.getNameForUid(uid) ?: (applicationContext.getString(R.string.label_system_processes) + " ($uid)")
+            val systemName = try {
+                packageManager.getNameForUid(uid)
+            } catch (_: SecurityException) {
+                null
+            } catch (_: Exception) {
+                null
+            } ?: (applicationContext.getString(R.string.label_system_processes) + " ($uid)")
             val icon = if (uid < 10000) systemIcon else null
             return ResolvedInfo("uid_$uid", systemName, icon, isSystem = true, isProcess = true)
         }

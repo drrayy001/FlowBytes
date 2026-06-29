@@ -1020,7 +1020,13 @@ class NetworkMonitoringService : Service() {
 
         if (topUid != -1) {
             val pm = packageManager
-            val packages = pm.getPackagesForUid(topUid)
+            val packages = try {
+                pm.getPackagesForUid(topUid)
+            } catch (_: SecurityException) {
+                null
+            } catch (_: Exception) {
+                null
+            }
             
             if (!packages.isNullOrEmpty()) {
                 for (pkg in packages) {

@@ -67,6 +67,7 @@ fun AppPickerScreen(
         )
     } else {
         Scaffold(
+            containerColor = MaterialTheme.colorScheme.background,
             topBar = {
                 TopAppBar(
                     title = {
@@ -344,6 +345,7 @@ fun BatchConfigurationScreen(
     var triggerConfirm by remember { mutableStateOf<(() -> Unit)?>(null) }
 
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             TopAppBar(
                 title = {

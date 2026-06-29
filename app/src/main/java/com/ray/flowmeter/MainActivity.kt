@@ -314,104 +314,109 @@ class MainActivity : ComponentActivity() {
                             useAmoled = useAmoled,
                             accentColor = accentColor,
                         ) {
-                            if (onboardingCompleted == true) {
-                                val (currentIntent, setCurrentIntent) = remember { mutableStateOf(intent) }
+                            androidx.compose.material3.Surface(
+                                modifier = Modifier.fillMaxSize(),
+                                color = androidx.compose.material3.MaterialTheme.colorScheme.background
+                            ) {
+                                if (onboardingCompleted == true) {
+                                    val (currentIntent, setCurrentIntent) = remember { mutableStateOf(intent) }
 
-                                // Listen for resume lifecycle events to update current intent (e.g. user clicked notification while app is running).
-                                val lifecycleOwner = LocalLifecycleOwner.current
-                                DisposableEffect(lifecycleOwner) {
-                                    val observer = LifecycleEventObserver { _, event ->
-                                        if (event == Lifecycle.Event.ON_RESUME) {
-                                            if (currentIntent != intent) {
-                                                setCurrentIntent(intent)
+                                    // Listen for resume lifecycle events to update current intent (e.g. user clicked notification while app is running).
+                                    val lifecycleOwner = LocalLifecycleOwner.current
+                                    DisposableEffect(lifecycleOwner) {
+                                        val observer = LifecycleEventObserver { _, event ->
+                                            if (event == Lifecycle.Event.ON_RESUME) {
+                                                if (currentIntent != intent) {
+                                                    setCurrentIntent(intent)
+                                                }
                                             }
                                         }
-                                    }
-                                    lifecycleOwner.lifecycle.addObserver(observer)
-                                    onDispose {
-                                        lifecycleOwner.lifecycle.removeObserver(observer)
-                                    }
-                                }
-
-                                // --- Notification Extra / Deep Link Handling ---
-                                val navigateToAlerts = currentIntent?.getBooleanExtra(NetworkMonitoringService.EXTRA_NAVIGATE_TO_ALERTS, false) ?: false
-                                val navigateToLimits = currentIntent?.getBooleanExtra(NetworkMonitoringService.EXTRA_NAVIGATE_TO_LIMITS, false) ?: false
-
-                                val initialDestination = when {
-                                    navigateToLimits -> Destination.Limits
-                                    navigateToAlerts -> Destination.Alerts
-                                    else -> Destination.Home
-                                }
-
-                                val muteAppName = currentIntent?.getStringExtra(NetworkMonitoringService.EXTRA_MUTE_APP_NAME)
-                                val dismissNotificationId = currentIntent?.getIntExtra(NetworkMonitoringService.EXTRA_DISMISS_NOTIFICATION_ID, -1) ?: -1
-                                val isIgnoreAction = currentIntent?.action == NetworkMonitoringService.ACTION_IGNORE_APP
-
-                                // Process incoming intent actions (such as clicking "Ignore App" directly from an alert notification).
-                                LaunchedEffect(currentIntent) {
-                                    if (muteAppName != null) {
-                                        if (isIgnoreAction) {
-                                            if (dismissNotificationId != -1) {
-                                                val manager = getSystemService(android.app.NotificationManager::class.java)
-                                                manager.cancel(dismissNotificationId)
-                                            }
+                                        lifecycleOwner.lifecycle.addObserver(observer)
+                                        onDispose {
+                                            lifecycleOwner.lifecycle.removeObserver(observer)
                                         }
-                                        alertsViewModel.onMuteRequested(muteAppName)
-
-                                        // Clear extras to avoid re-triggering the action if the activity is recreated.
-                                        intent.removeExtra(NetworkMonitoringService.EXTRA_MUTE_APP_NAME)
-                                        intent.removeExtra(NetworkMonitoringService.EXTRA_DISMISS_NOTIFICATION_ID)
-                                        if (intent.action == NetworkMonitoringService.ACTION_IGNORE_APP) {
-                                            intent.action = null
-                                        }
-
-                                        setCurrentIntent(null)
                                     }
-                                }
 
-                                MainScreen(
-                                    homeViewModel = homeViewModel,
-                                    appUsageViewModel = appUsageViewModel,
-                                    alertsViewModel = alertsViewModel,
-                                    appLimitsViewModel = appLimitsViewModel,
-                                    settingsViewModel = settingsViewModel,
-                                    initialDestination = initialDestination,
-                                )
+                                    // --- Notification Extra / Deep Link Handling ---
+                                    val navigateToAlerts = currentIntent?.getBooleanExtra(NetworkMonitoringService.EXTRA_NAVIGATE_TO_ALERTS, false) ?: false
+                                    val navigateToLimits = currentIntent?.getBooleanExtra(NetworkMonitoringService.EXTRA_NAVIGATE_TO_LIMITS, false) ?: false
 
-                                if (showChangelog) {
-                                    ChangelogDialog { setShowChangelog(false) }
-                                }
+                                    val initialDestination = when {
+                                        navigateToLimits -> Destination.Limits
+                                        navigateToAlerts -> Destination.Alerts
+                                        else -> Destination.Home
+                                    }
 
-                                val coroutineScope = rememberCoroutineScope()
-                                if (showReviewDialog) {
-                                    ReviewDialog(
-                                        onDismiss = { setShowReviewDialog(false) },
-                                        onNeverShowAgain = {
-                                            coroutineScope.launch {
-                                                repository.setUserReviewedRated(true)
+                                    val muteAppName = currentIntent?.getStringExtra(NetworkMonitoringService.EXTRA_MUTE_APP_NAME)
+                                    val dismissNotificationId = currentIntent?.getIntExtra(NetworkMonitoringService.EXTRA_DISMISS_NOTIFICATION_ID, -1) ?: -1
+                                    val isIgnoreAction = currentIntent?.action == NetworkMonitoringService.ACTION_IGNORE_APP
+
+                                    // Process incoming intent actions (such as clicking "Ignore App" directly from an alert notification).
+                                    LaunchedEffect(currentIntent) {
+                                        if (muteAppName != null) {
+                                            if (isIgnoreAction) {
+                                                if (dismissNotificationId != -1) {
+                                                    val manager = getSystemService(android.app.NotificationManager::class.java)
+                                                    manager.cancel(dismissNotificationId)
+                                                }
                                             }
-                                            setShowReviewDialog(false)
+                                            alertsViewModel.onMuteRequested(muteAppName)
+
+                                            // Clear extras to avoid re-triggering the action if the activity is recreated.
+                                            intent.removeExtra(NetworkMonitoringService.EXTRA_MUTE_APP_NAME)
+                                            intent.removeExtra(NetworkMonitoringService.EXTRA_DISMISS_NOTIFICATION_ID)
+                                            if (intent.action == NetworkMonitoringService.ACTION_IGNORE_APP) {
+                                                intent.action = null
+                                            }
+
+                                            setCurrentIntent(null)
+                                        }
+                                    }
+
+                                    MainScreen(
+                                        homeViewModel = homeViewModel,
+                                        appUsageViewModel = appUsageViewModel,
+                                        alertsViewModel = alertsViewModel,
+                                        appLimitsViewModel = appLimitsViewModel,
+                                        settingsViewModel = settingsViewModel,
+                                        initialDestination = initialDestination,
+                                    )
+
+                                    if (showChangelog) {
+                                        ChangelogDialog { setShowChangelog(false) }
+                                    }
+
+                                    val coroutineScope = rememberCoroutineScope()
+                                    if (showReviewDialog) {
+                                        ReviewDialog(
+                                            onDismiss = { setShowReviewDialog(false) },
+                                            onNeverShowAgain = {
+                                                coroutineScope.launch {
+                                                    repository.setUserReviewedRated(true)
+                                                }
+                                                setShowReviewDialog(false)
+                                            },
+                                            onLater = {
+                                                coroutineScope.launch {
+                                                    repository.setLastReviewPromptTime(System.currentTimeMillis())
+                                                }
+                                                setShowReviewDialog(false)
+                                            },
+                                            onReviewCompleted = {
+                                                coroutineScope.launch {
+                                                    repository.setUserReviewedRated(true)
+                                                }
+                                                setShowReviewDialog(false)
+                                            }
+                                        )
+                                    }
+                                } else {
+                                    OnboardingScreen(
+                                        onComplete = {
+                                            onboardingViewModel.completeOnboarding()
                                         },
-                                        onLater = {
-                                            coroutineScope.launch {
-                                                repository.setLastReviewPromptTime(System.currentTimeMillis())
-                                            }
-                                            setShowReviewDialog(false)
-                                        },
-                                        onReviewCompleted = {
-                                            coroutineScope.launch {
-                                                repository.setUserReviewedRated(true)
-                                            }
-                                            setShowReviewDialog(false)
-                                        }
                                     )
                                 }
-                            } else {
-                                OnboardingScreen(
-                                    onComplete = {
-                                        onboardingViewModel.completeOnboarding()
-                                    },
-                                )
                             }
                         }
                     }

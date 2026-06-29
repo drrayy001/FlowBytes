@@ -266,4 +266,19 @@ class SettingsViewModel(
     fun setWidgetUsageType(type: String) {
         viewModelScope.launch { repository.setWidgetUsageType(type) }
     }
+
+    val supportBannerDismissed: StateFlow<Boolean> = repository.supportBannerDismissed
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
+
+    val appLaunchCount: StateFlow<Int> = repository.appLaunchCount
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0)
+
+    val firstInstallTime: StateFlow<Long> = repository.firstInstallTime
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0L)
+
+    fun dismissSupportBanner() {
+        viewModelScope.launch {
+            repository.setSupportBannerDismissed(true)
+        }
+    }
 }

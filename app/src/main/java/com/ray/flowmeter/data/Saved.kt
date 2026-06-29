@@ -239,6 +239,7 @@ class UserPreferencesRepository(private val context: Context) {
 
         val WIDGET_SHOW_SPEED = booleanPreferencesKey("widget_show_speed")
         val WIDGET_USAGE_TYPE = stringPreferencesKey("widget_usage_type") // "DAILY", "MONTHLY"
+        val SUPPORT_BANNER_DISMISSED = booleanPreferencesKey("support_banner_dismissed")
     }
 
     private val preferencesFlow = context.dataStore.data
@@ -255,6 +256,11 @@ class UserPreferencesRepository(private val context: Context) {
     val onboardingCompleted: Flow<Boolean> = preferencesFlow
         .map { preferences ->
             preferences[PreferencesKeys.ONBOARDING_COMPLETED] ?: false
+        }.distinctUntilChanged()
+
+    val supportBannerDismissed: Flow<Boolean> = preferencesFlow
+        .map { preferences ->
+            preferences[PreferencesKeys.SUPPORT_BANNER_DISMISSED] ?: false
         }.distinctUntilChanged()
 
     val monitoringEnabled: Flow<Boolean> = preferencesFlow
@@ -857,6 +863,12 @@ class UserPreferencesRepository(private val context: Context) {
     suspend fun setWidgetUsageType(type: String) {
         context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.WIDGET_USAGE_TYPE] = type
+        }
+    }
+
+    suspend fun setSupportBannerDismissed(dismissed: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.SUPPORT_BANNER_DISMISSED] = dismissed
         }
     }
 }

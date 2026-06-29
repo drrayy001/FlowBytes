@@ -36,6 +36,7 @@ import java.util.Locale
 fun SettingsScreen(
     viewModel: SettingsViewModel,
     snackbarHostState: SnackbarHostState,
+    onDonateClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val monitoringEnabled by viewModel.monitoringEnabled.collectAsState()
@@ -119,39 +120,15 @@ fun SettingsScreen(
     var showTermsDialog by remember { mutableStateOf(value = false) }
     var showResetTimeDialog by remember { mutableStateOf(false) }
     var showResetDayDialog by remember { mutableStateOf(false) }
-    var showDonateDialog by remember { mutableStateOf(false) }
     var showHelpFeedbackDialog by remember { mutableStateOf(false) }
-    var isDonationSuccess by remember { mutableStateOf(false) }
 
     var showTrafficSettingsDialog by remember { mutableStateOf(false) }
     var showVpnDisclosure by remember { mutableStateOf(false) }
 
     val scrollState = rememberScrollState()
 
-    LaunchedEffect(Unit) {
-        viewModel.initBilling(context)
-    }
-
-    val donationCancelledMessage = stringResource(R.string.msg_donation_cancelled)
-    val donationFailedMessage = stringResource(R.string.msg_donation_failed)
     val shareTextTemplate = stringResource(R.string.share_text_body, context.packageName)
     val shareChooserTitle = stringResource(R.string.label_share_via)
-
-    LaunchedEffect(Unit) {
-        viewModel.billingEvents.collect { event ->
-            when (event) {
-                is BillingEvent.Success -> {
-                    isDonationSuccess = true
-                }
-                is BillingEvent.Cancelled -> {
-                    snackbarHostState.showSnackbar(donationCancelledMessage)
-                }
-                is BillingEvent.Error -> {
-                    snackbarHostState.showSnackbar(String.format(locale, donationFailedMessage, event.message))
-                }
-            }
-        }
-    }
 
     Column(
         modifier = modifier
@@ -483,7 +460,7 @@ fun SettingsScreen(
                     icon = Icons.Rounded.Favorite,
                     title = stringResource(R.string.settings_donate),
                     subtitle = stringResource(R.string.settings_donate_desc),
-                    onClick = { showDonateDialog = true }
+                    onClick = onDonateClick
                 )
             }
         }
@@ -615,20 +592,6 @@ fun SettingsScreen(
             }
         }
 
-        if (showDonateDialog) {
-            DonateDialog(
-                isSuccess = isDonationSuccess,
-                onDismiss = {
-                    showDonateDialog = false
-                    isDonationSuccess = false
-                },
-            ) { amount ->
-                val activity = context.findActivity()
-                activity?.let {
-                    viewModel.makeDonation(it, amount)
-                }
-            }
-        }
 
         if (showTrafficSettingsDialog) {
             TrafficSettingsDialog(

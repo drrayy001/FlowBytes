@@ -48,6 +48,11 @@ import com.ray.flowmeter.ui.viewmodels.AppLimitsViewModel
 import com.ray.flowmeter.ui.viewmodels.AppUsageViewModel
 import com.ray.flowmeter.ui.viewmodels.HomeViewModel
 import com.ray.flowmeter.ui.viewmodels.SettingsViewModel
+import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
+import com.ray.flowmeter.ui.dialogs.DonateDialog
+import com.ray.flowmeter.utils.BillingEvent
 @Serializable
 sealed interface Destination {
     @Serializable
@@ -102,6 +107,60 @@ fun MainScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val (limitsTab, setLimitsTab) = remember { mutableIntStateOf(0) }
     var showUsageFilters by remember { mutableStateOf(false) }
+
+    val context = LocalContext.current
+    val locale = LocalConfiguration.current.locales[0]
+    var showDonateDialog by remember { mutableStateOf(false) }
+    var isDonationSuccess by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        settingsViewModel.initBilling(context)
+    }
+
+    val donationCancelledMessage = stringResource(R.string.msg_donation_cancelled)
+    val donationFailedMessage = stringResource(R.string.msg_donation_failed)
+
+    LaunchedEffect(Unit) {
+        settingsViewModel.billingEvents.collect { event ->
+            when (event) {
+                is BillingEvent.Success -> {
+                    isDonationSuccess = true
+                    showDonateDialog = true
+                }
+                is BillingEvent.Cancelled -> {
+                    snackbarHostState.showSnackbar(donationCancelledMessage)
+                }
+                is BillingEvent.Error -> {
+                    snackbarHostState.showSnackbar(String.format(locale, donationFailedMessage, event.message))
+                }
+            }
+        }
+    }
+
+    // Milestone-based support prompt: show a snackbar after sufficient usage.
+    val supportBannerDismissed by settingsViewModel.supportBannerDismissed.collectAsState()
+    val appLaunchCount by settingsViewModel.appLaunchCount.collectAsState()
+    val firstInstallTime by settingsViewModel.firstInstallTime.collectAsState()
+    val supportPromptMessage = stringResource(R.string.snackbar_support_prompt)
+    val supportPromptAction = stringResource(R.string.snackbar_support_action)
+
+    LaunchedEffect(supportBannerDismissed, appLaunchCount, firstInstallTime) {
+        if (!supportBannerDismissed && appLaunchCount >= 5 && firstInstallTime > 0L) {
+            val threeDays = 3 * 24 * 60 * 60 * 1000L
+            if ((System.currentTimeMillis() - firstInstallTime) >= threeDays) {
+                delay(3000L)
+                settingsViewModel.dismissSupportBanner()
+                val result = snackbarHostState.showSnackbar(
+                    message = supportPromptMessage,
+                    actionLabel = supportPromptAction,
+                    duration = SnackbarDuration.Long
+                )
+                if (result == SnackbarResult.ActionPerformed) {
+                    showDonateDialog = true
+                }
+            }
+        }
+    }
 
     // Update data when switching tabs
     LaunchedEffect(currentDestination) {
@@ -431,6 +490,7 @@ fun MainScreen(
                             SettingsScreen(
                                 viewModel = settingsViewModel,
                                 snackbarHostState = snackbarHostState,
+                                onDonateClick = { showDonateDialog = true },
                                 modifier = Modifier.fillMaxSize().padding(innerPadding).nestedScroll(settingsScrollBehavior.nestedScrollConnection)
                             )
                         }
@@ -562,5 +622,29 @@ fun MainScreen(
                 }
             }
         }
+
+        if (showDonateDialog) {
+            DonateDialog(
+                isSuccess = isDonationSuccess,
+                onDismiss = {
+                    showDonateDialog = false
+                    isDonationSuccess = false
+                },
+            ) { amount ->
+                val activity = context.findActivity()
+                activity?.let {
+                    settingsViewModel.makeDonation(it, amount)
+                }
+            }
+        }
     }
+}
+
+private fun Context.findActivity(): Activity? {
+    var currentContext = this
+    while (currentContext is ContextWrapper) {
+        if (currentContext is Activity) return currentContext
+        currentContext = currentContext.baseContext
+    }
+    return null
 }

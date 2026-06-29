@@ -177,6 +177,8 @@
     <string name="msg_donation_success_body">Your support is greatly appreciated and helps keep the project alive.</string>
     <string name="msg_donation_cancelled">Donation cancelled.</string>
     <string name="msg_donation_failed">Donation failed: %1$s</string>
+    <string name="snackbar_support_prompt">Enjoying FlowBytes? Support our ad-free development!</string>
+    <string name="snackbar_support_action">Support</string>
 
     <!-- Settings: About -->
     <string name="settings_section_about">About</string>

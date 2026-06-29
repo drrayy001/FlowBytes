@@ -24,7 +24,6 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 import com.ray.flowmeter.utils.SpeedFormatter
-
 // ViewModel for the Home screen, managing usage stats and chart data
 class HomeViewModel(
     private val applicationContext: Context,

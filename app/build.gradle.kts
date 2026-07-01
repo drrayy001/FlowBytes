@@ -109,6 +109,8 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.material)
     implementation(libs.billing.ktx)
+    implementation(libs.play.review)
+    implementation(libs.play.review.ktx)
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.work.runtime.ktx)
     testImplementation(libs.junit)

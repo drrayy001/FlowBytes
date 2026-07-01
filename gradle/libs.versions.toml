@@ -36,7 +36,11 @@ material = "1.14.0"
 billing = "9.1.0"
 fragmentKtx = "1.8.9"
 workRuntimeKtx = "2.11.2"
+playReview = "2.0.2"
+
 [libraries]
+play-review = { group = "com.google.android.play", name = "review", version.ref = "playReview" }
+play-review-ktx = { group = "com.google.android.play", name = "review-ktx", version.ref = "playReview" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

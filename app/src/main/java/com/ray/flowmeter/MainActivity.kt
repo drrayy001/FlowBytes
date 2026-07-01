@@ -30,7 +30,8 @@ import com.ray.flowmeter.data.UserPreferencesRepository
 import com.ray.flowmeter.service.AppBlockVpnService
 import com.ray.flowmeter.service.NetworkMonitoringService
 import com.ray.flowmeter.ui.dialogs.ChangelogDialog
-import com.ray.flowmeter.ui.dialogs.ReviewDialog
+import com.google.android.play.core.review.ReviewManagerFactory
+import android.util.Log
 import com.ray.flowmeter.ui.screens.Destination
 import com.ray.flowmeter.ui.screens.MainScreen
 import com.ray.flowmeter.ui.screens.OnboardingScreen
@@ -247,7 +248,6 @@ class MainActivity : ComponentActivity() {
                     val currentVersionCode = BuildConfig.VERSION_CODE
                     val (showChangelog, setShowChangelog) = remember { mutableStateOf(false) }
 
-                    val (showReviewDialog, setShowReviewDialog) = remember { mutableStateOf(false) }
                     val appLaunchCount by repository.appLaunchCount.collectAsState(0)
                     val firstInstallTime by repository.firstInstallTime.collectAsState(0L)
                     val lastReviewPromptTime by repository.lastReviewPromptTime.collectAsState(0L)
@@ -255,6 +255,7 @@ class MainActivity : ComponentActivity() {
                     val lastVersionCode by repository.lastVersionCode.collectAsState(-1)
 
                     // Prompt user to rate the app after sufficient launches and time have elapsed.
+                    val context = LocalContext.current
                     LaunchedEffect(onboardingCompleted, showChangelog, appLaunchCount, firstInstallTime, lastReviewPromptTime, userReviewedRated) {
                         if (onboardingCompleted == true && !showChangelog && !userReviewedRated) {
                             val now = System.currentTimeMillis()
@@ -267,7 +268,31 @@ class MainActivity : ComponentActivity() {
 
                             if (isTimeSinceInstallOk && isTimeSinceLastPromptOk && isLaunchCountOk) {
                                 delay(2000.milliseconds)
-                                setShowReviewDialog(true)
+                                try {
+                                    val manager = ReviewManagerFactory.create(context)
+                                    Log.d("MainActivity", "Requesting Play In-App Review Flow")
+                                    manager.requestReviewFlow().addOnCompleteListener { requestTask ->
+                                        if (requestTask.isSuccessful) {
+                                            val reviewInfo = requestTask.result
+                                            Log.d("MainActivity", "Launching Play In-App Review Flow")
+                                            manager.launchReviewFlow(this@MainActivity, reviewInfo).addOnCompleteListener {
+                                                Log.d("MainActivity", "Play In-App Review completed")
+                                                lifecycleScope.launch {
+                                                    repository.setUserReviewedRated(true)
+                                                }
+                                            }
+                                        } else {
+                                            val exception = requestTask.exception
+                                            Log.e("MainActivity", "Play In-App Review request failed", exception)
+                                            lifecycleScope.launch {
+                                                repository.setLastReviewPromptTime(System.currentTimeMillis())
+                                            }
+                                        }
+                                    }
+                                } catch (e: Exception) {
+                                    Log.e("MainActivity", "Play In-App Review wrapper failed", e)
+                                    repository.setLastReviewPromptTime(System.currentTimeMillis())
+                                }
                             }
                         }
                     }
@@ -386,30 +411,6 @@ class MainActivity : ComponentActivity() {
                                         ChangelogDialog { setShowChangelog(false) }
                                     }
 
-                                    val coroutineScope = rememberCoroutineScope()
-                                    if (showReviewDialog) {
-                                        ReviewDialog(
-                                            onDismiss = { setShowReviewDialog(false) },
-                                            onNeverShowAgain = {
-                                                coroutineScope.launch {
-                                                    repository.setUserReviewedRated(true)
-                                                }
-                                                setShowReviewDialog(false)
-                                            },
-                                            onLater = {
-                                                coroutineScope.launch {
-                                                    repository.setLastReviewPromptTime(System.currentTimeMillis())
-                                                }
-                                                setShowReviewDialog(false)
-                                            },
-                                            onReviewCompleted = {
-                                                coroutineScope.launch {
-                                                    repository.setUserReviewedRated(true)
-                                                }
-                                                setShowReviewDialog(false)
-                                            }
-                                        )
-                                    }
                                 } else {
                                     OnboardingScreen(
                                         onComplete = {

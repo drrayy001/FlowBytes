@@ -104,9 +104,7 @@ fun AppUsageScreen(
     val (showMonthPicker, setShowMonthPicker) = remember { mutableStateOf(false) }
     val (showDateRangePicker, setShowDateRangePicker) = remember { mutableStateOf(false) }
 
-    val contentKey = remember(currentViewDate.timeInMillis, savedTimeFilter, savedNetworkFilter) {
-        "${currentViewDate.timeInMillis}_${savedTimeFilter}_${savedNetworkFilter}"
-    }
+
 
     LaunchedEffect(filteredAppList) {
         listState.scrollToItem(0)
@@ -494,6 +492,141 @@ fun AppUsageScreen(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
+        AnimatedVisibility(
+            visible = showFilters,
+            enter = expandVertically(animationSpec = premiumSpring()) + fadeIn(),
+            exit = shrinkVertically(animationSpec = premiumSpring()) + fadeOut()
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 4.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    AppUsageFilterChip(
+                        selectedText = timeFilter,
+                        expanded = showTimeDropdown,
+                        onExpandedChange = setShowTimeDropdown,
+                        options = timeOptions,
+                        modifier = Modifier.weight(1f)
+                    ) { filter ->
+                        val storeValue = when (filter) {
+                            monthFilterLabel -> "month"
+                            customFilterLabel -> "custom"
+                            else -> "day"
+                        }
+                        viewModel.setTimeFilter(storeValue)
+                        if (filter != customFilterLabel) {
+                            if (filter == monthFilterLabel) {
+                                viewModel.updateToThisMonth()
+                            } else {
+                                viewModel.loadAppUsageForDate(System.currentTimeMillis())
+                            }
+                        } else {
+                            setShowDateRangePicker(true)
+                        }
+                    }
+
+                    AppUsageFilterChip(
+                        selectedText = networkFilter,
+                        expanded = showNetworkDropdown,
+                        onExpandedChange = setShowNetworkDropdown,
+                        options = networkOptions,
+                        modifier = Modifier.weight(1f)
+                    ) { filter ->
+                        val storeValue = when (filter) {
+                            mobileOnlyFilterLabel -> "mobile"
+                            wifiOnlyFilterLabel -> "wifi"
+                            else -> "all"
+                        }
+                        viewModel.setNetworkFilter(storeValue)
+                    }
+                }
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    if (timeFilter != customFilterLabel) {
+                        IconButton(onClick = { viewModel.moveDate(backwards = true) }) {
+                            Icon(
+                                Icons.Default.ChevronLeft,
+                                contentDescription = stringResource(R.string.cd_prev_date),
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                    } else {
+                        Spacer(modifier = Modifier.size(48.dp))
+                    }
+
+                    val displayedDateText = viewModel.selectedDateString.ifBlank {
+                        if (timeFilter == monthFilterLabel) {
+                            val now = Calendar.getInstance()
+                            if (
+                                (currentViewDate[Calendar.YEAR] == now[Calendar.YEAR]) &&
+                                (currentViewDate[Calendar.MONTH] == now[Calendar.MONTH])
+                            ) {
+                                stringResource(R.string.label_this_month)
+                            } else {
+                                SimpleDateFormat("MMMM yyyy", locale)
+                                    .format(currentViewDate.time)
+                            }
+                        } else {
+                            stringResource(R.string.label_today)
+                        }
+                    }
+
+                    Text(
+                        text = displayedDateText,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.bounceClick {
+                            when (timeFilter) {
+                                monthFilterLabel -> setShowMonthPicker(true)
+                                customFilterLabel -> setShowDateRangePicker(true)
+                                else -> setShowDatePicker(true)
+                            }
+                        }
+                    )
+
+                    if (timeFilter != customFilterLabel) {
+                        val now = Calendar.getInstance()
+                        val isForwardDisabled = if (timeFilter == monthFilterLabel) {
+                            (currentViewDate[Calendar.YEAR] >= now[Calendar.YEAR]) &&
+                                    (currentViewDate[Calendar.MONTH] >= now[Calendar.MONTH])
+                        } else {
+                            (currentViewDate[Calendar.YEAR] >= now[Calendar.YEAR]) &&
+                                    (currentViewDate[Calendar.DAY_OF_YEAR] >= now[Calendar.DAY_OF_YEAR])
+                        }
+
+                        IconButton(
+                            onClick = { viewModel.moveDate(backwards = false) },
+                            enabled = !isForwardDisabled
+                        ) {
+                            Icon(
+                                Icons.Default.ChevronRight,
+                                contentDescription = stringResource(R.string.cd_next_date),
+                                tint = if (isForwardDisabled) {
+                                    MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)
+                                } else {
+                                    MaterialTheme.colorScheme.primary
+                                }
+                            )
+                        }
+                    } else {
+                        Spacer(modifier = Modifier.size(48.dp))
+                    }
+                }
+            }
+        }
+
         PullToRefreshBox(
             isRefreshing = viewModel.isRefreshing,
             onRefresh = { viewModel.refreshData() },
@@ -561,172 +694,54 @@ fun AppUsageScreen(
             }
         ) {
             AnimatedContent(
-                targetState = contentKey,
+                targetState = Triple(currentViewDate.timeInMillis, savedTimeFilter, savedNetworkFilter),
                 transitionSpec = {
-                    (fadeIn(animationSpec = tween(200)) + scaleIn(initialScale = 0.98f))
-                        .togetherWith(fadeOut(animationSpec = tween(150)))
-                        .using(SizeTransform(clip = true))
+                    val initialTime = initialState.first
+                    val initialTimeFilter = initialState.second
+                    val initialNetworkFilter = initialState.third
+
+                    val targetTime = targetState.first
+                    val targetTimeFilter = targetState.second
+                    val targetNetworkFilter = targetState.third
+
+                    if (initialTimeFilter == targetTimeFilter && initialNetworkFilter == targetNetworkFilter) {
+                        // Date changed (Chevron click or date picker select)
+                        if (targetTime > initialTime) {
+                            // Forward in time: slide in from right, slide out to left
+                            (slideInHorizontally(animationSpec = tween(250)) { width -> width } + fadeIn(animationSpec = tween(150)))
+                                .togetherWith(slideOutHorizontally(animationSpec = tween(250)) { width -> -width } + fadeOut(animationSpec = tween(100)))
+                        } else {
+                            // Backward in time: slide in from left, slide out to right
+                            (slideInHorizontally(animationSpec = tween(250)) { width -> -width } + fadeIn(animationSpec = tween(150)))
+                                .togetherWith(slideOutHorizontally(animationSpec = tween(250)) { width -> width } + fadeOut(animationSpec = tween(100)))
+                        }
+                    } else {
+                        // Filter type or network type changed: fade + scale
+                        (fadeIn(animationSpec = tween(200)) + scaleIn(initialScale = 0.98f))
+                            .togetherWith(fadeOut(animationSpec = tween(150)))
+                    }
                 },
                 label = "AppUsageContentTransition",
                 modifier = Modifier
                     .fillMaxSize()
                     .clipToBounds()
-            ) { targetContentKey ->
-                key(targetContentKey) {
+            ) { targetStateTriple ->
+                key(targetStateTriple) {
                     LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    state = listState,
-                    contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 16.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    item {
-                        Column(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-                            AnimatedVisibility(
-                                visible = showFilters,
-                                enter = expandVertically(animationSpec = premiumSpring()) + fadeIn(),
-                                exit = shrinkVertically(animationSpec = premiumSpring()) + fadeOut()
-                            ) {
-                                Column(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(bottom = 4.dp),
-                                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                                ) {
-                                    Row(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        AppUsageFilterChip(
-                                            selectedText = timeFilter,
-                                            expanded = showTimeDropdown,
-                                            onExpandedChange = setShowTimeDropdown,
-                                            options = timeOptions,
-                                            modifier = Modifier.weight(1f)
-                                        ) { filter ->
-                                            val storeValue = when (filter) {
-                                                monthFilterLabel -> "month"
-                                                customFilterLabel -> "custom"
-                                                else -> "day"
-                                            }
-                                            viewModel.setTimeFilter(storeValue)
-                                            if (filter != customFilterLabel) {
-                                                if (filter == monthFilterLabel) {
-                                                    viewModel.updateToThisMonth()
-                                                } else {
-                                                    viewModel.loadAppUsageForDate(System.currentTimeMillis())
-                                                }
-                                            } else {
-                                                setShowDateRangePicker(true)
-                                            }
-                                        }
-
-                                        AppUsageFilterChip(
-                                            selectedText = networkFilter,
-                                            expanded = showNetworkDropdown,
-                                            onExpandedChange = setShowNetworkDropdown,
-                                            options = networkOptions,
-                                            modifier = Modifier.weight(1f)
-                                        ) { filter ->
-                                            val storeValue = when (filter) {
-                                                mobileOnlyFilterLabel -> "mobile"
-                                                wifiOnlyFilterLabel -> "wifi"
-                                                else -> "all"
-                                            }
-                                            viewModel.setNetworkFilter(storeValue)
-                                        }
-                                    }
-
-                                    Row(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        horizontalArrangement = Arrangement.SpaceBetween,
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        if (timeFilter != customFilterLabel) {
-                                            IconButton(onClick = { viewModel.moveDate(backwards = true) }) {
-                                                Icon(
-                                                    Icons.Default.ChevronLeft,
-                                                    contentDescription = stringResource(R.string.cd_prev_date),
-                                                    tint = MaterialTheme.colorScheme.primary
-                                                )
-                                            }
-                                        } else {
-                                            Spacer(modifier = Modifier.size(48.dp))
-                                        }
-
-                                        val displayedDateText = viewModel.selectedDateString.ifBlank {
-                                            if (timeFilter == monthFilterLabel) {
-                                                val now = Calendar.getInstance()
-                                                if (
-                                                    (currentViewDate[Calendar.YEAR] == now[Calendar.YEAR]) &&
-                                                    (currentViewDate[Calendar.MONTH] == now[Calendar.MONTH])
-                                                ) {
-                                                    stringResource(R.string.label_this_month)
-                                                } else {
-                                                    SimpleDateFormat("MMMM yyyy", locale)
-                                                        .format(currentViewDate.time)
-                                                }
-                                            } else {
-                                                stringResource(R.string.label_today)
-                                            }
-                                        }
-
-                                        Text(
-                                            text = displayedDateText,
-                                            style = MaterialTheme.typography.titleMedium,
-                                            fontWeight = FontWeight.Bold,
-                                            color = MaterialTheme.colorScheme.onSurface,
-                                            modifier = Modifier.bounceClick {
-                                                when (timeFilter) {
-                                                    monthFilterLabel -> setShowMonthPicker(true)
-                                                    customFilterLabel -> setShowDateRangePicker(true)
-                                                    else -> setShowDatePicker(true)
-                                                }
-                                            }
-                                        )
-
-                                        if (timeFilter != customFilterLabel) {
-                                            val now = Calendar.getInstance()
-                                            val isForwardDisabled = if (timeFilter == monthFilterLabel) {
-                                                (currentViewDate[Calendar.YEAR] >= now[Calendar.YEAR]) &&
-                                                        (currentViewDate[Calendar.MONTH] >= now[Calendar.MONTH])
-                                            } else {
-                                                (currentViewDate[Calendar.YEAR] >= now[Calendar.YEAR]) &&
-                                                        (currentViewDate[Calendar.DAY_OF_YEAR] >= now[Calendar.DAY_OF_YEAR])
-                                            }
-
-                                            IconButton(
-                                                onClick = { viewModel.moveDate(backwards = false) },
-                                                enabled = !isForwardDisabled
-                                            ) {
-                                                Icon(
-                                                    Icons.Default.ChevronRight,
-                                                    contentDescription = stringResource(R.string.cd_next_date),
-                                                    tint = if (isForwardDisabled) {
-                                                        MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)
-                                                    } else {
-                                                        MaterialTheme.colorScheme.primary
-                                                    }
-                                                )
-                                            }
-                                        } else {
-                                            Spacer(modifier = Modifier.size(48.dp))
-                                        }
-                                    }
-                                }
-                            }
-
-                            val displayGlobalDown = when (networkFilter) {
-                                mobileOnlyFilterLabel -> viewModel.globalCellDown
-                                wifiOnlyFilterLabel -> viewModel.globalWifiDown
+                        modifier = Modifier.fillMaxSize(),
+                        state = listState,
+                        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 16.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        item {
+                            val displayGlobalDown = when (targetStateTriple.third) {
+                                "mobile" -> viewModel.globalCellDown
+                                "wifi" -> viewModel.globalWifiDown
                                 else -> viewModel.globalCellDown + viewModel.globalWifiDown
                             }
-                            val displayGlobalUp = when (networkFilter) {
-                                mobileOnlyFilterLabel -> viewModel.globalCellUp
-                                wifiOnlyFilterLabel -> viewModel.globalWifiUp
+                            val displayGlobalUp = when (targetStateTriple.third) {
+                                "mobile" -> viewModel.globalCellUp
+                                "wifi" -> viewModel.globalWifiUp
                                 else -> viewModel.globalCellUp + viewModel.globalWifiUp
                             }
                             val displayGlobalTotal = displayGlobalDown + displayGlobalUp
@@ -738,62 +753,61 @@ fun AppUsageScreen(
                                 modifier = Modifier.padding(horizontal = 0.dp)
                             )
                         }
-                    }
 
-                    val maxUsageBytes = if (filteredAppList.isNotEmpty()) {
-                        filteredAppList.maxOf {
-                            when (networkFilter) {
-                                mobileOnlyFilterLabel -> it.cellUsage
-                                wifiOnlyFilterLabel -> it.wifiUsage
-                                else -> it.totalUsage
-                            }
-                        }.coerceAtLeast(1L)
-                    } else {
-                        1L
-                    }
-
-                    if (filteredAppList.isEmpty() && !viewModel.isLoading) {
-                        item {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(32.dp),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(
-                                    text = stringResource(R.string.msg_no_usage_data),
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    style = MaterialTheme.typography.bodyLarge
-                                )
-                            }
+                        val maxUsageBytes = if (filteredAppList.isNotEmpty()) {
+                            filteredAppList.maxOf {
+                                when (targetStateTriple.third) {
+                                    "mobile" -> it.cellUsage
+                                    "wifi" -> it.wifiUsage
+                                    else -> it.totalUsage
+                                }
+                            }.coerceAtLeast(1L)
+                        } else {
+                            1L
                         }
-                    } else {
-                        itemsIndexed(
-                            items = filteredAppList,
-                            key = { _, it -> it.packageName }
-                        ) { _, appUsage ->
-                            val displayUsage = when (networkFilter) {
-                                mobileOnlyFilterLabel -> appUsage.cellUsage
-                                wifiOnlyFilterLabel -> appUsage.wifiUsage
-                                else -> appUsage.totalUsage
-                            }
 
-                            StaggeredEntrance {
-                                AppUsageItem(
-                                    appUsage = appUsage,
-                                    displayUsage = displayUsage,
-                                    maxUsageBytes = maxUsageBytes,
-                                    onClick = {
-                                        if (appUsage.isSystemGroup) {
-                                            viewModel.isViewingSystemApps = true
+                        if (filteredAppList.isEmpty() && !viewModel.isLoading) {
+                            item {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(32.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(
+                                        text = stringResource(R.string.msg_no_usage_data),
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        style = MaterialTheme.typography.bodyLarge
+                                    )
+                                }
+                            }
+                        } else {
+                            itemsIndexed(
+                                items = filteredAppList,
+                                key = { _, it -> it.packageName }
+                            ) { _, appUsage ->
+                                val displayUsage = when (targetStateTriple.third) {
+                                    "mobile" -> appUsage.cellUsage
+                                    "wifi" -> appUsage.wifiUsage
+                                    else -> appUsage.totalUsage
+                                }
+
+                                StaggeredEntrance {
+                                    AppUsageItem(
+                                        appUsage = appUsage,
+                                        displayUsage = displayUsage,
+                                        maxUsageBytes = maxUsageBytes,
+                                        onClick = {
+                                            if (appUsage.isSystemGroup) {
+                                                viewModel.isViewingSystemApps = true
+                                            }
                                         }
-                                    }
-                                )
+                                    )
+                                }
                             }
                         }
                     }
                 }
-            }
             }
         }
     }

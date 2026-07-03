@@ -37,6 +37,8 @@ import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 import com.ray.flowmeter.R
+import com.ray.flowmeter.data.UserPreferencesRepository
+import com.ray.flowmeter.ui.screens.WidgetsScreen
 import com.ray.flowmeter.ui.theme.StaggeredEntrance
 import androidx.compose.material3.adaptive.layout.calculatePaneScaffoldDirective
 import androidx.compose.material3.adaptive.navigation3.rememberListDetailSceneStrategy
@@ -75,6 +77,9 @@ sealed interface Destination {
 
     @Serializable
     data object AppPicker : Destination
+
+    @Serializable
+    data object Widgets : Destination
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3AdaptiveApi::class)
@@ -104,11 +109,14 @@ fun MainScreen(
         Destination.Limits -> limitsScrollBehavior
         Destination.Settings -> settingsScrollBehavior
         Destination.AppPicker -> limitsScrollBehavior
+        Destination.Widgets -> settingsScrollBehavior
     }
 
     BackHandler(enabled = (currentDestination != Destination.Home)) {
         if (currentDestination == Destination.AppPicker) {
             appLimitsViewModel.isPickerOpen = false
+        } else if (currentDestination == Destination.Widgets) {
+            homeViewModel.isWidgetsOpen = false
         } else {
             backStack.clear()
             backStack.add(Destination.Home)
@@ -120,6 +128,7 @@ fun MainScreen(
     var showUsageFilters by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
+    val repository = remember { UserPreferencesRepository(context.applicationContext) }
     val locale = LocalConfiguration.current.locales[0]
     var showDonateDialog by remember { mutableStateOf(false) }
     var isDonationSuccess by remember { mutableStateOf(false) }
@@ -193,6 +202,18 @@ fun MainScreen(
             }
         } else {
             if (currentDestination == Destination.AppPicker) {
+                backStack.removeLastOrNull()
+            }
+        }
+    }
+
+    LaunchedEffect(homeViewModel.isWidgetsOpen) {
+        if (homeViewModel.isWidgetsOpen) {
+            if (currentDestination != Destination.Widgets) {
+                backStack.add(Destination.Widgets)
+            }
+        } else {
+            if (currentDestination == Destination.Widgets) {
                 backStack.removeLastOrNull()
             }
         }
@@ -317,12 +338,15 @@ fun MainScreen(
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
+
+
                                 Text(
                                     text = when (currentDestination) {
                                         Destination.Home -> stringResource(R.string.app_name)
                                         Destination.Usage -> stringResource(R.string.title_app_usage)
                                         Destination.Alerts -> stringResource(R.string.title_alerts)
                                         Destination.Limits -> stringResource(R.string.title_limits)
+                                        Destination.Widgets -> "Homescreen widgets"
                                         else -> stringResource(R.string.title_settings)
                                     },
                                     modifier = Modifier.weight(1f),
@@ -332,6 +356,25 @@ fun MainScreen(
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis
                                 )
+
+                                if (currentDestination == Destination.Home) {
+                                    IconButton(
+                                        onClick = {
+                                            homeViewModel.isWidgetsOpen = true
+                                        },
+                                        colors = IconButtonDefaults.iconButtonColors(
+                                            containerColor = Color.Transparent
+                                        )
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.Widgets,
+                                            contentDescription = "Manage Widgets",
+                                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    }
+                                }
+
+
 
                                 if (currentDestination == Destination.Usage) {
                                     IconButton(
@@ -576,7 +619,6 @@ fun MainScreen(
                                     backStack.clear()
                                     backStack.add(Destination.Usage)
                                     appUsageViewModel.isViewingSystemApps = false
-                                    appUsageViewModel.updateToThisMonth()
                                 },
                                 modifier = Modifier.fillMaxSize().padding(innerPadding).nestedScroll(homeScrollBehavior.nestedScrollConnection)
                             )
@@ -624,6 +666,17 @@ fun MainScreen(
                                 appLimitsViewModel.addAppLimits(limits)
                                 appLimitsViewModel.isPickerOpen = false
                             }
+                        }
+
+                        Destination.Widgets -> NavEntry(key) {
+                            WidgetsScreen(
+                                context = context,
+                                repository = repository,
+                                onBack = {
+                                    homeViewModel.isWidgetsOpen = false
+                                },
+                                modifier = Modifier.fillMaxSize().padding(innerPadding)
+                            )
                         }
                     }
                 }

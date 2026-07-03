@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/widget_background"
+    android:gravity="center_vertical">
+
+    <!-- Title Row -->
+    <TextView
+        android:id="@+id/widget_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="NETWORK LIMIT"
+        android:textColor="#99FFFFFF"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        android:textAllCaps="true"
+        android:letterSpacing="0.06"
+        android:fontFamily="sans-serif-medium"
+        android:layout_marginBottom="12dp"/>
+
+    <!-- Wi-Fi Segment -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="12dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="4dp">
+            
+            <!-- Wi-Fi Label -->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Wi-Fi"
+                android:textColor="#FFFFFF"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium" />
+
+            <!-- Wi-Fi Values -->
+            <TextView
+                android:id="@+id/widget_wifi_values"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0.0 / 0.0 GB"
+                android:textColor="#99FFFFFF"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif-medium" />
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/widget_wifi_progress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="6dp"
+            android:max="100"
+            android:progress="0"
+            android:progressDrawable="@drawable/widget_progress_wifi" />
+    </LinearLayout>
+
+    <!-- Mobile Segment -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="4dp">
+
+            <!-- Mobile Label -->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Mobile"
+                android:textColor="#FFFFFF"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium" />
+
+            <!-- Mobile Values -->
+            <TextView
+                android:id="@+id/widget_mobile_values"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0.0 / 0.0 GB"
+                android:textColor="#99FFFFFF"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif-medium" />
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/widget_mobile_progress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="6dp"
+            android:max="100"
+            android:progress="0"
+            android:progressDrawable="@drawable/widget_progress_mobile" />
+    </LinearLayout>
+
+</LinearLayout>

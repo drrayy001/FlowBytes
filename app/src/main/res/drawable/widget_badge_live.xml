@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- 8% opacity Premium Electric Lavender -->
-    <solid android:color="#14DDA7FF" />
-    <!-- 20% opacity matching lavender stroke -->
+    <!-- 8% opacity Green -->
+    <solid android:color="#1410CF2D" />
+    <!-- 20% opacity matching green stroke -->
     <stroke
         android:width="1dp"
-        android:color="#33DDA7FF" />
+        android:color="#3310CF2D" />
     <corners android:radius="12dp" />
 </shape>

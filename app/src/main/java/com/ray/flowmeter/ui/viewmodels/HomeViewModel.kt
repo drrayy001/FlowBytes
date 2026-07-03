@@ -29,6 +29,8 @@ class HomeViewModel(
     private val applicationContext: Context,
     private val repository: UserPreferencesRepository,
 ) : ViewModel() {
+    var isWidgetsOpen by mutableStateOf(false)
+
     var downloadReceived by mutableStateOf("0 B")
     var uploadSent by mutableStateOf("0 B")
 

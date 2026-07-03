@@ -98,6 +98,62 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/speed_widget_info" />
         </receiver>
+
+        <receiver
+            android:name=".receiver.TodayDataWidget"
+            android:exported="true"
+            android:label="Today's Data">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.ray.flowmeter.ACTION_UPDATE_WIDGET" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/today_data_widget_info" />
+        </receiver>
+
+        <receiver
+            android:name=".receiver.DailyNetworkLimitWidget"
+            android:exported="true"
+            android:label="Daily Network Limit">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.ray.flowmeter.ACTION_UPDATE_WIDGET" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/daily_network_limit_widget_info" />
+        </receiver>
+
+        <receiver
+            android:name=".receiver.MonthlyNetworkLimitWidget"
+            android:exported="true"
+            android:label="Monthly Network Limit">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.ray.flowmeter.ACTION_UPDATE_WIDGET" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/monthly_network_limit_widget_info" />
+        </receiver>
+
+        <receiver
+            android:name=".receiver.SpeedMonitorWidget"
+            android:exported="true"
+            android:label="Speed Monitor">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.ray.flowmeter.ACTION_UPDATE_WIDGET" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/speed_monitor_widget_info" />
+        </receiver>
     </application>
 
 </manifest>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/widget_background"
+    android:gravity="center">
+
+    <!-- Top Left: Today's Data Label -->
+    <TextView
+        android:id="@+id/widget_label_today_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/label_todays_usage"
+        android:textColor="#99FFFFFF"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        android:textAllCaps="true"
+        android:letterSpacing="0.06"
+        android:fontFamily="sans-serif-medium"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- Circular Progress Area -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:foregroundGravity="center">
+
+        <!-- Circular progress ring -->
+        <ImageView
+            android:id="@+id/widget_circle_progress"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:scaleType="fitCenter"
+            android:contentDescription="@null" />
+
+        <!-- Centered Numbers -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/widget_text_usage_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0.0"
+                android:textColor="#4DE8F4"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-black"
+                android:includeFontPadding="false" />
+
+            <TextView
+                android:id="@+id/widget_text_usage_unit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="GB"
+                android:textColor="#99FFFFFF"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                android:fontFamily="sans-serif-medium"
+                android:includeFontPadding="false" />
+        </LinearLayout>
+    </FrameLayout>
+</LinearLayout>

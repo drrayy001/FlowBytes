@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/widget_background">
+
+    <!-- Header Row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SPEED MONITOR"
+            android:textColor="#8C9BB0"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.08"
+            android:fontFamily="sans-serif-medium" />
+    </LinearLayout>
+
+    <!-- Speeds & Graphs Columns -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:baselineAligned="false">
+
+        <!-- Download Column -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <!-- Download Title -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="4dp">
+
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:src="@drawable/ic_arrow_down_green"
+                    android:contentDescription="Download" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DOWNLOAD"
+                    android:textColor="#4DE8F4"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="6dp"
+                    android:letterSpacing="0.05"
+                    android:fontFamily="sans-serif-medium" />
+            </LinearLayout>
+
+            <!-- Download Value -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="bottom"
+                android:layout_marginBottom="6dp">
+
+                <TextView
+                    android:id="@+id/widget_monitor_text_down"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0.0"
+                    android:textColor="#FFFFFF"
+                    android:textSize="26sp"
+                    android:textStyle="bold"
+                    android:includeFontPadding="false"
+                    android:fontFamily="sans-serif-medium" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mbps"
+                    android:textColor="#8C9BB0"
+                    android:textSize="12sp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginBottom="3dp"
+                    android:fontFamily="sans-serif-medium" />
+            </LinearLayout>
+
+            <!-- Download Graph -->
+            <ImageView
+                android:id="@+id/widget_monitor_graph_down"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:contentDescription="Download Speed Graph" />
+        </LinearLayout>
+
+        <!-- Divider Space -->
+        <FrameLayout
+            android:layout_width="16dp"
+            android:layout_height="match_parent" />
+
+        <!-- Upload Column -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <!-- Upload Title -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="4dp">
+
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:src="@drawable/ic_arrow_up_red"
+                    android:contentDescription="Upload" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="UPLOAD"
+                    android:textColor="#DDA7FF"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="6dp"
+                    android:letterSpacing="0.05"
+                    android:fontFamily="sans-serif-medium" />
+            </LinearLayout>
+
+            <!-- Upload Value -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="bottom"
+                android:layout_marginBottom="6dp">
+
+                <TextView
+                    android:id="@+id/widget_monitor_text_up"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0.0"
+                    android:textColor="#FFFFFF"
+                    android:textSize="26sp"
+                    android:textStyle="bold"
+                    android:includeFontPadding="false"
+                    android:fontFamily="sans-serif-medium" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mbps"
+                    android:textColor="#8C9BB0"
+                    android:textSize="12sp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginBottom="3dp"
+                    android:fontFamily="sans-serif-medium" />
+            </LinearLayout>
+
+            <!-- Upload Graph -->
+            <ImageView
+                android:id="@+id/widget_monitor_graph_up"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:contentDescription="Upload Speed Graph" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

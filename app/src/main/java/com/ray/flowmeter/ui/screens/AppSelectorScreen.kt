@@ -64,6 +64,7 @@ fun AppPickerScreen(
     } else {
         Scaffold(
             containerColor = MaterialTheme.colorScheme.background,
+            contentWindowInsets = WindowInsets(0, 0, 0, 0),
             topBar = {
                 TopAppBar(
                     title = {
@@ -87,11 +88,11 @@ fun AppPickerScreen(
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.surface
                     ),
-                    windowInsets = TopAppBarDefaults.windowInsets
+                    windowInsets = WindowInsets.statusBars
                 )
             }
         ) { padding ->
-            Box(modifier = Modifier.fillMaxSize()) {
+            Box(modifier = Modifier.fillMaxSize().consumeWindowInsets(padding)) {
                 Column(
                     modifier = Modifier
                         .padding(padding)

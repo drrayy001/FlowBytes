@@ -221,7 +221,7 @@ fun MainScreen(
 
     Box(modifier = Modifier.fillMaxSize()) {
         Row(modifier = Modifier.fillMaxSize()) {
-            if (isWideScreen && currentDestination != Destination.AppPicker) {
+            if (isWideScreen && currentDestination != Destination.AppPicker && currentDestination != Destination.Widgets) {
                 NavigationRail(
                     containerColor = MaterialTheme.colorScheme.surfaceContainer
                 ) {
@@ -314,137 +314,138 @@ fun MainScreen(
                 modifier = Modifier.weight(1f),
                 snackbarHost = { SnackbarHost(snackbarHostState) },
                 topBar = {
-                val containerColor by animateColorAsState(
-                    targetValue = if (currentScrollBehavior.state.contentOffset < -1f) {
-                        MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp)
-                    } else {
-                        MaterialTheme.colorScheme.surface
-                    },
-                    animationSpec = tween(durationMillis = 250),
-                    label = "TopBarColorAnimation",
-                )
+                if (currentDestination != Destination.AppPicker && currentDestination != Destination.Widgets) {
+                    val containerColor by animateColorAsState(
+                        targetValue = if (currentScrollBehavior.state.contentOffset < -1f) {
+                            MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp)
+                        } else {
+                            MaterialTheme.colorScheme.surface
+                        },
+                        animationSpec = tween(durationMillis = 250),
+                        label = "TopBarColorAnimation",
+                    )
 
-                Surface(
-                    color = containerColor,
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    Column(modifier = Modifier.windowInsetsPadding(WindowInsets.statusBars)) {
-                        key(currentDestination) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(56.dp)
-                                    .padding(horizontal = 20.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
+                    Surface(
+                        color = containerColor,
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Column(modifier = Modifier.windowInsetsPadding(WindowInsets.statusBars)) {
+                            key(currentDestination) {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(56.dp)
+                                        .padding(horizontal = 20.dp),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
 
 
-                                Text(
-                                    text = when (currentDestination) {
-                                        Destination.Home -> stringResource(R.string.app_name)
-                                        Destination.Usage -> stringResource(R.string.title_app_usage)
-                                        Destination.Alerts -> stringResource(R.string.title_alerts)
-                                        Destination.Limits -> stringResource(R.string.title_limits)
-                                        Destination.Widgets -> "Homescreen widgets"
-                                        else -> stringResource(R.string.title_settings)
-                                    },
-                                    modifier = Modifier.weight(1f),
-                                    style = MaterialTheme.typography.headlineSmall,
-                                    fontWeight = FontWeight.Black,
-                                    letterSpacing = if (LocalConfiguration.current.locales[0].language == "ar") 0.sp else (-0.5).sp,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
-                                )
-
-                                if (currentDestination == Destination.Home) {
-                                    IconButton(
-                                        onClick = {
-                                            homeViewModel.isWidgetsOpen = true
+                                    Text(
+                                        text = when (currentDestination) {
+                                            Destination.Home -> stringResource(R.string.app_name)
+                                            Destination.Usage -> stringResource(R.string.title_app_usage)
+                                            Destination.Alerts -> stringResource(R.string.title_alerts)
+                                            Destination.Limits -> stringResource(R.string.title_limits)
+                                            else -> stringResource(R.string.title_settings)
                                         },
-                                        colors = IconButtonDefaults.iconButtonColors(
-                                            containerColor = Color.Transparent
-                                        )
-                                    ) {
-                                        Icon(
-                                            imageVector = Icons.Default.Widgets,
-                                            contentDescription = "Manage Widgets",
-                                            tint = MaterialTheme.colorScheme.onSurfaceVariant
-                                        )
-                                    }
-                                }
-
-
-
-                                if (currentDestination == Destination.Usage) {
-                                    IconButton(
-                                        onClick = { showUsageFilters = !showUsageFilters },
-                                        colors = IconButtonDefaults.iconButtonColors(
-                                            containerColor = Color.Transparent
-                                        )
-                                    ) {
-                                        Icon(
-                                            imageVector = com.ray.flowmeter.ui.components.AppIcons.Filter,
-                                            contentDescription = stringResource(R.string.cd_toggle_filters),
-                                            tint = if (showUsageFilters) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
-                                        )
-                                    }
-                                }
-
-                                if (currentDestination == Destination.Limits) {
-                                    val appBlockingMasterEnabled by appLimitsViewModel.appBlockingMasterEnabled.collectAsState()
-                                    val scope = rememberCoroutineScope()
-                                    val firewallEnabledMsg = stringResource(R.string.msg_firewall_enabled)
-                                    val firewallDisabledMsg = stringResource(R.string.msg_firewall_disabled)
-                                    
-                                    val buttonBgColor by animateColorAsState(
-                                        targetValue = if (appBlockingMasterEnabled) MaterialTheme.colorScheme.primaryContainer
-                                                      else Color.Transparent,
-                                        animationSpec = tween(300),
-                                        label = "FirewallBgColor"
+                                        modifier = Modifier.weight(1f),
+                                        style = MaterialTheme.typography.headlineSmall,
+                                        fontWeight = FontWeight.Black,
+                                        letterSpacing = if (LocalConfiguration.current.locales[0].language == "ar") 0.sp else (-0.5).sp,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
                                     )
-                                    val buttonContentColor by animateColorAsState(
-                                        targetValue = if (appBlockingMasterEnabled) MaterialTheme.colorScheme.onPrimaryContainer
-                                                      else MaterialTheme.colorScheme.onSurfaceVariant,
-                                        animationSpec = tween(300),
-                                        label = "FirewallContentColor"
-                                    )
-                                    
-                                    IconButton(
-                                        onClick = {
-                                            val targetState = !appBlockingMasterEnabled
-                                            appLimitsViewModel.setAppBlockingMasterEnabled(targetState)
-                                            scope.launch {
-                                                snackbarHostState.currentSnackbarData?.dismiss()
-                                                val msg = if (targetState) firewallEnabledMsg else firewallDisabledMsg
-                                                val job = launch {
-                                                    snackbarHostState.showSnackbar(
-                                                        message = msg,
-                                                        duration = SnackbarDuration.Indefinite
-                                                    )
-                                                }
-                                                delay(800.milliseconds)
-                                                job.cancel()
-                                            }
-                                        },
-                                        colors = IconButtonDefaults.iconButtonColors(
-                                            containerColor = buttonBgColor,
-                                            contentColor = buttonContentColor
-                                        ),
-                                        modifier = Modifier
-                                            .size(40.dp)
-                                            .clip(CircleShape)
-                                    ) {
-                                        Crossfade(
-                                            targetState = appBlockingMasterEnabled,
-                                            animationSpec = tween(200),
-                                            label = "FirewallIconTransition"
-                                        ) { enabled ->
-                                            Icon(
-                                                imageVector = if (enabled) Icons.Rounded.Security else Icons.Rounded.Shield,
-                                                contentDescription = stringResource(R.string.label_block_apps),
-                                                modifier = Modifier.size(20.dp)
+
+                                    if (currentDestination == Destination.Home) {
+                                        IconButton(
+                                            onClick = {
+                                                homeViewModel.isWidgetsOpen = true
+                                            },
+                                            colors = IconButtonDefaults.iconButtonColors(
+                                                containerColor = Color.Transparent
                                             )
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Default.Widgets,
+                                                contentDescription = "Manage Widgets",
+                                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                            )
+                                        }
+                                    }
+
+
+
+                                    if (currentDestination == Destination.Usage) {
+                                        IconButton(
+                                            onClick = { showUsageFilters = !showUsageFilters },
+                                            colors = IconButtonDefaults.iconButtonColors(
+                                                containerColor = Color.Transparent
+                                            )
+                                        ) {
+                                            Icon(
+                                                imageVector = com.ray.flowmeter.ui.components.AppIcons.Filter,
+                                                contentDescription = stringResource(R.string.cd_toggle_filters),
+                                                tint = if (showUsageFilters) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                                            )
+                                        }
+                                    }
+
+                                    if (currentDestination == Destination.Limits) {
+                                        val appBlockingMasterEnabled by appLimitsViewModel.appBlockingMasterEnabled.collectAsState()
+                                        val scope = rememberCoroutineScope()
+                                        val firewallEnabledMsg = stringResource(R.string.msg_firewall_enabled)
+                                        val firewallDisabledMsg = stringResource(R.string.msg_firewall_disabled)
+                                        
+                                        val buttonBgColor by animateColorAsState(
+                                            targetValue = if (appBlockingMasterEnabled) MaterialTheme.colorScheme.primaryContainer
+                                                          else Color.Transparent,
+                                            animationSpec = tween(300),
+                                            label = "FirewallBgColor"
+                                        )
+                                        val buttonContentColor by animateColorAsState(
+                                            targetValue = if (appBlockingMasterEnabled) MaterialTheme.colorScheme.onPrimaryContainer
+                                                          else MaterialTheme.colorScheme.onSurfaceVariant,
+                                            animationSpec = tween(300),
+                                            label = "FirewallContentColor"
+                                        )
+                                        
+                                        IconButton(
+                                            onClick = {
+                                                val targetState = !appBlockingMasterEnabled
+                                                appLimitsViewModel.setAppBlockingMasterEnabled(targetState)
+                                                scope.launch {
+                                                    snackbarHostState.currentSnackbarData?.dismiss()
+                                                    val msg = if (targetState) firewallEnabledMsg else firewallDisabledMsg
+                                                    val job = launch {
+                                                        snackbarHostState.showSnackbar(
+                                                            message = msg,
+                                                            duration = SnackbarDuration.Indefinite
+                                                        )
+                                                    }
+                                                    delay(800.milliseconds)
+                                                    job.cancel()
+                                                }
+                                            },
+                                            colors = IconButtonDefaults.iconButtonColors(
+                                                containerColor = buttonBgColor,
+                                                contentColor = buttonContentColor
+                                            ),
+                                            modifier = Modifier
+                                                .size(40.dp)
+                                                .clip(CircleShape)
+                                        ) {
+                                            Crossfade(
+                                                targetState = appBlockingMasterEnabled,
+                                                animationSpec = tween(200),
+                                                label = "FirewallIconTransition"
+                                            ) { enabled ->
+                                                Icon(
+                                                    imageVector = if (enabled) Icons.Rounded.Security else Icons.Rounded.Shield,
+                                                    contentDescription = stringResource(R.string.label_block_apps),
+                                                    modifier = Modifier.size(20.dp)
+                                                )
+                                            }
                                         }
                                     }
                                 }
@@ -499,7 +500,7 @@ fun MainScreen(
                 }
             },
             bottomBar = {
-                if (!isWideScreen && currentDestination != Destination.AppPicker) {
+                if (!isWideScreen && currentDestination != Destination.AppPicker && currentDestination != Destination.Widgets) {
                     NavigationBar(
                         containerColor = MaterialTheme.colorScheme.surfaceContainer
                     ) {
@@ -675,7 +676,7 @@ fun MainScreen(
                                 onBack = {
                                     homeViewModel.isWidgetsOpen = false
                                 },
-                                modifier = Modifier.fillMaxSize().padding(innerPadding)
+                                modifier = Modifier.fillMaxSize()
                             )
                         }
                     }

@@ -5,6 +5,7 @@ package com.ray.flowmeter.ui.screens
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -101,6 +102,16 @@ fun MainScreen(
 
     val backStack = remember { mutableStateListOf(initialDestination) }
     val currentDestination = backStack.last()
+
+    var activeLayoutDestination by remember { mutableStateOf(initialDestination) }
+    LaunchedEffect(currentDestination) {
+        if (currentDestination == Destination.AppPicker || currentDestination == Destination.Widgets) {
+            delay(380)
+            activeLayoutDestination = currentDestination
+        } else {
+            activeLayoutDestination = currentDestination
+        }
+    }
 
     val currentScrollBehavior = when (currentDestination) {
         Destination.Home -> homeScrollBehavior
@@ -589,6 +600,16 @@ fun MainScreen(
             }
         ) { innerPadding ->
 
+            var lastStablePadding by remember { mutableStateOf(PaddingValues()) }
+            val inFullscreenTransition = (currentDestination == Destination.AppPicker || currentDestination == Destination.Widgets)
+                    && (activeLayoutDestination != currentDestination)
+
+            LaunchedEffect(innerPadding, inFullscreenTransition) {
+                if (!inFullscreenTransition) {
+                    lastStablePadding = innerPadding
+                }
+            }
+
             val directive = calculatePaneScaffoldDirective(windowAdaptiveInfo)
             val listDetailStrategy = rememberListDetailSceneStrategy<Destination>(directive = directive)
 
@@ -597,7 +618,36 @@ fun MainScreen(
                 sceneStrategies = listOf(listDetailStrategy),
                 modifier = Modifier.background(MaterialTheme.colorScheme.background),
                 transitionSpec = {
-                    fadeIn(animationSpec = tween(220)) togetherWith fadeOut(animationSpec = tween(220))
+                    val initialDest = initialState.key as? Destination
+                    val targetDest = targetState.key as? Destination
+
+                    when {
+                        targetDest == Destination.AppPicker || targetDest == Destination.Widgets -> {
+                            (slideInHorizontally(
+                                initialOffsetX = { it },
+                                animationSpec = tween(380, easing = FastOutSlowInEasing)
+                            ) + fadeIn(animationSpec = tween(250))).togetherWith(
+                                slideOutHorizontally(
+                                    targetOffsetX = { -it / 3 },
+                                    animationSpec = tween(380, easing = FastOutSlowInEasing)
+                                ) + fadeOut(animationSpec = tween(300))
+                            )
+                        }
+                        initialDest == Destination.AppPicker || initialDest == Destination.Widgets -> {
+                            (slideInHorizontally(
+                                initialOffsetX = { -it / 3 },
+                                animationSpec = tween(350, easing = FastOutSlowInEasing)
+                            ) + fadeIn(animationSpec = tween(250))).togetherWith(
+                                slideOutHorizontally(
+                                    targetOffsetX = { it },
+                                    animationSpec = tween(350, easing = FastOutSlowInEasing)
+                                ) + fadeOut(animationSpec = tween(200))
+                            )
+                        }
+                        else -> {
+                            fadeIn(animationSpec = tween(220)) togetherWith fadeOut(animationSpec = tween(220))
+                        }
+                    }
                 },
                 entryProvider = { key ->
                     when (key) {
@@ -621,7 +671,7 @@ fun MainScreen(
                                     backStack.add(Destination.Usage)
                                     appUsageViewModel.isViewingSystemApps = false
                                 },
-                                modifier = Modifier.fillMaxSize().padding(innerPadding).nestedScroll(homeScrollBehavior.nestedScrollConnection)
+                                modifier = Modifier.fillMaxSize().padding(lastStablePadding).nestedScroll(homeScrollBehavior.nestedScrollConnection)
                             )
                         }
 
@@ -629,14 +679,14 @@ fun MainScreen(
                             AppUsageScreen(
                                 viewModel = appUsageViewModel,
                                 showFilters = showUsageFilters,
-                                modifier = Modifier.fillMaxSize().padding(innerPadding).nestedScroll(usageScrollBehavior.nestedScrollConnection)
+                                modifier = Modifier.fillMaxSize().padding(lastStablePadding).nestedScroll(usageScrollBehavior.nestedScrollConnection)
                             )
                         }
 
                         Destination.Alerts -> NavEntry(key) {
                             AlertsScreen(
                                 viewModel = alertsViewModel,
-                                modifier = Modifier.fillMaxSize().padding(innerPadding).nestedScroll(alertsScrollBehavior.nestedScrollConnection)
+                                modifier = Modifier.fillMaxSize().padding(lastStablePadding).nestedScroll(alertsScrollBehavior.nestedScrollConnection)
                             )
                         }
 
@@ -645,7 +695,7 @@ fun MainScreen(
                                 viewModel = appLimitsViewModel,
                                 currentTab = limitsTab,
                                 onTabChange = setLimitsTab,
-                                modifier = Modifier.fillMaxSize().padding(innerPadding).nestedScroll(limitsScrollBehavior.nestedScrollConnection)
+                                modifier = Modifier.fillMaxSize().padding(lastStablePadding).nestedScroll(limitsScrollBehavior.nestedScrollConnection)
                             )
                         }
 
@@ -653,7 +703,7 @@ fun MainScreen(
                             SettingsScreen(
                                 viewModel = settingsViewModel,
                                 onDonateClick = { showDonateDialog = true },
-                                modifier = Modifier.fillMaxSize().padding(innerPadding).nestedScroll(settingsScrollBehavior.nestedScrollConnection)
+                                modifier = Modifier.fillMaxSize().padding(lastStablePadding).nestedScroll(settingsScrollBehavior.nestedScrollConnection)
                             )
                         }
 

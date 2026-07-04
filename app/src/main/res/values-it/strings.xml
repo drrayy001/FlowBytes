@@ -358,4 +358,29 @@
     <string name="desc_default_limits_subtitle">L\'impostazione di questi valori compilerà automaticamente tutti gli editor delle app in basso.</string>
     <string name="title_individual_app_limits">Limiti delle singole app</string>
     <string name="desc_individual_app_limits_subtitle">Personalizza tipi di rete, periodi o valori limite per ciascuna app.</string>
+
+    <!-- Widgets Screen -->
+    <string name="title_homescreen_widgets">Widget della schermata home</string>
+    <string name="title_customize_add_widgets">Personalizza e aggiungi widget</string>
+    <string name="desc_widgets_instruction">Attiva le opzioni seguenti per personalizzare istantaneamente tutti gli stili dei widget. Fai clic su "Aggiungi" su qualsiasi scheda per fissare quel widget specifico al launcher della tua schermata home.</string>
+    <string name="label_available_widgets">WIDGET DISPONIBILI</string>
+    <string name="title_speed_usage_widget">Widget Velocità e Utilizzo</string>
+    <string name="desc_speed_usage_size">4x1 Compatto / 4x2 Dettagliato</string>
+    <string name="label_todays_usage_caps">UTILIZZO DI OGGI</string>
+    <string name="title_todays_data_widget">Widget Dati di oggi</string>
+    <string name="desc_todays_data_size">2x2 Avanzamento circolare</string>
+    <string name="label_todays_data_caps">DATI DI OGGI</string>
+    <string name="title_daily_limit_widget">Widget Limite di rete giornaliero</string>
+    <string name="desc_detailed_status_size">4x2 Stato dettagliato</string>
+    <string name="label_daily_limit_caps">LIMITE DI RETE GIORNALIERO</string>
+    <string name="title_monthly_limit_widget">Widget Limite di rete mensile</string>
+    <string name="label_monthly_limit_caps">LIMITE DI RETE MENSILE</string>
+    <string name="title_speed_monitor_widget">Widget Monitoraggio velocità</string>
+    <string name="desc_live_graphs_size">4x2 Grafici in tempo reale</string>
+    <string name="label_speed_monitor_caps">MONITORAGGIO VELOCITÀ</string>
+    <string name="label_download_caps">DOWNLOAD</string>
+    <string name="label_upload_caps">CARICAMENTO</string>
+    <string name="btn_add">Aggiungi</string>
+    <string name="msg_widget_pin_failed">L\'aggiunta diretta di widget non è supportata dal tuo launcher.</string>
+    <string name="msg_widget_pin_api_error">Questa funzione richiede Android 8.0 o versioni successive.</string>
 </resources>

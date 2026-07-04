@@ -358,4 +358,29 @@
     <string name="desc_default_limits_subtitle">设置这些数值将自动填充下方所有的应用编辑器。</string>
     <string name="title_individual_app_limits">个人应用限制</string>
     <string name="desc_individual_app_limits_subtitle">为每个应用自定义网络类型、计费周期或限额参数。</string>
+
+    <!-- Widgets Screen -->
+    <string name="title_homescreen_widgets">主屏幕小部件</string>
+    <string name="title_customize_add_widgets">自定义并添加小部件</string>
+    <string name="desc_widgets_instruction">切换下方选项可立即自定义所有小部件样式。点击任何卡片上的“添加”，即可将该特定小部件固定到主屏幕启动器。</string>
+    <string name="label_available_widgets">可用小部件</string>
+    <string name="title_speed_usage_widget">速度与使用情况小部件</string>
+    <string name="desc_speed_usage_size">4x1 紧凑型 / 4x2 详细型</string>
+    <string name="label_todays_usage_caps">今日使用情况</string>
+    <string name="title_todays_data_widget">今日数据小部件</string>
+    <string name="desc_todays_data_size">2x2 圆形进度</string>
+    <string name="label_todays_data_caps">今日数据</string>
+    <string name="title_daily_limit_widget">每日网络限制小部件</string>
+    <string name="desc_detailed_status_size">4x2 详细状态</string>
+    <string name="label_daily_limit_caps">每日网络限制</string>
+    <string name="title_monthly_limit_widget">每月网络限制小部件</string>
+    <string name="label_monthly_limit_caps">每月网络限制</string>
+    <string name="title_speed_monitor_widget">速度监控小部件</string>
+    <string name="desc_live_graphs_size">4x2 实时图表</string>
+    <string name="label_speed_monitor_caps">速度监控</string>
+    <string name="label_download_caps">下载</string>
+    <string name="label_upload_caps">上传</string>
+    <string name="btn_add">添加</string>
+    <string name="msg_widget_pin_failed">您的启动器不支持直接添加小部件。</string>
+    <string name="msg_widget_pin_api_error">此功能需要 Android 8.0 或更高版本。</string>
 </resources>

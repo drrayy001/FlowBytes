@@ -358,4 +358,29 @@
     <string name="desc_default_limits_subtitle">Установка этих значений автоматически заполнит все редакторы приложений ниже.</string>
     <string name="title_individual_app_limits">Индивидуальные лимиты приложений</string>
     <string name="desc_individual_app_limits_subtitle">Настройте типы сетей, периоды или значения лимитов для каждого приложения.</string>
+
+    <!-- Widgets Screen -->
+    <string name="title_homescreen_widgets">Виджеты на главном экране</string>
+    <string name="title_customize_add_widgets">Настройка и добавление виджетов</string>
+    <string name="desc_widgets_instruction">Переключите параметры ниже, чтобы мгновенно настроить стили всех виджетов. Нажмите «Добавить» на любой карточке, чтобы закрепить этот конкретный виджет в лаунчере главного экрана.</string>
+    <string name="label_available_widgets">ДОСТУПНЫЕ ВИДЖЕТЫ</string>
+    <string name="title_speed_usage_widget">Виджет скорости и использования</string>
+    <string name="desc_speed_usage_size">4x1 Компактный / 4x2 Детальный</string>
+    <string name="label_todays_usage_caps">ИСПОЛЬЗОВАНИЕ СЕГОДНЯ</string>
+    <string name="title_todays_data_widget">Виджет данных за сегодня</string>
+    <string name="desc_todays_data_size">2x2 Круговой прогресс</string>
+    <string name="label_todays_data_caps">ДАННЫЕ ЗА СЕГОДНЯ</string>
+    <string name="title_daily_limit_widget">Виджет дневного лимита сети</string>
+    <string name="desc_detailed_status_size">4x2 Детальный статус</string>
+    <string name="label_daily_limit_caps">ДНЕВНОЙ ЛИМИТ СЕТИ</string>
+    <string name="title_monthly_limit_widget">Виджет месячного лимита сети</string>
+    <string name="label_monthly_limit_caps">МЕСЯЧНЫЙ ЛИМИТ СЕТИ</string>
+    <string name="title_speed_monitor_widget">Виджет монитора скорости</string>
+    <string name="desc_live_graphs_size">4x2 Живые графики</string>
+    <string name="label_speed_monitor_caps">МОНИТОР СКОРОСТИ</string>
+    <string name="label_download_caps">ЗАГРУЗКА</string>
+    <string name="label_upload_caps">ВЫГРУЗКА</string>
+    <string name="btn_add">Добавить</string>
+    <string name="msg_widget_pin_failed">Ваш лаунчер не поддерживает прямое добавление виджетов.</string>
+    <string name="msg_widget_pin_api_error">Для этой функции требуется Android 8.0 или выше.</string>
 </resources>

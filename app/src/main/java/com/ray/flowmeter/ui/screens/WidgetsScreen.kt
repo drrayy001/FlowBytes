@@ -78,7 +78,7 @@ fun WidgetsScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = "Homescreen widgets",
+                        text = stringResource(R.string.title_homescreen_widgets),
                         fontWeight = FontWeight.Black,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -128,13 +128,13 @@ fun WidgetsScreen(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text(
-                        text = "Customize & Add Widgets",
+                        text = stringResource(R.string.title_customize_add_widgets),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
-                        text = "Toggle options below to customize all widget styles instantly. Click 'Add' on any card to pin that specific widget to your home screen launcher.",
+                        text = stringResource(R.string.desc_widgets_instruction),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -144,7 +144,7 @@ fun WidgetsScreen(
 
             // Widget Previews Section
             Text(
-                text = "AVAILABLE WIDGETS",
+                text = stringResource(R.string.label_available_widgets),
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.ExtraBold,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -154,8 +154,8 @@ fun WidgetsScreen(
 
             // 1. Speed Widget Preview
             WidgetPreviewCard(
-                title = "Speed & Usage Widget",
-                sizeInfo = "4x1 Compact / 4x2 Detailed",
+                title = stringResource(R.string.title_speed_usage_widget),
+                sizeInfo = stringResource(R.string.desc_speed_usage_size),
                 onAddClick = { pinWidget(context, SpeedWidget::class.java) }
             ) {
                 WidgetBackgroundPreview {
@@ -166,7 +166,7 @@ fun WidgetsScreen(
                     ) {
 
                         Text(
-                            text = "TODAY'S USAGE",
+                            text = stringResource(R.string.label_todays_usage_caps),
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.ExtraBold,
                             color = Color.White.copy(alpha = 0.6f),
@@ -185,8 +185,8 @@ fun WidgetsScreen(
 
             // 2. Today's Data Widget Preview
             WidgetPreviewCard(
-                title = "Today's Data Widget",
-                sizeInfo = "2x2 Circular Progress",
+                title = stringResource(R.string.title_todays_data_widget),
+                sizeInfo = stringResource(R.string.desc_todays_data_size),
                 onAddClick = { pinWidget(context, TodayDataWidget::class.java) }
             ) {
                 WidgetBackgroundPreview {
@@ -196,7 +196,7 @@ fun WidgetsScreen(
                         verticalArrangement = Arrangement.Center
                     ) {
                         Text(
-                            text = "TODAY'S DATA",
+                            text = stringResource(R.string.label_todays_data_caps),
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.ExtraBold,
                             color = Color.White.copy(alpha = 0.6f),
@@ -251,13 +251,13 @@ fun WidgetsScreen(
 
             // 3. Daily Network Limit Widget Preview
             WidgetPreviewCard(
-                title = "Daily Network Limit Widget",
-                sizeInfo = "4x2 Detailed Status",
+                title = stringResource(R.string.title_daily_limit_widget),
+                sizeInfo = stringResource(R.string.desc_detailed_status_size),
                 onAddClick = { pinWidget(context, DailyNetworkLimitWidget::class.java) }
             ) {
                 WidgetBackgroundPreview {
                     NetworkLimitPreviewItem(
-                        title = "DAILY NETWORK LIMIT",
+                        title = stringResource(R.string.label_daily_limit_caps),
                         wifiLimit = wifiDailyLimit,
                         mobileLimit = mobileDailyLimit,
                         wifiUsed = "0.4",
@@ -270,13 +270,13 @@ fun WidgetsScreen(
 
             // 4. Monthly Network Limit Widget Preview
             WidgetPreviewCard(
-                title = "Monthly Network Limit Widget",
-                sizeInfo = "4x2 Detailed Status",
+                title = stringResource(R.string.title_monthly_limit_widget),
+                sizeInfo = stringResource(R.string.desc_detailed_status_size),
                 onAddClick = { pinWidget(context, MonthlyNetworkLimitWidget::class.java) }
             ) {
                 WidgetBackgroundPreview {
                     NetworkLimitPreviewItem(
-                        title = "MONTHLY NETWORK LIMIT",
+                        title = stringResource(R.string.label_monthly_limit_caps),
                         wifiLimit = wifiMonthlyLimit,
                         mobileLimit = mobileMonthlyLimit,
                         wifiUsed = "12.5",
@@ -289,15 +289,15 @@ fun WidgetsScreen(
 
             // 5. Speed Monitor Widget Preview
             WidgetPreviewCard(
-                title = "Speed Monitor Widget",
-                sizeInfo = "4x2 Live Graphs",
+                title = stringResource(R.string.title_speed_monitor_widget),
+                sizeInfo = stringResource(R.string.desc_live_graphs_size),
                 onAddClick = { pinWidget(context, SpeedMonitorWidget::class.java) }
             ) {
                 WidgetBackgroundPreview {
                     Column(modifier = Modifier.fillMaxWidth()) {
                         // Header
                         Text(
-                            text = "SPEED MONITOR",
+                            text = stringResource(R.string.label_speed_monitor_caps),
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.Bold,
                             color = Color.White.copy(alpha = 0.5f),
@@ -324,7 +324,7 @@ fun WidgetsScreen(
                                     )
                                     Spacer(modifier = Modifier.width(6.dp))
                                     Text(
-                                        text = "DOWNLOAD",
+                                        text = stringResource(R.string.label_download_caps),
                                         color = Color(0xFF4DE8F4),
                                         style = MaterialTheme.typography.labelSmall,
                                         fontWeight = FontWeight.Bold,
@@ -401,7 +401,7 @@ fun WidgetsScreen(
                                     )
                                     Spacer(modifier = Modifier.width(6.dp))
                                     Text(
-                                        text = "UPLOAD",
+                                        text = stringResource(R.string.label_upload_caps),
                                         color = Color(0xFFDDA7FF),
                                         style = MaterialTheme.typography.labelSmall,
                                         fontWeight = FontWeight.Bold,
@@ -528,7 +528,7 @@ fun WidgetPreviewCard(
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = "Add",
+                        text = stringResource(R.string.btn_add),
                         style = MaterialTheme.typography.labelLarge,
                         fontWeight = FontWeight.Bold
                     )
@@ -623,10 +623,10 @@ private fun pinWidget(context: Context, providerClass: Class<out AppWidgetProvid
         if (appWidgetManager != null && appWidgetManager.isRequestPinAppWidgetSupported) {
             appWidgetManager.requestPinAppWidget(myProvider, null, null)
         } else {
-            Toast.makeText(context, "Adding widgets directly is not supported by your launcher.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, context.getString(R.string.msg_widget_pin_failed), Toast.LENGTH_SHORT).show()
         }
     } else {
-        Toast.makeText(context, "This feature requires Android 8.0 or above.", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, context.getString(R.string.msg_widget_pin_api_error), Toast.LENGTH_SHORT).show()
     }
 }
 
@@ -669,7 +669,7 @@ fun NetworkLimitPreviewItem(
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = "Wi-Fi",
+                        text = stringResource(R.string.label_wifi),
                         style = MaterialTheme.typography.bodySmall,
                         fontWeight = FontWeight.Bold,
                         color = Color.White
@@ -714,7 +714,7 @@ fun NetworkLimitPreviewItem(
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = "Mobile",
+                        text = stringResource(R.string.label_mobile),
                         style = MaterialTheme.typography.bodySmall,
                         fontWeight = FontWeight.Bold,
                         color = Color.White

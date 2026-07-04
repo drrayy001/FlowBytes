@@ -358,4 +358,29 @@
     <string name="desc_default_limits_subtitle">इन्हें सेट करने से नीचे दिए गए सभी ऐप संपादक स्वतः भर जाएंगे।</string>
     <string name="title_individual_app_limits">व्यक्तिगत ऐप सीमाएं</string>
     <string name="desc_individual_app_limits_subtitle">प्रत्येक ऐप के लिए नेटवर्क प्रकार, अवधि या सीमा मान अनुकूलित करें।</string>
+
+    <!-- Widgets Screen -->
+    <string name="title_homescreen_widgets">होम स्क्रीन विजेट</string>
+    <string name="title_customize_add_widgets">कस्टमाइज़ करें और विजेट जोड़ें</string>
+    <string name="desc_widgets_instruction">सभी विजेट शैलियों को तुरंत कस्टमाइज़ करने के लिए नीचे दिए गए विकल्पों को टॉगल करें। उस विशिष्ट विजेट को अपने होम स्क्रीन लॉन्चर पर पिन करने के लिए किसी भी कार्ड पर \'जोड़ें\' पर क्लिक करें।</string>
+    <string name="label_available_widgets">उपलब्ध विजेट</string>
+    <string name="title_speed_usage_widget">स्पीड और उपयोग विजेट</string>
+    <string name="desc_speed_usage_size">4x1 कॉम्पैक्ट / 4x2 विस्तृत</string>
+    <string name="label_todays_usage_caps">आज का उपयोग</string>
+    <string name="title_todays_data_widget">आज का डेटा विजेट</string>
+    <string name="desc_todays_data_size">2x2 गोलाकार प्रगति</string>
+    <string name="label_todays_data_caps">आज का डेटा</string>
+    <string name="title_daily_limit_widget">दैनिक नेटवर्क सीमा विजेट</string>
+    <string name="desc_detailed_status_size">4x2 विस्तृत स्थिति</string>
+    <string name="label_daily_limit_caps">दैनिक नेटवर्क सीमा</string>
+    <string name="title_monthly_limit_widget">मासिक नेटवर्क सीमा विजेट</string>
+    <string name="label_monthly_limit_caps">मासिक नेटवर्क सीमा</string>
+    <string name="title_speed_monitor_widget">स्पीड मॉनिटर विजेट</string>
+    <string name="desc_live_graphs_size">4x2 लाइव ग्राफ़</string>
+    <string name="label_speed_monitor_caps">स्पीड मॉनिटर</string>
+    <string name="label_download_caps">डाउनलोड</string>
+    <string name="label_upload_caps">अपलोड</string>
+    <string name="btn_add">जोड़ें</string>
+    <string name="msg_widget_pin_failed">आपका लॉन्चर सीधे विजेट जोड़ने का समर्थन नहीं करता है।</string>
+    <string name="msg_widget_pin_api_error">इस सुविधा के लिए Android 8.0 या उससे ऊपर के वर्जन की आवश्यकता है।</string>
 </resources>

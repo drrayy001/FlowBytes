@@ -358,4 +358,29 @@
     <string name="desc_default_limits_subtitle">Durch das Festlegen dieser Optionen werden alle App-Editoren unten automatisch ausgefüllt.</string>
     <string name="title_individual_app_limits">Individuelle App-Limits</string>
     <string name="desc_individual_app_limits_subtitle">Passen Sie Netzwerktypen, Zeiträume oder Limitwerte für jede App an.</string>
+
+    <!-- Widgets Screen -->
+    <string name="title_homescreen_widgets">Startbildschirm-Widgets</string>
+    <string name="title_customize_add_widgets">Widgets anpassen &amp; hinzufügen</string>
+    <string name="desc_widgets_instruction">Schalten Sie die untenstehenden Optionen um, um alle Widget-Stile sofort anzupassen. Klicken Sie auf einer Karte auf „Hinzufügen“, um dieses spezifische Widget an Ihren Startbildschirm-Launcher anzuheften.</string>
+    <string name="label_available_widgets">VERFÜGBARE WIDGETS</string>
+    <string name="title_speed_usage_widget">Geschwindigkeits- &amp; Nutzungs-Widget</string>
+    <string name="desc_speed_usage_size">4x1 Kompakt / 4x2 Detailliert</string>
+    <string name="label_todays_usage_caps">HEUTIGE NUTZUNG</string>
+    <string name="title_todays_data_widget">Heutiges Daten-Widget</string>
+    <string name="desc_todays_data_size">2x2 Kreisfortschritt</string>
+    <string name="label_todays_data_caps">HEUTIGE DATEN</string>
+    <string name="title_daily_limit_widget">Tägliches Netzlimit-Widget</string>
+    <string name="desc_detailed_status_size">4x2 Detaillierter Status</string>
+    <string name="label_daily_limit_caps">TÄGLICHES NETZLIMIT</string>
+    <string name="title_monthly_limit_widget">Monatliches Netzlimit-Widget</string>
+    <string name="label_monthly_limit_caps">MONATLICHES NETZLIMIT</string>
+    <string name="title_speed_monitor_widget">Geschwindigkeitsmonitor-Widget</string>
+    <string name="desc_live_graphs_size">4x2 Live-Graphen</string>
+    <string name="label_speed_monitor_caps">GESCHWINDIGKEITSMONITOR</string>
+    <string name="label_download_caps">DOWNLOAD</string>
+    <string name="label_upload_caps">UPLOAD</string>
+    <string name="btn_add">Hinzufügen</string>
+    <string name="msg_widget_pin_failed">Das direkte Hinzufügen von Widgets wird von Ihrem Launcher nicht unterstützt.</string>
+    <string name="msg_widget_pin_api_error">Diese Funktion erfordert Android 8.0 oder höher.</string>
 </resources>

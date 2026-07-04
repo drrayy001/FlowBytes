@@ -358,4 +358,29 @@
     <string name="desc_default_limits_subtitle">これを設定すると、下のすべてのアプリエディタに自動入力されます。</string>
     <string name="title_individual_app_limits">個別アプリ制限</string>
     <string name="desc_individual_app_limits_subtitle">各アプリのネットワークの種類、期間、または制限値をカスタマイズします。</string>
+
+    <!-- Widgets Screen -->
+    <string name="title_homescreen_widgets">ホーム画面ウィジェット</string>
+    <string name="title_customize_add_widgets">ウィジェットのカスタマイズと追加</string>
+    <string name="desc_widgets_instruction">下のオプションを切り替えると、すべてのウィジェットスタイルを即座にカスタマイズできます。カードの「追加」をクリックして、特定のウィジェットをホーム画面ランチャーに固定します。</string>
+    <string name="label_available_widgets">利用可能なウィジェット</string>
+    <string name="title_speed_usage_widget">速度と使用状況ウィジェット</string>
+    <string name="desc_speed_usage_size">4x1 コンパクト / 4x2 詳細</string>
+    <string name="label_todays_usage_caps">今日の使用状況</string>
+    <string name="title_todays_data_widget">今日のデータウィジェット</string>
+    <string name="desc_todays_data_size">2x2 円形プログレス</string>
+    <string name="label_todays_data_caps">今日のデータ</string>
+    <string name="title_daily_limit_widget">1日のネットワーク制限ウィジェット</string>
+    <string name="desc_detailed_status_size">4x2 詳細ステータス</string>
+    <string name="label_daily_limit_caps">1日のネットワーク制限</string>
+    <string name="title_monthly_limit_widget">月間ネットワーク制限ウィジェット</string>
+    <string name="label_monthly_limit_caps">月間ネットワーク制限</string>
+    <string name="title_speed_monitor_widget">速度モニターウィジェット</string>
+    <string name="desc_live_graphs_size">4x2 ライブグラフ</string>
+    <string name="label_speed_monitor_caps">速度モニター</string>
+    <string name="label_download_caps">ダウンロード</string>
+    <string name="label_upload_caps">アップロード</string>
+    <string name="btn_add">追加</string>
+    <string name="msg_widget_pin_failed">お使いのランチャーはウィジェットの直接追加をサポートしていません。</string>
+    <string name="msg_widget_pin_api_error">この機能にはAndroid 8.0以降が必要です。</string>
 </resources>

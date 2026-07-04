@@ -360,4 +360,29 @@
     <string name="desc_default_limits_subtitle">سيؤدي ضبط هذه الحدود إلى تعبئة جميع محرري التطبيقات أدناه تلقائيًا.</string>
     <string name="title_individual_app_limits">حدود التطبيقات الفردية</string>
     <string name="desc_individual_app_limits_subtitle">تخصيص أنواع الشبكات أو الفترات أو قيم الحدود لكل تطبيق.</string>
+
+    <!-- Widgets Screen -->
+    <string name="title_homescreen_widgets">أدوات الشاشة الرئيسية</string>
+    <string name="title_customize_add_widgets">تخصيص وإضافة الأدوات</string>
+    <string name="desc_widgets_instruction">قم بتبديل الخيارات أدناه لتخصيص جميع أنماط الأدوات على الفور. انقر على "إضافة" في أي بطاقة لتثبيت تلك الأداة المحددة في مشغل الشاشة الرئيسية.</string>
+    <string name="label_available_widgets">الأدوات المتاحة</string>
+    <string name="title_speed_usage_widget">أداة السرعة والاستخدام</string>
+    <string name="desc_speed_usage_size">4x1 مضغوط / 4x2 مفصل</string>
+    <string name="label_todays_usage_caps">استخدام اليوم</string>
+    <string name="title_todays_data_widget">أداة بيانات اليوم</string>
+    <string name="desc_todays_data_size">2x2 تقدم دائري</string>
+    <string name="label_todays_data_caps">بيانات اليوم</string>
+    <string name="title_daily_limit_widget">أداة حد الشبكة اليومي</string>
+    <string name="desc_detailed_status_size">4x2 حالة مفصلة</string>
+    <string name="label_daily_limit_caps">حد الشبكة اليومي</string>
+    <string name="title_monthly_limit_widget">أداة حد الشبكة الشهري</string>
+    <string name="label_monthly_limit_caps">حد الشبكة الشهري</string>
+    <string name="title_speed_monitor_widget">أداة مراقبة السرعة</string>
+    <string name="desc_live_graphs_size">4x2 رسوم بيانية مباشرة</string>
+    <string name="label_speed_monitor_caps">مراقب السرعة</string>
+    <string name="label_download_caps">تنزيل</string>
+    <string name="label_upload_caps">تحميل</string>
+    <string name="btn_add">إضافة</string>
+    <string name="msg_widget_pin_failed">إضافة الأدوات مباشرة غير مدعومة من قبل المشغل الخاص بك.</string>
+    <string name="msg_widget_pin_api_error">تتطلب هذه الميزة نظام أندرويد 8.0 أو أحدث.</string>
 </resources>

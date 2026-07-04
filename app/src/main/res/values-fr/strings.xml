@@ -360,4 +360,29 @@
     <string name="desc_default_limits_subtitle">La configuration de ces éléments remplira automatiquement tous les éditeurs d\'applications ci-dessous.</string>
     <string name="title_individual_app_limits">Limites d\'application individuelles</string>
     <string name="desc_individual_app_limits_subtitle">Personnaliser les types de réseau, les périodes ou les valeurs limites pour chaque application.</string>
+
+    <!-- Widgets Screen -->
+    <string name="title_homescreen_widgets">Widgets de l\'écran d\'accueil</string>
+    <string name="title_customize_add_widgets">Personnaliser et ajouter des widgets</string>
+    <string name="desc_widgets_instruction">Activez les options ci-dessous pour personnaliser instantanément tous les styles de widgets. Cliquez sur « Ajouter » sur n\'importe quelle carte pour épingler ce widget spécifique au lanceur de votre écran d\'accueil.</string>
+    <string name="label_available_widgets">WIDGETS DISPONIBLES</string>
+    <string name="title_speed_usage_widget">Widget Vitesse et Utilisation</string>
+    <string name="desc_speed_usage_size">4x1 Compact / 4x2 Détaillé</string>
+    <string name="label_todays_usage_caps">UTILISATION DU JOUR</string>
+    <string name="title_todays_data_widget">Widget Données du jour</string>
+    <string name="desc_todays_data_size">2x2 Progression circulaire</string>
+    <string name="label_todays_data_caps">DONNÉES DU JOUR</string>
+    <string name="title_daily_limit_widget">Widget Limite réseau quotidienne</string>
+    <string name="desc_detailed_status_size">4x2 État détaillé</string>
+    <string name="label_daily_limit_caps">LIMITE RÉSEAU QUOTIDIENNE</string>
+    <string name="title_monthly_limit_widget">Widget Limite réseau mensuelle</string>
+    <string name="label_monthly_limit_caps">LIMITE RÉSEAU MENSUELLE</string>
+    <string name="title_speed_monitor_widget">Widget Moniteur de vitesse</string>
+    <string name="desc_live_graphs_size">4x2 Graphiques en direct</string>
+    <string name="label_speed_monitor_caps">MONITEUR DE VITESSE</string>
+    <string name="label_download_caps">TÉLÉCHARGEMENT</string>
+    <string name="label_upload_caps">TÉLÉVERSEMENT</string>
+    <string name="btn_add">Ajouter</string>
+    <string name="msg_widget_pin_failed">L\'ajout direct de widgets n\'est pas pris en charge par votre lanceur.</string>
+    <string name="msg_widget_pin_api_error">Cette fonctionnalité nécessite Android 8.0 ou une version ultérieure.</string>
 </resources>

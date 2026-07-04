@@ -358,4 +358,29 @@
     <string name="desc_default_limits_subtitle">이 항목을 설정하면 아래의 모든 앱 편집기가 자동으로 채워집니다.</string>
     <string name="title_individual_app_limits">개별 앱 한도</string>
     <string name="desc_individual_app_limits_subtitle">각 앱별로 네트워크 유형, 한도 기간 또는 한도 값을 맞춤설정합니다.</string>
+
+    <!-- Widgets Screen -->
+    <string name="title_homescreen_widgets">홈 화면 위젯</string>
+    <string name="title_customize_add_widgets">위젯 맞춤설정 및 추가</string>
+    <string name="desc_widgets_instruction">아래 옵션을 토글하여 모든 위젯 스타일을 즉시 맞춤설정하세요. 카드에서 \'추가\'를 클릭하여 해당 위젯을 홈 화면 런처에 고정합니다.</string>
+    <string name="label_available_widgets">사용 가능한 위젯</string>
+    <string name="title_speed_usage_widget">속도 및 사용량 위젯</string>
+    <string name="desc_speed_usage_size">4x1 압축형 / 4x2 상세형</string>
+    <string name="label_todays_usage_caps">오늘 사용량</string>
+    <string name="title_todays_data_widget">오늘 데이터 위젯</string>
+    <string name="desc_todays_data_size">2x2 원형 진행률</string>
+    <string name="label_todays_data_caps">오늘 데이터</string>
+    <string name="title_daily_limit_widget">일일 네트워크 제한 위젯</string>
+    <string name="desc_detailed_status_size">4x2 상세 상태</string>
+    <string name="label_daily_limit_caps">일일 네트워크 제한</string>
+    <string name="title_monthly_limit_widget">월간 네트워크 제한 위젯</string>
+    <string name="label_monthly_limit_caps">월간 네트워크 제한</string>
+    <string name="title_speed_monitor_widget">속도 모니터 위젯</string>
+    <string name="desc_live_graphs_size">4x2 라이브 그래프</string>
+    <string name="label_speed_monitor_caps">속도 모니터</string>
+    <string name="label_download_caps">다운로드</string>
+    <string name="label_upload_caps">업로드</string>
+    <string name="btn_add">추가</string>
+    <string name="msg_widget_pin_failed">사용 중인 런처에서 위젯 직접 추가를 지원하지 않습니다.</string>
+    <string name="msg_widget_pin_api_error">이 기능은 Android 8.0 이상이 필요합니다.</string>
 </resources>

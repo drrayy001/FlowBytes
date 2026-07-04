@@ -358,4 +358,29 @@
     <string name="desc_default_limits_subtitle">Definir estes valores preencherá automaticamente todos os editores de aplicativos abaixo.</string>
     <string name="title_individual_app_limits">Limites de aplicativos individuais</string>
     <string name="desc_individual_app_limits_subtitle">Personalize tipos de rede, períodos ou valores limite para cada aplicativo.</string>
+
+    <!-- Widgets Screen -->
+    <string name="title_homescreen_widgets">Widgets da tela inicial</string>
+    <string name="title_customize_add_widgets">Personalizar e adicionar widgets</string>
+    <string name="desc_widgets_instruction">Ative as opções abaixo para personalizar instantaneamente todos os estilos de widgets. Clique em "Adicionar" em qualquer cartão para fixar esse widget específico ao inicializador da tela inicial.</string>
+    <string name="label_available_widgets">WIDGETS DISPONÍVEIS</string>
+    <string name="title_speed_usage_widget">Widget de Velocidade e Uso</string>
+    <string name="desc_speed_usage_size">4x1 Compacto / 4x2 Detalhado</string>
+    <string name="label_todays_usage_caps">USO DE HOJE</string>
+    <string name="title_todays_data_widget">Widget de Dados de hoje</string>
+    <string name="desc_todays_data_size">2x2 Progresso circular</string>
+    <string name="label_todays_data_caps">DADOS DE HOJE</string>
+    <string name="title_daily_limit_widget">Widget de Limite de rede diário</string>
+    <string name="desc_detailed_status_size">4x2 Status detalhado</string>
+    <string name="label_daily_limit_caps">LIMITE DE REDE DIÁRIO</string>
+    <string name="title_monthly_limit_widget">Widget de Limite de rede mensal</string>
+    <string name="label_monthly_limit_caps">LIMITE DE REDE MENSAL</string>
+    <string name="title_speed_monitor_widget">Widget de Monitor de velocidade</string>
+    <string name="desc_live_graphs_size">4x2 Gráficos ao vivo</string>
+    <string name="label_speed_monitor_caps">MONITOR DE VELOCIDADE</string>
+    <string name="label_download_caps">DOWNLOAD</string>
+    <string name="label_upload_caps">UPLOAD</string>
+    <string name="btn_add">Adicionar</string>
+    <string name="msg_widget_pin_failed">Seu inicializador não suporta a adição direta de widgets.</string>
+    <string name="msg_widget_pin_api_error">Este recurso requer o Android 8.0 ou superior.</string>
 </resources>

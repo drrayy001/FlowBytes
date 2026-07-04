@@ -362,4 +362,29 @@
     <string name="desc_default_limits_subtitle">Setting these will auto-fill all app editors below.</string>
     <string name="title_individual_app_limits">Individual App Limits</string>
     <string name="desc_individual_app_limits_subtitle">Customize network types, periods, or limit values for each app.</string>
+
+    <!-- Widgets Screen -->
+    <string name="title_homescreen_widgets">Homescreen widgets</string>
+    <string name="title_customize_add_widgets">Customize &amp; Add Widgets</string>
+    <string name="desc_widgets_instruction">Toggle options below to customize all widget styles instantly. Click \'Add\' on any card to pin that specific widget to your home screen launcher.</string>
+    <string name="label_available_widgets">AVAILABLE WIDGETS</string>
+    <string name="title_speed_usage_widget">Speed &amp; Usage Widget</string>
+    <string name="desc_speed_usage_size">4x1 Compact / 4x2 Detailed</string>
+    <string name="label_todays_usage_caps">TODAY\'S USAGE</string>
+    <string name="title_todays_data_widget">Today\'s Data Widget</string>
+    <string name="desc_todays_data_size">2x2 Circular Progress</string>
+    <string name="label_todays_data_caps">TODAY\'S DATA</string>
+    <string name="title_daily_limit_widget">Daily Network Limit Widget</string>
+    <string name="desc_detailed_status_size">4x2 Detailed Status</string>
+    <string name="label_daily_limit_caps">DAILY NETWORK LIMIT</string>
+    <string name="title_monthly_limit_widget">Monthly Network Limit Widget</string>
+    <string name="label_monthly_limit_caps">MONTHLY NETWORK LIMIT</string>
+    <string name="title_speed_monitor_widget">Speed Monitor Widget</string>
+    <string name="desc_live_graphs_size">4x2 Live Graphs</string>
+    <string name="label_speed_monitor_caps">SPEED MONITOR</string>
+    <string name="label_download_caps">DOWNLOAD</string>
+    <string name="label_upload_caps">UPLOAD</string>
+    <string name="btn_add">Add</string>
+    <string name="msg_widget_pin_failed">Adding widgets directly is not supported by your launcher.</string>
+    <string name="msg_widget_pin_api_error">This feature requires Android 8.0 or above.</string>
 </resources>

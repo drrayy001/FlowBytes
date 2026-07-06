@@ -364,8 +364,10 @@
     <string name="title_customize_add_widgets">위젯 맞춤설정 및 추가</string>
     <string name="desc_widgets_instruction">아래 옵션을 토글하여 모든 위젯 스타일을 즉시 맞춤설정하세요. 카드에서 \'추가\'를 클릭하여 해당 위젯을 홈 화면 런처에 고정합니다.</string>
     <string name="label_available_widgets">사용 가능한 위젯</string>
-    <string name="title_speed_usage_widget">속도 및 사용량 위젯</string>
-    <string name="desc_speed_usage_size">4x1 압축형 / 4x2 상세형</string>
+    <string name="title_daily_usage_widget">일일 사용량 위젯</string>
+    <string name="desc_daily_usage_widget_size">4x1 컴팩트 / 4x2 일일</string>
+    <string name="title_monthly_usage_widget">월간 사용량 위젯</string>
+    <string name="desc_monthly_usage_widget_size">4x1 컴팩트 / 4x2 월간</string>
     <string name="label_todays_usage_caps">오늘 사용량</string>
     <string name="title_todays_data_widget">오늘 데이터 위젯</string>
     <string name="desc_todays_data_size">2x2 원형 진행률</string>

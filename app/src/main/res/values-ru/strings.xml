@@ -364,8 +364,10 @@
     <string name="title_customize_add_widgets">Настройка и добавление виджетов</string>
     <string name="desc_widgets_instruction">Переключите параметры ниже, чтобы мгновенно настроить стили всех виджетов. Нажмите «Добавить» на любой карточке, чтобы закрепить этот конкретный виджет в лаунчере главного экрана.</string>
     <string name="label_available_widgets">ДОСТУПНЫЕ ВИДЖЕТЫ</string>
-    <string name="title_speed_usage_widget">Виджет скорости и использования</string>
-    <string name="desc_speed_usage_size">4x1 Компактный / 4x2 Детальный</string>
+    <string name="title_daily_usage_widget">Виджет ежедневного использования</string>
+    <string name="desc_daily_usage_widget_size">4x1 компактный / 4x2 ежедневный</string>
+    <string name="title_monthly_usage_widget">Виджет ежемесячного использования</string>
+    <string name="desc_monthly_usage_widget_size">4x1 компактный / 4x2 ежемесячный</string>
     <string name="label_todays_usage_caps">ИСПОЛЬЗОВАНИЕ СЕГОДНЯ</string>
     <string name="title_todays_data_widget">Виджет данных за сегодня</string>
     <string name="desc_todays_data_size">2x2 Круговой прогресс</string>

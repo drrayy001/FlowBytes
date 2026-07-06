@@ -366,8 +366,10 @@
     <string name="title_customize_add_widgets">تخصيص وإضافة الأدوات</string>
     <string name="desc_widgets_instruction">قم بتبديل الخيارات أدناه لتخصيص جميع أنماط الأدوات على الفور. انقر على "إضافة" في أي بطاقة لتثبيت تلك الأداة المحددة في مشغل الشاشة الرئيسية.</string>
     <string name="label_available_widgets">الأدوات المتاحة</string>
-    <string name="title_speed_usage_widget">أداة السرعة والاستخدام</string>
-    <string name="desc_speed_usage_size">4x1 مضغوط / 4x2 مفصل</string>
+    <string name="title_daily_usage_widget">أداة الاستخدام اليومي</string>
+    <string name="desc_daily_usage_widget_size">4x1 مضغوط / 4x2 يومي</string>
+    <string name="title_monthly_usage_widget">أداة الاستخدام الشهري</string>
+    <string name="desc_monthly_usage_widget_size">4x1 مضغوط / 4x2 شهري</string>
     <string name="label_todays_usage_caps">استخدام اليوم</string>
     <string name="title_todays_data_widget">أداة بيانات اليوم</string>
     <string name="desc_todays_data_size">2x2 تقدم دائري</string>

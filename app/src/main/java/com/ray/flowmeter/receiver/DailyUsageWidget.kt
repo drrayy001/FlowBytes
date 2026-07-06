@@ -24,11 +24,10 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
 import java.util.Calendar
-import java.util.Locale
 
 // AppWidgetProvider that handles rendering and real-time updates of the home screen widget,
-// displaying current upload/download speeds and cumulative network data usage.
-class SpeedWidget : AppWidgetProvider() {
+// displaying cumulative daily network data usage.
+class DailyUsageWidget : AppWidgetProvider() {
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         for (appWidgetId in appWidgetIds) {
@@ -50,28 +49,27 @@ class SpeedWidget : AppWidgetProvider() {
         super.onReceive(context, intent)
         if (intent.action == ACTION_UPDATE_WIDGET) {
             val appWidgetManager = AppWidgetManager.getInstance(context)
-            val componentName = ComponentName(context, SpeedWidget::class.java)
+            val componentName = ComponentName(context, DailyUsageWidget::class.java)
             val appWidgetIds = appWidgetManager.getAppWidgetIds(componentName)
             
-            val rxSpeed = intent.getLongExtra(EXTRA_RX_SPEED, 0L)
-            val txSpeed = intent.getLongExtra(EXTRA_TX_SPEED, 0L)
-            val usageBytes = intent.getLongExtra(EXTRA_USAGE, 0L)
-            val usageType = intent.getStringExtra(EXTRA_USAGE_TYPE) ?: "DAILY"
-            val showSpeed = intent.getBooleanExtra(EXTRA_SHOW_SPEED, true)
+            val usageBytes = intent.getLongExtra(EXTRA_DAILY_USAGE, -1L)
 
             for (appWidgetId in appWidgetIds) {
-                updateWidgetData(context, appWidgetManager, appWidgetId, rxSpeed, txSpeed, usageBytes, usageType, showSpeed)
+                if (usageBytes >= 0L) {
+                    updateWidgetData(context, appWidgetManager, appWidgetId, usageBytes)
+                } else {
+                    updateAppWidget(context, appWidgetManager, appWidgetId)
+                }
             }
         }
     }
 
     companion object {
         const val ACTION_UPDATE_WIDGET = "com.ray.flowmeter.ACTION_UPDATE_WIDGET"
+        const val EXTRA_DAILY_USAGE = "extra_daily_usage"
+        const val EXTRA_MONTHLY_USAGE = "extra_monthly_usage"
         const val EXTRA_RX_SPEED = "extra_rx_speed"
         const val EXTRA_TX_SPEED = "extra_tx_speed"
-        const val EXTRA_USAGE = "extra_usage"
-        const val EXTRA_USAGE_TYPE = "extra_usage_type"
-        const val EXTRA_SHOW_SPEED = "extra_show_speed"
 
         // Select either compact or full layout depending on the widget's current vertical span.
         fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
@@ -79,9 +77,9 @@ class SpeedWidget : AppWidgetProvider() {
             val minHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 72)
             
             val layoutResId = if (minHeight < 100) {
-                R.layout.widget_speed_usage_compact
+                R.layout.widget_usage_compact
             } else {
-                R.layout.widget_speed_usage
+                R.layout.widget_usage
             }
             val views = RemoteViews(context.packageName, layoutResId)
             
@@ -91,42 +89,145 @@ class SpeedWidget : AppWidgetProvider() {
 
             CoroutineScope(Dispatchers.IO).launch {
                 val repository = UserPreferencesRepository(context)
-                val showSpeed = repository.widgetShowSpeed.first()
-                
+                val resetHour = repository.resetTimeHour.first()
+                val resetMinute = repository.resetTimeMinute.first()
+                val monthlyResetDay = repository.monthlyResetDay.first()
+
+                val wifiUsage = WidgetUsageQuerier.getUsageBytes(context, NetworkCapabilities.TRANSPORT_WIFI, "daily", resetHour, resetMinute, monthlyResetDay)
+                val mobileUsage = WidgetUsageQuerier.getUsageBytes(context, NetworkCapabilities.TRANSPORT_CELLULAR, "daily", resetHour, resetMinute, monthlyResetDay)
+                val totalUsage = wifiUsage + mobileUsage
+
                 withContext(Dispatchers.Main) {
+                    views.setTextViewText(R.id.widget_text_usage, SpeedFormatter.formatUsage(totalUsage))
+                    views.setTextViewText(R.id.widget_label_usage, context.getString(R.string.label_todays_usage).uppercase())
                     views.setViewVisibility(R.id.widget_speed_layout, View.GONE)
                     appWidgetManager.updateAppWidget(appWidgetId, views)
                 }
             }
         }
 
-        // Populates the widget layout with formatted speeds and usage values received from the broadcast intent.
         private fun updateWidgetData(
             context: Context,
             appWidgetManager: AppWidgetManager,
             appWidgetId: Int,
-            rxSpeed: Long,
-            txSpeed: Long,
-            usageBytes: Long,
-            usageType: String,
-            showSpeed: Boolean
+            usageBytes: Long
         ) {
             val options = appWidgetManager.getAppWidgetOptions(appWidgetId)
             val minHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 72)
             
             val layoutResId = if (minHeight < 100) {
-                R.layout.widget_speed_usage_compact
+                R.layout.widget_usage_compact
             } else {
-                R.layout.widget_speed_usage
+                R.layout.widget_usage
             }
             val views = RemoteViews(context.packageName, layoutResId)
             
-            views.setTextViewText(R.id.widget_text_down, SpeedFormatter.formatBytes(rxSpeed))
-            views.setTextViewText(R.id.widget_text_up, SpeedFormatter.formatBytes(txSpeed))
             views.setTextViewText(R.id.widget_text_usage, SpeedFormatter.formatUsage(usageBytes))
+            views.setTextViewText(R.id.widget_label_usage, context.getString(R.string.label_todays_usage).uppercase())
+
+            val intent = Intent(context, MainActivity::class.java)
+            val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+            views.setOnClickPendingIntent(R.id.widget_container, pendingIntent)
+
+            views.setViewVisibility(R.id.widget_speed_layout, View.GONE)
+            appWidgetManager.updateAppWidget(appWidgetId, views)
+        }
+    }
+}
+
+// AppWidgetProvider that handles rendering and real-time updates of the home screen widget,
+// displaying cumulative monthly network data usage.
+class MonthlyUsageWidget : AppWidgetProvider() {
+
+    override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
+        for (appWidgetId in appWidgetIds) {
+            updateAppWidget(context, appWidgetManager, appWidgetId)
+        }
+    }
+
+    override fun onAppWidgetOptionsChanged(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetId: Int,
+        newOptions: Bundle
+    ) {
+        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
+        updateAppWidget(context, appWidgetManager, appWidgetId)
+    }
+
+    override fun onReceive(context: Context, intent: Intent) {
+        super.onReceive(context, intent)
+        if (intent.action == DailyUsageWidget.ACTION_UPDATE_WIDGET) {
+            val appWidgetManager = AppWidgetManager.getInstance(context)
+            val componentName = ComponentName(context, MonthlyUsageWidget::class.java)
+            val appWidgetIds = appWidgetManager.getAppWidgetIds(componentName)
             
-            val labelRes = if (usageType == "MONTHLY") R.string.label_this_month else R.string.label_todays_usage
-            views.setTextViewText(R.id.widget_label_usage, context.getString(labelRes).uppercase())
+            val usageBytes = intent.getLongExtra(DailyUsageWidget.EXTRA_MONTHLY_USAGE, -1L)
+
+            for (appWidgetId in appWidgetIds) {
+                if (usageBytes >= 0L) {
+                    updateWidgetData(context, appWidgetManager, appWidgetId, usageBytes)
+                } else {
+                    updateAppWidget(context, appWidgetManager, appWidgetId)
+                }
+            }
+        }
+    }
+
+    companion object {
+        // Select either compact or full layout depending on the widget's current vertical span.
+        fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
+            val options = appWidgetManager.getAppWidgetOptions(appWidgetId)
+            val minHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 72)
+            
+            val layoutResId = if (minHeight < 100) {
+                R.layout.widget_usage_compact
+            } else {
+                R.layout.widget_usage
+            }
+            val views = RemoteViews(context.packageName, layoutResId)
+            
+            val intent = Intent(context, MainActivity::class.java)
+            val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+            views.setOnClickPendingIntent(R.id.widget_container, pendingIntent)
+
+            CoroutineScope(Dispatchers.IO).launch {
+                val repository = UserPreferencesRepository(context)
+                val resetHour = repository.resetTimeHour.first()
+                val resetMinute = repository.resetTimeMinute.first()
+                val monthlyResetDay = repository.monthlyResetDay.first()
+
+                val wifiUsage = WidgetUsageQuerier.getUsageBytes(context, NetworkCapabilities.TRANSPORT_WIFI, "monthly", resetHour, resetMinute, monthlyResetDay)
+                val mobileUsage = WidgetUsageQuerier.getUsageBytes(context, NetworkCapabilities.TRANSPORT_CELLULAR, "monthly", resetHour, resetMinute, monthlyResetDay)
+                val totalUsage = wifiUsage + mobileUsage
+
+                withContext(Dispatchers.Main) {
+                    views.setTextViewText(R.id.widget_text_usage, SpeedFormatter.formatUsage(totalUsage))
+                    views.setTextViewText(R.id.widget_label_usage, context.getString(R.string.label_this_month).uppercase())
+                    views.setViewVisibility(R.id.widget_speed_layout, View.GONE)
+                    appWidgetManager.updateAppWidget(appWidgetId, views)
+                }
+            }
+        }
+
+        private fun updateWidgetData(
+            context: Context,
+            appWidgetManager: AppWidgetManager,
+            appWidgetId: Int,
+            usageBytes: Long
+        ) {
+            val options = appWidgetManager.getAppWidgetOptions(appWidgetId)
+            val minHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 72)
+            
+            val layoutResId = if (minHeight < 100) {
+                R.layout.widget_usage_compact
+            } else {
+                R.layout.widget_usage
+            }
+            val views = RemoteViews(context.packageName, layoutResId)
+            
+            views.setTextViewText(R.id.widget_text_usage, SpeedFormatter.formatUsage(usageBytes))
+            views.setTextViewText(R.id.widget_label_usage, context.getString(R.string.label_this_month).uppercase())
 
             val intent = Intent(context, MainActivity::class.java)
             val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
@@ -214,7 +315,7 @@ class TodayDataWidget : AppWidgetProvider() {
 
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
-        if (intent.action == SpeedWidget.ACTION_UPDATE_WIDGET) {
+        if (intent.action == DailyUsageWidget.ACTION_UPDATE_WIDGET) {
             val appWidgetManager = AppWidgetManager.getInstance(context)
             val componentName = ComponentName(context, TodayDataWidget::class.java)
             val appWidgetIds = appWidgetManager.getAppWidgetIds(componentName)
@@ -315,7 +416,7 @@ class DailyNetworkLimitWidget : AppWidgetProvider() {
 
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
-        if (intent.action == SpeedWidget.ACTION_UPDATE_WIDGET) {
+        if (intent.action == DailyUsageWidget.ACTION_UPDATE_WIDGET) {
             val appWidgetManager = AppWidgetManager.getInstance(context)
             val componentName = ComponentName(context, DailyNetworkLimitWidget::class.java)
             val appWidgetIds = appWidgetManager.getAppWidgetIds(componentName)
@@ -385,7 +486,7 @@ class MonthlyNetworkLimitWidget : AppWidgetProvider() {
 
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
-        if (intent.action == SpeedWidget.ACTION_UPDATE_WIDGET) {
+        if (intent.action == DailyUsageWidget.ACTION_UPDATE_WIDGET) {
             val appWidgetManager = AppWidgetManager.getInstance(context)
             val componentName = ComponentName(context, MonthlyNetworkLimitWidget::class.java)
             val appWidgetIds = appWidgetManager.getAppWidgetIds(componentName)

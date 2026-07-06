@@ -364,8 +364,10 @@
     <string name="title_customize_add_widgets">Widgets anpassen &amp; hinzufügen</string>
     <string name="desc_widgets_instruction">Schalten Sie die untenstehenden Optionen um, um alle Widget-Stile sofort anzupassen. Klicken Sie auf einer Karte auf „Hinzufügen“, um dieses spezifische Widget an Ihren Startbildschirm-Launcher anzuheften.</string>
     <string name="label_available_widgets">VERFÜGBARE WIDGETS</string>
-    <string name="title_speed_usage_widget">Geschwindigkeits- &amp; Nutzungs-Widget</string>
-    <string name="desc_speed_usage_size">4x1 Kompakt / 4x2 Detailliert</string>
+    <string name="title_daily_usage_widget">Tägliches Nutzungs-Widget</string>
+    <string name="desc_daily_usage_widget_size">4x1 Kompakt / 4x2 Täglich</string>
+    <string name="title_monthly_usage_widget">Monatliches Nutzungs-Widget</string>
+    <string name="desc_monthly_usage_widget_size">4x1 Kompakt / 4x2 Monatlich</string>
     <string name="label_todays_usage_caps">HEUTIGE NUTZUNG</string>
     <string name="title_todays_data_widget">Heutiges Daten-Widget</string>
     <string name="desc_todays_data_size">2x2 Kreisfortschritt</string>

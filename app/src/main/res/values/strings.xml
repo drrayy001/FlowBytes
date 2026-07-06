@@ -368,8 +368,10 @@
     <string name="title_customize_add_widgets">Customize &amp; Add Widgets</string>
     <string name="desc_widgets_instruction">Toggle options below to customize all widget styles instantly. Click \'Add\' on any card to pin that specific widget to your home screen launcher.</string>
     <string name="label_available_widgets">AVAILABLE WIDGETS</string>
-    <string name="title_speed_usage_widget">Speed &amp; Usage Widget</string>
-    <string name="desc_speed_usage_size">4x1 Compact / 4x2 Detailed</string>
+    <string name="title_daily_usage_widget">Daily Usage Widget</string>
+    <string name="desc_daily_usage_widget_size">4x1 Compact / 4x2 Daily</string>
+    <string name="title_monthly_usage_widget">Monthly Usage Widget</string>
+    <string name="desc_monthly_usage_widget_size">4x1 Compact / 4x2 Monthly</string>
     <string name="label_todays_usage_caps">TODAY\'S USAGE</string>
     <string name="title_todays_data_widget">Today\'s Data Widget</string>
     <string name="desc_todays_data_size">2x2 Circular Progress</string>

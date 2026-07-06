@@ -364,8 +364,10 @@
     <string name="title_customize_add_widgets">ウィジェットのカスタマイズと追加</string>
     <string name="desc_widgets_instruction">下のオプションを切り替えると、すべてのウィジェットスタイルを即座にカスタマイズできます。カードの「追加」をクリックして、特定のウィジェットをホーム画面ランチャーに固定します。</string>
     <string name="label_available_widgets">利用可能なウィジェット</string>
-    <string name="title_speed_usage_widget">速度と使用状況ウィジェット</string>
-    <string name="desc_speed_usage_size">4x1 コンパクト / 4x2 詳細</string>
+    <string name="title_daily_usage_widget">日次使用状況ウィジェット</string>
+    <string name="desc_daily_usage_widget_size">4x1 コンパクト / 4x2 日次</string>
+    <string name="title_monthly_usage_widget">月間使用状況ウィジェット</string>
+    <string name="desc_monthly_usage_widget_size">4x1 コンパクト / 4x2 月次</string>
     <string name="label_todays_usage_caps">今日の使用状況</string>
     <string name="title_todays_data_widget">今日のデータウィジェット</string>
     <string name="desc_todays_data_size">2x2 円形プログレス</string>

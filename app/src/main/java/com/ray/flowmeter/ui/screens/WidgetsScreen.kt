@@ -45,7 +45,8 @@ import com.ray.flowmeter.R
 import com.ray.flowmeter.data.UserPreferencesRepository
 import com.ray.flowmeter.receiver.DailyNetworkLimitWidget
 import com.ray.flowmeter.receiver.MonthlyNetworkLimitWidget
-import com.ray.flowmeter.receiver.SpeedWidget
+import com.ray.flowmeter.receiver.DailyUsageWidget
+import com.ray.flowmeter.receiver.MonthlyUsageWidget
 import com.ray.flowmeter.receiver.SpeedMonitorWidget
 import com.ray.flowmeter.receiver.TodayDataWidget
 import com.ray.flowmeter.utils.SpeedFormatter
@@ -152,11 +153,11 @@ fun WidgetsScreen(
                 modifier = Modifier.padding(top = 8.dp)
             )
 
-            // 1. Speed Widget Preview
+            // 1. Daily Usage Widget Preview
             WidgetPreviewCard(
-                title = stringResource(R.string.title_speed_usage_widget),
-                sizeInfo = stringResource(R.string.desc_speed_usage_size),
-                onAddClick = { pinWidget(context, SpeedWidget::class.java) }
+                title = stringResource(R.string.title_daily_usage_widget),
+                sizeInfo = stringResource(R.string.desc_daily_usage_widget_size),
+                onAddClick = { pinWidget(context, DailyUsageWidget::class.java) }
             ) {
                 WidgetBackgroundPreview {
                     Column(
@@ -175,6 +176,37 @@ fun WidgetsScreen(
                         Spacer(modifier = Modifier.height(2.dp))
                         Text(
                             text = "2.4 GB",
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White
+                        )
+                    }
+                }
+            }
+
+            // 2. Monthly Usage Widget Preview
+            WidgetPreviewCard(
+                title = stringResource(R.string.title_monthly_usage_widget),
+                sizeInfo = stringResource(R.string.desc_monthly_usage_widget_size),
+                onAddClick = { pinWidget(context, MonthlyUsageWidget::class.java) }
+            ) {
+                WidgetBackgroundPreview {
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+
+                        Text(
+                            text = stringResource(R.string.label_this_month).uppercase(),
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = Color.White.copy(alpha = 0.6f),
+                            letterSpacing = 0.5.sp
+                        )
+                        Spacer(modifier = Modifier.height(2.dp))
+                        Text(
+                            text = "48.7 GB",
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Bold,
                             color = Color.White
@@ -610,7 +642,7 @@ fun BadgePreview(
 }
 
 private fun triggerWidgetUpdate(context: Context) {
-    val intent = Intent(SpeedWidget.ACTION_UPDATE_WIDGET).apply {
+    val intent = Intent(DailyUsageWidget.ACTION_UPDATE_WIDGET).apply {
         setPackage(context.packageName)
     }
     context.sendBroadcast(intent)

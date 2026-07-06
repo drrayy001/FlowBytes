@@ -364,8 +364,10 @@
     <string name="title_customize_add_widgets">कस्टमाइज़ करें और विजेट जोड़ें</string>
     <string name="desc_widgets_instruction">सभी विजेट शैलियों को तुरंत कस्टमाइज़ करने के लिए नीचे दिए गए विकल्पों को टॉगल करें। उस विशिष्ट विजेट को अपने होम स्क्रीन लॉन्चर पर पिन करने के लिए किसी भी कार्ड पर \'जोड़ें\' पर क्लिक करें।</string>
     <string name="label_available_widgets">उपलब्ध विजेट</string>
-    <string name="title_speed_usage_widget">स्पीड और उपयोग विजेट</string>
-    <string name="desc_speed_usage_size">4x1 कॉम्पैक्ट / 4x2 विस्तृत</string>
+    <string name="title_daily_usage_widget">दैनिक उपयोग विजेट</string>
+    <string name="desc_daily_usage_widget_size">4x1 कॉम्पैक्ट / 4x2 दैनिक</string>
+    <string name="title_monthly_usage_widget">मासिक उपयोग विजेट</string>
+    <string name="desc_monthly_usage_widget_size">4x1 कॉम्पैक्ट / 4x2 मासिक</string>
     <string name="label_todays_usage_caps">आज का उपयोग</string>
     <string name="title_todays_data_widget">आज का डेटा विजेट</string>
     <string name="desc_todays_data_size">2x2 गोलाकार प्रगति</string>

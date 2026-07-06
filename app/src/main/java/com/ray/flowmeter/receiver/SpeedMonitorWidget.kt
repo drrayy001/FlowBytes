@@ -26,9 +26,9 @@ class SpeedMonitorWidget : AppWidgetProvider() {
 
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
-        if (intent.action == SpeedWidget.ACTION_UPDATE_WIDGET) {
-            val rxSpeed = intent.getLongExtra(SpeedWidget.EXTRA_RX_SPEED, 0L)
-            val txSpeed = intent.getLongExtra(SpeedWidget.EXTRA_TX_SPEED, 0L)
+        if (intent.action == DailyUsageWidget.ACTION_UPDATE_WIDGET) {
+            val rxSpeed = intent.getLongExtra(DailyUsageWidget.EXTRA_RX_SPEED, 0L)
+            val txSpeed = intent.getLongExtra(DailyUsageWidget.EXTRA_TX_SPEED, 0L)
             
             val rxMbps = (rxSpeed * 8f) / 1_000_000f
             val txMbps = (txSpeed * 8f) / 1_000_000f

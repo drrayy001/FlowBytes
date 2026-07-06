@@ -364,8 +364,10 @@
     <string name="title_customize_add_widgets">Personalizza e aggiungi widget</string>
     <string name="desc_widgets_instruction">Attiva le opzioni seguenti per personalizzare istantaneamente tutti gli stili dei widget. Fai clic su "Aggiungi" su qualsiasi scheda per fissare quel widget specifico al launcher della tua schermata home.</string>
     <string name="label_available_widgets">WIDGET DISPONIBILI</string>
-    <string name="title_speed_usage_widget">Widget Velocità e Utilizzo</string>
-    <string name="desc_speed_usage_size">4x1 Compatto / 4x2 Dettagliato</string>
+    <string name="title_daily_usage_widget">Widget di utilizzo quotidiano</string>
+    <string name="desc_daily_usage_widget_size">4x1 compatto / 4x2 giornaliero</string>
+    <string name="title_monthly_usage_widget">Widget di utilizzo mensile</string>
+    <string name="desc_monthly_usage_widget_size">4x1 compatto / 4x2 mensile</string>
     <string name="label_todays_usage_caps">UTILIZZO DI OGGI</string>
     <string name="title_todays_data_widget">Widget Dati di oggi</string>
     <string name="desc_todays_data_size">2x2 Avanzamento circolare</string>

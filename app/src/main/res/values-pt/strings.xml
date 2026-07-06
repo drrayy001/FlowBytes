@@ -364,8 +364,10 @@
     <string name="title_customize_add_widgets">Personalizar e adicionar widgets</string>
     <string name="desc_widgets_instruction">Ative as opções abaixo para personalizar instantaneamente todos os estilos de widgets. Clique em "Adicionar" em qualquer cartão para fixar esse widget específico ao inicializador da tela inicial.</string>
     <string name="label_available_widgets">WIDGETS DISPONÍVEIS</string>
-    <string name="title_speed_usage_widget">Widget de Velocidade e Uso</string>
-    <string name="desc_speed_usage_size">4x1 Compacto / 4x2 Detalhado</string>
+    <string name="title_daily_usage_widget">Widget de Uso Diário</string>
+    <string name="desc_daily_usage_widget_size">4x1 compacto / 4x2 diário</string>
+    <string name="title_monthly_usage_widget">Widget de Uso Mensal</string>
+    <string name="desc_monthly_usage_widget_size">4x1 compacto / 4x2 mensal</string>
     <string name="label_todays_usage_caps">USO DE HOJE</string>
     <string name="title_todays_data_widget">Widget de Dados de hoje</string>
     <string name="desc_todays_data_size">2x2 Progresso circular</string>

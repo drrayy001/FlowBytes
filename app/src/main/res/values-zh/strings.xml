@@ -364,8 +364,10 @@
     <string name="title_customize_add_widgets">自定义并添加小部件</string>
     <string name="desc_widgets_instruction">切换下方选项可立即自定义所有小部件样式。点击任何卡片上的“添加”，即可将该特定小部件固定到主屏幕启动器。</string>
     <string name="label_available_widgets">可用小部件</string>
-    <string name="title_speed_usage_widget">速度与使用情况小部件</string>
-    <string name="desc_speed_usage_size">4x1 紧凑型 / 4x2 详细型</string>
+    <string name="title_daily_usage_widget">每日使用情况小部件</string>
+    <string name="desc_daily_usage_widget_size">4x1 紧凑 / 4x2 每日</string>
+    <string name="title_monthly_usage_widget">月度使用情况小部件</string>
+    <string name="desc_monthly_usage_widget_size">4x1 紧凑 / 4x2 每月</string>
     <string name="label_todays_usage_caps">今日使用情况</string>
     <string name="title_todays_data_widget">今日数据小部件</string>
     <string name="desc_todays_data_size">2x2 圆形进度</string>

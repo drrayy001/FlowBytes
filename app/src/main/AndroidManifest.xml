@@ -86,9 +86,9 @@
         </receiver>
 
         <receiver
-            android:name=".receiver.SpeedWidget"
+            android:name=".receiver.DailyUsageWidget"
             android:exported="true"
-            android:label="@string/app_name">
+            android:label="@string/title_daily_usage_widget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.ray.flowmeter.ACTION_UPDATE_WIDGET" />
@@ -96,7 +96,21 @@
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/speed_widget_info" />
+                android:resource="@xml/daily_usage_widget_info" />
+        </receiver>
+
+        <receiver
+            android:name=".receiver.MonthlyUsageWidget"
+            android:exported="true"
+            android:label="@string/title_monthly_usage_widget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.ray.flowmeter.ACTION_UPDATE_WIDGET" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/monthly_usage_widget_info" />
         </receiver>
 
         <receiver

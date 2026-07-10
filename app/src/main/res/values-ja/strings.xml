@@ -385,4 +385,19 @@
     <string name="btn_add">追加</string>
     <string name="msg_widget_pin_failed">お使いのランチャーはウィジェットの直接追加をサポートしていません。</string>
     <string name="msg_widget_pin_api_error">この機能にはAndroid 8.0以降が必要です。</string>
+
+    <!-- App Updates -->
+    <string name="title_update_available">アップデートがあります</string>
+    <string name="desc_update_available">FlowBytesの新しいバージョン（%1$s）がダウンロード可能です。</string>
+    <string name="btn_update">アップデート</string>
+    <string name="btn_ignore_version">このバージョンを無視</string>
+    <string name="btn_later">後で</string>
+    <string name="label_release_notes">リリースノート</string>
+    <string name="settings_auto_check_updates">アップデートを自動チェック</string>
+    <string name="settings_auto_check_updates_desc">起動時に新しいバージョンを確認する</string>
+    <string name="settings_check_updates">アップデートを確認</string>
+    <string name="settings_check_updates_desc">アプリが最新バージョンであることを確認する</string>
+    <string name="toast_app_up_to_date">FlowBytesは最新の状態です！</string>
+    <string name="toast_update_check_failed">アップデートの確認に失敗しました。後で再試行してください。</string>
+    <string name="toast_checking_updates">アップデートを確認中...</string>
 </resources>

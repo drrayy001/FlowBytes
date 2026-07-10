@@ -387,4 +387,19 @@
     <string name="btn_add">إضافة</string>
     <string name="msg_widget_pin_failed">إضافة الأدوات مباشرة غير مدعومة من قبل المشغل الخاص بك.</string>
     <string name="msg_widget_pin_api_error">تتطلب هذه الميزة نظام أندرويد 8.0 أو أحدث.</string>
+
+    <!-- App Updates -->
+    <string name="title_update_available">تحديث متاح</string>
+    <string name="desc_update_available">إصدار جديد من FlowBytes (%1$s) جاهز للتنزيل.</string>
+    <string name="btn_update">تحديث</string>
+    <string name="btn_ignore_version">تجاهل هذا الإصدار</string>
+    <string name="btn_later">لاحقاً</string>
+    <string name="label_release_notes">ملاحظات الإصدار</string>
+    <string name="settings_auto_check_updates">التحقق من التحديثات تلقائيًا</string>
+    <string name="settings_auto_check_updates_desc">البحث عن إصدارات جديدة عند بدء التشغيل</string>
+    <string name="settings_check_updates">التحقق من وجود تحديثات</string>
+    <string name="settings_check_updates_desc">تأكد من أن تطبيقك يعمل بأحدث إصدار</string>
+    <string name="toast_app_up_to_date">FlowBytes محدث بالفعل!</string>
+    <string name="toast_update_check_failed">فشل التحقق من وجود تحديثات. يرجى المحاولة لاحقًا.</string>
+    <string name="toast_checking_updates">جاري التحقق من وجود تحديثات...</string>
 </resources>

@@ -387,4 +387,19 @@
     <string name="btn_add">Ajouter</string>
     <string name="msg_widget_pin_failed">L\'ajout direct de widgets n\'est pas pris en charge par votre lanceur.</string>
     <string name="msg_widget_pin_api_error">Cette fonctionnalité nécessite Android 8.0 ou une version ultérieure.</string>
+
+    <!-- App Updates -->
+    <string name="title_update_available">Mise à jour disponible</string>
+    <string name="desc_update_available">Une nouvelle version de FlowBytes (%1$s) est prête à être téléchargée.</string>
+    <string name="btn_update">Mettre à jour</string>
+    <string name="btn_ignore_version">Ignorer la version</string>
+    <string name="btn_later">Plus tard</string>
+    <string name="label_release_notes">NOTES DE VERSION</string>
+    <string name="settings_auto_check_updates">Vérifier les mises à jour automatiquement</string>
+    <string name="settings_auto_check_updates_desc">Rechercher des mises à jour au démarrage</string>
+    <string name="settings_check_updates">Vérifier les mises à jour</string>
+    <string name="settings_check_updates_desc">S\'assurer d\'utiliser la dernière version</string>
+    <string name="toast_app_up_to_date">FlowBytes est à jour !</string>
+    <string name="toast_update_check_failed">Échec de la vérification des mises à jour. Veuillez réessayer plus tard.</string>
+    <string name="toast_checking_updates">Recherche de mises à jour...</string>
 </resources>

@@ -385,4 +385,19 @@
     <string name="btn_add">Добавить</string>
     <string name="msg_widget_pin_failed">Ваш лаунчер не поддерживает прямое добавление виджетов.</string>
     <string name="msg_widget_pin_api_error">Для этой функции требуется Android 8.0 или выше.</string>
+
+    <!-- App Updates -->
+    <string name="title_update_available">Доступно обновление</string>
+    <string name="desc_update_available">Новая версия FlowBytes (%1$s) готова к загрузке.</string>
+    <string name="btn_update">Обновить</string>
+    <string name="btn_ignore_version">Пропустить версию</string>
+    <string name="btn_later">Позже</string>
+    <string name="label_release_notes">СПИСОК ИЗМЕНЕНИЙ</string>
+    <string name="settings_auto_check_updates">Автоматическое обновление</string>
+    <string name="settings_auto_check_updates_desc">Искать новые версии при запуске</string>
+    <string name="settings_check_updates">Проверить обновления</string>
+    <string name="settings_check_updates_desc">Убедитесь, что используется последняя версия</string>
+    <string name="toast_app_up_to_date">Приложение FlowBytes обновлено!</string>
+    <string name="toast_update_check_failed">Не удалось проверить обновления. Попробуйте позже.</string>
+    <string name="toast_checking_updates">Проверка обновлений...</string>
 </resources>

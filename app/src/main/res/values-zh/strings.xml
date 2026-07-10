@@ -385,4 +385,19 @@
     <string name="btn_add">添加</string>
     <string name="msg_widget_pin_failed">您的启动器不支持直接添加小部件。</string>
     <string name="msg_widget_pin_api_error">此功能需要 Android 8.0 或更高版本。</string>
+
+    <!-- App Updates -->
+    <string name="title_update_available">有可用更新</string>
+    <string name="desc_update_available">新版本 FlowBytes (%1$s) 已准备好下载。</string>
+    <string name="btn_update">更新</string>
+    <string name="btn_ignore_version">忽略此版本</string>
+    <string name="btn_later">稍后</string>
+    <string name="label_release_notes">更新日志</string>
+    <string name="settings_auto_check_updates">自动检查更新</string>
+    <string name="settings_auto_check_updates_desc">启动时检查新版本</string>
+    <string name="settings_check_updates">检查更新</string>
+    <string name="settings_check_updates_desc">确保您的应用运行的是最新版本</string>
+    <string name="toast_app_up_to_date">FlowBytes 已是最新版本！</string>
+    <string name="toast_update_check_failed">检查更新失败。请稍后再试。</string>
+    <string name="toast_checking_updates">正在检查更新...</string>
 </resources>

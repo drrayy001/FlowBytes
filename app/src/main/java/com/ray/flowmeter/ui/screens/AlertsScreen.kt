@@ -230,47 +230,9 @@ fun AlertsScreen(
 
 @Composable
 private fun AlertItem(alert: AppAlert) {
-    var expanded by remember { mutableStateOf(value = false) }
-
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .bounceClick { expanded = !expanded },
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerLow
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-        border = BorderStroke(
-            1.dp,
-            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
-        )
-    ) {
-        Box(modifier = Modifier.fillMaxWidth()) {
-            Column(modifier = Modifier.padding(12.dp)) {
-                AlertItemFront(alert)
-
-                AnimatedVisibility(
-                    visible = expanded,
-                    enter = fadeIn(premiumSpring()) + expandVertically(premiumSpring()),
-                    exit = fadeOut(premiumSpring()) + shrinkVertically(premiumSpring())
-                ) {
-                    Column {
-                        Spacer(modifier = Modifier.height(16.dp))
-                        AlertItemBack(alert)
-                    }
-                }
-            }
-        }
-    }
-}
-
-
-@Composable
-fun AlertItemFront(alert: AppAlert) {
     val context = LocalContext.current
-    val dateFormat = remember { SimpleDateFormat("HH:mm", Locale.getDefault()) }
-    val timeString = dateFormat.format(Date(alert.timestamp))
+    val dateFormat = remember { SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault()) }
+    val dateTimeString = dateFormat.format(Date(alert.timestamp))
 
     val dailyWifiLimit = stringResource(R.string.label_daily_wifi_limit)
     val monthlyWifiLimit = stringResource(R.string.label_monthly_wifi_limit)
@@ -345,7 +307,7 @@ fun AlertItemFront(alert: AppAlert) {
                                     appName.contains("الشهري") || 
                                     appName.contains("Mensual", ignoreCase = true) || 
                                     appName.contains("Mensuelle", ignoreCase = true) || 
-                                    appName.contains("मासिक") || 
+                                    appName.contains("масик") || 
                                     appName.contains("Mensile", ignoreCase = true) || 
                                     appName.contains("月間の") || 
                                     appName.contains("월간") || 
@@ -384,52 +346,99 @@ fun AlertItemFront(alert: AppAlert) {
 
     val wifiLabel = stringResource(R.string.label_wifi)
 
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Box(
-            modifier = Modifier
-                .size(40.dp)
-                .background(
-                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.08f),
-                    shape = RoundedCornerShape(12.dp)
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-            if (appIcon != null) {
-                Image(
-                    bitmap = appIcon.toBitmap().asImageBitmap(),
-                    contentDescription = null,
-                    modifier = Modifier.size(26.dp),
-                    contentScale = ContentScale.Fit
-                )
-            } else {
-                val icon = when(alert.alertType) {
-                    "DAILY_LIMIT", "MONTHLY_LIMIT", "CUSTOM_LIMIT" -> {
-                        val isWifi = displayAppName.contains("Wi-Fi", ignoreCase = true) || 
-                                     displayAppName.contains("Wifi", ignoreCase = true) || 
-                                     displayAppName.contains(wifiLabel, ignoreCase = true)
-                        if (isWifi) Icons.Rounded.Wifi else Icons.Rounded.SignalCellularAlt
-                    }
-                    else -> Icons.Rounded.Category
-                }
-                Icon(
-                    imageVector = icon,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(20.dp)
-                )
-            }
+    val subtitleText = when(alert.alertType) {
+        "HIGH_TRAFFIC" -> {
+            val speedStr = SpeedFormatter.formatBytes(alert.speed)
+            "${stringResource(R.string.label_high_traffic)} ($speedStr)"
         }
+        "APP_LIMIT" -> {
+            val limitStr = formatUsage(alert.limitValue)
+            "${stringResource(R.string.label_app_limit_reached)} (Limit: $limitStr)"
+        }
+        "DAILY_LIMIT" -> {
+            val limitStr = formatUsage(alert.limitValue)
+            "${stringResource(R.string.label_daily_limit_reached)} (Limit: $limitStr)"
+        }
+        "MONTHLY_LIMIT" -> {
+            val limitStr = formatUsage(alert.limitValue)
+            "${stringResource(R.string.label_monthly_limit_reached)} (Limit: $limitStr)"
+        }
+        else -> alert.alertType
+    }
 
-        Spacer(modifier = Modifier.width(12.dp))
+    val rightValue = formatUsage(alert.rxBytes + alert.txBytes)
 
-        Column(modifier = Modifier.weight(1f)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+    // Determine status color for Left Icon Background ONLY
+    val statusColor = if (alert.isMuted) {
+        MaterialTheme.colorScheme.outline
+    } else {
+        when (alert.alertType) {
+            "HIGH_TRAFFIC" -> MaterialTheme.colorScheme.primary
+            "APP_LIMIT", "DAILY_LIMIT", "MONTHLY_LIMIT" -> MaterialTheme.colorScheme.error
+            else -> MaterialTheme.colorScheme.secondary
+        }
+    }
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        border = BorderStroke(
+            1.dp,
+            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
+        )
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // App Icon / Indicator
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .background(
+                        color = statusColor.copy(alpha = 0.08f),
+                        shape = RoundedCornerShape(14.dp)
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                if (appIcon != null) {
+                    Image(
+                        bitmap = appIcon.toBitmap().asImageBitmap(),
+                        contentDescription = null,
+                        modifier = Modifier.size(32.dp),
+                        contentScale = ContentScale.Fit
+                    )
+                } else {
+                    val icon = when(alert.alertType) {
+                        "DAILY_LIMIT", "MONTHLY_LIMIT", "CUSTOM_LIMIT" -> {
+                            val isWifi = displayAppName.contains("Wi-Fi", ignoreCase = true) || 
+                                         displayAppName.contains("Wifi", ignoreCase = true) || 
+                                         displayAppName.contains(wifiLabel, ignoreCase = true)
+                            if (isWifi) Icons.Rounded.Wifi else Icons.Rounded.SignalCellularAlt
+                        }
+                        else -> Icons.Rounded.Category
+                    }
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = null,
+                        tint = statusColor,
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.width(14.dp))
+
+            // Title & Subtitle (Left-aligned Column)
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.Center
             ) {
                 Text(
                     text = displayAppName,
@@ -437,122 +446,39 @@ fun AlertItemFront(alert: AppAlert) {
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.weight(1f, fill = false)
+                    overflow = TextOverflow.Ellipsis
                 )
+                Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    text = timeString,
-                    style = MaterialTheme.typography.labelMedium,
+                    text = subtitleText,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            // Value & Timestamp (Right-aligned Column, NO status icon)
+            Column(
+                horizontalAlignment = Alignment.End,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = rightValue,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = dateTimeString,
+                    style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.outline,
                     fontWeight = FontWeight.Medium
                 )
             }
-            
-            val categoryText = when(alert.alertType) {
-                "HIGH_TRAFFIC" -> stringResource(R.string.label_high_traffic)
-                "APP_LIMIT" -> stringResource(R.string.label_app_limit_reached)
-                "DAILY_LIMIT" -> stringResource(R.string.label_daily_limit_reached)
-                "MONTHLY_LIMIT" -> stringResource(R.string.label_monthly_limit_reached)
-                else -> alert.alertType
-            }
-
-            Text(
-                text = categoryText,
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.Bold,
-            )
-        }
-    }
-}
-
-@Composable
-fun AlertItemBack(alert: AppAlert) {
-    val dateFormat = remember { SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()) }
-    val dateString = dateFormat.format(Date(alert.timestamp))
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surfaceContainer, RoundedCornerShape(20.dp))
-            .padding(16.dp)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column {
-                Text(
-                    text = when(alert.alertType) {
-                        "HIGH_TRAFFIC" -> stringResource(R.string.label_trigger_speed_header).uppercase()
-                        else -> stringResource(R.string.label_limit_set_header).uppercase()
-                    },
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    fontWeight = FontWeight.ExtraBold,
-                    letterSpacing = 0.5.sp
-                )
-                Text(
-                    text = if (alert.alertType == "HIGH_TRAFFIC") SpeedFormatter.formatBytes(alert.speed) 
-                           else formatUsage(alert.limitValue),
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-            }
-
-            Column(horizontalAlignment = Alignment.End) {
-                Text(
-                    text = stringResource(R.string.label_usage_recorded_header).uppercase(),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    fontWeight = FontWeight.ExtraBold,
-                    letterSpacing = 0.5.sp
-                )
-                Text(
-                    text = formatUsage(alert.rxBytes + alert.txBytes),
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.height(12.dp))
-        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
-        Spacer(modifier = Modifier.height(12.dp))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            if (alert.isMuted) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        imageVector = Icons.Rounded.NotificationsOff,
-                        contentDescription = null,
-                        modifier = Modifier.size(16.dp),
-                        tint = MaterialTheme.colorScheme.outline
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = stringResource(R.string.msg_alert_muted),
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.outline,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-            } else {
-                Spacer(modifier = Modifier.weight(1f))
-            }
-
-            Text(
-                text = dateString,
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.outline,
-                fontWeight = FontWeight.Medium
-            )
         }
     }
 }

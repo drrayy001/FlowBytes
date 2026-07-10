@@ -240,6 +240,9 @@ class UserPreferencesRepository(private val context: Context) {
         val WIDGET_SHOW_SPEED = booleanPreferencesKey("widget_show_speed")
         val WIDGET_USAGE_TYPE = stringPreferencesKey("widget_usage_type") // "DAILY", "MONTHLY"
         val SUPPORT_BANNER_DISMISSED = booleanPreferencesKey("support_banner_dismissed")
+        val CHECK_UPDATES_AUTOMATICALLY = booleanPreferencesKey("check_updates_automatically")
+        val LAST_UPDATE_CHECK_TIME = longPreferencesKey("last_update_check_time")
+        val IGNORED_UPDATE_VERSION = stringPreferencesKey("ignored_update_version")
     }
 
     private val preferencesFlow = context.dataStore.data
@@ -546,6 +549,21 @@ class UserPreferencesRepository(private val context: Context) {
     val widgetUsageType: Flow<String> = preferencesFlow
         .map { preferences ->
             preferences[PreferencesKeys.WIDGET_USAGE_TYPE] ?: "DAILY"
+        }.distinctUntilChanged()
+
+    val checkUpdatesAutomatically: Flow<Boolean> = preferencesFlow
+        .map { preferences ->
+            preferences[PreferencesKeys.CHECK_UPDATES_AUTOMATICALLY] ?: true
+        }.distinctUntilChanged()
+
+    val lastUpdateCheckTime: Flow<Long> = preferencesFlow
+        .map { preferences ->
+            preferences[PreferencesKeys.LAST_UPDATE_CHECK_TIME] ?: 0L
+        }.distinctUntilChanged()
+
+    val ignoredUpdateVersion: Flow<String> = preferencesFlow
+        .map { preferences ->
+            preferences[PreferencesKeys.IGNORED_UPDATE_VERSION] ?: ""
         }.distinctUntilChanged()
 
     // --- Preferences Write Operations ---
@@ -869,6 +887,24 @@ class UserPreferencesRepository(private val context: Context) {
     suspend fun setSupportBannerDismissed(dismissed: Boolean) {
         context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.SUPPORT_BANNER_DISMISSED] = dismissed
+        }
+    }
+
+    suspend fun setCheckUpdatesAutomatically(enabled: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.CHECK_UPDATES_AUTOMATICALLY] = enabled
+        }
+    }
+
+    suspend fun setLastUpdateCheckTime(time: Long) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.LAST_UPDATE_CHECK_TIME] = time
+        }
+    }
+
+    suspend fun setIgnoredUpdateVersion(version: String) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.IGNORED_UPDATE_VERSION] = version
         }
     }
 }

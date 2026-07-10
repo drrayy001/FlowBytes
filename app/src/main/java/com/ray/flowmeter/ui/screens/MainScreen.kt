@@ -92,6 +92,7 @@ fun MainScreen(
     appLimitsViewModel: AppLimitsViewModel,
     settingsViewModel: SettingsViewModel,
     initialDestination: Destination = Destination.Home,
+    onCheckForUpdates: () -> Unit = {},
 ) {
     val homeScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val usageScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -703,6 +704,7 @@ fun MainScreen(
                             SettingsScreen(
                                 viewModel = settingsViewModel,
                                 onDonateClick = { showDonateDialog = true },
+                                onCheckForUpdates = onCheckForUpdates,
                                 modifier = Modifier.fillMaxSize().padding(lastStablePadding).nestedScroll(settingsScrollBehavior.nestedScrollConnection)
                             )
                         }

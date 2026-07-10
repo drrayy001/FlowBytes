@@ -276,9 +276,36 @@ class SettingsViewModel(
     val firstInstallTime: StateFlow<Long> = repository.firstInstallTime
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0L)
 
+    val checkUpdatesAutomatically: StateFlow<Boolean> = repository.checkUpdatesAutomatically
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), true)
+
+    val lastUpdateCheckTime: StateFlow<Long> = repository.lastUpdateCheckTime
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0L)
+
+    val ignoredUpdateVersion: StateFlow<String> = repository.ignoredUpdateVersion
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), "")
+
     fun dismissSupportBanner() {
         viewModelScope.launch {
             repository.setSupportBannerDismissed(true)
+        }
+    }
+
+    fun setCheckUpdatesAutomatically(enabled: Boolean) {
+        viewModelScope.launch {
+            repository.setCheckUpdatesAutomatically(enabled)
+        }
+    }
+
+    fun setLastUpdateCheckTime(time: Long) {
+        viewModelScope.launch {
+            repository.setLastUpdateCheckTime(time)
+        }
+    }
+
+    fun setIgnoredUpdateVersion(version: String) {
+        viewModelScope.launch {
+            repository.setIgnoredUpdateVersion(version)
         }
     }
 }

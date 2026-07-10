@@ -34,6 +34,7 @@ import java.util.Locale
 fun SettingsScreen(
     viewModel: SettingsViewModel,
     onDonateClick: () -> Unit,
+    onCheckForUpdates: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val monitoringEnabled by viewModel.monitoringEnabled.collectAsState()
@@ -44,6 +45,7 @@ fun SettingsScreen(
     val notificationContentType by viewModel.notificationContentType.collectAsState()
     val notificationIconScale by viewModel.notificationIconScale.collectAsState()
     val languageCode by viewModel.language.collectAsState()
+    val checkUpdatesAutomatically by viewModel.checkUpdatesAutomatically.collectAsState()
 
     val highPriorityNotification by viewModel.highPriorityNotification.collectAsState()
     val showOnlyWhenConnected by viewModel.showOnlyWhenConnected.collectAsState()
@@ -465,6 +467,25 @@ fun SettingsScreen(
                             targetContext.startActivity(intent)
                         } catch (_: Exception) {}
                     }
+                )
+                SettingsItem(
+                    icon = Icons.Rounded.CloudDownload,
+                    title = stringResource(R.string.settings_auto_check_updates),
+                    subtitle = stringResource(R.string.settings_auto_check_updates_desc),
+                    trailingContent = {
+                        Switch(
+                            checked = checkUpdatesAutomatically,
+                            onCheckedChange = { viewModel.setCheckUpdatesAutomatically(it) },
+                            colors = switchColors,
+                            thumbContent = { thumbContent(checkUpdatesAutomatically) }
+                        )
+                    }
+                )
+                SettingsItem(
+                    icon = Icons.Rounded.Update,
+                    title = stringResource(R.string.settings_check_updates),
+                    subtitle = stringResource(R.string.settings_check_updates_desc),
+                    onClick = onCheckForUpdates
                 )
                 SettingsItem(
                     icon = Icons.Rounded.Info,

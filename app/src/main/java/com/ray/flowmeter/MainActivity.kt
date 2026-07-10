@@ -30,8 +30,19 @@ import com.ray.flowmeter.data.UserPreferencesRepository
 import com.ray.flowmeter.service.AppBlockVpnService
 import com.ray.flowmeter.service.NetworkMonitoringService
 import com.ray.flowmeter.ui.dialogs.ChangelogDialog
+import android.net.Uri
+import android.widget.Toast
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.InstallStateUpdatedListener
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.InstallStatus
+import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.review.ReviewManagerFactory
 import android.util.Log
+import com.ray.flowmeter.utils.AppUpdateHelper
+import com.ray.flowmeter.utils.UpdateResult
+import com.ray.flowmeter.ui.dialogs.UpdateDialog
 import com.ray.flowmeter.ui.screens.Destination
 import com.ray.flowmeter.ui.screens.MainScreen
 import com.ray.flowmeter.ui.screens.OnboardingScreen
@@ -59,6 +70,26 @@ import androidx.compose.foundation.layout.fillMaxSize
 class MainActivity : ComponentActivity() {
 
     private var currentAppliedLanguage: String = ""
+    private lateinit var appUpdateHelper: AppUpdateHelper
+    private var appUpdateManager: AppUpdateManager? = null
+
+    private val installStateUpdatedListener = InstallStateUpdatedListener { state ->
+        if (state.installStatus() == InstallStatus.DOWNLOADED) {
+            showUpdateCompletedToast()
+        }
+    }
+
+    private fun showUpdateCompletedToast() {
+        Toast.makeText(
+            this,
+            "An update has been downloaded. Restarting app in 3 seconds to complete install...",
+            Toast.LENGTH_LONG
+        ).show()
+        lifecycleScope.launch {
+            delay(3000)
+            appUpdateManager?.completeUpdate()
+        }
+    }
 
     // --- VPN Permission & Startup Orchestration ---
     
@@ -101,6 +132,12 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         val repository = UserPreferencesRepository(applicationContext)
+        appUpdateHelper = AppUpdateHelper(this, repository)
+        if (appUpdateHelper.getInstallerPackageName(this) == "com.android.vending") {
+            val manager = AppUpdateManagerFactory.create(this)
+            appUpdateManager = manager
+            manager.registerListener(installStateUpdatedListener)
+        }
 
         // Initialize language configuration before setting up the Compose layout.
         lifecycleScope.launch {
@@ -125,6 +162,7 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
+            val (gitHubUpdate, setGitHubUpdate) = remember { mutableStateOf<UpdateResult.GitHubUpdateAvailable?>(null) }
             // Load user theme preferences asynchronously before rendering the app theme.
             val themeSettingsState = produceState<ThemeSettings?>(initialValue = null) {
                 val themeMode = repository.themeMode.first()
@@ -253,6 +291,36 @@ class MainActivity : ComponentActivity() {
                     val lastReviewPromptTime by repository.lastReviewPromptTime.collectAsState(0L)
                     val userReviewedRated by repository.userReviewedRated.collectAsState(false)
                     val lastVersionCode by repository.lastVersionCode.collectAsState(-1)
+
+                    val checkUpdatesAutomatically by repository.checkUpdatesAutomatically.collectAsState(true)
+                    val lastUpdateCheckTime by repository.lastUpdateCheckTime.collectAsState(0L)
+
+                    LaunchedEffect(onboardingCompleted) {
+                        if (onboardingCompleted == true) {
+                            val now = System.currentTimeMillis()
+                            val oneDay = 24 * 60 * 60 * 1000L
+                            if (checkUpdatesAutomatically && (now - lastUpdateCheckTime >= oneDay)) {
+                                repository.setLastUpdateCheckTime(now)
+                                appUpdateHelper.checkForUpdates { result ->
+                                    when (result) {
+                                        is UpdateResult.PlayStoreUpdateAvailable -> {
+                                            @Suppress("DEPRECATION")
+                                            appUpdateManager?.startUpdateFlowForResult(
+                                                result.appUpdateInfo,
+                                                AppUpdateType.FLEXIBLE,
+                                                this@MainActivity,
+                                                UPDATE_REQUEST_CODE
+                                            )
+                                        }
+                                        is UpdateResult.GitHubUpdateAvailable -> {
+                                            setGitHubUpdate(result)
+                                        }
+                                        else -> {}
+                                    }
+                                }
+                            }
+                        }
+                    }
 
                     // Prompt user to rate the app after sufficient launches and time have elapsed.
                     val context = LocalContext.current
@@ -405,10 +473,56 @@ class MainActivity : ComponentActivity() {
                                         appLimitsViewModel = appLimitsViewModel,
                                         settingsViewModel = settingsViewModel,
                                         initialDestination = initialDestination,
+                                        onCheckForUpdates = {
+                                            Toast.makeText(context, R.string.toast_checking_updates, Toast.LENGTH_SHORT).show()
+                                            appUpdateHelper.checkForUpdates { result ->
+                                                when (result) {
+                                                    is UpdateResult.PlayStoreUpdateAvailable -> {
+                                                        @Suppress("DEPRECATION")
+                                                        appUpdateManager?.startUpdateFlowForResult(
+                                                            result.appUpdateInfo,
+                                                            AppUpdateType.FLEXIBLE,
+                                                            this@MainActivity,
+                                                            UPDATE_REQUEST_CODE
+                                                        )
+                                                    }
+                                                    is UpdateResult.GitHubUpdateAvailable -> {
+                                                        setGitHubUpdate(result)
+                                                    }
+                                                    is UpdateResult.NoUpdateAvailable -> {
+                                                        Toast.makeText(context, R.string.toast_app_up_to_date, Toast.LENGTH_SHORT).show()
+                                                    }
+                                                    is UpdateResult.Error -> {
+                                                        Toast.makeText(context, R.string.toast_update_check_failed, Toast.LENGTH_SHORT).show()
+                                                    }
+                                                }
+                                            }
+                                        }
                                     )
 
                                     if (showChangelog) {
                                         ChangelogDialog { setShowChangelog(false) }
+                                    }
+
+                                    if (gitHubUpdate != null) {
+                                        UpdateDialog(
+                                            tagName = gitHubUpdate.tag,
+                                            releaseNotes = gitHubUpdate.releaseNotes,
+                                            onDismiss = { setGitHubUpdate(null) },
+                                            onIgnore = {
+                                                lifecycleScope.launch {
+                                                    repository.setIgnoredUpdateVersion(gitHubUpdate.tag)
+                                                }
+                                                setGitHubUpdate(null)
+                                            },
+                                            onUpdate = {
+                                                val updateIntent = Intent(Intent.ACTION_VIEW, Uri.parse(gitHubUpdate.downloadUrl))
+                                                try {
+                                                    startActivity(updateIntent)
+                                                } catch (_: Exception) {}
+                                                setGitHubUpdate(null)
+                                            }
+                                        )
                                     }
 
                                 } else {
@@ -425,7 +539,34 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        appUpdateManager?.appUpdateInfo?.addOnSuccessListener { appUpdateInfo ->
+            if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
+                showUpdateCompletedToast()
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        appUpdateManager?.unregisterListener(installStateUpdatedListener)
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        @Suppress("DEPRECATION")
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == UPDATE_REQUEST_CODE) {
+            if (resultCode != RESULT_OK) {
+                Log.e("MainActivity", "Update flow failed! Result code: $resultCode")
+            }
+        }
+    }
 }
+
+private const val UPDATE_REQUEST_CODE = 9999
 
 private data class ThemeSettings(
     val themeMode: String,

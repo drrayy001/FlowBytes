@@ -37,6 +37,7 @@ import java.util.*
 @Composable
 fun AlertsScreen(
     viewModel: AlertsViewModel,
+    showFilters: Boolean,
     modifier: Modifier = Modifier,
 ) {
     val alerts by viewModel.alerts.collectAsState()
@@ -119,40 +120,46 @@ fun AlertsScreen(
         ) {
             Column(modifier = Modifier.fillMaxSize()) {
                 // Centered Pill-based Navigation Row
-                LazyRow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 8.dp, bottom = 12.dp, start = 16.dp, end = 16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally),
-                    verticalAlignment = Alignment.CenterVertically
+                AnimatedVisibility(
+                    visible = showFilters,
+                    enter = expandVertically(animationSpec = premiumSpring()) + fadeIn(),
+                    exit = shrinkVertically(animationSpec = premiumSpring()) + fadeOut()
                 ) {
-                    items(categories, key = { it.first }) { (id, label) ->
-                        val selected = selectedCategory == id
-                        val contentColor by animateColorAsState(
-                            if (selected) MaterialTheme.colorScheme.onSecondaryContainer 
-                            else MaterialTheme.colorScheme.onSurfaceVariant,
-                            label = "TabContentColor"
-                        )
-                        val containerColor by animateColorAsState(
-                            if (selected) MaterialTheme.colorScheme.secondaryContainer
-                            else MaterialTheme.colorScheme.surfaceContainerHigh,
-                            label = "TabContainerColor"
-                        )
-
-                        Box(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(12.dp))
-                                .background(containerColor)
-                                .clickable { viewModel.setSelectedCategory(id) }
-                                .padding(horizontal = 16.dp, vertical = 8.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = label,
-                                style = MaterialTheme.typography.labelLarge,
-                                fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
-                                color = contentColor
+                    LazyRow(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp, bottom = 12.dp, start = 16.dp, end = 16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        items(categories, key = { it.first }) { (id, label) ->
+                            val selected = selectedCategory == id
+                            val contentColor by animateColorAsState(
+                                if (selected) MaterialTheme.colorScheme.onSecondaryContainer 
+                                else MaterialTheme.colorScheme.onSurfaceVariant,
+                                label = "TabContentColor"
                             )
+                            val containerColor by animateColorAsState(
+                                if (selected) MaterialTheme.colorScheme.secondaryContainer
+                                else MaterialTheme.colorScheme.surfaceContainerHigh,
+                                label = "TabContainerColor"
+                            )
+
+                            Box(
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(12.dp))
+                                    .background(containerColor)
+                                    .clickable { viewModel.setSelectedCategory(id) }
+                                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = label,
+                                    style = MaterialTheme.typography.labelLarge,
+                                    fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
+                                    color = contentColor
+                                )
+                            }
                         }
                     }
                 }

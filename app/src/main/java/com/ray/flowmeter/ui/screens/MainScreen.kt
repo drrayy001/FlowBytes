@@ -138,6 +138,7 @@ fun MainScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val (limitsTab, setLimitsTab) = remember { mutableIntStateOf(0) }
     var showUsageFilters by remember { mutableStateOf(false) }
+    var showAlertsFilters by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
     val repository = remember { UserPreferencesRepository(context.applicationContext) }
@@ -399,6 +400,21 @@ fun MainScreen(
                                                 imageVector = com.ray.flowmeter.ui.components.AppIcons.Filter,
                                                 contentDescription = stringResource(R.string.cd_toggle_filters),
                                                 tint = if (showUsageFilters) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                                            )
+                                        }
+                                    }
+
+                                    if (currentDestination == Destination.Alerts) {
+                                        IconButton(
+                                            onClick = { showAlertsFilters = !showAlertsFilters },
+                                            colors = IconButtonDefaults.iconButtonColors(
+                                                containerColor = Color.Transparent
+                                            )
+                                        ) {
+                                            Icon(
+                                                imageVector = com.ray.flowmeter.ui.components.AppIcons.Filter,
+                                                contentDescription = stringResource(R.string.cd_toggle_filters),
+                                                tint = if (showAlertsFilters) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
                                             )
                                         }
                                     }
@@ -687,6 +703,7 @@ fun MainScreen(
                         Destination.Alerts -> NavEntry(key) {
                             AlertsScreen(
                                 viewModel = alertsViewModel,
+                                showFilters = showAlertsFilters,
                                 modifier = Modifier.fillMaxSize().padding(lastStablePadding).nestedScroll(alertsScrollBehavior.nestedScrollConnection)
                             )
                         }

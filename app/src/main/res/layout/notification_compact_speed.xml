@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:paddingTop="2dp"
-    android:paddingBottom="2dp">
+    android:paddingBottom="2dp"
+    android:theme="@style/Theme.AppCompat.DayNight">
 
     <!-- Top Row: Speeds -->
     <LinearLayout
@@ -21,14 +22,14 @@
             android:layout_height="14dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_arrow_down"
-            app:tint="#FFFFFF"
+            android:tint="?android:attr/textColorPrimary"
             android:contentDescription="@string/desc_download"/>
         <TextView
             android:id="@+id/text_down"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:textColor="#FFFFFF"
+            android:textColor="?android:attr/textColorPrimary"
             android:textSize="14sp"
             android:textStyle="bold"
             android:layout_marginEnd="16dp"/>
@@ -39,14 +40,14 @@
             android:layout_height="14dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_arrow_up"
-            app:tint="#FFFFFF"
+            android:tint="?android:attr/textColorPrimary"
             android:contentDescription="@string/desc_upload"/>
         <TextView
             android:id="@+id/text_up"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:textColor="#FFFFFF"
+            android:textColor="?android:attr/textColorPrimary"
             android:textSize="14sp"
             android:textStyle="bold"
             android:layout_marginEnd="16dp"/>
@@ -57,14 +58,14 @@
             android:layout_height="14dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_arrow_combined"
-            app:tint="#FFFFFF"
+            android:tint="?android:attr/textColorPrimary"
             android:contentDescription="@string/desc_combined"/>
         <TextView
             android:id="@+id/text_combined"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:textColor="#FFFFFF"
+            android:textColor="?android:attr/textColorPrimary"
             android:textSize="14sp"
             android:textStyle="bold"/>
     </LinearLayout>
@@ -82,7 +83,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/label_todays_usage"
-            android:textColor="#FFFFFF"
+            android:textColor="?android:attr/textColorPrimary"
             android:textSize="13sp"
             android:textStyle="bold"
             android:layout_marginBottom="2dp"
@@ -100,7 +101,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/label_today_colon"
-                android:textColor="#CCCCCC"
+                android:textColor="?android:attr/textColorSecondary"
                 android:textSize="13sp"
                 android:layout_marginEnd="6dp"/>
 
@@ -110,7 +111,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/label_wifi_colon"
-                android:textColor="#CCCCCC"
+                android:textColor="?android:attr/textColorSecondary"
                 android:textSize="13sp"
                 android:layout_marginEnd="4dp"
                 android:visibility="gone"/>
@@ -121,14 +122,14 @@
                 android:layout_height="14dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_wifi"
-                app:tint="#FFFFFF"
+                android:tint="?android:attr/textColorPrimary"
                 android:contentDescription="@string/desc_wifi"/>
 
             <TextView
                 android:id="@+id/text_wifi_usage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#FFFFFF"
+                android:textColor="?android:attr/textColorPrimary"
                 android:textSize="13sp"
                 android:layout_marginStart="4dp"/>
 
@@ -137,7 +138,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/label_separator"
-                android:textColor="#888888"
+                android:textColor="?android:attr/textColorSecondary"
                 android:textSize="13sp"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"/>
@@ -148,7 +149,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/label_mobile_colon"
-                android:textColor="#CCCCCC"
+                android:textColor="?android:attr/textColorSecondary"
                 android:textSize="13sp"
                 android:layout_marginEnd="4dp"
                 android:visibility="gone"/>
@@ -159,14 +160,14 @@
                 android:layout_height="14dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_data"
-                app:tint="#FFFFFF"
+                android:tint="?android:attr/textColorPrimary"
                 android:contentDescription="@string/desc_mobile_data"/>
 
             <TextView
                 android:id="@+id/text_mobile_usage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#FFFFFF"
+                android:textColor="?android:attr/textColorPrimary"
                 android:textSize="13sp"
                 android:layout_marginStart="4dp"/>
         </LinearLayout>

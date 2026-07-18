@@ -212,6 +212,7 @@
     <string name="title_custom_color">Customize Color</string>
     <string name="btn_apply_globally">Apply Globally</string>
     <string name="btn_get_started">Get Started</string>
+    <string name="btn_skip_for_now">Skip for now</string>
     <string name="title_welcome">Welcome to FlowBytes</string>
     <string name="msg_onboarding_desc">To provide accurate data tracking and live speed monitoring, we need a few permissions.</string>
     <string name="label_usage_access">Usage Access</string>

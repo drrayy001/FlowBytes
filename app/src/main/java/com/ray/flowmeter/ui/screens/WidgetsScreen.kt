@@ -51,6 +51,11 @@ import com.ray.flowmeter.receiver.SpeedMonitorWidget
 import com.ray.flowmeter.receiver.TodayDataWidget
 import com.ray.flowmeter.utils.SpeedFormatter
 import kotlinx.coroutines.launch
+import androidx.compose.material.icons.rounded.Update
+import androidx.compose.material.icons.rounded.Speed
+import androidx.compose.material.icons.rounded.DataUsage
+import com.ray.flowmeter.ui.components.SettingsItem
+import com.ray.flowmeter.ui.theme.bounceClick
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -67,6 +72,8 @@ fun WidgetsScreen(
     val mobileDailyLimit by repository.dataDailyLimit.collectAsState(initial = 2147483648L)
     val wifiMonthlyLimit by repository.wifiMonthlyLimit.collectAsState(initial = 53687091200L)
     val mobileMonthlyLimit by repository.dataMonthlyLimit.collectAsState(initial = 10737418240L)
+
+    val widgetUpdateInterval by repository.widgetUpdateInterval.collectAsState(initial = 30)
 
     BackHandler {
         onBack()
@@ -142,6 +149,61 @@ fun WidgetsScreen(
                 }
             }
 
+            // Widget Settings Section
+            Text(
+                text = "WIDGET SETTINGS",
+                style = MaterialTheme.typography.labelSmall,
+                fontWeight = FontWeight.ExtraBold,
+                color = MaterialTheme.colorScheme.primary,
+                letterSpacing = 1.sp,
+                modifier = Modifier.padding(top = 8.dp)
+            )
+
+            Card(
+                shape = RoundedCornerShape(24.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+                ),
+                border = BorderStroke(
+                    1.dp,
+                    MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
+                ),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(modifier = Modifier.padding(vertical = 4.dp)) {
+                    var showUpdateIntervalDialog by remember { mutableStateOf(false) }
+                    val intervalText = when (widgetUpdateInterval) {
+                        0 -> "Manual Only / Disabled"
+                        15 -> "15 Minutes"
+                        30 -> "30 Minutes"
+                        60 -> "1 Hour"
+                        120 -> "2 Hours"
+                        360 -> "6 Hours"
+                        720 -> "12 Hours"
+                        1440 -> "24 Hours"
+                        else -> "$widgetUpdateInterval Minutes"
+                    }
+                    SettingsItem(
+                        icon = Icons.Rounded.Update,
+                        title = "Update Interval",
+                        subtitle = "Frequency of background updates (when monitoring is disabled): $intervalText",
+                        onClick = { showUpdateIntervalDialog = true }
+                    )
+
+
+                    if (showUpdateIntervalDialog) {
+                        WidgetUpdateIntervalDialog(
+                            currentInterval = widgetUpdateInterval,
+                            onDismiss = { showUpdateIntervalDialog = false },
+                            onSelect = { selectedInterval ->
+                                scope.launch {
+                                    repository.setWidgetUpdateInterval(selectedInterval)
+                                }
+                            }
+                        )
+                    }
+                }
+            }
 
             // Widget Previews Section
             Text(
@@ -776,3 +838,89 @@ fun NetworkLimitPreviewItem(
         }
     }
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun WidgetUpdateIntervalDialog(
+    currentInterval: Int,
+    onDismiss: () -> Unit,
+    onSelect: (Int) -> Unit
+) {
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = sheetState,
+        dragHandle = { BottomSheetDefaults.DragHandle() },
+        containerColor = MaterialTheme.colorScheme.surfaceContainer,
+        shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
+        properties = ModalBottomSheetProperties(shouldDismissOnBackPress = false)
+    ) {
+        com.ray.flowmeter.ui.dialogs.AnimatedDialogContent(onBack = onDismiss) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp)
+                    .padding(bottom = 40.dp)
+            ) {
+                Text(
+                    text = "Select Update Interval",
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.padding(bottom = 24.dp)
+                )
+
+                val intervalOptions = listOf(
+                    0 to "Manual Only / Disabled",
+                    15 to "15 Minutes",
+                    30 to "30 Minutes",
+                    60 to "1 Hour",
+                    120 to "2 Hours",
+                    360 to "6 Hours",
+                    720 to "12 Hours",
+                    1440 to "24 Hours"
+                )
+
+                intervalOptions.forEach { (minutes, label) ->
+                    val isSelected = currentInterval == minutes
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp)
+                            .bounceClick {
+                                onSelect(minutes)
+                                onDismiss()
+                            },
+                        shape = RoundedCornerShape(20.dp),
+                        color = if (isSelected) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                        border = BorderStroke(
+                            width = if (isSelected) 2.dp else 1.dp,
+                            color = if (isSelected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.outlineVariant
+                        )
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp, vertical = 16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = label,
+                                style = MaterialTheme.typography.bodyLarge,
+                                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                                color = if (isSelected) MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.onSurface,
+                                modifier = Modifier.weight(1f)
+                            )
+                            RadioButton(
+                                selected = isSelected,
+                                onClick = null
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+

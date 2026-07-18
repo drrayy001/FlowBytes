@@ -29,6 +29,7 @@ import com.ray.flowmeter.data.FlowMeterDatabase
 import com.ray.flowmeter.data.UserPreferencesRepository
 import com.ray.flowmeter.service.AppBlockVpnService
 import com.ray.flowmeter.service.NetworkMonitoringService
+import com.ray.flowmeter.receiver.WidgetUpdateScheduler
 import com.ray.flowmeter.ui.dialogs.ChangelogDialog
 import android.net.Uri
 import android.widget.Toast
@@ -391,6 +392,14 @@ class MainActivity : ComponentActivity() {
                                     stopService(serviceIntent)
                                     stopService(Intent(this@MainActivity, AppBlockVpnService::class.java))
                                 }
+                            }
+                        }
+
+                        val widgetUpdateInterval by settingsViewModel.widgetUpdateInterval.collectAsState()
+
+                        LaunchedEffect(widgetUpdateInterval) {
+                            if (onboardingCompleted == true) {
+                                WidgetUpdateScheduler.schedule(applicationContext, widgetUpdateInterval)
                             }
                         }
 

@@ -239,6 +239,7 @@ class UserPreferencesRepository(private val context: Context) {
 
         val WIDGET_SHOW_SPEED = booleanPreferencesKey("widget_show_speed")
         val WIDGET_USAGE_TYPE = stringPreferencesKey("widget_usage_type") // "DAILY", "MONTHLY"
+        val WIDGET_UPDATE_INTERVAL = intPreferencesKey("widget_update_interval")
         val SUPPORT_BANNER_DISMISSED = booleanPreferencesKey("support_banner_dismissed")
         val CHECK_UPDATES_AUTOMATICALLY = booleanPreferencesKey("check_updates_automatically")
         val LAST_UPDATE_CHECK_TIME = longPreferencesKey("last_update_check_time")
@@ -549,6 +550,11 @@ class UserPreferencesRepository(private val context: Context) {
     val widgetUsageType: Flow<String> = preferencesFlow
         .map { preferences ->
             preferences[PreferencesKeys.WIDGET_USAGE_TYPE] ?: "DAILY"
+        }.distinctUntilChanged()
+
+    val widgetUpdateInterval: Flow<Int> = preferencesFlow
+        .map { preferences ->
+            preferences[PreferencesKeys.WIDGET_UPDATE_INTERVAL] ?: 30
         }.distinctUntilChanged()
 
     val checkUpdatesAutomatically: Flow<Boolean> = preferencesFlow
@@ -881,6 +887,12 @@ class UserPreferencesRepository(private val context: Context) {
     suspend fun setWidgetUsageType(type: String) {
         context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.WIDGET_USAGE_TYPE] = type
+        }
+    }
+
+    suspend fun setWidgetUpdateInterval(intervalMinutes: Int) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.WIDGET_UPDATE_INTERVAL] = intervalMinutes
         }
     }
 

@@ -22,6 +22,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.BatteryChargingFull
 import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.material.icons.rounded.BarChart
+import androidx.compose.material.icons.rounded.Info
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -32,6 +34,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -82,25 +85,51 @@ fun OnboardingScreen(
             val isEnabled = usageAccessGranted && (notificationPermissionState?.status?.isGranted != false) && isIgnoringBatteryOptimizations
             val interactionSource = remember { MutableInteractionSource() }
             
-            Button(
-                onClick = onComplete,
-                enabled = isEnabled,
-                interactionSource = interactionSource,
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(24.dp)
-                    .height(60.dp)
-                    .bounceClick(
-                        enabled = isEnabled,
-                        interactionSource = interactionSource
-                    ),
-                shape = RoundedCornerShape(20.dp)
+                    .padding(horizontal = 24.dp)
+                    .padding(bottom = 24.dp, top = 8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    stringResource(R.string.btn_get_started),
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
-                )
+                Button(
+                    onClick = onComplete,
+                    enabled = isEnabled,
+                    interactionSource = interactionSource,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp)
+                        .bounceClick(
+                            enabled = isEnabled,
+                            interactionSource = interactionSource
+                        ),
+                    shape = RoundedCornerShape(20.dp)
+                ) {
+                    Text(
+                        stringResource(R.string.btn_get_started),
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+
+                if (!isEnabled) {
+                    Spacer(modifier = Modifier.height(10.dp))
+                    TextButton(
+                        onClick = onComplete,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(48.dp)
+                            .bounceClick(),
+                        shape = RoundedCornerShape(20.dp)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.btn_skip_for_now),
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Medium,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
             }
         }
     ) { innerPadding ->
@@ -159,6 +188,8 @@ fun OnboardingScreen(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
+
+
 
             Spacer(modifier = Modifier.height(32.dp))
 
@@ -290,11 +321,5 @@ fun PermissionItem(
 }
 
 private fun hasUsageAccess(context: Context): Boolean {
-    val appOps = context.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
-    val mode = appOps.checkOpNoThrow(
-        AppOpsManager.OPSTR_GET_USAGE_STATS,
-        android.os.Process.myUid(),
-        context.packageName
-    )
-    return mode == AppOpsManager.MODE_ALLOWED
+    return com.ray.flowmeter.utils.PermissionHelper.hasUsageAccess(context)
 }

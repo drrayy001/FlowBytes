@@ -122,6 +122,9 @@ class SettingsViewModel(
     val widgetUsageType: StateFlow<String> = repository.widgetUsageType
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), initialValue = "DAILY")
 
+    val widgetUpdateInterval: StateFlow<Int> = repository.widgetUpdateInterval
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), initialValue = 30)
+
     fun toggleMonitoring(enabled: Boolean) {
         viewModelScope.launch {
             repository.setMonitoringEnabled(enabled)
@@ -265,6 +268,10 @@ class SettingsViewModel(
 
     fun setWidgetUsageType(type: String) {
         viewModelScope.launch { repository.setWidgetUsageType(type) }
+    }
+
+    fun setWidgetUpdateInterval(interval: Int) {
+        viewModelScope.launch { repository.setWidgetUpdateInterval(interval) }
     }
 
     val supportBannerDismissed: StateFlow<Boolean> = repository.supportBannerDismissed

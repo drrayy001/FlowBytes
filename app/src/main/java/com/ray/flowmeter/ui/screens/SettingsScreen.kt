@@ -6,6 +6,11 @@ import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
+import android.provider.Settings
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import com.ray.flowmeter.utils.PermissionHelper
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -37,6 +42,30 @@ fun SettingsScreen(
     onCheckForUpdates: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val context = LocalContext.current
+
+    val notificationPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            viewModel.toggleMonitoring(true)
+        }
+    }
+
+    val usageAccessLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) {
+        if (PermissionHelper.hasUsageAccess(context)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                androidx.core.content.ContextCompat.checkSelfPermission(context, android.Manifest.permission.POST_NOTIFICATIONS) != android.content.pm.PackageManager.PERMISSION_GRANTED
+            ) {
+                notificationPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+            } else {
+                viewModel.toggleMonitoring(true)
+            }
+        }
+    }
+
     val monitoringEnabled by viewModel.monitoringEnabled.collectAsState()
     val themeMode by viewModel.themeMode.collectAsState()
     val useMaterialYou by viewModel.useMaterialYou.collectAsState()
@@ -95,8 +124,6 @@ fun SettingsScreen(
 
     var showAccentColorDialog by remember { mutableStateOf(value = false) }
 
-    val context = LocalContext.current
-
     val versionName = remember {
         try {
             val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
@@ -139,7 +166,23 @@ fun SettingsScreen(
                     trailingContent = {
                         Switch(
                             checked = monitoringEnabled == true,
-                            onCheckedChange = { viewModel.toggleMonitoring(it) },
+                            onCheckedChange = { checked ->
+                                if (checked) {
+                                    val hasUsageStats = PermissionHelper.hasUsageAccess(context)
+                                    if (!hasUsageStats) {
+                                        val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
+                                        usageAccessLauncher.launch(intent)
+                                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                                        androidx.core.content.ContextCompat.checkSelfPermission(context, android.Manifest.permission.POST_NOTIFICATIONS) != android.content.pm.PackageManager.PERMISSION_GRANTED
+                                    ) {
+                                        notificationPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+                                    } else {
+                                        viewModel.toggleMonitoring(true)
+                                    }
+                                } else {
+                                    viewModel.toggleMonitoring(false)
+                                }
+                            },
                             enabled = monitoringEnabled != null,
                             colors = switchColors,
                             thumbContent = { thumbContent(monitoringEnabled == true) }

@@ -283,6 +283,24 @@ object WidgetUsageQuerier {
         return total
     }
 
+    fun getCustomUsageBytes(context: Context, transportType: Int, startTime: Long, endTime: Long): Long {
+        if (startTime <= 0L || endTime <= 0L || startTime >= endTime) return 0L
+        val manager = context.getSystemService(Context.NETWORK_STATS_SERVICE) as? NetworkStatsManager ?: return 0L
+        var total = 0L
+        try {
+            val stats = manager.querySummary(transportType, null, startTime, endTime)
+            val bucket = NetworkStats.Bucket()
+            while (stats.hasNextBucket()) {
+                stats.getNextBucket(bucket)
+                total += bucket.rxBytes + bucket.txBytes
+            }
+            stats.close()
+        } catch (_: Exception) {
+            // ignore
+        }
+        return total
+    }
+
     fun formatLimitValues(usage: Long, limit: Long): String {
         val gbUsage = usage / (1024.0 * 1024.0 * 1024.0)
         val gbLimit = limit / (1024.0 * 1024.0 * 1024.0)
@@ -524,6 +542,77 @@ class MonthlyNetworkLimitWidget : AppWidgetProvider() {
 
                 withContext(Dispatchers.Main) {
                     views.setTextViewText(R.id.widget_title, "MONTHLY NETWORK LIMIT")
+                    views.setTextViewText(R.id.widget_wifi_values, formattedWifi)
+                    views.setTextViewText(R.id.widget_mobile_values, formattedMobile)
+                    views.setProgressBar(R.id.widget_wifi_progress, 100, wifiProgress, false)
+                    views.setProgressBar(R.id.widget_mobile_progress, 100, mobileProgress, false)
+                    appWidgetManager.updateAppWidget(appWidgetId, views)
+                }
+            }
+        }
+    }
+}
+
+// 4x2 Custom Network Limit Widget
+class CustomNetworkLimitWidget : AppWidgetProvider() {
+
+    override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
+        for (appWidgetId in appWidgetIds) {
+            updateAppWidget(context, appWidgetManager, appWidgetId)
+        }
+    }
+
+    override fun onAppWidgetOptionsChanged(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetId: Int,
+        newOptions: Bundle
+    ) {
+        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
+        updateAppWidget(context, appWidgetManager, appWidgetId)
+    }
+
+    override fun onReceive(context: Context, intent: Intent) {
+        super.onReceive(context, intent)
+        if (intent.action == DailyUsageWidget.ACTION_UPDATE_WIDGET) {
+            val appWidgetManager = AppWidgetManager.getInstance(context)
+            val componentName = ComponentName(context, CustomNetworkLimitWidget::class.java)
+            val appWidgetIds = appWidgetManager.getAppWidgetIds(componentName)
+            for (appWidgetId in appWidgetIds) {
+                updateAppWidget(context, appWidgetManager, appWidgetId)
+            }
+        }
+    }
+
+    companion object {
+        fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
+            val views = RemoteViews(context.packageName, R.layout.widget_network_limit)
+
+            val mainIntent = Intent(context, MainActivity::class.java)
+            val pendingIntent = PendingIntent.getActivity(context, 0, mainIntent, PendingIntent.FLAG_IMMUTABLE)
+            views.setOnClickPendingIntent(R.id.widget_container, pendingIntent)
+
+            CoroutineScope(Dispatchers.IO).launch {
+                val repository = UserPreferencesRepository(context)
+
+                val wifiLimit = repository.wifiCustomLimit.first()
+                val mobileLimit = repository.dataCustomLimit.first()
+                val wifiStart = repository.wifiCustomLimitStart.first()
+                val wifiEnd = repository.wifiCustomLimitEnd.first()
+                val mobileStart = repository.dataCustomLimitStart.first()
+                val mobileEnd = repository.dataCustomLimitEnd.first()
+
+                val wifiUsage = WidgetUsageQuerier.getCustomUsageBytes(context, NetworkCapabilities.TRANSPORT_WIFI, wifiStart, wifiEnd)
+                val mobileUsage = WidgetUsageQuerier.getCustomUsageBytes(context, NetworkCapabilities.TRANSPORT_CELLULAR, mobileStart, mobileEnd)
+
+                val formattedWifi = WidgetUsageQuerier.formatLimitValues(wifiUsage, wifiLimit)
+                val formattedMobile = WidgetUsageQuerier.formatLimitValues(mobileUsage, mobileLimit)
+
+                val wifiProgress = if (wifiLimit > 0L) ((wifiUsage.toDouble() / wifiLimit.toDouble()) * 100).toInt().coerceIn(0, 100) else 0
+                val mobileProgress = if (mobileLimit > 0L) ((mobileUsage.toDouble() / mobileLimit.toDouble()) * 100).toInt().coerceIn(0, 100) else 0
+
+                withContext(Dispatchers.Main) {
+                    views.setTextViewText(R.id.widget_title, "CUSTOM NETWORK LIMIT")
                     views.setTextViewText(R.id.widget_wifi_values, formattedWifi)
                     views.setTextViewText(R.id.widget_mobile_values, formattedMobile)
                     views.setProgressBar(R.id.widget_wifi_progress, 100, wifiProgress, false)

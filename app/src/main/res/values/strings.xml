@@ -382,6 +382,8 @@
     <string name="label_daily_limit_caps">DAILY NETWORK LIMIT</string>
     <string name="title_monthly_limit_widget">Monthly Network Limit Widget</string>
     <string name="label_monthly_limit_caps">MONTHLY NETWORK LIMIT</string>
+    <string name="title_custom_limit_widget">Custom Network Limit Widget</string>
+    <string name="label_custom_limit_caps">CUSTOM NETWORK LIMIT</string>
     <string name="title_speed_monitor_widget">Speed Monitor Widget</string>
     <string name="desc_live_graphs_size">4x2 Live Graphs</string>
     <string name="label_speed_monitor_caps">SPEED MONITOR</string>

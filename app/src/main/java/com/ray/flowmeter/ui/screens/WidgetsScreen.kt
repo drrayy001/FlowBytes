@@ -45,6 +45,7 @@ import com.ray.flowmeter.R
 import com.ray.flowmeter.data.UserPreferencesRepository
 import com.ray.flowmeter.receiver.DailyNetworkLimitWidget
 import com.ray.flowmeter.receiver.MonthlyNetworkLimitWidget
+import com.ray.flowmeter.receiver.CustomNetworkLimitWidget
 import com.ray.flowmeter.receiver.DailyUsageWidget
 import com.ray.flowmeter.receiver.MonthlyUsageWidget
 import com.ray.flowmeter.receiver.SpeedMonitorWidget
@@ -72,6 +73,8 @@ fun WidgetsScreen(
     val mobileDailyLimit by repository.dataDailyLimit.collectAsState(initial = 2147483648L)
     val wifiMonthlyLimit by repository.wifiMonthlyLimit.collectAsState(initial = 53687091200L)
     val mobileMonthlyLimit by repository.dataMonthlyLimit.collectAsState(initial = 10737418240L)
+    val wifiCustomLimit by repository.wifiCustomLimit.collectAsState(initial = 0L)
+    val mobileCustomLimit by repository.dataCustomLimit.collectAsState(initial = 0L)
 
     val widgetUpdateInterval by repository.widgetUpdateInterval.collectAsState(initial = 30)
 
@@ -377,6 +380,25 @@ fun WidgetsScreen(
                         mobileUsed = "4.2",
                         wifiProgress = 0.25f,
                         mobileProgress = 0.42f
+                    )
+                }
+            }
+
+            // 5. Custom Network Limit Widget Preview
+            WidgetPreviewCard(
+                title = stringResource(R.string.title_custom_limit_widget),
+                sizeInfo = stringResource(R.string.desc_detailed_status_size),
+                onAddClick = { pinWidget(context, CustomNetworkLimitWidget::class.java) }
+            ) {
+                WidgetBackgroundPreview {
+                    NetworkLimitPreviewItem(
+                        title = stringResource(R.string.label_custom_limit_caps),
+                        wifiLimit = wifiCustomLimit,
+                        mobileLimit = mobileCustomLimit,
+                        wifiUsed = "1.8",
+                        mobileUsed = "0.9",
+                        wifiProgress = 0.18f,
+                        mobileProgress = 0.09f
                     )
                 }
             }

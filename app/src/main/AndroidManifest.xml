@@ -156,6 +156,20 @@
         </receiver>
 
         <receiver
+            android:name=".receiver.CustomNetworkLimitWidget"
+            android:exported="true"
+            android:label="@string/title_custom_limit_widget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.ray.flowmeter.ACTION_UPDATE_WIDGET" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/custom_network_limit_widget_info" />
+        </receiver>
+
+        <receiver
             android:name=".receiver.SpeedMonitorWidget"
             android:exported="true"
             android:label="Speed Monitor">

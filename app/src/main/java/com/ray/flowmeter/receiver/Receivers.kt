@@ -107,7 +107,13 @@ class WidgetUpdateWorker(context: Context, params: WorkerParameters) : Coroutine
             MonthlyNetworkLimitWidget.updateAppWidget(applicationContext, appWidgetManager, id)
         }
 
-        // 6. SpeedMonitorWidget
+        // 6. CustomNetworkLimitWidget
+        val customLimitIds = appWidgetManager.getAppWidgetIds(ComponentName(applicationContext, CustomNetworkLimitWidget::class.java))
+        for (id in customLimitIds) {
+            CustomNetworkLimitWidget.updateAppWidget(applicationContext, appWidgetManager, id)
+        }
+
+        // 7. SpeedMonitorWidget
         val speedMonitorIds = appWidgetManager.getAppWidgetIds(ComponentName(applicationContext, SpeedMonitorWidget::class.java))
         for (id in speedMonitorIds) {
             SpeedMonitorWidget.updateAppWidget(applicationContext, appWidgetManager, id)

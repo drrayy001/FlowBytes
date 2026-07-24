@@ -400,4 +400,26 @@
     <string name="toast_app_up_to_date">FlowBytesは最新の状態です！</string>
     <string name="toast_update_check_failed">アップデートの確認に失敗しました。後で再試行してください。</string>
     <string name="toast_checking_updates">アップデートを確認中...</string>
+    <string name="snackbar_support_prompt">FlowBytesをお楽しみいただけていますか？広告なしの開発を支援してください！</string>
+    <string name="snackbar_support_action">支援する</string>
+    <string name="btn_skip_for_now">今はスキップ</string>
+    <string name="title_custom_limit_widget">カスタムネットワーク制限ウィジェット</string>
+    <string name="label_custom_limit_caps">カスタムネットワーク制限</string>
+    <string name="msg_usage_stats_permission_disabled">使用状況へのアクセス権限が無効です。タップして許可してください。</string>
+    <string name="msg_notification_permission_disabled">通知権限が無効です。タップして許可してください。</string>
+    <string name="label_widget_settings_caps">ウィジェット設定</string>
+    <string name="option_update_interval_manual">手動のみ / 無効</string>
+    <string name="option_update_interval_hour">1時間</string>
+    <string name="option_update_interval_hours">%1$d時間</string>
+    <string name="option_update_interval_minutes">%1$d分</string>
+    <string name="label_update_interval">更新間隔</string>
+    <string name="desc_update_interval_format">バックグラウンド更新の頻度（監視が無効な場合）: %1$s</string>
+    <string name="title_select_update_interval">更新間隔の選択</string>
+    <string name="cd_manage_widgets">ウィジェットの管理</string>
+    <string name="cd_switch_to_input_mode">入力モードに切り替え</string>
+    <string name="cd_switch_to_picker_mode">選択モードに切り替え</string>
+    <string name="msg_billing_service_not_ready">決済サービスが準備できていません。しばらくしてからもう一度お試しください。</string>
+    <string name="msg_billing_error_format">Google Play決済エラー（コード: %1$s）</string>
+    <string name="vpn_session_name">FlowBytesブロック</string>
+    <string name="msg_product_details_not_found">商品情報が見つかりませんでした。アプリがGoogle Playからインストールされていることを確認してください。</string>
 </resources>

@@ -381,7 +381,7 @@ fun MainScreen(
                                         ) {
                                             Icon(
                                                 imageVector = Icons.Default.Widgets,
-                                                contentDescription = "Manage Widgets",
+                                                contentDescription = stringResource(R.string.cd_manage_widgets),
                                                 tint = MaterialTheme.colorScheme.onSurfaceVariant
                                             )
                                         }

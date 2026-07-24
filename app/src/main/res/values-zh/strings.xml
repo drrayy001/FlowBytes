@@ -400,4 +400,26 @@
     <string name="toast_app_up_to_date">FlowBytes 已是最新版本！</string>
     <string name="toast_update_check_failed">检查更新失败。请稍后再试。</string>
     <string name="toast_checking_updates">正在检查更新...</string>
+    <string name="snackbar_support_prompt">喜欢 FlowBytes 吗？支持我们的无广告开发！</string>
+    <string name="snackbar_support_action">支持</string>
+    <string name="btn_skip_for_now">暂时跳过</string>
+    <string name="title_custom_limit_widget">自定义网络限制小部件</string>
+    <string name="label_custom_limit_caps">自定义网络限制</string>
+    <string name="msg_usage_stats_permission_disabled">使用情况记录权限已禁用。点击去授权。</string>
+    <string name="msg_notification_permission_disabled">通知权限已禁用。点击去授权。</string>
+    <string name="label_widget_settings_caps">小部件设置</string>
+    <string name="option_update_interval_manual">仅手动 / 已禁用</string>
+    <string name="option_update_interval_hour">1 小时</string>
+    <string name="option_update_interval_hours">%1$d 小时</string>
+    <string name="option_update_interval_minutes">%1$d 分钟</string>
+    <string name="label_update_interval">更新间隔</string>
+    <string name="desc_update_interval_format">后台更新频率（当实时监控关闭时）：%1$s</string>
+    <string name="title_select_update_interval">选择更新间隔</string>
+    <string name="cd_manage_widgets">管理小部件</string>
+    <string name="cd_switch_to_input_mode">切换到输入模式</string>
+    <string name="cd_switch_to_picker_mode">切换到选择器模式</string>
+    <string name="msg_billing_service_not_ready">账单服务未就绪。请稍后重试。</string>
+    <string name="msg_billing_error_format">Google Play 账单错误 (代码: %1$s)</string>
+    <string name="vpn_session_name">FlowBytes 拦截</string>
+    <string name="msg_product_details_not_found">未找到产品详情。请确保应用是从 Google Play 安装的。</string>
 </resources>

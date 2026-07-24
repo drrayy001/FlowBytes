@@ -503,13 +503,14 @@ class NetworkMonitoringService : Service() {
             else -> "DAILY_LIMIT"
         }
         
-        val displayPeriod = when (period) {
-            "daily" -> "Daily"
-            "monthly" -> "Monthly"
-            else -> "Custom"
+        val appNameForAlert = when {
+            networkType == "wifi" && period == "daily" -> getString(R.string.label_daily_wifi_limit)
+            networkType == "wifi" && period == "monthly" -> getString(R.string.label_monthly_wifi_limit)
+            networkType == "wifi" -> getString(R.string.label_custom_wifi_limit)
+            period == "daily" -> getString(R.string.label_daily_mobile_limit)
+            period == "monthly" -> getString(R.string.label_monthly_mobile_limit)
+            else -> getString(R.string.label_custom_mobile_limit)
         }
-        val displayNetworkType = if (networkType == "wifi") "Wi-Fi" else "Mobile"
-        val appNameForAlert = "$displayPeriod $displayNetworkType Limit"
         val packageNameForAlert = "system.$networkType.$period"
 
         serviceScope.launch(Dispatchers.IO) {
@@ -561,7 +562,7 @@ class NetworkMonitoringService : Service() {
             .setGroup(ALERT_GROUP_KEY)
             .build()
 
-        manager.notify(ALERT_NOTIFICATION_ID + (networkType + period).hashCode(), notification)
+        manager.safeNotify(ALERT_NOTIFICATION_ID + (networkType + period).hashCode(), notification)
         sendSummaryNotification()
     }
 
@@ -778,18 +779,19 @@ class NetworkMonitoringService : Service() {
     }
 
     private fun createNotificationChannel() {
-        val manager = getSystemService(NotificationManager::class.java)
+        val manager = getSystemService(NotificationManager::class.java) ?: return
 
         val currentChannelId = if (highPriority) "SPEED_METER_V7_HIGH" else "SPEED_METER_V7_DEFAULT"
 
-        listOf(
-            CHANNEL_ACTIVE, "${CHANNEL_ACTIVE}_HIGH", "${CHANNEL_ACTIVE}_LOW",
-            "SPEED_METER_V2_HIGH", "SPEED_METER_V2_DEFAULT",
-            "SPEED_METER_V3_HIGH", "SPEED_METER_V3_DEFAULT",
-            "SPEED_METER_V4_HIGH", "SPEED_METER_V4_DEFAULT",
-            "SPEED_METER_V5_HIGH", "SPEED_METER_V5_DEFAULT",
-            "SPEED_METER_V6_HIGH", "SPEED_METER_V6_DEFAULT",
-        ).forEach { manager.deleteNotificationChannel(it) }
+        try {
+            listOf(
+                CHANNEL_ACTIVE, "${CHANNEL_ACTIVE}_HIGH", "${CHANNEL_ACTIVE}_LOW",
+                "SPEED_METER_V2_HIGH", "SPEED_METER_V2_DEFAULT",
+                "SPEED_METER_V3_HIGH", "SPEED_METER_V3_DEFAULT",
+                "SPEED_METER_V4_HIGH", "SPEED_METER_V4_DEFAULT",
+                "SPEED_METER_V5_HIGH", "SPEED_METER_V5_DEFAULT",
+                "SPEED_METER_V6_HIGH", "SPEED_METER_V6_DEFAULT",
+            ).forEach { manager.deleteNotificationChannel(it) }
 
             val importance = if (highPriority) {
                 NotificationManager.IMPORTANCE_MAX
@@ -823,6 +825,9 @@ class NetworkMonitoringService : Service() {
 
             manager.createNotificationChannel(activeChannel)
             manager.createNotificationChannel(alertChannel)
+        } catch (e: Exception) {
+            Log.e("NetworkMonitoringService", "Failed to create/delete notification channels", e)
+        }
     }
 
     private fun createSpeedIcon(speedText: String): Icon? {
@@ -900,7 +905,7 @@ class NetworkMonitoringService : Service() {
     private fun updateNotification(customLayout: RemoteViews, iconText: String) {
         val notification = createNotification(customLayout, iconText)
         val manager = getSystemService(NotificationManager::class.java)
-        manager.notify(NOTIFICATION_ID, notification)
+        manager.safeNotify(NOTIFICATION_ID, notification)
     }
 
     private fun safeStartForeground(notification: Notification) {
@@ -1128,7 +1133,7 @@ class NetworkMonitoringService : Service() {
             ignorePendingIntent
         )
 
-        manager.notify(notificationId, builder.build())
+        manager.safeNotify(notificationId, builder.build())
         sendSummaryNotification()
     }
 
@@ -1161,7 +1166,7 @@ class NetworkMonitoringService : Service() {
             .setContentIntent(pendingIntent)
             .build()
 
-        manager.notify(SUMMARY_ID, summary)
+        manager.safeNotify(SUMMARY_ID, summary)
     }
 
     private fun scheduleNetworkWakeup() {
@@ -1357,7 +1362,15 @@ class NetworkMonitoringService : Service() {
             .setContentIntent(pendingIntent)
             .build()
 
-        manager.notify(ALERT_NOTIFICATION_ID + limit.packageName.hashCode(), notification)
+        manager.safeNotify(ALERT_NOTIFICATION_ID + limit.packageName.hashCode(), notification)
         sendSummaryNotification()
+    }
+
+    private fun NotificationManager?.safeNotify(id: Int, notification: Notification) {
+        try {
+            this?.notify(id, notification)
+        } catch (e: Exception) {
+            Log.e("NetworkMonitoringService", "NotificationManager.notify failed for id $id", e)
+        }
     }
 }

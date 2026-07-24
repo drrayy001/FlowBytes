@@ -400,4 +400,26 @@
     <string name="toast_app_up_to_date">FlowBytes अप-टू-डेट है!</string>
     <string name="toast_update_check_failed">अपडेट की जाँच करने में विफल। कृपया बाद में पुनः प्रयास करें।</string>
     <string name="toast_checking_updates">अपडेट की जाँच की जा रही है...</string>
+    <string name="snackbar_support_prompt">FlowBytes पसंद आ रहा है? हमारे विज्ञापन-मुक्त विकास का समर्थन करें!</string>
+    <string name="snackbar_support_action">समर्थन करें</string>
+    <string name="btn_skip_for_now">अभी छोड़ें</string>
+    <string name="title_custom_limit_widget">कस्टम नेटवर्क सीमा विजेट</string>
+    <string name="label_custom_limit_caps">कस्टम नेटवर्क सीमा</string>
+    <string name="msg_usage_stats_permission_disabled">उपयोग आँकड़े अनुमति अक्षम है। अनुमति देने के लिए टैप करें।</string>
+    <string name="msg_notification_permission_disabled">अधिसूचना अनुमति अक्षम है। अनुमति देने के लिए टैप करें।</string>
+    <string name="label_widget_settings_caps">विजेट सेटिंग्स</string>
+    <string name="option_update_interval_manual">केवल मैन्युअल / अक्षम</string>
+    <string name="option_update_interval_hour">1 घंटा</string>
+    <string name="option_update_interval_hours">%1$d घंटे</string>
+    <string name="option_update_interval_minutes">%1$d मिनट</string>
+    <string name="label_update_interval">अपडेट अंतराल</string>
+    <string name="desc_update_interval_format">पृष्ठभूमि अपडेट की आवृत्ति (जब निगरानी अक्षम हो): %1$s</string>
+    <string name="title_select_update_interval">अपडेट अंतराल चुनें</string>
+    <string name="cd_manage_widgets">विजेट प्रबंधित करें</string>
+    <string name="cd_switch_to_input_mode">इनपुट मोड पर स्विच करें</string>
+    <string name="cd_switch_to_picker_mode">पिकर मोड पर स्विच करें</string>
+    <string name="msg_billing_service_not_ready">बिलिंग सेवा तैयार नहीं है। थोड़ी देर में पुनः प्रयास करें।</string>
+    <string name="msg_billing_error_format">Google Play बिलिंग त्रुटि (कोड: %1$s)</string>
+    <string name="vpn_session_name">FlowBytes ब्लॉक</string>
+    <string name="msg_product_details_not_found">उत्पाद विवरण नहीं मिला। सुनिश्चित करें कि ऐप Google Play से इंस्टॉल किया गया है।</string>
 </resources>

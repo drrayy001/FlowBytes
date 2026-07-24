@@ -154,7 +154,7 @@ fun WidgetsScreen(
 
             // Widget Settings Section
             Text(
-                text = "WIDGET SETTINGS",
+                text = stringResource(R.string.label_widget_settings_caps),
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.ExtraBold,
                 color = MaterialTheme.colorScheme.primary,
@@ -175,21 +175,11 @@ fun WidgetsScreen(
             ) {
                 Column(modifier = Modifier.padding(vertical = 4.dp)) {
                     var showUpdateIntervalDialog by remember { mutableStateOf(false) }
-                    val intervalText = when (widgetUpdateInterval) {
-                        0 -> "Manual Only / Disabled"
-                        15 -> "15 Minutes"
-                        30 -> "30 Minutes"
-                        60 -> "1 Hour"
-                        120 -> "2 Hours"
-                        360 -> "6 Hours"
-                        720 -> "12 Hours"
-                        1440 -> "24 Hours"
-                        else -> "$widgetUpdateInterval Minutes"
-                    }
+                    val intervalText = getIntervalText(widgetUpdateInterval)
                     SettingsItem(
                         icon = Icons.Rounded.Update,
-                        title = "Update Interval",
-                        subtitle = "Frequency of background updates (when monitoring is disabled): $intervalText",
+                        title = stringResource(R.string.label_update_interval),
+                        subtitle = stringResource(R.string.desc_update_interval_format, intervalText),
                         onClick = { showUpdateIntervalDialog = true }
                     )
 
@@ -886,25 +876,17 @@ fun WidgetUpdateIntervalDialog(
                     .padding(bottom = 40.dp)
             ) {
                 Text(
-                    text = "Select Update Interval",
+                    text = stringResource(R.string.title_select_update_interval),
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.ExtraBold,
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.padding(bottom = 24.dp)
                 )
 
-                val intervalOptions = listOf(
-                    0 to "Manual Only / Disabled",
-                    15 to "15 Minutes",
-                    30 to "30 Minutes",
-                    60 to "1 Hour",
-                    120 to "2 Hours",
-                    360 to "6 Hours",
-                    720 to "12 Hours",
-                    1440 to "24 Hours"
-                )
+                val intervalOptions = listOf(0, 15, 30, 60, 120, 360, 720, 1440)
 
-                intervalOptions.forEach { (minutes, label) ->
+                intervalOptions.forEach { minutes ->
+                    val label = getIntervalText(minutes)
                     val isSelected = currentInterval == minutes
                     Surface(
                         modifier = Modifier
@@ -941,6 +923,21 @@ fun WidgetUpdateIntervalDialog(
                         }
                     }
                 }
+            }
+        }
+    }
+}
+
+@Composable
+private fun getIntervalText(minutes: Int): String {
+    return when (minutes) {
+        0 -> stringResource(R.string.option_update_interval_manual)
+        60 -> stringResource(R.string.option_update_interval_hour)
+        else -> {
+            if (minutes % 60 == 0) {
+                stringResource(R.string.option_update_interval_hours, minutes / 60)
+            } else {
+                stringResource(R.string.option_update_interval_minutes, minutes)
             }
         }
     }

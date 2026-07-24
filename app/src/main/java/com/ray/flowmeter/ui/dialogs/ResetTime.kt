@@ -71,10 +71,10 @@ fun ResetTimeDialog(
                         .padding(top = 24.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    IconButton(onClick = { showingPicker = !showingPicker }) {
+                    IconButton(onClick = {showingPicker = !showingPicker}) {
                         Icon(
                             imageVector = if (showingPicker) Icons.Rounded.Keyboard else Icons.Rounded.Schedule,
-                            contentDescription = if (showingPicker) "Switch to input mode" else "Switch to picker mode"
+                            contentDescription = if (showingPicker) stringResource(R.string.cd_switch_to_input_mode) else stringResource(R.string.cd_switch_to_picker_mode)
                         )
                     }
                     Spacer(modifier = Modifier.weight(1f))

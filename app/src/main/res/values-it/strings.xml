@@ -400,4 +400,26 @@
     <string name="toast_app_up_to_date">FlowBytes è aggiornato!</string>
     <string name="toast_update_check_failed">Impossibile verificare gli aggiornamenti. Riprova più tardi.</string>
     <string name="toast_checking_updates">Verifica aggiornamenti in corso...</string>
+    <string name="snackbar_support_prompt">Ti piace FlowBytes? Supporta il nostro sviluppo senza pubblicità!</string>
+    <string name="snackbar_support_action">Supporta</string>
+    <string name="btn_skip_for_now">Salta per ora</string>
+    <string name="title_custom_limit_widget">Widget limite di rete personalizzato</string>
+    <string name="label_custom_limit_caps">LIMITE RETE PERSONALIZZATO</string>
+    <string name="msg_usage_stats_permission_disabled">Autorizzazione statistiche di utilizzo disattivata. Tocca per concedere.</string>
+    <string name="msg_notification_permission_disabled">Autorizzazione notifiche disattivata. Tocca per concedere.</string>
+    <string name="label_widget_settings_caps">IMPOSTAZIONI WIDGET</string>
+    <string name="option_update_interval_manual">Solo manuale / Disattivato</string>
+    <string name="option_update_interval_hour">1 ora</string>
+    <string name="option_update_interval_hours">%1$d ore</string>
+    <string name="option_update_interval_minutes">%1$d minuti</string>
+    <string name="label_update_interval">Intervallo di aggiornamento</string>
+    <string name="desc_update_interval_format">Frecuencia degli aggiornamenti in background (quando il monitoraggio è disattivato): %1$s</string>
+    <string name="title_select_update_interval">Seleziona intervallo di aggiornamento</string>
+    <string name="cd_manage_widgets">Gestisci widget</string>
+    <string name="cd_switch_to_input_mode">Passa alla modalità di inserimento</string>
+    <string name="cd_switch_to_picker_mode">Passa alla modalità di selezione</string>
+    <string name="msg_billing_service_not_ready">Il servizio di fatturazione non è pronto. Riprova tra un momento.</string>
+    <string name="msg_billing_error_format">Errore di fatturazione di Google Play (Codice: %1$s)</string>
+    <string name="vpn_session_name">Blocco FlowBytes</string>
+    <string name="msg_product_details_not_found">Dettagli del prodotto non trovati. Assicurati che l\'app sia installata da Google Play.</string>
 </resources>

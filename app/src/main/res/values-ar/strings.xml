@@ -402,4 +402,26 @@
     <string name="toast_app_up_to_date">FlowBytes محدث بالفعل!</string>
     <string name="toast_update_check_failed">فشل التحقق من وجود تحديثات. يرجى المحاولة لاحقًا.</string>
     <string name="toast_checking_updates">جاري التحقق من وجود تحديثات...</string>
+    <string name="snackbar_support_prompt">هل تستمتع بـ FlowBytes؟ ادعم تطويرنا الخالي من الإعلانات!</string>
+    <string name="snackbar_support_action">دعم</string>
+    <string name="btn_skip_for_now">تخطي الآن</string>
+    <string name="title_custom_limit_widget">أداة حد الشبكة المخصصة</string>
+    <string name="label_custom_limit_caps">حد الشبكة المخصص</string>
+    <string name="msg_usage_stats_permission_disabled">إذن إحصاءات الاستخدام معطل. اضغط للمنح.</string>
+    <string name="msg_notification_permission_disabled">إذن الإشعارات معطل. اضغط للمنح.</string>
+    <string name="label_widget_settings_caps">إعدادات الأداة</string>
+    <string name="option_update_interval_manual">يدوي فقط / معطل</string>
+    <string name="option_update_interval_hour">ساعة واحدة</string>
+    <string name="option_update_interval_hours">%1$d ساعات</string>
+    <string name="option_update_interval_minutes">%1$d دقائق</string>
+    <string name="label_update_interval">فترات التحديث</string>
+    <string name="desc_update_interval_format">تكرار التحديثات في الخلفية (عند تعطيل المراقبة): %1$s</string>
+    <string name="title_select_update_interval">اختر فترة التحديث</string>
+    <string name="cd_manage_widgets">إدارة الأدوات</string>
+    <string name="cd_switch_to_input_mode">التبديل إلى وضع الإدخال</string>
+    <string name="cd_switch_to_picker_mode">التبديل إلى وضع الاختيار</string>
+    <string name="msg_billing_service_not_ready">خدمة الدفع ليست جاهزة. يرجى المحاولة بعد قليل.</string>
+    <string name="msg_billing_error_format">خطأ في فوترة Google Play (الرمز: %1$s)</string>
+    <string name="vpn_session_name">حظر FlowBytes</string>
+    <string name="msg_product_details_not_found">لم يتم العثور على تفاصيل المنتج. تأكد من تثبيت التطبيق من Google Play.</string>
 </resources>

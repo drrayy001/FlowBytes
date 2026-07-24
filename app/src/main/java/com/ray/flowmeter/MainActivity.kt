@@ -458,8 +458,12 @@ class MainActivity : ComponentActivity() {
                                         if (muteAppName != null) {
                                             if (isIgnoreAction) {
                                                 if (dismissNotificationId != -1) {
-                                                    val manager = getSystemService(android.app.NotificationManager::class.java)
-                                                    manager.cancel(dismissNotificationId)
+                                                    try {
+                                                        val manager = getSystemService(android.app.NotificationManager::class.java)
+                                                        manager?.cancel(dismissNotificationId)
+                                                    } catch (e: Exception) {
+                                                        Log.e("MainActivity", "Failed to cancel notification", e)
+                                                    }
                                                 }
                                             }
                                             alertsViewModel.onMuteRequested(muteAppName)

@@ -471,7 +471,7 @@ class DailyNetworkLimitWidget : AppWidgetProvider() {
                 val mobileProgress = if (mobileLimit > 0L) ((mobileUsage.toDouble() / mobileLimit.toDouble()) * 100).toInt().coerceIn(0, 100) else 0
 
                 withContext(Dispatchers.Main) {
-                    views.setTextViewText(R.id.widget_title, "DAILY NETWORK LIMIT")
+                    views.setTextViewText(R.id.widget_title, context.getString(R.string.label_daily_limit_caps))
                     views.setTextViewText(R.id.widget_wifi_values, formattedWifi)
                     views.setTextViewText(R.id.widget_mobile_values, formattedMobile)
                     views.setProgressBar(R.id.widget_wifi_progress, 100, wifiProgress, false)
@@ -541,7 +541,7 @@ class MonthlyNetworkLimitWidget : AppWidgetProvider() {
                 val mobileProgress = if (mobileLimit > 0L) ((mobileUsage.toDouble() / mobileLimit.toDouble()) * 100).toInt().coerceIn(0, 100) else 0
 
                 withContext(Dispatchers.Main) {
-                    views.setTextViewText(R.id.widget_title, "MONTHLY NETWORK LIMIT")
+                    views.setTextViewText(R.id.widget_title, context.getString(R.string.label_monthly_limit_caps))
                     views.setTextViewText(R.id.widget_wifi_values, formattedWifi)
                     views.setTextViewText(R.id.widget_mobile_values, formattedMobile)
                     views.setProgressBar(R.id.widget_wifi_progress, 100, wifiProgress, false)
@@ -612,7 +612,7 @@ class CustomNetworkLimitWidget : AppWidgetProvider() {
                 val mobileProgress = if (mobileLimit > 0L) ((mobileUsage.toDouble() / mobileLimit.toDouble()) * 100).toInt().coerceIn(0, 100) else 0
 
                 withContext(Dispatchers.Main) {
-                    views.setTextViewText(R.id.widget_title, "CUSTOM NETWORK LIMIT")
+                    views.setTextViewText(R.id.widget_title, context.getString(R.string.label_custom_limit_caps))
                     views.setTextViewText(R.id.widget_wifi_values, formattedWifi)
                     views.setTextViewText(R.id.widget_mobile_values, formattedMobile)
                     views.setProgressBar(R.id.widget_wifi_progress, 100, wifiProgress, false)

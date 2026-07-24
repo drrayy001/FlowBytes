@@ -400,11 +400,30 @@
     <string name="btn_ignore_version">Ignore Version</string>
     <string name="btn_later">Later</string>
     <string name="label_release_notes">RELEASE NOTES</string>
-    <string name="settings_auto_check_updates">Auto Update</string>
+    <string name="settings_auto_check_updates">Auto Update Check</string>
     <string name="settings_auto_check_updates_desc">Look for new versions on startup</string>
     <string name="settings_check_updates">Check for Updates</string>
     <string name="settings_check_updates_desc">Ensure your app is running the latest version</string>
     <string name="toast_app_up_to_date">FlowBytes is up to date!</string>
     <string name="toast_update_check_failed">Failed to check for updates. Please try again later.</string>
     <string name="toast_checking_updates">Checking for updates...</string>
+
+    <!-- Strings extracted from Kotlin files -->
+    <string name="msg_usage_stats_permission_disabled">Usage stats permission disabled. Tap to grant.</string>
+    <string name="msg_notification_permission_disabled">Notification permission disabled. Tap to grant.</string>
+    <string name="label_widget_settings_caps">WIDGET SETTINGS</string>
+    <string name="option_update_interval_manual">Manual Only / Disabled</string>
+    <string name="option_update_interval_hour">1 Hour</string>
+    <string name="option_update_interval_hours">%1$d Hours</string>
+    <string name="option_update_interval_minutes">%1$d Minutes</string>
+    <string name="label_update_interval">Update Interval</string>
+    <string name="desc_update_interval_format">Frequency of background updates (when monitoring is disabled): %1$s</string>
+    <string name="title_select_update_interval">Select Update Interval</string>
+    <string name="cd_manage_widgets">Manage Widgets</string>
+    <string name="cd_switch_to_input_mode">Switch to input mode</string>
+    <string name="cd_switch_to_picker_mode">Switch to picker mode</string>
+    <string name="msg_billing_service_not_ready">Billing service is not ready. Try again in a moment.</string>
+    <string name="msg_billing_error_format">Google Play Billing error (Code: %1$s)</string>
+    <string name="vpn_session_name">FlowBytes Block</string>
+    <string name="msg_product_details_not_found">Product details not found. Make sure the app is installed from Google Play.</string>
 </resources>

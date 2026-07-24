@@ -2,6 +2,7 @@ package com.ray.flowmeter.service
 
 import android.annotation.SuppressLint
 import android.content.Context
+import com.ray.flowmeter.R
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.Network
@@ -294,7 +295,7 @@ class AppBlockVpnService : VpnService() {
 
         try {
             val builder = Builder()
-                .setSession("FlowMeter Block")
+                .setSession(getString(R.string.vpn_session_name))
                 .addAddress("10.0.0.2", 32)
                 .addRoute("0.0.0.0", 0)
 

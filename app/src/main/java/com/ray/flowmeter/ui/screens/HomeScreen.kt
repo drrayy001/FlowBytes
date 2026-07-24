@@ -166,7 +166,7 @@ fun HomeScreen(
                                 )
                                 Spacer(modifier = Modifier.width(12.dp))
                                 Text(
-                                    text = "Usage stats stats permission disabled. Tap to grant.",
+                                    text = stringResource(R.string.msg_usage_stats_permission_disabled),
                                     style = MaterialTheme.typography.bodyMedium,
                                     fontWeight = FontWeight.Bold,
                                     color = MaterialTheme.colorScheme.onErrorContainer,
@@ -201,7 +201,7 @@ fun HomeScreen(
                                 )
                                 Spacer(modifier = Modifier.width(12.dp))
                                 Text(
-                                    text = "Notification permission disabled. Tap to grant.",
+                                    text = stringResource(R.string.msg_notification_permission_disabled),
                                     style = MaterialTheme.typography.bodyMedium,
                                     fontWeight = FontWeight.Bold,
                                     color = MaterialTheme.colorScheme.onErrorContainer,

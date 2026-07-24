@@ -4,6 +4,7 @@ package com.ray.flowmeter.utils
 import android.app.Activity
 import android.content.Context
 import com.android.billingclient.api.*
+import com.ray.flowmeter.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -16,7 +17,7 @@ sealed class BillingEvent {
     data class Error(val message: String) : BillingEvent()
 }
 
-class BillingManager(context: Context, private val scope: CoroutineScope) {
+class BillingManager(private val context: Context, private val scope: CoroutineScope) {
 
     private val purchasesUpdatedListener = PurchasesUpdatedListener { billingResult, purchases ->
         when (billingResult.responseCode) {
@@ -78,7 +79,7 @@ class BillingManager(context: Context, private val scope: CoroutineScope) {
     fun makePurchase(activity: Activity, productId: String) {
         if (!billingClient.isReady) {
             scope.launch {
-                _events.emit(BillingEvent.Error("Billing service is not ready. Try again in a moment."))
+                _events.emit(BillingEvent.Error(context.getString(R.string.msg_billing_service_not_ready)))
             }
             startConnection()
             return
@@ -111,11 +112,11 @@ class BillingManager(context: Context, private val scope: CoroutineScope) {
                             .build()
                         billingClient.launchBillingFlow(activity, flowParams)
                     } else {
-                        _events.emit(BillingEvent.Error("Product details not found. Make sure the app is installed from Google Play."))
+                        _events.emit(BillingEvent.Error(context.getString(R.string.msg_product_details_not_found)))
                     }
                 } else {
                     val debugMsg = billingResult.debugMessage
-                    val errMsg = debugMsg.ifEmpty { "Google Play Billing error (Code: ${billingResult.responseCode})" }
+                    val errMsg = debugMsg.ifEmpty { context.getString(R.string.msg_billing_error_format, billingResult.responseCode.toString()) }
                     _events.emit(BillingEvent.Error(errMsg))
                 }
             }

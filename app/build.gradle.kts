@@ -8,7 +8,7 @@ plugins {
     alias(libs.plugins.google.devtools.ksp)
 }
 
-val appVersionName = "2.1.0"
+val appVersionName = "2.1.1"
 
 
 base {
@@ -23,7 +23,7 @@ android {
         applicationId = "com.ray.flowmeter"
         minSdk = 29
         targetSdk = 37
-        versionCode = 38
+        versionCode = 39
         versionName = appVersionName
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -127,4 +127,14 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     "ksp"(libs.androidx.room.compiler)
     "ksp"(libs.moshi.kotlin.codegen)
+}
+tasks.register<Copy>("copyReleaseOutputs") {
+    dependsOn("bundleRelease", "assembleRelease")
+    from(layout.buildDirectory.dir("outputs/bundle/release")) {
+        include("*.aab")
+    }
+    from(layout.buildDirectory.dir("outputs/apk/release")) {
+        include("*.apk")
+    }
+    into(layout.buildDirectory.dir("outputs/all-releases"))
 }

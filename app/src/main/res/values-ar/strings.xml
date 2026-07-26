@@ -205,7 +205,7 @@
     <string name="btn_not_now">ليس الآن</string>
     <string name="btn_continue">متابعة</string>
     <string name="title_custom_color">تخصيص اللون</string>
-    <string name="btn_apply_globally">تطبيق عالمياً</string>
+    <string name="btn_apply">تطبيق</string>
     <string name="btn_get_started">ابدأ الآن</string>
     <string name="title_welcome">مرحباً بك في FlowBytes</string>
     <string name="msg_onboarding_desc">لتقديم تتبع دقيق للبيانات ومراقبة حية للسرعة، نحتاج إلى بعض الأذونات.</string>

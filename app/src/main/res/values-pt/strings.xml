@@ -208,7 +208,7 @@
     <string name="btn_not_now">Agora não</string>
     <string name="btn_continue">Continuar</string>
     <string name="title_custom_color">Personalizar cor</string>
-    <string name="btn_apply_globally">Aplicar globalmente</string>
+    <string name="btn_apply">Aplicar</string>
     <string name="btn_get_started">Começar</string>
     <string name="title_welcome">Bem-vindo ao FlowBytes</string>
     <string name="msg_onboarding_desc">Para fornecer rastreamento preciso de dados e monitoramento de velocidade em tempo real, precisamos de algumas permissões.</string>

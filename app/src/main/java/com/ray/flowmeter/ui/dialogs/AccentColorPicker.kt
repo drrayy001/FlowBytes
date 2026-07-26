@@ -24,6 +24,7 @@ import com.ray.flowmeter.R
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
@@ -165,7 +166,7 @@ fun AccentColorDialog(
                             ),
                             singleLine = true,
                             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Characters),
-                            modifier = Modifier.width(80.dp)
+                            modifier = Modifier.width(110.dp)
                         )
                     }
                 }
@@ -222,7 +223,7 @@ fun AccentColorDialog(
                 ) {
                     Box(contentAlignment = Alignment.Center) {
                         Text(
-                            text = stringResource(R.string.btn_apply_globally),
+                            text = stringResource(R.string.btn_apply),
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold
                         )
@@ -242,6 +243,8 @@ fun ColorWheel(
 ) {
     var center by remember { mutableStateOf(Offset.Zero) }
     var radius by remember { mutableFloatStateOf(0f) }
+    val density = LocalDensity.current
+    val selectorPaddingPx = remember(density) { with(density) { 12.dp.toPx() } }
 
     Canvas(
         modifier = modifier
@@ -253,16 +256,18 @@ fun ColorWheel(
             }
             .pointerInput(center, radius) {
                 if (radius <= 0) return@pointerInput
+                val maxSelectorRadius = radius - selectorPaddingPx
                 detectDragGestures { change, _ ->
-                    val (h, s) = getHueSatAtPoint(change.position, center, radius)
+                    val (h, s) = getHueSatAtPoint(change.position, center, maxSelectorRadius)
                     onColorChanged(h, s)
                     change.consume()
                 }
             }
             .pointerInput(center, radius) {
                 if (radius <= 0) return@pointerInput
+                val maxSelectorRadius = radius - selectorPaddingPx
                 detectTapGestures { position ->
-                    val (h, s) = getHueSatAtPoint(position, center, radius)
+                    val (h, s) = getHueSatAtPoint(position, center, maxSelectorRadius)
                     onColorChanged(h, s)
                 }
             }
@@ -288,7 +293,8 @@ fun ColorWheel(
         )
 
         val angle = (hue.toDouble() * PI / 180.0)
-        val selectorRadius = saturation * radius
+        val maxSelectorRadius = radius - selectorPaddingPx
+        val selectorRadius = saturation * maxSelectorRadius
         val x = center.x + cos(angle).toFloat() * selectorRadius
         val y = center.y + sin(angle).toFloat() * selectorRadius
 
@@ -315,24 +321,41 @@ fun BrightnessSlider(
     onValueChange: (Float) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var width by remember { mutableFloatStateOf(0f) }
     var height by remember { mutableFloatStateOf(0f) }
 
     Canvas(
         modifier = modifier
             .fillMaxHeight()
-            .onSizeChanged { height = it.height.toFloat() }
-            .pointerInput(Unit) {
+            .onSizeChanged { size ->
+                width = size.width.toFloat()
+                height = size.height.toFloat()
+            }
+            .pointerInput(width, height) {
+                if (width <= 0f || height <= 0f) return@pointerInput
+                val radius = width / 2f
+                val range = height - 2 * radius
                 detectTapGestures { offset ->
-                    onValueChange((1f - (offset.y / height)).coerceIn(0f, 1f))
+                    if (range > 0f) {
+                        val fraction = ((offset.y - radius) / range).coerceIn(0f, 1f)
+                        onValueChange(1f - fraction)
+                    }
                 }
             }
-            .pointerInput(Unit) {
+            .pointerInput(width, height) {
+                if (width <= 0f || height <= 0f) return@pointerInput
+                val radius = width / 2f
+                val range = height - 2 * radius
                 detectDragGestures { change, _ ->
-                    onValueChange((1f - (change.position.y / height)).coerceIn(0f, 1f))
+                    if (range > 0f) {
+                        val fraction = ((change.position.y - radius) / range).coerceIn(0f, 1f)
+                        onValueChange(1f - fraction)
+                    }
                     change.consume()
                 }
             }
     ) {
+        if (width <= 0f || height <= 0f) return@Canvas
         val strokeWidth = size.width
         val cornerRadius = strokeWidth / 2
 
@@ -345,11 +368,13 @@ fun BrightnessSlider(
             cornerRadius = androidx.compose.ui.geometry.CornerRadius(cornerRadius, cornerRadius)
         )
 
-        val selectorY = (1f - value) * height
+        val radius = strokeWidth / 2f
+        val range = height - 2 * radius
+        val selectorY = if (range > 0f) radius + (1f - value) * range else radius
         drawCircle(
             color = Color.White,
-            radius = (strokeWidth / 2) - 2.dp.toPx(),
-            center = Offset(size.width / 2, selectorY),
+            radius = radius - 2.dp.toPx(),
+            center = Offset(strokeWidth / 2, selectorY),
             style = Stroke(width = 3.dp.toPx())
         )
     }

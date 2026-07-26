@@ -208,7 +208,7 @@
     <string name="btn_not_now">अभी नहीं</string>
     <string name="btn_continue">जारी रखें</string>
     <string name="title_custom_color">रंग अनुकूलित करें</string>
-    <string name="btn_apply_globally">विश्व स्तर पर लागू करें</string>
+    <string name="btn_apply">लागू करें</string>
     <string name="btn_get_started">शुरू करें</string>
     <string name="title_welcome">फ्लोबाइट्स में आपका स्वागत है</string>
     <string name="msg_onboarding_desc">सटीक डेटा ट्रैकिंग और लाइव स्पीड निगरानी प्रदान करने के लिए, हमें कुछ अनुमतियों की आवश्यकता है।</string>

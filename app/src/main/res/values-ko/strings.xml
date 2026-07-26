@@ -208,7 +208,7 @@
     <string name="btn_not_now">나중에</string>
     <string name="btn_continue">계속</string>
     <string name="title_custom_color">색상 지정</string>
-    <string name="btn_apply_globally">전체 적용</string>
+    <string name="btn_apply">적용</string>
     <string name="btn_get_started">시작하기</string>
     <string name="title_welcome">FlowBytes에 오신 것을 환영합니다</string>
     <string name="msg_onboarding_desc">정확한 데이터 추적 및 실시간 속도 모니터링을 위해 몇 가지 권한이 필요합니다.</string>

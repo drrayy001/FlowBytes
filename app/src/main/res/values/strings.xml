@@ -210,7 +210,7 @@
     <string name="btn_not_now">Not Now</string>
     <string name="btn_continue">Continue</string>
     <string name="title_custom_color">Customize Color</string>
-    <string name="btn_apply_globally">Apply Globally</string>
+    <string name="btn_apply">Apply</string>
     <string name="btn_get_started">Get Started</string>
     <string name="btn_skip_for_now">Skip for now</string>
     <string name="title_welcome">Welcome to FlowBytes</string>

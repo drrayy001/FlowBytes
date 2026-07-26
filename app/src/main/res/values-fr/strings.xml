@@ -205,7 +205,7 @@
     <string name="btn_not_now">Plus tard</string>
     <string name="btn_continue">Continuer</string>
     <string name="title_custom_color">Personnaliser la couleur</string>
-    <string name="btn_apply_globally">Appliquer globalement</string>
+    <string name="btn_apply">Appliquer</string>
     <string name="btn_get_started">Commencer</string>
     <string name="title_welcome">Bienvenue sur FlowBytes</string>
     <string name="msg_onboarding_desc">Pour offrir un suivi précis des données, nous avons besoin de certaines autorisations.</string>

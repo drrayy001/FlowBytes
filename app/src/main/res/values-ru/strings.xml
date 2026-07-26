@@ -208,7 +208,7 @@
     <string name="btn_not_now">Не сейчас</string>
     <string name="btn_continue">Продолжить</string>
     <string name="title_custom_color">Настройка цвета</string>
-    <string name="btn_apply_globally">Применить везде</string>
+    <string name="btn_apply">Применить</string>
     <string name="btn_get_started">Начать</string>
     <string name="title_welcome">Добро пожаловать в FlowBytes</string>
     <string name="msg_onboarding_desc">Для работы мониторинга и учета трафика необходимы разрешения.</string>

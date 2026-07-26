@@ -1,5 +1,6 @@
 package com.ray.flowmeter.receiver
 
+import android.util.Log
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
@@ -30,8 +31,12 @@ import java.util.Calendar
 class DailyUsageWidget : AppWidgetProvider() {
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
-        for (appWidgetId in appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId)
+        try {
+            for (appWidgetId in appWidgetIds) {
+                updateAppWidget(context, appWidgetManager, appWidgetId)
+            }
+        } catch (e: Exception) {
+            Log.e("DailyUsageWidget", "Error in onUpdate", e)
         }
     }
 
@@ -41,26 +46,34 @@ class DailyUsageWidget : AppWidgetProvider() {
         appWidgetId: Int,
         newOptions: Bundle
     ) {
-        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
-        updateAppWidget(context, appWidgetManager, appWidgetId)
+        try {
+            super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
+            updateAppWidget(context, appWidgetManager, appWidgetId)
+        } catch (e: Exception) {
+            Log.e("DailyUsageWidget", "Error in onAppWidgetOptionsChanged", e)
+        }
     }
 
     override fun onReceive(context: Context, intent: Intent) {
-        super.onReceive(context, intent)
-        if (intent.action == ACTION_UPDATE_WIDGET) {
-            val appWidgetManager = AppWidgetManager.getInstance(context)
-            val componentName = ComponentName(context, DailyUsageWidget::class.java)
-            val appWidgetIds = appWidgetManager.getAppWidgetIds(componentName)
-            
-            val usageBytes = intent.getLongExtra(EXTRA_DAILY_USAGE, -1L)
+        try {
+            super.onReceive(context, intent)
+            if (intent.action == ACTION_UPDATE_WIDGET) {
+                val appWidgetManager = AppWidgetManager.getInstance(context)
+                val componentName = ComponentName(context, DailyUsageWidget::class.java)
+                val appWidgetIds = appWidgetManager.getAppWidgetIds(componentName)
+                
+                val usageBytes = intent.getLongExtra(EXTRA_DAILY_USAGE, -1L)
 
-            for (appWidgetId in appWidgetIds) {
-                if (usageBytes >= 0L) {
-                    updateWidgetData(context, appWidgetManager, appWidgetId, usageBytes)
-                } else {
-                    updateAppWidget(context, appWidgetManager, appWidgetId)
+                for (appWidgetId in appWidgetIds) {
+                    if (usageBytes >= 0L) {
+                        updateWidgetData(context, appWidgetManager, appWidgetId, usageBytes)
+                    } else {
+                        updateAppWidget(context, appWidgetManager, appWidgetId)
+                    }
                 }
             }
+        } catch (e: Exception) {
+            Log.e("DailyUsageWidget", "Error in onReceive", e)
         }
     }
 
@@ -73,36 +86,48 @@ class DailyUsageWidget : AppWidgetProvider() {
 
         // Select either compact or full layout depending on the widget's current vertical span.
         fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
-            val options = appWidgetManager.getAppWidgetOptions(appWidgetId)
-            val minHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 72)
-            
-            val layoutResId = if (minHeight < 100) {
-                R.layout.widget_usage_compact
-            } else {
-                R.layout.widget_usage
-            }
-            val views = RemoteViews(context.packageName, layoutResId)
-            
-            val intent = Intent(context, MainActivity::class.java)
-            val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
-            views.setOnClickPendingIntent(R.id.widget_container, pendingIntent)
-
-            CoroutineScope(Dispatchers.IO).launch {
-                val repository = UserPreferencesRepository(context)
-                val resetHour = repository.resetTimeHour.first()
-                val resetMinute = repository.resetTimeMinute.first()
-                val monthlyResetDay = repository.monthlyResetDay.first()
-
-                val wifiUsage = WidgetUsageQuerier.getUsageBytes(context, NetworkCapabilities.TRANSPORT_WIFI, "daily", resetHour, resetMinute, monthlyResetDay)
-                val mobileUsage = WidgetUsageQuerier.getUsageBytes(context, NetworkCapabilities.TRANSPORT_CELLULAR, "daily", resetHour, resetMinute, monthlyResetDay)
-                val totalUsage = wifiUsage + mobileUsage
-
-                withContext(Dispatchers.Main) {
-                    views.setTextViewText(R.id.widget_text_usage, SpeedFormatter.formatUsage(totalUsage))
-                    views.setTextViewText(R.id.widget_label_usage, context.getString(R.string.label_todays_usage).uppercase())
-                    views.setViewVisibility(R.id.widget_speed_layout, View.GONE)
-                    appWidgetManager.updateAppWidget(appWidgetId, views)
+            try {
+                val options = appWidgetManager.getAppWidgetOptions(appWidgetId)
+                val minHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 72)
+                
+                val layoutResId = if (minHeight < 100) {
+                    R.layout.widget_usage_compact
+                } else {
+                    R.layout.widget_usage
                 }
+                val views = RemoteViews(context.packageName, layoutResId)
+                
+                val intent = Intent(context, MainActivity::class.java)
+                val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+                views.setOnClickPendingIntent(R.id.widget_container, pendingIntent)
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    try {
+                        val repository = UserPreferencesRepository(context)
+                        val resetHour = repository.resetTimeHour.first()
+                        val resetMinute = repository.resetTimeMinute.first()
+                        val monthlyResetDay = repository.monthlyResetDay.first()
+
+                        val wifiUsage = WidgetUsageQuerier.getUsageBytes(context, NetworkCapabilities.TRANSPORT_WIFI, "daily", resetHour, resetMinute, monthlyResetDay)
+                        val mobileUsage = WidgetUsageQuerier.getUsageBytes(context, NetworkCapabilities.TRANSPORT_CELLULAR, "daily", resetHour, resetMinute, monthlyResetDay)
+                        val totalUsage = wifiUsage + mobileUsage
+
+                        withContext(Dispatchers.Main) {
+                            try {
+                                views.setTextViewText(R.id.widget_text_usage, SpeedFormatter.formatUsage(totalUsage))
+                                views.setTextViewText(R.id.widget_label_usage, context.getString(R.string.label_todays_usage).uppercase())
+                                views.setViewVisibility(R.id.widget_speed_layout, View.GONE)
+                                appWidgetManager.updateAppWidget(appWidgetId, views)
+                            } catch (e: Exception) {
+                                Log.e("DailyUsageWidget", "Error updating widget views", e)
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Log.e("DailyUsageWidget", "Error in Coroutine updateAppWidget", e)
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("DailyUsageWidget", "Error in updateAppWidget", e)
             }
         }
 
@@ -112,25 +137,29 @@ class DailyUsageWidget : AppWidgetProvider() {
             appWidgetId: Int,
             usageBytes: Long
         ) {
-            val options = appWidgetManager.getAppWidgetOptions(appWidgetId)
-            val minHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 72)
-            
-            val layoutResId = if (minHeight < 100) {
-                R.layout.widget_usage_compact
-            } else {
-                R.layout.widget_usage
+            try {
+                val options = appWidgetManager.getAppWidgetOptions(appWidgetId)
+                val minHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 72)
+                
+                val layoutResId = if (minHeight < 100) {
+                    R.layout.widget_usage_compact
+                } else {
+                    R.layout.widget_usage
+                }
+                val views = RemoteViews(context.packageName, layoutResId)
+                
+                views.setTextViewText(R.id.widget_text_usage, SpeedFormatter.formatUsage(usageBytes))
+                views.setTextViewText(R.id.widget_label_usage, context.getString(R.string.label_todays_usage).uppercase())
+
+                val intent = Intent(context, MainActivity::class.java)
+                val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+                views.setOnClickPendingIntent(R.id.widget_container, pendingIntent)
+
+                views.setViewVisibility(R.id.widget_speed_layout, View.GONE)
+                appWidgetManager.updateAppWidget(appWidgetId, views)
+            } catch (e: Exception) {
+                Log.e("DailyUsageWidget", "Error in updateWidgetData", e)
             }
-            val views = RemoteViews(context.packageName, layoutResId)
-            
-            views.setTextViewText(R.id.widget_text_usage, SpeedFormatter.formatUsage(usageBytes))
-            views.setTextViewText(R.id.widget_label_usage, context.getString(R.string.label_todays_usage).uppercase())
-
-            val intent = Intent(context, MainActivity::class.java)
-            val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
-            views.setOnClickPendingIntent(R.id.widget_container, pendingIntent)
-
-            views.setViewVisibility(R.id.widget_speed_layout, View.GONE)
-            appWidgetManager.updateAppWidget(appWidgetId, views)
         }
     }
 }
@@ -140,8 +169,12 @@ class DailyUsageWidget : AppWidgetProvider() {
 class MonthlyUsageWidget : AppWidgetProvider() {
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
-        for (appWidgetId in appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId)
+        try {
+            for (appWidgetId in appWidgetIds) {
+                updateAppWidget(context, appWidgetManager, appWidgetId)
+            }
+        } catch (e: Exception) {
+            Log.e("MonthlyUsageWidget", "Error in onUpdate", e)
         }
     }
 
@@ -151,62 +184,82 @@ class MonthlyUsageWidget : AppWidgetProvider() {
         appWidgetId: Int,
         newOptions: Bundle
     ) {
-        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
-        updateAppWidget(context, appWidgetManager, appWidgetId)
+        try {
+            super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
+            updateAppWidget(context, appWidgetManager, appWidgetId)
+        } catch (e: Exception) {
+            Log.e("MonthlyUsageWidget", "Error in onAppWidgetOptionsChanged", e)
+        }
     }
 
     override fun onReceive(context: Context, intent: Intent) {
-        super.onReceive(context, intent)
-        if (intent.action == DailyUsageWidget.ACTION_UPDATE_WIDGET) {
-            val appWidgetManager = AppWidgetManager.getInstance(context)
-            val componentName = ComponentName(context, MonthlyUsageWidget::class.java)
-            val appWidgetIds = appWidgetManager.getAppWidgetIds(componentName)
-            
-            val usageBytes = intent.getLongExtra(DailyUsageWidget.EXTRA_MONTHLY_USAGE, -1L)
+        try {
+            super.onReceive(context, intent)
+            if (intent.action == DailyUsageWidget.ACTION_UPDATE_WIDGET) {
+                val appWidgetManager = AppWidgetManager.getInstance(context)
+                val componentName = ComponentName(context, MonthlyUsageWidget::class.java)
+                val appWidgetIds = appWidgetManager.getAppWidgetIds(componentName)
+                
+                val usageBytes = intent.getLongExtra(DailyUsageWidget.EXTRA_MONTHLY_USAGE, -1L)
 
-            for (appWidgetId in appWidgetIds) {
-                if (usageBytes >= 0L) {
-                    updateWidgetData(context, appWidgetManager, appWidgetId, usageBytes)
-                } else {
-                    updateAppWidget(context, appWidgetManager, appWidgetId)
+                for (appWidgetId in appWidgetIds) {
+                    if (usageBytes >= 0L) {
+                        updateWidgetData(context, appWidgetManager, appWidgetId, usageBytes)
+                    } else {
+                        updateAppWidget(context, appWidgetManager, appWidgetId)
+                    }
                 }
             }
+        } catch (e: Exception) {
+            Log.e("MonthlyUsageWidget", "Error in onReceive", e)
         }
     }
 
     companion object {
         // Select either compact or full layout depending on the widget's current vertical span.
         fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
-            val options = appWidgetManager.getAppWidgetOptions(appWidgetId)
-            val minHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 72)
-            
-            val layoutResId = if (minHeight < 100) {
-                R.layout.widget_usage_compact
-            } else {
-                R.layout.widget_usage
-            }
-            val views = RemoteViews(context.packageName, layoutResId)
-            
-            val intent = Intent(context, MainActivity::class.java)
-            val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
-            views.setOnClickPendingIntent(R.id.widget_container, pendingIntent)
-
-            CoroutineScope(Dispatchers.IO).launch {
-                val repository = UserPreferencesRepository(context)
-                val resetHour = repository.resetTimeHour.first()
-                val resetMinute = repository.resetTimeMinute.first()
-                val monthlyResetDay = repository.monthlyResetDay.first()
-
-                val wifiUsage = WidgetUsageQuerier.getUsageBytes(context, NetworkCapabilities.TRANSPORT_WIFI, "monthly", resetHour, resetMinute, monthlyResetDay)
-                val mobileUsage = WidgetUsageQuerier.getUsageBytes(context, NetworkCapabilities.TRANSPORT_CELLULAR, "monthly", resetHour, resetMinute, monthlyResetDay)
-                val totalUsage = wifiUsage + mobileUsage
-
-                withContext(Dispatchers.Main) {
-                    views.setTextViewText(R.id.widget_text_usage, SpeedFormatter.formatUsage(totalUsage))
-                    views.setTextViewText(R.id.widget_label_usage, context.getString(R.string.label_this_month).uppercase())
-                    views.setViewVisibility(R.id.widget_speed_layout, View.GONE)
-                    appWidgetManager.updateAppWidget(appWidgetId, views)
+            try {
+                val options = appWidgetManager.getAppWidgetOptions(appWidgetId)
+                val minHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 72)
+                
+                val layoutResId = if (minHeight < 100) {
+                    R.layout.widget_usage_compact
+                } else {
+                    R.layout.widget_usage
                 }
+                val views = RemoteViews(context.packageName, layoutResId)
+                
+                val intent = Intent(context, MainActivity::class.java)
+                val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+                views.setOnClickPendingIntent(R.id.widget_container, pendingIntent)
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    try {
+                        val repository = UserPreferencesRepository(context)
+                        val resetHour = repository.resetTimeHour.first()
+                        val resetMinute = repository.resetTimeMinute.first()
+                        val monthlyResetDay = repository.monthlyResetDay.first()
+
+                        val wifiUsage = WidgetUsageQuerier.getUsageBytes(context, NetworkCapabilities.TRANSPORT_WIFI, "monthly", resetHour, resetMinute, monthlyResetDay)
+                        val mobileUsage = WidgetUsageQuerier.getUsageBytes(context, NetworkCapabilities.TRANSPORT_CELLULAR, "monthly", resetHour, resetMinute, monthlyResetDay)
+                        val totalUsage = wifiUsage + mobileUsage
+
+                        withContext(Dispatchers.Main) {
+                            try {
+                                views.setTextViewText(R.id.widget_text_usage, SpeedFormatter.formatUsage(totalUsage))
+                                views.setTextViewText(R.id.widget_label_usage, context.getString(R.string.label_this_month).uppercase())
+                                views.setViewVisibility(R.id.widget_speed_layout, View.GONE)
+                                appWidgetManager.updateAppWidget(appWidgetId, views)
+                            } catch (e: Exception) {
+                                Log.e("MonthlyUsageWidget", "Error updating widget views", e)
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Log.e("MonthlyUsageWidget", "Error in Coroutine updateAppWidget", e)
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("MonthlyUsageWidget", "Error in updateAppWidget", e)
             }
         }
 
@@ -216,25 +269,29 @@ class MonthlyUsageWidget : AppWidgetProvider() {
             appWidgetId: Int,
             usageBytes: Long
         ) {
-            val options = appWidgetManager.getAppWidgetOptions(appWidgetId)
-            val minHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 72)
-            
-            val layoutResId = if (minHeight < 100) {
-                R.layout.widget_usage_compact
-            } else {
-                R.layout.widget_usage
+            try {
+                val options = appWidgetManager.getAppWidgetOptions(appWidgetId)
+                val minHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 72)
+                
+                val layoutResId = if (minHeight < 100) {
+                    R.layout.widget_usage_compact
+                } else {
+                    R.layout.widget_usage
+                }
+                val views = RemoteViews(context.packageName, layoutResId)
+                
+                views.setTextViewText(R.id.widget_text_usage, SpeedFormatter.formatUsage(usageBytes))
+                views.setTextViewText(R.id.widget_label_usage, context.getString(R.string.label_this_month).uppercase())
+
+                val intent = Intent(context, MainActivity::class.java)
+                val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+                views.setOnClickPendingIntent(R.id.widget_container, pendingIntent)
+
+                views.setViewVisibility(R.id.widget_speed_layout, View.GONE)
+                appWidgetManager.updateAppWidget(appWidgetId, views)
+            } catch (e: Exception) {
+                Log.e("MonthlyUsageWidget", "Error in updateWidgetData", e)
             }
-            val views = RemoteViews(context.packageName, layoutResId)
-            
-            views.setTextViewText(R.id.widget_text_usage, SpeedFormatter.formatUsage(usageBytes))
-            views.setTextViewText(R.id.widget_label_usage, context.getString(R.string.label_this_month).uppercase())
-
-            val intent = Intent(context, MainActivity::class.java)
-            val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
-            views.setOnClickPendingIntent(R.id.widget_container, pendingIntent)
-
-            views.setViewVisibility(R.id.widget_speed_layout, View.GONE)
-            appWidgetManager.updateAppWidget(appWidgetId, views)
         }
     }
 }
@@ -316,8 +373,12 @@ object WidgetUsageQuerier {
 class TodayDataWidget : AppWidgetProvider() {
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
-        for (appWidgetId in appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId)
+        try {
+            for (appWidgetId in appWidgetIds) {
+                updateAppWidget(context, appWidgetManager, appWidgetId)
+            }
+        } catch (e: Exception) {
+            Log.e("TodayDataWidget", "Error in onUpdate", e)
         }
     }
 
@@ -327,55 +388,75 @@ class TodayDataWidget : AppWidgetProvider() {
         appWidgetId: Int,
         newOptions: Bundle
     ) {
-        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
-        updateAppWidget(context, appWidgetManager, appWidgetId)
+        try {
+            super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
+            updateAppWidget(context, appWidgetManager, appWidgetId)
+        } catch (e: Exception) {
+            Log.e("TodayDataWidget", "Error in onAppWidgetOptionsChanged", e)
+        }
     }
 
     override fun onReceive(context: Context, intent: Intent) {
-        super.onReceive(context, intent)
-        if (intent.action == DailyUsageWidget.ACTION_UPDATE_WIDGET) {
-            val appWidgetManager = AppWidgetManager.getInstance(context)
-            val componentName = ComponentName(context, TodayDataWidget::class.java)
-            val appWidgetIds = appWidgetManager.getAppWidgetIds(componentName)
-            for (appWidgetId in appWidgetIds) {
-                updateAppWidget(context, appWidgetManager, appWidgetId)
+        try {
+            super.onReceive(context, intent)
+            if (intent.action == DailyUsageWidget.ACTION_UPDATE_WIDGET) {
+                val appWidgetManager = AppWidgetManager.getInstance(context)
+                val componentName = ComponentName(context, TodayDataWidget::class.java)
+                val appWidgetIds = appWidgetManager.getAppWidgetIds(componentName)
+                for (appWidgetId in appWidgetIds) {
+                    updateAppWidget(context, appWidgetManager, appWidgetId)
+                }
             }
+        } catch (e: Exception) {
+            Log.e("TodayDataWidget", "Error in onReceive", e)
         }
     }
 
     companion object {
         fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
-            val views = RemoteViews(context.packageName, R.layout.widget_today_data)
+            try {
+                val views = RemoteViews(context.packageName, R.layout.widget_today_data)
 
-            val mainIntent = Intent(context, MainActivity::class.java)
-            val pendingIntent = PendingIntent.getActivity(context, 0, mainIntent, PendingIntent.FLAG_IMMUTABLE)
-            views.setOnClickPendingIntent(R.id.widget_container, pendingIntent)
+                val mainIntent = Intent(context, MainActivity::class.java)
+                val pendingIntent = PendingIntent.getActivity(context, 0, mainIntent, PendingIntent.FLAG_IMMUTABLE)
+                views.setOnClickPendingIntent(R.id.widget_container, pendingIntent)
 
-            CoroutineScope(Dispatchers.IO).launch {
-                val repository = UserPreferencesRepository(context)
-                val resetHour = repository.resetTimeHour.first()
-                val resetMinute = repository.resetTimeMinute.first()
-                val monthlyResetDay = repository.monthlyResetDay.first()
-                
-                // Get daily limits and usage
-                val dailyLimit = repository.dataDailyLimit.first()
-                val wifiUsage = WidgetUsageQuerier.getUsageBytes(context, NetworkCapabilities.TRANSPORT_WIFI, "daily", resetHour, resetMinute, monthlyResetDay)
-                val mobileUsage = WidgetUsageQuerier.getUsageBytes(context, NetworkCapabilities.TRANSPORT_CELLULAR, "daily", resetHour, resetMinute, monthlyResetDay)
-                val totalUsage = wifiUsage + mobileUsage
+                CoroutineScope(Dispatchers.IO).launch {
+                    try {
+                        val repository = UserPreferencesRepository(context)
+                        val resetHour = repository.resetTimeHour.first()
+                        val resetMinute = repository.resetTimeMinute.first()
+                        val monthlyResetDay = repository.monthlyResetDay.first()
+                        
+                        // Get daily limits and usage
+                        val dailyLimit = repository.dataDailyLimit.first()
+                        val wifiUsage = WidgetUsageQuerier.getUsageBytes(context, NetworkCapabilities.TRANSPORT_WIFI, "daily", resetHour, resetMinute, monthlyResetDay)
+                        val mobileUsage = WidgetUsageQuerier.getUsageBytes(context, NetworkCapabilities.TRANSPORT_CELLULAR, "daily", resetHour, resetMinute, monthlyResetDay)
+                        val totalUsage = wifiUsage + mobileUsage
 
-                val formatted = SpeedFormatter.formatUsage(totalUsage)
-                val parts = formatted.split(" ")
-                val valueText = parts.getOrNull(0) ?: "0"
-                val unitText = parts.getOrNull(1) ?: "B"
+                        val formatted = SpeedFormatter.formatUsage(totalUsage)
+                        val parts = formatted.split(" ")
+                        val valueText = parts.getOrNull(0) ?: "0"
+                        val unitText = parts.getOrNull(1) ?: "B"
 
-                val bitmap = drawCircularProgress(totalUsage, dailyLimit)
+                        val bitmap = drawCircularProgress(totalUsage, dailyLimit)
 
-                withContext(Dispatchers.Main) {
-                    views.setImageViewBitmap(R.id.widget_circle_progress, bitmap)
-                    views.setTextViewText(R.id.widget_text_usage_value, valueText)
-                    views.setTextViewText(R.id.widget_text_usage_unit, unitText)
-                    appWidgetManager.updateAppWidget(appWidgetId, views)
+                        withContext(Dispatchers.Main) {
+                            try {
+                                views.setImageViewBitmap(R.id.widget_circle_progress, bitmap)
+                                views.setTextViewText(R.id.widget_text_usage_value, valueText)
+                                views.setTextViewText(R.id.widget_text_usage_unit, unitText)
+                                appWidgetManager.updateAppWidget(appWidgetId, views)
+                            } catch (e: Exception) {
+                                Log.e("TodayDataWidget", "Error updating widget views", e)
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Log.e("TodayDataWidget", "Error in Coroutine updateAppWidget", e)
+                    }
                 }
+            } catch (e: Exception) {
+                Log.e("TodayDataWidget", "Error in updateAppWidget", e)
             }
         }
 
@@ -417,8 +498,12 @@ class TodayDataWidget : AppWidgetProvider() {
 class DailyNetworkLimitWidget : AppWidgetProvider() {
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
-        for (appWidgetId in appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId)
+        try {
+            for (appWidgetId in appWidgetIds) {
+                updateAppWidget(context, appWidgetManager, appWidgetId)
+            }
+        } catch (e: Exception) {
+            Log.e("DailyNetworkLimitWidget", "Error in onUpdate", e)
         }
     }
 
@@ -428,56 +513,76 @@ class DailyNetworkLimitWidget : AppWidgetProvider() {
         appWidgetId: Int,
         newOptions: Bundle
     ) {
-        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
-        updateAppWidget(context, appWidgetManager, appWidgetId)
+        try {
+            super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
+            updateAppWidget(context, appWidgetManager, appWidgetId)
+        } catch (e: Exception) {
+            Log.e("DailyNetworkLimitWidget", "Error in onAppWidgetOptionsChanged", e)
+        }
     }
 
     override fun onReceive(context: Context, intent: Intent) {
-        super.onReceive(context, intent)
-        if (intent.action == DailyUsageWidget.ACTION_UPDATE_WIDGET) {
-            val appWidgetManager = AppWidgetManager.getInstance(context)
-            val componentName = ComponentName(context, DailyNetworkLimitWidget::class.java)
-            val appWidgetIds = appWidgetManager.getAppWidgetIds(componentName)
-            for (appWidgetId in appWidgetIds) {
-                updateAppWidget(context, appWidgetManager, appWidgetId)
+        try {
+            super.onReceive(context, intent)
+            if (intent.action == DailyUsageWidget.ACTION_UPDATE_WIDGET) {
+                val appWidgetManager = AppWidgetManager.getInstance(context)
+                val componentName = ComponentName(context, DailyNetworkLimitWidget::class.java)
+                val appWidgetIds = appWidgetManager.getAppWidgetIds(componentName)
+                for (appWidgetId in appWidgetIds) {
+                    updateAppWidget(context, appWidgetManager, appWidgetId)
+                }
             }
+        } catch (e: Exception) {
+            Log.e("DailyNetworkLimitWidget", "Error in onReceive", e)
         }
     }
 
     companion object {
         fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
-            val views = RemoteViews(context.packageName, R.layout.widget_network_limit)
+            try {
+                val views = RemoteViews(context.packageName, R.layout.widget_network_limit)
 
-            val mainIntent = Intent(context, MainActivity::class.java)
-            val pendingIntent = PendingIntent.getActivity(context, 0, mainIntent, PendingIntent.FLAG_IMMUTABLE)
-            views.setOnClickPendingIntent(R.id.widget_container, pendingIntent)
+                val mainIntent = Intent(context, MainActivity::class.java)
+                val pendingIntent = PendingIntent.getActivity(context, 0, mainIntent, PendingIntent.FLAG_IMMUTABLE)
+                views.setOnClickPendingIntent(R.id.widget_container, pendingIntent)
 
-            CoroutineScope(Dispatchers.IO).launch {
-                val repository = UserPreferencesRepository(context)
-                val resetHour = repository.resetTimeHour.first()
-                val resetMinute = repository.resetTimeMinute.first()
-                val monthlyResetDay = repository.monthlyResetDay.first()
+                CoroutineScope(Dispatchers.IO).launch {
+                    try {
+                        val repository = UserPreferencesRepository(context)
+                        val resetHour = repository.resetTimeHour.first()
+                        val resetMinute = repository.resetTimeMinute.first()
+                        val monthlyResetDay = repository.monthlyResetDay.first()
 
-                val wifiLimit = repository.wifiDailyLimit.first()
-                val mobileLimit = repository.dataDailyLimit.first()
+                        val wifiLimit = repository.wifiDailyLimit.first()
+                        val mobileLimit = repository.dataDailyLimit.first()
 
-                val wifiUsage = WidgetUsageQuerier.getUsageBytes(context, NetworkCapabilities.TRANSPORT_WIFI, "daily", resetHour, resetMinute, monthlyResetDay)
-                val mobileUsage = WidgetUsageQuerier.getUsageBytes(context, NetworkCapabilities.TRANSPORT_CELLULAR, "daily", resetHour, resetMinute, monthlyResetDay)
+                        val wifiUsage = WidgetUsageQuerier.getUsageBytes(context, NetworkCapabilities.TRANSPORT_WIFI, "daily", resetHour, resetMinute, monthlyResetDay)
+                        val mobileUsage = WidgetUsageQuerier.getUsageBytes(context, NetworkCapabilities.TRANSPORT_CELLULAR, "daily", resetHour, resetMinute, monthlyResetDay)
 
-                val formattedWifi = WidgetUsageQuerier.formatLimitValues(wifiUsage, wifiLimit)
-                val formattedMobile = WidgetUsageQuerier.formatLimitValues(mobileUsage, mobileLimit)
+                        val formattedWifi = WidgetUsageQuerier.formatLimitValues(wifiUsage, wifiLimit)
+                        val formattedMobile = WidgetUsageQuerier.formatLimitValues(mobileUsage, mobileLimit)
 
-                val wifiProgress = if (wifiLimit > 0L) ((wifiUsage.toDouble() / wifiLimit.toDouble()) * 100).toInt().coerceIn(0, 100) else 0
-                val mobileProgress = if (mobileLimit > 0L) ((mobileUsage.toDouble() / mobileLimit.toDouble()) * 100).toInt().coerceIn(0, 100) else 0
+                        val wifiProgress = if (wifiLimit > 0L) ((wifiUsage.toDouble() / wifiLimit.toDouble()) * 100).toInt().coerceIn(0, 100) else 0
+                        val mobileProgress = if (mobileLimit > 0L) ((mobileUsage.toDouble() / mobileLimit.toDouble()) * 100).toInt().coerceIn(0, 100) else 0
 
-                withContext(Dispatchers.Main) {
-                    views.setTextViewText(R.id.widget_title, context.getString(R.string.label_daily_limit_caps))
-                    views.setTextViewText(R.id.widget_wifi_values, formattedWifi)
-                    views.setTextViewText(R.id.widget_mobile_values, formattedMobile)
-                    views.setProgressBar(R.id.widget_wifi_progress, 100, wifiProgress, false)
-                    views.setProgressBar(R.id.widget_mobile_progress, 100, mobileProgress, false)
-                    appWidgetManager.updateAppWidget(appWidgetId, views)
+                        withContext(Dispatchers.Main) {
+                            try {
+                                views.setTextViewText(R.id.widget_title, context.getString(R.string.label_daily_limit_caps))
+                                views.setTextViewText(R.id.widget_wifi_values, formattedWifi)
+                                views.setTextViewText(R.id.widget_mobile_values, formattedMobile)
+                                views.setProgressBar(R.id.widget_wifi_progress, 100, wifiProgress, false)
+                                views.setProgressBar(R.id.widget_mobile_progress, 100, mobileProgress, false)
+                                appWidgetManager.updateAppWidget(appWidgetId, views)
+                            } catch (e: Exception) {
+                                Log.e("DailyNetworkLimitWidget", "Error updating widget views", e)
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Log.e("DailyNetworkLimitWidget", "Error in Coroutine updateAppWidget", e)
+                    }
                 }
+            } catch (e: Exception) {
+                Log.e("DailyNetworkLimitWidget", "Error in updateAppWidget", e)
             }
         }
     }
@@ -487,8 +592,12 @@ class DailyNetworkLimitWidget : AppWidgetProvider() {
 class MonthlyNetworkLimitWidget : AppWidgetProvider() {
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
-        for (appWidgetId in appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId)
+        try {
+            for (appWidgetId in appWidgetIds) {
+                updateAppWidget(context, appWidgetManager, appWidgetId)
+            }
+        } catch (e: Exception) {
+            Log.e("MonthlyNetworkLimitWidget", "Error in onUpdate", e)
         }
     }
 
@@ -498,56 +607,76 @@ class MonthlyNetworkLimitWidget : AppWidgetProvider() {
         appWidgetId: Int,
         newOptions: Bundle
     ) {
-        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
-        updateAppWidget(context, appWidgetManager, appWidgetId)
+        try {
+            super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
+            updateAppWidget(context, appWidgetManager, appWidgetId)
+        } catch (e: Exception) {
+            Log.e("MonthlyNetworkLimitWidget", "Error in onAppWidgetOptionsChanged", e)
+        }
     }
 
     override fun onReceive(context: Context, intent: Intent) {
-        super.onReceive(context, intent)
-        if (intent.action == DailyUsageWidget.ACTION_UPDATE_WIDGET) {
-            val appWidgetManager = AppWidgetManager.getInstance(context)
-            val componentName = ComponentName(context, MonthlyNetworkLimitWidget::class.java)
-            val appWidgetIds = appWidgetManager.getAppWidgetIds(componentName)
-            for (appWidgetId in appWidgetIds) {
-                updateAppWidget(context, appWidgetManager, appWidgetId)
+        try {
+            super.onReceive(context, intent)
+            if (intent.action == DailyUsageWidget.ACTION_UPDATE_WIDGET) {
+                val appWidgetManager = AppWidgetManager.getInstance(context)
+                val componentName = ComponentName(context, MonthlyNetworkLimitWidget::class.java)
+                val appWidgetIds = appWidgetManager.getAppWidgetIds(componentName)
+                for (appWidgetId in appWidgetIds) {
+                    updateAppWidget(context, appWidgetManager, appWidgetId)
+                }
             }
+        } catch (e: Exception) {
+            Log.e("MonthlyNetworkLimitWidget", "Error in onReceive", e)
         }
     }
 
     companion object {
         fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
-            val views = RemoteViews(context.packageName, R.layout.widget_network_limit)
+            try {
+                val views = RemoteViews(context.packageName, R.layout.widget_network_limit)
 
-            val mainIntent = Intent(context, MainActivity::class.java)
-            val pendingIntent = PendingIntent.getActivity(context, 0, mainIntent, PendingIntent.FLAG_IMMUTABLE)
-            views.setOnClickPendingIntent(R.id.widget_container, pendingIntent)
+                val mainIntent = Intent(context, MainActivity::class.java)
+                val pendingIntent = PendingIntent.getActivity(context, 0, mainIntent, PendingIntent.FLAG_IMMUTABLE)
+                views.setOnClickPendingIntent(R.id.widget_container, pendingIntent)
 
-            CoroutineScope(Dispatchers.IO).launch {
-                val repository = UserPreferencesRepository(context)
-                val resetHour = repository.resetTimeHour.first()
-                val resetMinute = repository.resetTimeMinute.first()
-                val monthlyResetDay = repository.monthlyResetDay.first()
+                CoroutineScope(Dispatchers.IO).launch {
+                    try {
+                        val repository = UserPreferencesRepository(context)
+                        val resetHour = repository.resetTimeHour.first()
+                        val resetMinute = repository.resetTimeMinute.first()
+                        val monthlyResetDay = repository.monthlyResetDay.first()
 
-                val wifiLimit = repository.wifiMonthlyLimit.first()
-                val mobileLimit = repository.dataMonthlyLimit.first()
+                        val wifiLimit = repository.wifiMonthlyLimit.first()
+                        val mobileLimit = repository.dataMonthlyLimit.first()
 
-                val wifiUsage = WidgetUsageQuerier.getUsageBytes(context, NetworkCapabilities.TRANSPORT_WIFI, "monthly", resetHour, resetMinute, monthlyResetDay)
-                val mobileUsage = WidgetUsageQuerier.getUsageBytes(context, NetworkCapabilities.TRANSPORT_CELLULAR, "monthly", resetHour, resetMinute, monthlyResetDay)
+                        val wifiUsage = WidgetUsageQuerier.getUsageBytes(context, NetworkCapabilities.TRANSPORT_WIFI, "monthly", resetHour, resetMinute, monthlyResetDay)
+                        val mobileUsage = WidgetUsageQuerier.getUsageBytes(context, NetworkCapabilities.TRANSPORT_CELLULAR, "monthly", resetHour, resetMinute, monthlyResetDay)
 
-                val formattedWifi = WidgetUsageQuerier.formatLimitValues(wifiUsage, wifiLimit)
-                val formattedMobile = WidgetUsageQuerier.formatLimitValues(mobileUsage, mobileLimit)
+                        val formattedWifi = WidgetUsageQuerier.formatLimitValues(wifiUsage, wifiLimit)
+                        val formattedMobile = WidgetUsageQuerier.formatLimitValues(mobileUsage, mobileLimit)
 
-                val wifiProgress = if (wifiLimit > 0L) ((wifiUsage.toDouble() / wifiLimit.toDouble()) * 100).toInt().coerceIn(0, 100) else 0
-                val mobileProgress = if (mobileLimit > 0L) ((mobileUsage.toDouble() / mobileLimit.toDouble()) * 100).toInt().coerceIn(0, 100) else 0
+                        val wifiProgress = if (wifiLimit > 0L) ((wifiUsage.toDouble() / wifiLimit.toDouble()) * 100).toInt().coerceIn(0, 100) else 0
+                        val mobileProgress = if (mobileLimit > 0L) ((mobileUsage.toDouble() / mobileLimit.toDouble()) * 100).toInt().coerceIn(0, 100) else 0
 
-                withContext(Dispatchers.Main) {
-                    views.setTextViewText(R.id.widget_title, context.getString(R.string.label_monthly_limit_caps))
-                    views.setTextViewText(R.id.widget_wifi_values, formattedWifi)
-                    views.setTextViewText(R.id.widget_mobile_values, formattedMobile)
-                    views.setProgressBar(R.id.widget_wifi_progress, 100, wifiProgress, false)
-                    views.setProgressBar(R.id.widget_mobile_progress, 100, mobileProgress, false)
-                    appWidgetManager.updateAppWidget(appWidgetId, views)
+                        withContext(Dispatchers.Main) {
+                            try {
+                                views.setTextViewText(R.id.widget_title, context.getString(R.string.label_monthly_limit_caps))
+                                views.setTextViewText(R.id.widget_wifi_values, formattedWifi)
+                                views.setTextViewText(R.id.widget_mobile_values, formattedMobile)
+                                views.setProgressBar(R.id.widget_wifi_progress, 100, wifiProgress, false)
+                                views.setProgressBar(R.id.widget_mobile_progress, 100, mobileProgress, false)
+                                appWidgetManager.updateAppWidget(appWidgetId, views)
+                            } catch (e: Exception) {
+                                Log.e("MonthlyNetworkLimitWidget", "Error updating widget views", e)
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Log.e("MonthlyNetworkLimitWidget", "Error in Coroutine updateAppWidget", e)
+                    }
                 }
+            } catch (e: Exception) {
+                Log.e("MonthlyNetworkLimitWidget", "Error in updateAppWidget", e)
             }
         }
     }
@@ -557,8 +686,12 @@ class MonthlyNetworkLimitWidget : AppWidgetProvider() {
 class CustomNetworkLimitWidget : AppWidgetProvider() {
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
-        for (appWidgetId in appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId)
+        try {
+            for (appWidgetId in appWidgetIds) {
+                updateAppWidget(context, appWidgetManager, appWidgetId)
+            }
+        } catch (e: Exception) {
+            Log.e("CustomNetworkLimitWidget", "Error in onUpdate", e)
         }
     }
 
@@ -568,57 +701,77 @@ class CustomNetworkLimitWidget : AppWidgetProvider() {
         appWidgetId: Int,
         newOptions: Bundle
     ) {
-        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
-        updateAppWidget(context, appWidgetManager, appWidgetId)
+        try {
+            super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
+            updateAppWidget(context, appWidgetManager, appWidgetId)
+        } catch (e: Exception) {
+            Log.e("CustomNetworkLimitWidget", "Error in onAppWidgetOptionsChanged", e)
+        }
     }
 
     override fun onReceive(context: Context, intent: Intent) {
-        super.onReceive(context, intent)
-        if (intent.action == DailyUsageWidget.ACTION_UPDATE_WIDGET) {
-            val appWidgetManager = AppWidgetManager.getInstance(context)
-            val componentName = ComponentName(context, CustomNetworkLimitWidget::class.java)
-            val appWidgetIds = appWidgetManager.getAppWidgetIds(componentName)
-            for (appWidgetId in appWidgetIds) {
-                updateAppWidget(context, appWidgetManager, appWidgetId)
+        try {
+            super.onReceive(context, intent)
+            if (intent.action == DailyUsageWidget.ACTION_UPDATE_WIDGET) {
+                val appWidgetManager = AppWidgetManager.getInstance(context)
+                val componentName = ComponentName(context, CustomNetworkLimitWidget::class.java)
+                val appWidgetIds = appWidgetManager.getAppWidgetIds(componentName)
+                for (appWidgetId in appWidgetIds) {
+                    updateAppWidget(context, appWidgetManager, appWidgetId)
+                }
             }
+        } catch (e: Exception) {
+            Log.e("CustomNetworkLimitWidget", "Error in onReceive", e)
         }
     }
 
     companion object {
         fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
-            val views = RemoteViews(context.packageName, R.layout.widget_network_limit)
+            try {
+                val views = RemoteViews(context.packageName, R.layout.widget_network_limit)
 
-            val mainIntent = Intent(context, MainActivity::class.java)
-            val pendingIntent = PendingIntent.getActivity(context, 0, mainIntent, PendingIntent.FLAG_IMMUTABLE)
-            views.setOnClickPendingIntent(R.id.widget_container, pendingIntent)
+                val mainIntent = Intent(context, MainActivity::class.java)
+                val pendingIntent = PendingIntent.getActivity(context, 0, mainIntent, PendingIntent.FLAG_IMMUTABLE)
+                views.setOnClickPendingIntent(R.id.widget_container, pendingIntent)
 
-            CoroutineScope(Dispatchers.IO).launch {
-                val repository = UserPreferencesRepository(context)
+                CoroutineScope(Dispatchers.IO).launch {
+                    try {
+                        val repository = UserPreferencesRepository(context)
 
-                val wifiLimit = repository.wifiCustomLimit.first()
-                val mobileLimit = repository.dataCustomLimit.first()
-                val wifiStart = repository.wifiCustomLimitStart.first()
-                val wifiEnd = repository.wifiCustomLimitEnd.first()
-                val mobileStart = repository.dataCustomLimitStart.first()
-                val mobileEnd = repository.dataCustomLimitEnd.first()
+                        val wifiLimit = repository.wifiCustomLimit.first()
+                        val mobileLimit = repository.dataCustomLimit.first()
+                        val wifiStart = repository.wifiCustomLimitStart.first()
+                        val wifiEnd = repository.wifiCustomLimitEnd.first()
+                        val mobileStart = repository.dataCustomLimitStart.first()
+                        val mobileEnd = repository.dataCustomLimitEnd.first()
 
-                val wifiUsage = WidgetUsageQuerier.getCustomUsageBytes(context, NetworkCapabilities.TRANSPORT_WIFI, wifiStart, wifiEnd)
-                val mobileUsage = WidgetUsageQuerier.getCustomUsageBytes(context, NetworkCapabilities.TRANSPORT_CELLULAR, mobileStart, mobileEnd)
+                        val wifiUsage = WidgetUsageQuerier.getCustomUsageBytes(context, NetworkCapabilities.TRANSPORT_WIFI, wifiStart, wifiEnd)
+                        val mobileUsage = WidgetUsageQuerier.getCustomUsageBytes(context, NetworkCapabilities.TRANSPORT_CELLULAR, mobileStart, mobileEnd)
 
-                val formattedWifi = WidgetUsageQuerier.formatLimitValues(wifiUsage, wifiLimit)
-                val formattedMobile = WidgetUsageQuerier.formatLimitValues(mobileUsage, mobileLimit)
+                        val formattedWifi = WidgetUsageQuerier.formatLimitValues(wifiUsage, wifiLimit)
+                        val formattedMobile = WidgetUsageQuerier.formatLimitValues(mobileUsage, mobileLimit)
 
-                val wifiProgress = if (wifiLimit > 0L) ((wifiUsage.toDouble() / wifiLimit.toDouble()) * 100).toInt().coerceIn(0, 100) else 0
-                val mobileProgress = if (mobileLimit > 0L) ((mobileUsage.toDouble() / mobileLimit.toDouble()) * 100).toInt().coerceIn(0, 100) else 0
+                        val wifiProgress = if (wifiLimit > 0L) ((wifiUsage.toDouble() / wifiLimit.toDouble()) * 100).toInt().coerceIn(0, 100) else 0
+                        val mobileProgress = if (mobileLimit > 0L) ((mobileUsage.toDouble() / mobileLimit.toDouble()) * 100).toInt().coerceIn(0, 100) else 0
 
-                withContext(Dispatchers.Main) {
-                    views.setTextViewText(R.id.widget_title, context.getString(R.string.label_custom_limit_caps))
-                    views.setTextViewText(R.id.widget_wifi_values, formattedWifi)
-                    views.setTextViewText(R.id.widget_mobile_values, formattedMobile)
-                    views.setProgressBar(R.id.widget_wifi_progress, 100, wifiProgress, false)
-                    views.setProgressBar(R.id.widget_mobile_progress, 100, mobileProgress, false)
-                    appWidgetManager.updateAppWidget(appWidgetId, views)
+                        withContext(Dispatchers.Main) {
+                            try {
+                                views.setTextViewText(R.id.widget_title, context.getString(R.string.label_custom_limit_caps))
+                                views.setTextViewText(R.id.widget_wifi_values, formattedWifi)
+                                views.setTextViewText(R.id.widget_mobile_values, formattedMobile)
+                                views.setProgressBar(R.id.widget_wifi_progress, 100, wifiProgress, false)
+                                views.setProgressBar(R.id.widget_mobile_progress, 100, mobileProgress, false)
+                                appWidgetManager.updateAppWidget(appWidgetId, views)
+                            } catch (e: Exception) {
+                                Log.e("CustomNetworkLimitWidget", "Error updating widget views", e)
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Log.e("CustomNetworkLimitWidget", "Error in Coroutine updateAppWidget", e)
+                    }
                 }
+            } catch (e: Exception) {
+                Log.e("CustomNetworkLimitWidget", "Error in updateAppWidget", e)
             }
         }
     }

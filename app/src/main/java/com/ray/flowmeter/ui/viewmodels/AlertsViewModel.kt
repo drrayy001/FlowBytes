@@ -22,6 +22,9 @@ class AlertsViewModel(
     private val userPrefsRepository: UserPreferencesRepository,
 ) : ViewModel() {
 
+    val speedUnit: StateFlow<String> = userPrefsRepository.speedUnit
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), "BYTES")
+
     val selectedCategory: StateFlow<String> = userPrefsRepository.alertsCategory
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), "ALL")
 

@@ -130,6 +130,7 @@ class NetworkMonitoringService : Service() {
     private var highTrafficDetectionEnabled = false
     private var widgetUsageType = "DAILY"
     private var widgetShowSpeed = true
+    private var speedUnitStr = "BYTES"
 
     private var isScreenOn = true
 
@@ -224,6 +225,7 @@ class NetworkMonitoringService : Service() {
         serviceScope.launch { repository.monthlyResetDay.collect { monthlyResetDay = it } }
         serviceScope.launch { repository.widgetUsageType.collect { widgetUsageType = it } }
         serviceScope.launch { repository.widgetShowSpeed.collect { widgetShowSpeed = it } }
+        serviceScope.launch { repository.speedUnit.collect { speedUnitStr = it } }
         serviceScope.launch { 
             var isFirst = true
             repository.showOnlyWhenConnected.collect { 
@@ -340,7 +342,10 @@ class NetworkMonitoringService : Service() {
         return cm.activeNetwork != null
     }
 
-    private fun formatSpeed(bytesPerSec: Long): String = SpeedFormatter.formatBytes(bytesPerSec)
+    private fun formatSpeed(bytesPerSec: Long): String {
+        val unit = if (speedUnitStr == "BITS") com.ray.flowmeter.utils.SpeedUnit.BITS else com.ray.flowmeter.utils.SpeedUnit.BYTES
+        return SpeedFormatter.formatBytes(bytesPerSec, unit)
+    }
 
     private fun formatDataUsage(bytes: Long): String = SpeedFormatter.formatUsage(bytes)
 

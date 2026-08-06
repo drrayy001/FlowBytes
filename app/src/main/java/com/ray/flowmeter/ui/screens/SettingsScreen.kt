@@ -72,6 +72,7 @@ fun SettingsScreen(
     val useAmoled by viewModel.useAmoled.collectAsState()
     val showNotification by viewModel.showNotification.collectAsState()
     val notificationContentType by viewModel.notificationContentType.collectAsState()
+    val speedUnit by viewModel.speedUnit.collectAsState()
     val notificationIconScale by viewModel.notificationIconScale.collectAsState()
     val languageCode by viewModel.language.collectAsState()
     val checkUpdatesAutomatically by viewModel.checkUpdatesAutomatically.collectAsState()
@@ -135,6 +136,7 @@ fun SettingsScreen(
 
     var showThemeDialog by remember { mutableStateOf(value = false) }
     var showNotificationContentDialog by remember { mutableStateOf(value = false) }
+    var showSpeedUnitDialog by remember { mutableStateOf(value = false) }
     var showIconScaleDialog by remember { mutableStateOf(value = false) }
     var showLanguageDialog by remember { mutableStateOf(value = false) }
     var showLicensesDialog by remember { mutableStateOf(value = false) }
@@ -208,6 +210,12 @@ fun SettingsScreen(
                     title = stringResource(R.string.settings_monthly_reset_day),
                     subtitle = stringResource(R.string.settings_monthly_reset_day_desc, monthlyResetDay),
                     onClick = { showResetDayDialog = true }
+                )
+                SettingsItem(
+                    icon = Icons.Rounded.Speed,
+                    title = stringResource(R.string.settings_speed_unit),
+                    subtitle = if (speedUnit == "BYTES") stringResource(R.string.unit_bytes) else stringResource(R.string.unit_bits),
+                    onClick = { showSpeedUnitDialog = true }
                 )
             }
         }
@@ -553,6 +561,14 @@ fun SettingsScreen(
                 currentType = notificationContentType,
                 onDismiss = { showNotificationContentDialog = false },
                 onSelect = viewModel::setNotificationContentType
+            )
+        }
+
+        if (showSpeedUnitDialog) {
+            SpeedUnitDialog(
+                currentUnit = speedUnit,
+                onDismiss = { showSpeedUnitDialog = false },
+                onSelect = viewModel::setSpeedUnit
             )
         }
 

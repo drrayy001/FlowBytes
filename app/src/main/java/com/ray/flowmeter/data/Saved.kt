@@ -244,6 +244,7 @@ class UserPreferencesRepository(private val context: Context) {
         val CHECK_UPDATES_AUTOMATICALLY = booleanPreferencesKey("check_updates_automatically")
         val LAST_UPDATE_CHECK_TIME = longPreferencesKey("last_update_check_time")
         val IGNORED_UPDATE_VERSION = stringPreferencesKey("ignored_update_version")
+        val SPEED_UNIT = stringPreferencesKey("speed_unit")
     }
 
     private val preferencesFlow = context.dataStore.data
@@ -570,6 +571,11 @@ class UserPreferencesRepository(private val context: Context) {
     val ignoredUpdateVersion: Flow<String> = preferencesFlow
         .map { preferences ->
             preferences[PreferencesKeys.IGNORED_UPDATE_VERSION] ?: ""
+        }.distinctUntilChanged()
+
+    val speedUnit: Flow<String> = preferencesFlow
+        .map { preferences ->
+            preferences[PreferencesKeys.SPEED_UNIT] ?: "BYTES"
         }.distinctUntilChanged()
 
     // --- Preferences Write Operations ---
@@ -917,6 +923,12 @@ class UserPreferencesRepository(private val context: Context) {
     suspend fun setIgnoredUpdateVersion(version: String) {
         context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.IGNORED_UPDATE_VERSION] = version
+        }
+    }
+
+    suspend fun setSpeedUnit(unit: String) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.SPEED_UNIT] = unit
         }
     }
 }

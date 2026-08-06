@@ -81,6 +81,11 @@
     <string name="settings_monitoring_desc">Track network speed and data usage in real-time</string>
     <string name="settings_reset_time">Reset Time</string>
     <string name="settings_reset_time_desc">Time of day to start a new tracking cycle</string>
+    <string name="settings_speed_unit">Speed Unit</string>
+    <string name="settings_speed_unit_desc">Choose between Bytes per second (B/s) or Bits per second (bps)</string>
+    <string name="unit_bytes">Bytes per second (B/s)</string>
+    <string name="unit_bits">Bits per second (bps)</string>
+    <string name="dialog_select_speed_unit_title">Select Speed Unit</string>
     <string name="dialog_reset_time_title">Set Reset Time</string>
     <string name="settings_monthly_reset_day">Monthly Reset Day</string>
     <string name="settings_monthly_reset_day_desc">Billing cycle resets on day %d of the month</string>

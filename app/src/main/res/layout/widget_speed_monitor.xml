@@ -87,6 +87,7 @@
                     android:fontFamily="sans-serif-medium" />
 
                 <TextView
+                    android:id="@+id/widget_monitor_unit_down"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Mbps"
@@ -164,6 +165,7 @@
                     android:fontFamily="sans-serif-medium" />
 
                 <TextView
+                    android:id="@+id/widget_monitor_unit_up"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Mbps"

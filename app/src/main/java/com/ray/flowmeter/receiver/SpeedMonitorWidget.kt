@@ -13,6 +13,9 @@ import android.graphics.Path
 import android.widget.RemoteViews
 import com.ray.flowmeter.MainActivity
 import com.ray.flowmeter.R
+import com.ray.flowmeter.data.UserPreferencesRepository
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.first
 import java.util.Locale
 
 // Speed Monitor Widget displaying live download and upload speeds with curve graphs
@@ -30,23 +33,31 @@ class SpeedMonitorWidget : AppWidgetProvider() {
             val rxSpeed = intent.getLongExtra(DailyUsageWidget.EXTRA_RX_SPEED, 0L)
             val txSpeed = intent.getLongExtra(DailyUsageWidget.EXTRA_TX_SPEED, 0L)
             
-            val rxMbps = (rxSpeed * 8f) / 1_000_000f
-            val txMbps = (txSpeed * 8f) / 1_000_000f
+            CoroutineScope(Dispatchers.IO).launch {
+                val repository = UserPreferencesRepository(context)
+                val unit = repository.speedUnit.first()
+                val isBits = unit == "BITS"
 
-            synchronized(lock) {
-                downloadHistory.add(rxMbps)
-                if (downloadHistory.size > 12) downloadHistory.removeAt(0)
+                val rxValue = if (isBits) (rxSpeed * 8f) / 1_000_000f else (rxSpeed.toFloat() / 1_000_000f)
+                val txValue = if (isBits) (txSpeed * 8f) / 1_000_000f else (txSpeed.toFloat() / 1_000_000f)
 
-                uploadHistory.add(txMbps)
-                if (uploadHistory.size > 12) uploadHistory.removeAt(0)
-            }
+                synchronized(lock) {
+                    downloadHistory.add(rxValue)
+                    if (downloadHistory.size > 12) downloadHistory.removeAt(0)
 
-            val appWidgetManager = AppWidgetManager.getInstance(context)
-            val componentName = ComponentName(context, SpeedMonitorWidget::class.java)
-            val appWidgetIds = appWidgetManager.getAppWidgetIds(componentName)
+                    uploadHistory.add(txValue)
+                    if (uploadHistory.size > 12) uploadHistory.removeAt(0)
+                }
 
-            for (appWidgetId in appWidgetIds) {
-                updateWidgetData(context, appWidgetManager, appWidgetId, rxMbps, txMbps)
+                val appWidgetManager = AppWidgetManager.getInstance(context)
+                val componentName = ComponentName(context, SpeedMonitorWidget::class.java)
+                val appWidgetIds = appWidgetManager.getAppWidgetIds(componentName)
+
+                withContext(Dispatchers.Main) {
+                    for (appWidgetId in appWidgetIds) {
+                        updateWidgetData(context, appWidgetManager, appWidgetId, rxValue, txValue, isBits)
+                    }
+                }
             }
         }
     }
@@ -57,17 +68,27 @@ class SpeedMonitorWidget : AppWidgetProvider() {
         private val uploadHistory = mutableListOf(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
 
         fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
-            val lastRx = synchronized(lock) { downloadHistory.lastOrNull() ?: 0f }
-            val lastTx = synchronized(lock) { uploadHistory.lastOrNull() ?: 0f }
-            updateWidgetData(context, appWidgetManager, appWidgetId, lastRx, lastTx)
+            CoroutineScope(Dispatchers.IO).launch {
+                val repository = UserPreferencesRepository(context)
+                val unit = repository.speedUnit.first()
+                val isBits = unit == "BITS"
+                
+                val lastRx = synchronized(lock) { downloadHistory.lastOrNull() ?: 0f }
+                val lastTx = synchronized(lock) { uploadHistory.lastOrNull() ?: 0f }
+                
+                withContext(Dispatchers.Main) {
+                    updateWidgetData(context, appWidgetManager, appWidgetId, lastRx, lastTx, isBits)
+                }
+            }
         }
 
         private fun updateWidgetData(
             context: Context,
             appWidgetManager: AppWidgetManager,
             appWidgetId: Int,
-            rxMbps: Float,
-            txMbps: Float
+            rxValue: Float,
+            txValue: Float,
+            isBits: Boolean
         ) {
             val views = RemoteViews(context.packageName, R.layout.widget_speed_monitor)
 
@@ -76,9 +97,13 @@ class SpeedMonitorWidget : AppWidgetProvider() {
             val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
             views.setOnClickPendingIntent(R.id.widget_container, pendingIntent)
 
-            // Format values exactly like the screenshot: e.g., "45.2" and "12.8"
-            views.setTextViewText(R.id.widget_monitor_text_down, String.format(Locale.US, "%.1f", rxMbps))
-            views.setTextViewText(R.id.widget_monitor_text_up, String.format(Locale.US, "%.1f", txMbps))
+            // Format values
+            views.setTextViewText(R.id.widget_monitor_text_down, String.format(Locale.US, "%.1f", rxValue))
+            views.setTextViewText(R.id.widget_monitor_text_up, String.format(Locale.US, "%.1f", txValue))
+            
+            val unitLabel = if (isBits) "Mbps" else "MB/s"
+            views.setTextViewText(R.id.widget_monitor_unit_down, unitLabel)
+            views.setTextViewText(R.id.widget_monitor_unit_up, unitLabel)
 
             // Draw wave graphs
             val downHistoryCopy = synchronized(lock) { downloadHistory.toList() }

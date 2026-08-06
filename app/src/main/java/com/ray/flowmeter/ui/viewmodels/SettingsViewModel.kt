@@ -292,6 +292,9 @@ class SettingsViewModel(
     val ignoredUpdateVersion: StateFlow<String> = repository.ignoredUpdateVersion
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), "")
 
+    val speedUnit: StateFlow<String> = repository.speedUnit
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), "BYTES")
+
     fun dismissSupportBanner() {
         viewModelScope.launch {
             repository.setSupportBannerDismissed(true)
@@ -313,6 +316,12 @@ class SettingsViewModel(
     fun setIgnoredUpdateVersion(version: String) {
         viewModelScope.launch {
             repository.setIgnoredUpdateVersion(version)
+        }
+    }
+
+    fun setSpeedUnit(unit: String) {
+        viewModelScope.launch {
+            repository.setSpeedUnit(unit)
         }
     }
 }

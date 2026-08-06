@@ -41,6 +41,7 @@ fun AlertsScreen(
     modifier: Modifier = Modifier,
 ) {
     val alerts by viewModel.alerts.collectAsState()
+    val speedUnit by viewModel.speedUnit.collectAsState()
     val selectedCategory by viewModel.selectedCategory.collectAsState()
     val pullRefreshState = rememberPullToRefreshState()
     
@@ -226,7 +227,7 @@ fun AlertsScreen(
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         items(alerts, key = { it.id }) { alert ->
-                            AlertItem(alert)
+                            AlertItem(alert, speedUnit)
                         }
                     }
                 }
@@ -236,7 +237,7 @@ fun AlertsScreen(
 }
 
 @Composable
-private fun AlertItem(alert: AppAlert) {
+private fun AlertItem(alert: AppAlert, speedUnit: String) {
     val context = LocalContext.current
     val dateFormat = remember { SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault()) }
     val dateTimeString = dateFormat.format(Date(alert.timestamp))
@@ -355,7 +356,8 @@ private fun AlertItem(alert: AppAlert) {
 
     val subtitleText = when(alert.alertType) {
         "HIGH_TRAFFIC" -> {
-            val speedStr = SpeedFormatter.formatBytes(alert.speed)
+            val unit = if (speedUnit == "BITS") com.ray.flowmeter.utils.SpeedUnit.BITS else com.ray.flowmeter.utils.SpeedUnit.BYTES
+            val speedStr = SpeedFormatter.formatBytes(alert.speed, unit)
             "${stringResource(R.string.label_high_traffic)} ($speedStr)"
         }
         "APP_LIMIT" -> {

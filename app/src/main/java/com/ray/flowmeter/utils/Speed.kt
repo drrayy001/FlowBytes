@@ -3,6 +3,10 @@ package com.ray.flowmeter.utils
 
 import java.util.Locale
 
+enum class SpeedUnit {
+    BYTES, BITS
+}
+
 object SpeedFormatter {
 
     private fun localizeDigits(input: String, isAr: Boolean): String {
@@ -24,28 +28,51 @@ object SpeedFormatter {
         return builder.toString()
     }
 
-    fun formatBytes(bytesPerSecond: Long): String {
+    fun formatBytes(bytesPerSecond: Long, unit: SpeedUnit = SpeedUnit.BYTES): String {
         val locale = Locale.getDefault()
         val isAr = locale.language == "ar"
+
+        val value = if (unit == SpeedUnit.BITS) bytesPerSecond * 8.0 else bytesPerSecond.toDouble()
+
         val formatted = when {
-            bytesPerSecond >= 1_000_000_000 -> {
-                val unit = if (isAr) "ج.ب/ث" else "GB/s"
-                String.format(locale, "%.1f $unit", bytesPerSecond / 1_000_000_000.0)
+            value >= 1_000_000_000 -> {
+                val unitStr = if (unit == SpeedUnit.BITS) {
+                    if (isAr) "ج.بت/ث" else "Gbps"
+                } else {
+                    if (isAr) "ج.ب/ث" else "GB/s"
+                }
+                String.format(locale, "%.1f $unitStr", value / 1_000_000_000.0)
             }
 
-            bytesPerSecond >= 1_000_000 -> {
-                val unit = if (isAr) "م.ب/ث" else "MB/s"
-                String.format(locale, "%.1f $unit", bytesPerSecond / 1_000_000.0)
+            value >= 1_000_000 -> {
+                val unitStr = if (unit == SpeedUnit.BITS) {
+                    if (isAr) "م.بت/ث" else "Mbps"
+                } else {
+                    if (isAr) "م.ب/ث" else "MB/s"
+                }
+                String.format(locale, "%.1f $unitStr", value / 1_000_000.0)
             }
 
-            bytesPerSecond >= 1_000 -> {
-                val unit = if (isAr) "ك.ب/ث" else "KB/s"
-                String.format(locale, "%.0f $unit", bytesPerSecond / 1_000.0)
+            value >= 1_000 -> {
+                val unitStr = if (unit == SpeedUnit.BITS) {
+                    if (isAr) "ك.بت/ث" else "kbps"
+                } else {
+                    if (isAr) "ك.ب/ث" else "KB/s"
+                }
+                String.format(locale, "%.0f $unitStr", value / 1_000.0)
             }
 
             else -> {
-                val unit = if (isAr) "ك.ب/ث" else "KB/s"
-                String.format(locale, "0 $unit")
+                val unitStr = if (unit == SpeedUnit.BITS) {
+                    if (isAr) "بت/ث" else "bps"
+                } else {
+                    if (isAr) "ك.ب/ث" else "KB/s"
+                }
+                if (unit == SpeedUnit.BITS) {
+                    String.format(locale, "%.0f $unitStr", value)
+                } else {
+                    String.format(locale, "0 $unitStr")
+                }
             }
         }
         return localizeDigits(formatted, isAr)

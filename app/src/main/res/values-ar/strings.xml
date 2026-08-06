@@ -424,4 +424,24 @@
     <string name="msg_billing_error_format">خطأ في فوترة Google Play (الرمز: %1$s)</string>
     <string name="vpn_session_name">حظر FlowBytes</string>
     <string name="msg_product_details_not_found">لم يتم العثور على تفاصيل المنتج. تأكد من تثبيت التطبيق من Google Play.</string>
+    <string name="settings_speed_unit">وحدة السرعة</string>
+    <string name="settings_speed_unit_desc">اختر بين بايت في الثانية (B/s) أو بت في الثانية (bps)</string>
+    <string name="unit_bytes">بايت في الثانية (B/s)</string>
+    <string name="unit_bits">بت في الثانية (bps)</string>
+    <string name="dialog_select_speed_unit_title">اختر وحدة السرعة</string>
+    <string name="placeholder_usage">0.0 م.ب</string>
+    <string name="placeholder_speed">0 ك.ب/ث</string>
+    <string name="widget_title_network_limit">حد الشبكة</string>
+    <string name="widget_title_speed_monitor">مراقب السرعة</string>
+    <string name="widget_title_todays_data">بيانات اليوم</string>
+    <string name="desc_download_speed_graph">رسم بياني لسرعة التنزيل</string>
+    <string name="desc_upload_speed_graph">رسم بياني لسرعة التحميل</string>
+    <string name="cd_previous">السابق</string>
+    <string name="cd_next">التالي</string>
+    <string name="label_limit_prefix">الحد: %1$s</string>
+    <string name="unit_secs">ثوانٍ</string>
+    <string name="unit_mins">دقائق</string>
+    <string name="unit_hours">ساعات</string>
+    <string name="unit_min_short">دقيقة</string>
+    <string name="unit_sec_short">ثانية</string>
 </resources>

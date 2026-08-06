@@ -422,4 +422,24 @@
     <string name="msg_billing_error_format">Google Play 账单错误 (代码: %1$s)</string>
     <string name="vpn_session_name">FlowBytes 拦截</string>
     <string name="msg_product_details_not_found">未找到产品详情。请确保应用是从 Google Play 安装的。</string>
+    <string name="settings_speed_unit">速度单位</string>
+    <string name="settings_speed_unit_desc">在 每秒字节数 (B/s) 或 每秒比特数 (bps) 之间选择</string>
+    <string name="unit_bytes">每秒字节数 (B/s)</string>
+    <string name="unit_bits">每秒比特数 (bps)</string>
+    <string name="dialog_select_speed_unit_title">选择速度单位</string>
+    <string name="placeholder_usage">0.0 MB</string>
+    <string name="placeholder_speed">0 KB/s</string>
+    <string name="widget_title_network_limit">网络限制</string>
+    <string name="widget_title_speed_monitor">速度监控</string>
+    <string name="widget_title_todays_data">今日数据</string>
+    <string name="desc_download_speed_graph">下载速度图表</string>
+    <string name="desc_upload_speed_graph">上传速度图表</string>
+    <string name="cd_previous">上一页</string>
+    <string name="cd_next">下一页</string>
+    <string name="label_limit_prefix">限制：%1$s</string>
+    <string name="unit_secs">秒</string>
+    <string name="unit_mins">分</string>
+    <string name="unit_hours">小时</string>
+    <string name="unit_min_short">分</string>
+    <string name="unit_sec_short">秒</string>
 </resources>

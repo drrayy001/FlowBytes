@@ -116,7 +116,7 @@
         <receiver
             android:name=".receiver.TodayDataWidget"
             android:exported="true"
-            android:label="Today's Data">
+            android:label="@string/title_todays_data_widget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.ray.flowmeter.ACTION_UPDATE_WIDGET" />
@@ -130,7 +130,7 @@
         <receiver
             android:name=".receiver.DailyNetworkLimitWidget"
             android:exported="true"
-            android:label="Daily Network Limit">
+            android:label="@string/title_daily_limit_widget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.ray.flowmeter.ACTION_UPDATE_WIDGET" />
@@ -144,7 +144,7 @@
         <receiver
             android:name=".receiver.MonthlyNetworkLimitWidget"
             android:exported="true"
-            android:label="Monthly Network Limit">
+            android:label="@string/title_monthly_limit_widget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.ray.flowmeter.ACTION_UPDATE_WIDGET" />
@@ -172,7 +172,7 @@
         <receiver
             android:name=".receiver.SpeedMonitorWidget"
             android:exported="true"
-            android:label="Speed Monitor">
+            android:label="@string/title_speed_monitor_widget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.ray.flowmeter.ACTION_UPDATE_WIDGET" />

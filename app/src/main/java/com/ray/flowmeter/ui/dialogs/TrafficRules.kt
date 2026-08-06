@@ -231,12 +231,19 @@ fun UnitSelector(
     onUnitSelected: (String) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
+    @Composable
+    fun getLabel(u: String): String = when (u) {
+        "Min" -> stringResource(R.string.unit_min_short)
+        "Sec" -> stringResource(R.string.unit_sec_short)
+        else -> u
+    }
+
     Box {
         TextButton(
             onClick = { expanded = true },
             modifier = Modifier.padding(end = 8.dp)
         ) {
-            Text(selectedUnit, fontWeight = FontWeight.ExtraBold)
+            Text(getLabel(selectedUnit), fontWeight = FontWeight.ExtraBold)
             Icon(Icons.Rounded.ArrowDropDown, contentDescription = null)
         }
         DropdownMenu(
@@ -246,7 +253,7 @@ fun UnitSelector(
         ) {
             units.forEach { unit ->
                 DropdownMenuItem(
-                    text = { Text(unit, fontWeight = FontWeight.Bold) },
+                    text = { Text(getLabel(unit), fontWeight = FontWeight.Bold) },
                     onClick = { onUnitSelected(unit); expanded = false }
                 )
             }

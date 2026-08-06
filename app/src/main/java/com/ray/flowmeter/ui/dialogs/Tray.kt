@@ -196,7 +196,7 @@ fun UnifiedPickerHeader(
                 ) {
                     Icon(
                         imageVector = Icons.Default.ChevronLeft,
-                        contentDescription = "Previous",
+                        contentDescription = stringResource(R.string.cd_previous),
                         tint = MaterialTheme.colorScheme.onPrimaryContainer
                     )
                 }
@@ -278,7 +278,7 @@ fun UnifiedPickerHeader(
                 ) {
                     Icon(
                         imageVector = Icons.Default.ChevronRight,
-                        contentDescription = "Next",
+                        contentDescription = stringResource(R.string.cd_next),
                         tint = if (nextEnabled) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.4f)
                     )
                 }

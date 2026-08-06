@@ -422,4 +422,24 @@
     <string name="msg_billing_error_format">Google Play Abrechnungsfehler (Code: %1$s)</string>
     <string name="vpn_session_name">FlowBytes-Sperre</string>
     <string name="msg_product_details_not_found">Produktdetails nicht gefunden. Stellen Sie sicher, dass die App von Google Play installiert ist.</string>
+    <string name="settings_speed_unit">Geschwindigkeitseinheit</string>
+    <string name="settings_speed_unit_desc">Wählen Sie zwischen Bytes pro Sekunde (B/s) oder Bits pro Sekunde (bps)</string>
+    <string name="unit_bytes">Bytes pro Sekunde (B/s)</string>
+    <string name="unit_bits">Bits pro Sekunde (bps)</string>
+    <string name="dialog_select_speed_unit_title">Geschwindigkeitseinheit auswählen</string>
+    <string name="placeholder_usage">0,0 MB</string>
+    <string name="placeholder_speed">0 KB/s</string>
+    <string name="widget_title_network_limit">Netzwerklimit</string>
+    <string name="widget_title_speed_monitor">Geschwindigkeitsmonitor</string>
+    <string name="widget_title_todays_data">Heutige Daten</string>
+    <string name="desc_download_speed_graph">Download-Geschwindigkeitsdiagramm</string>
+    <string name="desc_upload_speed_graph">Upload-Geschwindigkeitsdiagramm</string>
+    <string name="cd_previous">Zurück</string>
+    <string name="cd_next">Weiter</string>
+    <string name="label_limit_prefix">Limit: %1$s</string>
+    <string name="unit_secs">Sek.</string>
+    <string name="unit_mins">Min.</string>
+    <string name="unit_hours">Std.</string>
+    <string name="unit_min_short">Min</string>
+    <string name="unit_sec_short">Sek</string>
 </resources>

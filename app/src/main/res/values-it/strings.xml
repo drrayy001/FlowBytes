@@ -422,4 +422,24 @@
     <string name="msg_billing_error_format">Errore di fatturazione di Google Play (Codice: %1$s)</string>
     <string name="vpn_session_name">Blocco FlowBytes</string>
     <string name="msg_product_details_not_found">Dettagli del prodotto non trovati. Assicurati che l\'app sia installata da Google Play.</string>
+    <string name="settings_speed_unit">Unità di velocità</string>
+    <string name="settings_speed_unit_desc">Scegli tra Byte al secondo (B/s) o Bit al secondo (bps)</string>
+    <string name="unit_bytes">Byte al secondo (B/s)</string>
+    <string name="unit_bits">Bit al secondo (bps)</string>
+    <string name="dialog_select_speed_unit_title">Seleziona unità di velocità</string>
+    <string name="placeholder_usage">0,0 MB</string>
+    <string name="placeholder_speed">0 KB/s</string>
+    <string name="widget_title_network_limit">Limite di rete</string>
+    <string name="widget_title_speed_monitor">Monitor di velocità</string>
+    <string name="widget_title_todays_data">Dati di oggi</string>
+    <string name="desc_download_speed_graph">Grafico velocità di download</string>
+    <string name="desc_upload_speed_graph">Grafico velocità di upload</string>
+    <string name="cd_previous">Precedente</string>
+    <string name="cd_next">Successivo</string>
+    <string name="label_limit_prefix">Limite: %1$s</string>
+    <string name="unit_secs">Sec</string>
+    <string name="unit_mins">Min</string>
+    <string name="unit_hours">Ore</string>
+    <string name="unit_min_short">Min</string>
+    <string name="unit_sec_short">Sec</string>
 </resources>

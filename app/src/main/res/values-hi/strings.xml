@@ -422,4 +422,24 @@
     <string name="msg_billing_error_format">Google Play बिलिंग त्रुटि (कोड: %1$s)</string>
     <string name="vpn_session_name">FlowBytes ब्लॉक</string>
     <string name="msg_product_details_not_found">उत्पाद विवरण नहीं मिला। सुनिश्चित करें कि ऐप Google Play से इंस्टॉल किया गया है।</string>
+    <string name="settings_speed_unit">गति इकाई</string>
+    <string name="settings_speed_unit_desc">बाइट्स प्रति सेकंड (B/s) या बिट्स प्रति सेकंड (bps) में से चुनें</string>
+    <string name="unit_bytes">बाइट्स प्रति सेकंड (B/s)</string>
+    <string name="unit_bits">बिट्स प्रति सेकंड (bps)</string>
+    <string name="dialog_select_speed_unit_title">गति इकाई चुनें</string>
+    <string name="placeholder_usage">0.0 MB</string>
+    <string name="placeholder_speed">0 KB/s</string>
+    <string name="widget_title_network_limit">नेटवर्क सीमा</string>
+    <string name="widget_title_speed_monitor">गति मॉनिटर</string>
+    <string name="widget_title_todays_data">आज का डेटा</string>
+    <string name="desc_download_speed_graph">डाउनलोड गति ग्राफ</string>
+    <string name="desc_upload_speed_graph">अपलोड गति ग्राफ</string>
+    <string name="cd_previous">पिछला</string>
+    <string name="cd_next">अगला</string>
+    <string name="label_limit_prefix">सीमा: %1$s</string>
+    <string name="unit_secs">सेकंड</string>
+    <string name="unit_mins">मिनट</string>
+    <string name="unit_hours">घंटे</string>
+    <string name="unit_min_short">मिनट</string>
+    <string name="unit_sec_short">सेकंड</string>
 </resources>

@@ -362,15 +362,15 @@ private fun AlertItem(alert: AppAlert, speedUnit: String) {
         }
         "APP_LIMIT" -> {
             val limitStr = formatUsage(alert.limitValue)
-            "${stringResource(R.string.label_app_limit_reached)} (Limit: $limitStr)"
+            "${stringResource(R.string.label_app_limit_reached)} (${stringResource(R.string.label_limit_prefix, limitStr)})"
         }
         "DAILY_LIMIT" -> {
             val limitStr = formatUsage(alert.limitValue)
-            "${stringResource(R.string.label_daily_limit_reached)} (Limit: $limitStr)"
+            "${stringResource(R.string.label_daily_limit_reached)} (${stringResource(R.string.label_limit_prefix, limitStr)})"
         }
         "MONTHLY_LIMIT" -> {
             val limitStr = formatUsage(alert.limitValue)
-            "${stringResource(R.string.label_monthly_limit_reached)} (Limit: $limitStr)"
+            "${stringResource(R.string.label_monthly_limit_reached)} (${stringResource(R.string.label_limit_prefix, limitStr)})"
         }
         else -> alert.alertType
     }

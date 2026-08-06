@@ -422,4 +422,24 @@
     <string name="msg_billing_error_format">Google Play 결제 오류 (코드: %1$s)</string>
     <string name="vpn_session_name">FlowBytes 차단</string>
     <string name="msg_product_details_not_found">제품 정보를 찾을 수 없습니다. 앱이 Google Play에서 설치되었는지 확인하세요.</string>
+    <string name="settings_speed_unit">속도 단위</string>
+    <string name="settings_speed_unit_desc">초당 바이트 (B/s) 또는 초당 비트 (bps) 중에서 선택</string>
+    <string name="unit_bytes">초당 바이트 (B/s)</string>
+    <string name="unit_bits">초당 비트 (bps)</string>
+    <string name="dialog_select_speed_unit_title">속도 단위 선택</string>
+    <string name="placeholder_usage">0.0 MB</string>
+    <string name="placeholder_speed">0 KB/s</string>
+    <string name="widget_title_network_limit">네트워크 제한</string>
+    <string name="widget_title_speed_monitor">속도 모니터</string>
+    <string name="widget_title_todays_data">오늘의 데이터</string>
+    <string name="desc_download_speed_graph">다운로드 속도 그래프</string>
+    <string name="desc_upload_speed_graph">업로드 속도 그래프</string>
+    <string name="cd_previous">이전</string>
+    <string name="cd_next">다음</string>
+    <string name="label_limit_prefix">제한: %1$s</string>
+    <string name="unit_secs">초</string>
+    <string name="unit_mins">분</string>
+    <string name="unit_hours">시간</string>
+    <string name="unit_min_short">분</string>
+    <string name="unit_sec_short">초</string>
 </resources>

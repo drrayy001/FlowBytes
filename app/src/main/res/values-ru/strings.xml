@@ -422,4 +422,24 @@
     <string name="msg_billing_error_format">Ошибка платежной системы Google Play (Код: %1$s)</string>
     <string name="vpn_session_name">Блокировка FlowBytes</string>
     <string name="msg_product_details_not_found">Сведения о продукте не найдены. Убедитесь, что приложение установлено из Google Play.</string>
+    <string name="settings_speed_unit">Единица скорости</string>
+    <string name="settings_speed_unit_desc">Выберите между Байтами в секунду (Б/с) или Битами в секунду (бит/с)</string>
+    <string name="unit_bytes">Байты в секунду (Б/с)</string>
+    <string name="unit_bits">Биты в секунду (бит/с)</string>
+    <string name="dialog_select_speed_unit_title">Выберите единицу скорости</string>
+    <string name="placeholder_usage">0,0 МБ</string>
+    <string name="placeholder_speed">0 КБ/с</string>
+    <string name="widget_title_network_limit">Лимит сети</string>
+    <string name="widget_title_speed_monitor">Монитор скорости</string>
+    <string name="widget_title_todays_data">Данные за сегодня</string>
+    <string name="desc_download_speed_graph">График скорости скачивания</string>
+    <string name="desc_upload_speed_graph">График скорости загрузки</string>
+    <string name="cd_previous">Назад</string>
+    <string name="cd_next">Далее</string>
+    <string name="label_limit_prefix">Лимит: %1$s</string>
+    <string name="unit_secs">Сек.</string>
+    <string name="unit_mins">Мин.</string>
+    <string name="unit_hours">Ч.</string>
+    <string name="unit_min_short">Мин</string>
+    <string name="unit_sec_short">Сек</string>
 </resources>

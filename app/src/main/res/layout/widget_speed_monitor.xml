@@ -18,7 +18,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SPEED MONITOR"
+            android:text="@string/label_speed_monitor_caps"
             android:textColor="#8C9BB0"
             android:textSize="11sp"
             android:textStyle="bold"
@@ -53,12 +53,12 @@
                     android:layout_width="12dp"
                     android:layout_height="12dp"
                     android:src="@drawable/ic_arrow_down_green"
-                    android:contentDescription="Download" />
+                    android:contentDescription="@string/desc_download" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="DOWNLOAD"
+                    android:text="@string/label_download_caps"
                     android:textColor="#4DE8F4"
                     android:textSize="10sp"
                     android:textStyle="bold"
@@ -104,7 +104,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"
-                android:contentDescription="Download Speed Graph" />
+                android:contentDescription="@string/desc_download_speed_graph" />
         </LinearLayout>
 
         <!-- Divider Space -->
@@ -131,12 +131,12 @@
                     android:layout_width="12dp"
                     android:layout_height="12dp"
                     android:src="@drawable/ic_arrow_up_red"
-                    android:contentDescription="Upload" />
+                    android:contentDescription="@string/desc_upload" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="UPLOAD"
+                    android:text="@string/label_upload_caps"
                     android:textColor="#DDA7FF"
                     android:textSize="10sp"
                     android:textStyle="bold"
@@ -182,7 +182,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"
-                android:contentDescription="Upload Speed Graph" />
+                android:contentDescription="@string/desc_upload_speed_graph" />
         </LinearLayout>
     </LinearLayout>
 

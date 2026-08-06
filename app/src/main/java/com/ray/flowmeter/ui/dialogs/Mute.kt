@@ -126,8 +126,14 @@ fun MuteAppContent(
                         .padding(vertical = 10.dp),
                     contentAlignment = Alignment.Center
                 ) {
+                    val unitLabel = when (unit) {
+                        "Secs" -> stringResource(R.string.unit_secs)
+                        "Mins" -> stringResource(R.string.unit_mins)
+                        "Hours" -> stringResource(R.string.unit_hours)
+                        else -> unit
+                    }
                     Text(
-                        text = unit,
+                        text = unitLabel,
                         style = MaterialTheme.typography.labelLarge,
                         fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
                         color = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant

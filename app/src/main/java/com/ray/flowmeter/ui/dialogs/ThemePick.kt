@@ -71,8 +71,14 @@ fun ThemeDialog(
                                 .padding(horizontal = 16.dp, vertical = 16.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
+                            val themeLabel = when (mode) {
+                                "System" -> stringResource(R.string.theme_system)
+                                "Light" -> stringResource(R.string.theme_light)
+                                "Dark" -> stringResource(R.string.theme_dark)
+                                else -> mode
+                            }
                             Text(
-                                text = mode,
+                                text = themeLabel,
                                 style = MaterialTheme.typography.bodyLarge,
                                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
                                 color = if (isSelected) MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.onSurface,

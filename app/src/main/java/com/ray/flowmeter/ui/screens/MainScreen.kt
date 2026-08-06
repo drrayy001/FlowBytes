@@ -4,8 +4,7 @@ package com.ray.flowmeter.ui.screens
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -24,6 +23,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
@@ -107,7 +107,7 @@ fun MainScreen(
     var activeLayoutDestination by remember { mutableStateOf(initialDestination) }
     LaunchedEffect(currentDestination) {
         if (currentDestination == Destination.AppPicker || currentDestination == Destination.Widgets) {
-            delay(380)
+            delay(500)
             activeLayoutDestination = currentDestination
         } else {
             activeLayoutDestination = currentDestination
@@ -234,20 +234,28 @@ fun MainScreen(
 
     Box(modifier = Modifier.fillMaxSize()) {
         Row(modifier = Modifier.fillMaxSize()) {
-            if (isWideScreen && currentDestination != Destination.AppPicker && currentDestination != Destination.Widgets) {
+            val showGlobalNavRail = isWideScreen && activeLayoutDestination != Destination.AppPicker && activeLayoutDestination != Destination.Widgets
+            if (showGlobalNavRail) {
+                val navRailAlpha by animateFloatAsState(
+                    targetValue = if (currentDestination == Destination.AppPicker || currentDestination == Destination.Widgets) 0f else 1f,
+                    animationSpec = tween(300),
+                    label = "NavRailAlpha"
+                )
+
                 NavigationRail(
-                    containerColor = MaterialTheme.colorScheme.surfaceContainer
+                    containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                    modifier = Modifier.graphicsLayer { alpha = navRailAlpha }
                 ) {
                     Spacer(modifier = Modifier.weight(1f))
                     NavigationRailItem(
                         icon = {
                             Icon(
-                                imageVector = if (currentDestination == Destination.Home) Icons.Filled.Home else Icons.Outlined.Home,
+                                imageVector = if (activeLayoutDestination == Destination.Home) Icons.Filled.Home else Icons.Outlined.Home,
                                 contentDescription = stringResource(R.string.title_home)
                             )
                         },
                         label = { Text(stringResource(R.string.title_home), maxLines = 1, overflow = TextOverflow.Ellipsis) },
-                        selected = currentDestination == Destination.Home,
+                        selected = activeLayoutDestination == Destination.Home,
                         onClick = {
                             if (currentDestination != Destination.Home) {
                                 backStack.clear()
@@ -258,12 +266,12 @@ fun MainScreen(
                     NavigationRailItem(
                         icon = {
                             Icon(
-                                imageVector = if (currentDestination == Destination.Usage) Icons.Filled.Assessment else Icons.Outlined.Assessment,
+                                imageVector = if (activeLayoutDestination == Destination.Usage) Icons.Filled.Assessment else Icons.Outlined.Assessment,
                                 contentDescription = stringResource(R.string.title_app_usage)
                             )
                         },
                         label = { Text(stringResource(R.string.label_usage), maxLines = 1, overflow = TextOverflow.Ellipsis) },
-                        selected = currentDestination == Destination.Usage,
+                        selected = activeLayoutDestination == Destination.Usage,
                         onClick = {
                             if (currentDestination != Destination.Usage) {
                                 backStack.clear()
@@ -274,12 +282,12 @@ fun MainScreen(
                     NavigationRailItem(
                         icon = {
                             Icon(
-                                imageVector = if (currentDestination == Destination.Alerts) Icons.Filled.Notifications else Icons.Outlined.Notifications,
+                                imageVector = if (activeLayoutDestination == Destination.Alerts) Icons.Filled.Notifications else Icons.Outlined.Notifications,
                                 contentDescription = stringResource(R.string.title_alerts)
                             )
                         },
                         label = { Text(stringResource(R.string.label_alerts), maxLines = 1, overflow = TextOverflow.Ellipsis) },
-                        selected = currentDestination == Destination.Alerts,
+                        selected = activeLayoutDestination == Destination.Alerts,
                         onClick = {
                             if (currentDestination != Destination.Alerts) {
                                 backStack.clear()
@@ -290,12 +298,12 @@ fun MainScreen(
                     NavigationRailItem(
                         icon = {
                             Icon(
-                                imageVector = if (currentDestination == Destination.Limits) Icons.Filled.Security else Icons.Outlined.Security,
+                                imageVector = if (activeLayoutDestination == Destination.Limits) Icons.Filled.Security else Icons.Outlined.Security,
                                 contentDescription = stringResource(R.string.title_limits)
                             )
                         },
                         label = { Text(stringResource(R.string.title_limits), maxLines = 1, overflow = TextOverflow.Ellipsis) },
-                        selected = currentDestination == Destination.Limits,
+                        selected = activeLayoutDestination == Destination.Limits,
                         onClick = {
                             if (currentDestination != Destination.Limits) {
                                 backStack.clear()
@@ -306,12 +314,12 @@ fun MainScreen(
                     NavigationRailItem(
                         icon = {
                             Icon(
-                                imageVector = if (currentDestination == Destination.Settings) Icons.Filled.Settings else Icons.Outlined.Settings,
+                                imageVector = if (activeLayoutDestination == Destination.Settings) Icons.Filled.Settings else Icons.Outlined.Settings,
                                 contentDescription = stringResource(R.string.title_settings)
                             )
                         },
                         label = { Text(stringResource(R.string.title_settings), maxLines = 1, overflow = TextOverflow.Ellipsis) },
-                        selected = currentDestination == Destination.Settings,
+                        selected = activeLayoutDestination == Destination.Settings,
                         onClick = {
                             if (currentDestination != Destination.Settings) {
                                 backStack.clear()
@@ -327,7 +335,8 @@ fun MainScreen(
                 modifier = Modifier.weight(1f),
                 snackbarHost = { SnackbarHost(snackbarHostState) },
                 topBar = {
-                if (currentDestination != Destination.AppPicker && currentDestination != Destination.Widgets) {
+                val showGlobalTopBar = activeLayoutDestination != Destination.AppPicker && activeLayoutDestination != Destination.Widgets
+                if (showGlobalTopBar) {
                     val containerColor by animateColorAsState(
                         targetValue = if (currentScrollBehavior.state.contentOffset < -1f) {
                             MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp)
@@ -338,12 +347,20 @@ fun MainScreen(
                         label = "TopBarColorAnimation",
                     )
 
+                    val topBarAlpha by animateFloatAsState(
+                        targetValue = if (currentDestination == Destination.AppPicker || currentDestination == Destination.Widgets) 0f else 1f,
+                        animationSpec = tween(300),
+                        label = "TopBarAlpha"
+                    )
+
                     Surface(
                         color = containerColor,
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .graphicsLayer { alpha = topBarAlpha },
                     ) {
                         Column(modifier = Modifier.windowInsetsPadding(WindowInsets.statusBars)) {
-                            key(currentDestination) {
+                            key(activeLayoutDestination) {
                                 Row(
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -355,12 +372,13 @@ fun MainScreen(
 
 
                                     Text(
-                                        text = when (currentDestination) {
+                                        text = when (activeLayoutDestination) {
                                             Destination.Home -> stringResource(R.string.app_name)
                                             Destination.Usage -> stringResource(R.string.title_app_usage)
                                             Destination.Alerts -> stringResource(R.string.title_alerts)
                                             Destination.Limits -> stringResource(R.string.title_limits)
-                                            else -> stringResource(R.string.title_settings)
+                                            Destination.Settings -> stringResource(R.string.title_settings)
+                                            else -> ""
                                         },
                                         modifier = Modifier.weight(1f),
                                         style = MaterialTheme.typography.headlineSmall,
@@ -370,7 +388,7 @@ fun MainScreen(
                                         overflow = TextOverflow.Ellipsis
                                     )
 
-                                    if (currentDestination == Destination.Home) {
+                                    if (activeLayoutDestination == Destination.Home) {
                                         IconButton(
                                             onClick = {
                                                 homeViewModel.isWidgetsOpen = true
@@ -389,7 +407,7 @@ fun MainScreen(
 
 
 
-                                    if (currentDestination == Destination.Usage) {
+                                    if (activeLayoutDestination == Destination.Usage) {
                                         IconButton(
                                             onClick = { showUsageFilters = !showUsageFilters },
                                             colors = IconButtonDefaults.iconButtonColors(
@@ -404,7 +422,7 @@ fun MainScreen(
                                         }
                                     }
 
-                                    if (currentDestination == Destination.Alerts) {
+                                    if (activeLayoutDestination == Destination.Alerts) {
                                         IconButton(
                                             onClick = { showAlertsFilters = !showAlertsFilters },
                                             colors = IconButtonDefaults.iconButtonColors(
@@ -419,7 +437,7 @@ fun MainScreen(
                                         }
                                     }
 
-                                    if (currentDestination == Destination.Limits) {
+                                    if (activeLayoutDestination == Destination.Limits) {
                                         val appBlockingMasterEnabled by appLimitsViewModel.appBlockingMasterEnabled.collectAsState()
                                         val scope = rememberCoroutineScope()
                                         val firewallEnabledMsg = stringResource(R.string.msg_firewall_enabled)
@@ -528,19 +546,27 @@ fun MainScreen(
                 }
             },
             bottomBar = {
-                if (!isWideScreen && currentDestination != Destination.AppPicker && currentDestination != Destination.Widgets) {
+                val showGlobalBottomBar = !isWideScreen && activeLayoutDestination != Destination.AppPicker && activeLayoutDestination != Destination.Widgets
+                if (showGlobalBottomBar) {
+                    val bottomBarAlpha by animateFloatAsState(
+                        targetValue = if (currentDestination == Destination.AppPicker || currentDestination == Destination.Widgets) 0f else 1f,
+                        animationSpec = tween(300),
+                        label = "BottomBarAlpha"
+                    )
+
                     NavigationBar(
-                        containerColor = MaterialTheme.colorScheme.surfaceContainer
+                        containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                        modifier = Modifier.graphicsLayer { alpha = bottomBarAlpha }
                     ) {
                     NavigationBarItem(
                         icon = {
                             Icon(
-                                imageVector = if (currentDestination == Destination.Home) Icons.Filled.Home else Icons.Outlined.Home,
+                                imageVector = if (activeLayoutDestination == Destination.Home) Icons.Filled.Home else Icons.Outlined.Home,
                                 contentDescription = stringResource(R.string.title_home)
                             )
                         },
                         label = { Text(stringResource(R.string.title_home), maxLines = 1, overflow = TextOverflow.Ellipsis) },
-                        selected = currentDestination == Destination.Home,
+                        selected = activeLayoutDestination == Destination.Home,
                         onClick = {
                             if (currentDestination != Destination.Home) {
                                 backStack.clear()
@@ -551,12 +577,12 @@ fun MainScreen(
                     NavigationBarItem(
                         icon = {
                             Icon(
-                                imageVector = if (currentDestination == Destination.Usage) Icons.Filled.Assessment else Icons.Outlined.Assessment,
+                                imageVector = if (activeLayoutDestination == Destination.Usage) Icons.Filled.Assessment else Icons.Outlined.Assessment,
                                 contentDescription = stringResource(R.string.title_app_usage)
                             )
                         },
                         label = { Text(stringResource(R.string.label_usage), maxLines = 1, overflow = TextOverflow.Ellipsis) },
-                        selected = currentDestination == Destination.Usage,
+                        selected = activeLayoutDestination == Destination.Usage,
                         onClick = {
                             if (currentDestination != Destination.Usage) {
                                 backStack.clear()
@@ -567,12 +593,12 @@ fun MainScreen(
                     NavigationBarItem(
                         icon = {
                             Icon(
-                                imageVector = if (currentDestination == Destination.Limits) Icons.Filled.Timer else Icons.Outlined.Timer,
+                                imageVector = if (activeLayoutDestination == Destination.Limits) Icons.Filled.Timer else Icons.Outlined.Timer,
                                 contentDescription = stringResource(R.string.title_limits)
                             )
                         },
                         label = { Text(stringResource(R.string.label_plans), maxLines = 1, overflow = TextOverflow.Ellipsis) },
-                        selected = currentDestination == Destination.Limits,
+                        selected = activeLayoutDestination == Destination.Limits,
                         onClick = {
                             if (currentDestination != Destination.Limits) {
                                 backStack.clear()
@@ -583,12 +609,12 @@ fun MainScreen(
                     NavigationBarItem(
                         icon = {
                             Icon(
-                                imageVector = if (currentDestination == Destination.Alerts) Icons.Filled.Notifications else Icons.Outlined.Notifications,
+                                imageVector = if (activeLayoutDestination == Destination.Alerts) Icons.Filled.Notifications else Icons.Outlined.Notifications,
                                 contentDescription = stringResource(R.string.title_alerts)
                             )
                         },
                         label = { Text(stringResource(R.string.label_alerts), maxLines = 1, overflow = TextOverflow.Ellipsis) },
-                        selected = currentDestination == Destination.Alerts,
+                        selected = activeLayoutDestination == Destination.Alerts,
                         onClick = {
                             if (currentDestination != Destination.Alerts) {
                                 backStack.clear()
@@ -599,12 +625,12 @@ fun MainScreen(
                     NavigationBarItem(
                         icon = {
                             Icon(
-                                imageVector = if (currentDestination == Destination.Settings) Icons.Filled.Settings else Icons.Outlined.Settings,
+                                imageVector = if (activeLayoutDestination == Destination.Settings) Icons.Filled.Settings else Icons.Outlined.Settings,
                                 contentDescription = stringResource(R.string.title_settings)
                             )
                         },
                         label = { Text(stringResource(R.string.title_settings), maxLines = 1, overflow = TextOverflow.Ellipsis) },
-                        selected = currentDestination == Destination.Settings,
+                        selected = activeLayoutDestination == Destination.Settings,
                         onClick = {
                             if (currentDestination != Destination.Settings) {
                                 backStack.clear()
@@ -639,26 +665,19 @@ fun MainScreen(
                     val targetDest = targetState.key as? Destination
 
                     when {
-                        targetDest == Destination.AppPicker || targetDest == Destination.Widgets -> {
-                            (slideInHorizontally(
-                                initialOffsetX = { it },
-                                animationSpec = tween(380, easing = FastOutSlowInEasing)
-                            ) + fadeIn(animationSpec = tween(250))).togetherWith(
-                                slideOutHorizontally(
-                                    targetOffsetX = { -it / 3 },
-                                    animationSpec = tween(380, easing = FastOutSlowInEasing)
-                                ) + fadeOut(animationSpec = tween(300))
+                        targetDest == Destination.Widgets || targetDest == Destination.AppPicker -> {
+                            (scaleIn(initialScale = 0.88f, animationSpec = tween(500, easing = EaseOutCubic)) +
+                             fadeIn(animationSpec = tween(400)) +
+                             slideInVertically(initialOffsetY = { it / 8 }, animationSpec = tween(500, easing = EaseOutCubic))
+                            ).togetherWith(
+                                fadeOut(animationSpec = tween(400))
                             )
                         }
-                        initialDest == Destination.AppPicker || initialDest == Destination.Widgets -> {
-                            (slideInHorizontally(
-                                initialOffsetX = { -it / 3 },
-                                animationSpec = tween(350, easing = FastOutSlowInEasing)
-                            ) + fadeIn(animationSpec = tween(250))).togetherWith(
-                                slideOutHorizontally(
-                                    targetOffsetX = { it },
-                                    animationSpec = tween(350, easing = FastOutSlowInEasing)
-                                ) + fadeOut(animationSpec = tween(200))
+                        initialDest == Destination.Widgets || initialDest == Destination.AppPicker -> {
+                            fadeIn(animationSpec = tween(400)) togetherWith (
+                                scaleOut(targetScale = 0.88f, animationSpec = tween(500, easing = EaseOutCubic)) +
+                                fadeOut(animationSpec = tween(400)) +
+                                slideOutVertically(targetOffsetY = { it / 8 }, animationSpec = tween(500, easing = EaseOutCubic))
                             )
                         }
                         else -> {

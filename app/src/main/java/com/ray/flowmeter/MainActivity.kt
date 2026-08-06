@@ -16,7 +16,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import android.view.View
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -140,16 +144,13 @@ class MainActivity : ComponentActivity() {
             manager.registerListener(installStateUpdatedListener)
         }
 
-        // Initialize language configuration before setting up the Compose layout.
+        // Initialize and observe language configuration changes dynamically.
         lifecycleScope.launch {
-            val languageCode = try {
-                repository.language.first()
-            } catch (_: Exception) {
-                ""
-            }
-            if (languageCode != currentAppliedLanguage) {
-                currentAppliedLanguage = languageCode
-                LocaleHelper.applyLocale(this@MainActivity, languageCode)
+            repository.language.collect { languageCode ->
+                if (languageCode != currentAppliedLanguage) {
+                    currentAppliedLanguage = languageCode
+                    LocaleHelper.applyLocale(this@MainActivity, languageCode)
+                }
             }
         }
 
@@ -271,18 +272,21 @@ class MainActivity : ComponentActivity() {
                 val accentColor by settingsViewModel.accentColor.collectAsState()
                 val onboardingCompleted by repository.onboardingCompleted.collectAsState(null)
 
+                val currentContext = LocalContext.current
+                val localizedContext = remember(languageCode, currentContext) {
+                    LocaleHelper.applyLocale(currentContext, languageCode)
+                }
+                val layoutDirection = if (localizedContext.resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL) {
+                    LayoutDirection.Rtl
+                } else {
+                    LayoutDirection.Ltr
+                }
+
                 CompositionLocalProvider(
-                    LocalContext provides LocaleHelper.applyLocale(LocalContext.current, languageCode)
+                    LocalContext provides localizedContext,
+                    LocalConfiguration provides localizedContext.resources.configuration,
+                    LocalLayoutDirection provides layoutDirection
                 ) {
-                    var isInitialCollect by remember { mutableStateOf(true) }
-                    // Recreate activity to apply runtime language changes if the language changed.
-                    LaunchedEffect(languageCode) {
-                        if (isInitialCollect) {
-                            isInitialCollect = false
-                        } else if (languageCode != currentAppliedLanguage) {
-                            recreate()
-                        }
-                    }
 
                     val currentVersionCode = BuildConfig.VERSION_CODE
                     val (showChangelog, setShowChangelog) = remember { mutableStateOf(false) }

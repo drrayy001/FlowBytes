@@ -117,8 +117,9 @@ class AppUsageViewModel(
                 repository.resetTimeHour,
                 repository.resetTimeMinute,
                 repository.usageTimeFilter,
-                repository.monthlyResetDay
-            ) { h, m, f, r -> Triple(h, m, f) to r }.collect { (triple, resetDay) ->
+                repository.monthlyResetDay,
+                repository.language
+            ) { h, m, f, r, lang -> Triple(h, m, f) to r }.collect { (triple, resetDay) ->
                 val (resetHour, resetMinute, savedTime) = triple
                 monthlyResetDay = resetDay
                 val start: Long

@@ -80,6 +80,11 @@ class HomeViewModel(
                 updateTotalUsage()
             }
         }
+        viewModelScope.launch {
+            repository.language.collect {
+                updateTotalUsage()
+            }
+        }
     }
 
     fun updateChartType(type: ChartType) {

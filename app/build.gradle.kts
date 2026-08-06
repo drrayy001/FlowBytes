@@ -120,7 +120,6 @@ dependencies {
     testImplementation(libs.androidx.core)
     testImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(libs.androidx.runner)
     debugImplementation(libs.androidx.compose.ui.tooling)
@@ -129,6 +128,7 @@ dependencies {
     "ksp"(libs.moshi.kotlin.codegen)
 }
 tasks.register<Copy>("copyReleaseOutputs") {
+    description = "Copies the release APK and AAB files to a single directory for easier access."
     dependsOn("bundleRelease", "assembleRelease")
     from(layout.buildDirectory.dir("outputs/bundle/release")) {
         include("*.aab")

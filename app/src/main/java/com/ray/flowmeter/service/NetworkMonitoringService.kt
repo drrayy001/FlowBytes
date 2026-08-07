@@ -1045,7 +1045,8 @@ class NetworkMonitoringService : Service() {
                         val info = pm.getApplicationInfo(pkg, 0)
                         // Match the logic in AppLimitsViewModel to only show "selectable" apps
                         val isSelectable = ((info.flags and android.content.pm.ApplicationInfo.FLAG_SYSTEM) == 0) || 
-                                           ((info.flags and android.content.pm.ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0)
+                                           ((info.flags and android.content.pm.ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0) ||
+                                           (pm.getLaunchIntentForPackage(pkg) != null)
                         
                         if (isSelectable) {
                             return AppTrafficInfo(

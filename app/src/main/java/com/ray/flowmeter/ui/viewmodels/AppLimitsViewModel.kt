@@ -286,7 +286,11 @@ class AppLimitsViewModel(
                     .asSequence()
                     .map { it.activityInfo.applicationInfo }
                     .distinctBy { it.packageName }
-                    .filter { ((it.flags and ApplicationInfo.FLAG_SYSTEM) == 0) || ((it.flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0) }
+                    .filter { 
+                        ((it.flags and ApplicationInfo.FLAG_SYSTEM) == 0) || 
+                        ((it.flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0) ||
+                        (pm.getLaunchIntentForPackage(it.packageName) != null)
+                    }
                     .map { info ->
                         AppInfo(
                             packageName = info.packageName,

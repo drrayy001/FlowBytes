@@ -502,14 +502,22 @@ class AppUsageViewModel(
         }
 
         var isSystem = uid < 10000
-        for (pkg in packages) {
-            try {
-                val appInfo = packageManager.getApplicationInfo(pkg, 0)
-                if ((appInfo.flags and ApplicationInfo.FLAG_SYSTEM) != 0) {
-                    isSystem = true
-                    break
-                }
-            } catch (_: Exception) {}
+        if (!isSystem) {
+            var isUserApp = false
+            for (pkg in packages) {
+                try {
+                    val appInfo = packageManager.getApplicationInfo(pkg, 0)
+                    val isSystemPkg = (appInfo.flags and ApplicationInfo.FLAG_SYSTEM) != 0
+                    val isUpdatedSystem = (appInfo.flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0
+                    val hasLaunchIntent = packageManager.getLaunchIntentForPackage(pkg) != null
+
+                    if (!isSystemPkg || isUpdatedSystem || hasLaunchIntent) {
+                        isUserApp = true
+                        break
+                    }
+                } catch (_: Exception) {}
+            }
+            isSystem = !isUserApp
         }
 
         for (pkg in packages) {

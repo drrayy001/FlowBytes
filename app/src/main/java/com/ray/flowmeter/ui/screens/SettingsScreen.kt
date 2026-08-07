@@ -308,6 +308,11 @@ fun SettingsScreen(
                         "ja" -> stringResource(R.string.language_japanese)
                         "ko" -> stringResource(R.string.language_korean)
                         "ru" -> stringResource(R.string.language_russian)
+                        "tr" -> stringResource(R.string.language_turkish)
+                        "id" -> stringResource(R.string.language_indonesian)
+                        "vi" -> stringResource(R.string.language_vietnamese)
+                        "pl" -> stringResource(R.string.language_polish)
+                        "uk" -> stringResource(R.string.language_ukrainian)
                         else -> stringResource(R.string.language_default)
                     },
                     onClick = { showLanguageDialog = true }

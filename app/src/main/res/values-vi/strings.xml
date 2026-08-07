@@ -1,0 +1,445 @@
+<resources>
+    <string name="app_name">FlowBytes</string>
+
+    <!-- Screen Titles -->
+    <string name="title_app_usage">Sử dụng ứng dụng</string>
+    <string name="title_settings">Cài đặt</string>
+    <string name="title_home">Trang chủ</string>
+    <string name="title_limits">Giới hạn gói</string>
+    <string name="title_alerts">Lịch sử cảnh báo</string>
+    <string name="label_usage">Sử dụng</string>
+    <string name="label_plans">Gói cước</string>
+    <string name="label_alerts">Cảnh báo</string>
+
+    <!-- Accessibility Descriptions -->
+    <string name="cd_back">Quay lại</string>
+    <string name="cd_pull_to_refresh">Kéo xuống để làm mới dữ liệu</string>
+    <string name="cd_clear_search">Xóa tìm kiếm</string>
+    <string name="cd_prev_date">Ngày trước</string>
+    <string name="cd_next_date">Ngày sau</string>
+    <string name="cd_toggle_filters">Bật/Tắt bộ lọc</string>
+    <string name="cd_app_icon">Biểu tượng ứng dụng</string>
+    <string name="desc_download">Tốc độ tải xuống</string>
+    <string name="desc_upload">Tốc độ tải lên</string>
+    <string name="desc_combined">Tổng tốc độ</string>
+    <string name="desc_mobile_data">Dữ liệu di động đã dùng</string>
+    <string name="desc_wifi">Dữ liệu Wi-Fi đã dùng</string>
+
+    <!-- Home Screen -->
+    <string name="label_today_colon">Hôm nay:</string>
+    <string name="label_separator">|</string>
+    <string name="label_download">Tải xuống</string>
+    <string name="label_upload">Tải lên</string>
+    <string name="label_this_month">Tháng này</string>
+    <string name="label_usage_breakdown">Hoạt động hàng tuần</string>
+    <string name="label_mobile">Di động</string>
+    <string name="label_wifi">Wi-Fi</string>
+    <string name="label_combined">Kết hợp</string>
+    <string name="label_todays_usage">Dữ liệu hôm nay</string>
+    <string name="label_usage_summary">Tóm tắt sử dụng</string>
+    <string name="msg_no_usage_recorded">Chưa có dữ liệu nào được ghi lại</string>
+
+    <!-- App Usage Screen -->
+    <string name="filter_daily">Hàng ngày</string>
+    <string name="filter_monthly">Hàng tháng</string>
+    <string name="filter_custom">Tùy chỉnh</string>
+    <string name="filter_mobile_wifi">Di động &amp; Wi-Fi</string>
+    <string name="filter_mobile_only">Chỉ Di động</string>
+    <string name="filter_wifi_only">Chỉ Wi-Fi</string>
+    <string name="btn_ok">OK</string>
+    <string name="btn_cancel">Hủy</string>
+    <string name="btn_delete">Xóa</string>
+    <string name="btn_edit">Sửa</string>
+    <string name="label_both">Cả hai</string>
+    <string name="label_start_date">Từ ngày</string>
+    <string name="label_end_date">Đến ngày</string>
+    <string name="title_select_month">Chọn tháng</string>
+    <string name="label_today">Hôm nay</string>
+    <string name="msg_no_usage_data">Không tìm thấy dữ liệu cho bộ lọc đã chọn.</string>
+    <string name="label_wifi_usage">Wi-Fi</string>
+    <string name="label_mobile_usage">Di động</string>
+    <string name="label_wifi_colon">Wi-Fi:</string>
+    <string name="label_mobile_colon">Di động:</string>
+    <string name="label_system_apps">Ứng dụng hệ thống</string>
+    <string name="title_system_data_usage">Dữ liệu hệ thống sử dụng</string>
+    <string name="label_system_processes">Tiến trình hệ thống</string>
+    <string name="label_tethering">Điểm phát sóng &amp; Kết nối mạng</string>
+    <string name="label_removed_apps">Ứng dụng đã xóa</string>
+    <string name="label_root">Root</string>
+    <string name="label_android_system">Hệ thống Android</string>
+    <string name="label_dns_resolver">Bộ giải mã DNS</string>
+    <string name="label_mdns_responder">Phản hồi mDNS</string>
+    <string name="label_media_service">Dịch vụ Media</string>
+    <string name="label_system_update">Cập nhật hệ thống</string>
+
+    <string name="tile_monitoring_on">Giám sát BẬT</string>
+    <string name="tile_monitoring_off">Giám sát TẮT</string>
+
+    <!-- Settings: General -->
+    <string name="settings_section_general">Chung</string>
+    <string name="settings_monitoring_toggle">Bật giám sát</string>
+    <string name="settings_monitoring_desc">Theo dõi tốc độ mạng và dung lượng thời gian thực</string>
+    <string name="settings_reset_time">Thời gian đặt lại</string>
+    <string name="settings_reset_time_desc">Thời gian bắt đầu chu kỳ theo dõi mới trong ngày</string>
+    <string name="settings_speed_unit">Đơn vị tốc độ</string>
+    <string name="settings_speed_unit_desc">Chọn giữa Byte trên giây (B/s) hoặc Bit trên giây (bps)</string>
+    <string name="unit_bytes">Byte trên giây (B/s)</string>
+    <string name="unit_bits">Bit trên giây (bps)</string>
+    <string name="dialog_select_speed_unit_title">Chọn đơn vị tốc độ</string>
+    <string name="dialog_reset_time_title">Đặt thời gian làm mới</string>
+    <string name="settings_monthly_reset_day">Ngày làm mới hàng tháng</string>
+    <string name="settings_monthly_reset_day_desc">Chu kỳ cước được đặt lại vào ngày %d hàng tháng</string>
+    <string name="dialog_reset_day_title">Chọn ngày làm mới trong tháng</string>
+    <string name="msg_reset_day_explanation">Tất cả dữ liệu sử dụng hàng tháng và cảnh báo giới hạn sẽ tính từ ngày này.</string>
+
+    <!-- Settings: Notifications & Status Bar -->
+    <string name="settings_section_notifications">Thông báo &amp; Thanh trạng thái</string>
+    <string name="settings_show_daily_usage">Hiển thị thông báo</string>
+    <string name="settings_daily_usage_desc">Hiển thị tốc độ và dữ liệu thực trong vùng thông báo</string>
+    <string name="settings_notification_content">Nội dung thông báo</string>
+    <string name="option_speed_only">Chỉ tốc độ</string>
+    <string name="option_daily_only">Chỉ thống kê hàng ngày</string>
+    <string name="option_both">Tốc độ &amp; Thống kê hàng ngày</string>
+    <string name="settings_high_priority">Ưu tiên cao</string>
+    <string name="settings_high_priority_desc">Giữ chỉ báo tốc độ luôn hiển thị ở trên cùng của thông báo</string>
+    <string name="settings_hide_offline">Ẩn khi ngoại tuyến</string>
+    <string name="settings_hide_offline_desc">Tự động ẩn chỉ báo tốc độ khi mất kết nối</string>
+
+    <string name="settings_section_widget">Tiện ích màn hình chính</string>
+    <string name="settings_widget_show_speed">Hiển thị tốc độ</string>
+    <string name="settings_widget_show_speed_desc">Hiển thị tốc độ tải xuống và tải lên trên tiện ích</string>
+    <string name="settings_widget_usage_type">Chế độ hiển thị của tiện ích</string>
+
+    <!-- Settings: Alerts & Limits -->
+    <string name="settings_section_alerts">Cảnh báo &amp; Giới hạn</string>
+    <string name="settings_data_alerts">Cảnh báo dung lượng cao</string>
+    <string name="settings_data_alerts_desc">Nhận thông báo khi ứng dụng dùng quá nhiều dữ liệu chạy nền</string>
+    <string name="settings_mobile_limit">Giới hạn dữ liệu di động</string>
+    <string name="settings_wifi_limit">Giới hạn dữ liệu Wi-Fi</string>
+
+    <string name="label_plan_duration">Thời hạn gói</string>
+    <string name="msg_alert_muted">Đã tắt tiếng cảnh báo</string>
+    <string name="title_select_plan_type">Chọn loại gói</string>
+    <string name="settings_indicator_size">Kích thước biểu tượng</string>
+
+    <!-- Settings: Appearance -->
+    <string name="settings_section_appearance">Giao diện</string>
+    <string name="settings_app_theme">Chủ đề ứng dụng</string>
+    <string name="dialog_select_theme_title">Chọn chủ đề</string>
+    <string name="theme_system">Hệ thống</string>
+    <string name="theme_light">Sáng</string>
+    <string name="theme_dark">Tối</string>
+    <string name="settings_material_you">Material You</string>
+    <string name="settings_material_you_desc">Sử dụng màu chủ đạo của hệ thống</string>
+    <string name="settings_accent_color">Màu điểm nhấn</string>
+    <string name="settings_accent_color_desc">Chọn màu chính tùy chỉnh</string>
+    <string name="settings_amoled_mode">Chế độ AMOLED</string>
+    <string name="settings_amoled_mode_desc">Nền đen hoàn toàn</string>
+    <string name="size_small">Nhỏ</string>
+    <string name="size_medium">Vừa</string>
+    <string name="size_large">Lớn</string>
+    <string name="settings_language">Ngôn ngữ</string>
+    <string name="dialog_select_language_title">Chọn ngôn ngữ</string>
+    <string name="language_default">Mặc định hệ thống</string>
+    <string name="language_arabic">Tiếng Ả Rập (العربية)</string>
+    <string name="language_french">Tiếng Pháp (Français)</string>
+    <string name="language_spanish">Tiếng Tây Ban Nha (Español)</string>
+    <string name="language_german">Tiếng Đức (Deutsch)</string>
+    <string name="language_portuguese">Tiếng Bồ Đào Nha (Português)</string>
+    <string name="language_italian">Tiếng Ý (Italiano)</string>
+    <string name="language_chinese">Tiếng Trung (中文)</string>
+    <string name="language_hindi">Tiếng Ấn Độ (हिन्दी)</string>
+    <string name="language_japanese">Tiếng Nhật (日本語)</string>
+    <string name="language_korean">Tiếng Hàn (한국어)</string>
+    <string name="language_russian">Tiếng Nga (Русский)</string>
+    <string name="language_turkish">Tiếng Thổ Nhĩ Kỳ (Türkçe)</string>
+    <string name="language_indonesian">Tiếng Indonesia (Bahasa Indonesia)</string>
+    <string name="language_vietnamese">Tiếng Việt</string>
+    <string name="language_polish">Tiếng Ba Lan (Polski)</string>
+    <string name="language_ukrainian">Tiếng Ukraina (Українська)</string>
+
+    <!-- Settings: Support & Feedback -->
+    <string name="settings_section_support">Hỗ trợ &amp; Phản hồi</string>
+    <string name="settings_rate_app">Đánh giá FlowBytes</string>
+    <string name="settings_rate_app_desc">Chia sẻ trải nghiệm và giúp chúng tôi cải thiện</string>
+    <string name="settings_share_app">Chia sẻ với bạn bè</string>
+    <string name="settings_share_app_desc">Giới thiệu FlowBytes tới mọi người</string>
+    <string name="label_share_via">Chia sẻ qua</string>
+    <string name="share_text_body">Trải nghiệm FlowBytes! Theo dõi dung lượng chính xác: https://play.google.com/store/apps/details?id=%1$s</string>
+    <string name="settings_help_feedback">Trợ giúp &amp; Phản hồi</string>
+    <string name="settings_help_feedback_desc">Liên hệ qua Telegram hoặc Email</string>
+    <string name="option_telegram">Telegram</string>
+    <string name="desc_telegram">Nhắn tin trực tiếp cho nhà phát triển</string>
+    <string name="option_email">Email</string>
+    <string name="desc_email">Gửi email cho nhà phát triển</string>
+    <string name="option_report_bug">Báo lỗi / Đề xuất tính năng</string>
+    <string name="desc_report_bug">Mở GitHub Issues để báo lỗi hoặc yêu cầu tính năng</string>
+    <string name="settings_donate">Ủng hộ</string>
+    <string name="settings_donate_desc">Đóng góp để duy trì FlowBytes không quảng cáo và mã nguồn mở</string>
+    <string name="dialog_donate_title">Ủng hộ FlowBytes</string>
+    <string name="label_donate_amount_1">Món quà nhỏ ($1.00)</string>
+    <string name="label_donate_amount_2_5">Người ủng hộ dự án ($2.50)</string>
+    <string name="label_donate_amount_6">Nhà tài trợ dự án ($6.00)</string>
+    <string name="desc_donate_1">Một cách đơn giản để thể hiện sự trân trọng và duy trì dự án.</string>
+    <string name="desc_donate_2_5">Giúp tài trợ phát triển các tính năng mới và tối ưu hiệu năng.</string>
+    <string name="desc_donate_6">Đóng góp quan trọng giúp FlowBytes duy trì mã nguồn mở và không quảng cáo.</string>
+    <string name="msg_donation_success_title">Xin cảm ơn!</string>
+    <string name="msg_donation_success_body">Sự ủng hộ của bạn rất quý giá và giúp duy trì dự án.</string>
+    <string name="msg_donation_cancelled">Đã hủy ủng hộ.</string>
+    <string name="msg_donation_failed">Ủng hộ thất bại: %1$s</string>
+    <string name="snackbar_support_prompt">Bạn thích FlowBytes? Hãy ủng hộ phát triển không quảng cáo!</string>
+    <string name="snackbar_support_action">Ủng hộ</string>
+
+    <!-- Settings: About -->
+    <string name="settings_section_about">Giới thiệu</string>
+    <string name="settings_version_label">Phiên bản</string>
+    <string name="settings_view_source">Mã nguồn</string>
+    <string name="settings_view_source_desc">FlowBytes là phần mềm mã nguồn mở</string>
+    <string name="settings_privacy_policy">Chính sách bảo mật</string>
+    <string name="settings_terms_conditions">Điều khoản &amp; Điều kiện</string>
+    <string name="settings_licenses">Giấy phép mã nguồn mở</string>
+
+    <!-- Alerts History -->
+    <string name="msg_no_alerts_history">Không tìm thấy lịch sử cảnh báo.</string>
+    <string name="btn_clear_history">Xóa lịch sử</string>
+    <string name="msg_confirm_clear_history">Bạn có chắc chắn muốn xóa vĩnh viễn lịch sử cảnh báo không?</string>
+
+    <!-- Code Strings -->
+    <string name="label_advanced_settings">Cài đặt nâng cao</string>
+    <string name="title_mute_app">Tắt tiếng %s</string>
+    <string name="desc_mute_app">Ngừng nhận cảnh báo dung lượng cao cho ứng dụng này.</string>
+    <string name="btn_mute">Tắt tiếng</string>
+    <string name="title_whats_new">Có gì mới</string>
+    <string name="desc_whats_new">Khám phá các tính năng và cải tiến mới nhất.</string>
+    <string name="btn_done">Hoàn thành</string>
+    <string name="title_vpn_disclosure">Bật chặn ứng dụng</string>
+    <string name="desc_vpn_disclosure">FlowBytes sử dụng VPN cục bộ để quản lý truy cập internet cho ứng dụng vượt giới hạn.</string>
+    <string name="msg_vpn_feature_local">100% Cục bộ: Dữ liệu của bạn không bao giờ rời khỏi thiết bị.</string>
+    <string name="msg_vpn_feature_privacy">Bảo mật hàng đầu: Chúng tôi không thu thập hoặc theo dõi dữ liệu.</string>
+    <string name="msg_vpn_feature_focused">Chính xác: Chỉ ảnh hưởng đến ứng dụng bạn chọn giới hạn.</string>
+    <string name="btn_not_now">Để sau</string>
+    <string name="btn_continue">Tiếp tục</string>
+    <string name="title_custom_color">Tùy chỉnh màu</string>
+    <string name="btn_apply">Áp dụng</string>
+    <string name="btn_get_started">Bắt đầu</string>
+    <string name="btn_skip_for_now">Bỏ qua lúc này</string>
+    <string name="title_welcome">Chào mừng đến với FlowBytes</string>
+    <string name="msg_onboarding_desc">Để theo dõi chính xác, chúng tôi cần một số quyền truy cập.</string>
+    <string name="label_usage_access">Quyền truy cập dữ liệu</string>
+    <string name="desc_usage_access">Cần thiết để theo dõi dung lượng sử dụng theo ứng dụng.</string>
+    <string name="label_notifications">Thông báo</string>
+    <string name="desc_notifications">Cần thiết để hiển thị tốc độ trên thanh trạng thái.</string>
+    <string name="label_battery_optimization">Tối ưu hóa pin</string>
+    <string name="desc_battery_optimization">Cần thiết để giữ bộ giám sát tốc độ chạy ngầm.</string>
+    <string name="label_granted">Đã cấp quyền</string>
+    <string name="btn_grant">Cấp quyền</string>
+    <string name="title_traffic_settings">Cài đặt cảnh báo dung lượng cao</string>
+    <string name="label_speed_threshold">Tốc độ kích hoạt</string>
+    <string name="desc_speed_threshold">Cảnh báo kích hoạt khi tốc độ mạng vượt ngưỡng này.</string>
+    <string name="label_time_above_threshold">Thời gian duy trì tốc độ</string>
+    <string name="desc_time_above_threshold">Tốc độ phải giữ trên ngưỡng trong khoảng thời gian này trước khi cảnh báo.</string>
+    <string name="label_alert_cooldown">Thời gian giữa các cảnh báo</string>
+    <string name="desc_alert_cooldown">Thời gian chờ tối thiểu trước khi gửi cảnh báo tiếp theo.</string>
+    <string name="label_reset_speed_threshold">Tốc độ đặt lại</string>
+    <string name="desc_reset_speed_threshold">Hệ thống đặt lại khi tốc độ giảm xuống dưới mức này.</string>
+    <string name="label_time_below_reset">Thời gian dưới tốc độ đặt lại</string>
+    <string name="desc_time_below_reset">Tốc độ phải ở dưới mức đặt lại đủ lâu để xóa cảnh báo.</string>
+    <string name="btn_save_config">Lưu</string>
+    <string name="label_app_limits">Giới hạn ứng dụng</string>
+    <string name="filter_all">Tất cả</string>
+    <string name="label_daily_limits">Giới hạn hàng ngày</string>
+    <string name="label_monthly_limits">Giới hạn hàng tháng</string>
+    <string name="label_high_traffic">Lưu lượng cao</string>
+    <string name="msg_no_alerts_all">Chưa có cảnh báo nào.</string>
+    <string name="msg_no_alerts_app">Chưa có cảnh báo giới hạn ứng dụng.</string>
+    <string name="msg_no_alerts_daily">Chưa có cảnh báo giới hạn hàng ngày.</string>
+    <string name="msg_no_alerts_monthly">Chưa có cảnh báo giới hạn hàng tháng.</string>
+    <string name="msg_no_alerts_traffic">Chưa có cảnh báo lưu lượng cao.</string>
+    <string name="label_app_limit_reached">Đã đạt giới hạn ứng dụng</string>
+    <string name="label_daily_limit_reached">Đã đạt giới hạn hàng ngày</string>
+    <string name="label_monthly_limit_reached">Đã đạt giới hạn hàng tháng</string>
+    <string name="label_custom_limit_reached">Đã đạt giới hạn tùy chỉnh</string>
+    <string name="label_start_date_select">Ngày bắt đầu: %s</string>
+    <string name="label_end_date_select">Ngày kết thúc: %s</string>
+    <string name="msg_invalid_date_range">Ngày kết thúc phải trùng hoặc sau Ngày bắt đầu</string>
+    <string name="label_trigger_speed_header">TỐC ĐỘ KÍCH HOẠT</string>
+    <string name="label_limit_set_header">GIỚI HẠN ĐÃ ĐẶT</string>
+    <string name="label_usage_recorded_header">DỮ LIỆU ĐÃ GHI</string>
+    <string name="msg_no_app_limits">Chưa cấu hình giới hạn ứng dụng.</string>
+    <string name="desc_restrict_app_subtitle">Thêm ứng dụng để quản lý dung lượng sử dụng.</string>
+    <string name="cd_add_app_limit">Thêm giới hạn ứng dụng</string>
+    <string name="label_block_apps">Tường lửa</string>
+    <string name="desc_block_apps">Chặn truy cập internet khi vượt quá giới hạn</string>
+    <string name="msg_firewall_enabled">Đã bật tường lửa</string>
+    <string name="msg_firewall_disabled">Đã tắt tường lửa</string>
+    <string name="title_edit_app_limit">Sửa giới hạn ứng dụng</string>
+    <string name="btn_create_app_limit">Tạo giới hạn</string>
+    <string name="label_app_limit_selection">Giới hạn ứng dụng</string>
+    <string name="desc_app_limit_selection">Đặt hạn chế cho một ứng dụng cụ thể</string>
+    <string name="title_delete_limit">Xóa giới hạn</string>
+    <string name="msg_confirm_delete_limit">Bạn có chắc muốn xóa giới hạn cho %s không?</string>
+    <string name="msg_no_apps_found">Không tìm thấy ứng dụng.</string>
+    <string name="placeholder_search_apps">Tìm kiếm ứng dụng</string>
+    <string name="title_select_application">Chọn ứng dụng</string>
+    <string name="title_configure_limit">Cấu hình giới hạn</string>
+    <string name="title_general_limits">Gói hệ thống</string>
+    <string name="btn_add_plan">Thêm gói</string>
+    <string name="btn_add_app_limit">Thêm giới hạn ứng dụng</string>
+    <string name="msg_no_restricted_apps">Không có ứng dụng bị hạn chế</string>
+    <string name="desc_restrict_app_placeholder">Hạn chế ứng dụng cụ thể sử dụng dữ liệu chạy nền.</string>
+    <string name="label_inactive">Không hoạt động</string>
+    <string name="cd_delete_plan">Xóa gói</string>
+    <string name="label_configure_network_plan">Cấu hình gói mạng</string>
+    <string name="desc_prevent_overages">Tránh phát sinh cước dữ liệu.</string>
+    <string name="msg_no_general_limits">Chưa cấu hình gói hệ thống.</string>
+    <string name="desc_add_general_limit_subtitle">Đặt gói dữ liệu toàn thiết bị để kiểm soát cước.</string>
+    <string name="label_general_limit_selection">Gói hệ thống</string>
+    <string name="desc_general_limit_selection">Cấu hình giới hạn dữ liệu hàng ngày toàn thiết bị</string>
+    <string name="title_choose_limit_type">Chọn loại giới hạn</string>
+
+    <!-- Notification Strings -->
+    <string name="status_not_supported">Thiết bị không hỗ trợ giám sát tốc độ</string>
+    <string name="channel_speed_monitor_name">Bộ giám sát tốc độ</string>
+    <string name="channel_speed_monitor_desc">Chỉ báo tốc độ mạng thời gian thực</string>
+    <string name="channel_usage_alerts_name">Cảnh báo dung lượng cao</string>
+    <string name="channel_usage_alerts_desc">Thông báo khi đạt ngưỡng dung lượng</string>
+    <string name="notification_high_usage_app_msg">%1$s đang dùng nhiều dữ liệu: %2$s (Đã dùng %3$s).</string>
+    <string name="notification_high_usage_title">Sử dụng dữ liệu cao</string>
+    <string name="notification_summary_title">Cảnh báo dung lượng cao</string>
+    <string name="notification_summary_msg">Nhấn để xem lịch sử cảnh báo dữ liệu.</string>
+    <string name="notification_summary_text">Cảnh báo FlowBytes</string>
+    <string name="notification_app_limit_msg">%1$s đã đạt giới hạn %2$s.</string>
+    <string name="notification_app_limit_title">Đã đạt giới hạn %s</string>
+    <string name="msg_reached_limit">Bạn đã đạt giới hạn %1$s %2$s (Đã dùng %3$s).</string>
+    <string name="btn_silence">Tắt tiếng</string>
+
+    <!-- Badges -->
+    <string name="badge_limit_reached">Đã đạt giới hạn</string>
+    <string name="badge_blocked">Đã chặn</string>
+
+    <!-- App Review Dialog -->
+    <string name="review_dialog_title">Bạn thích FlowBytes chứ?</string>
+    <string name="review_dialog_description">Nếu FlowBytes hữu ích, xin dành chút thời gian đánh giá chúng tôi! Điều này giúp ứng dụng ngày càng tốt hơn và không có quảng cáo.</string>
+    <string name="review_later">Để sau</string>
+    <string name="review_never">Không bao giờ</string>
+    <string name="review_submit_feedback">Gửi phản hồi</string>
+    <string name="review_rate_on_play_store">Đánh giá trên Play Store</string>
+    <string name="review_feedback_title">Giúp chúng tôi cải thiện</string>
+    <string name="review_feedback_description">Rất tiếc nếu bạn chưa hài lòng. Hãy cho chúng tôi biết cách cải thiện FlowBytes tốt hơn.</string>
+    <string name="review_feedback_placeholder">Nhập góp ý hoặc phản hồi của bạn ở đây&#8230;</string>
+    <string name="review_play_store_title">Cảm ơn bạn đã đánh giá!</string>
+    <string name="review_play_store_description">Chúng tôi rất trân trọng nếu bạn để lại nhận xét trên Google Play!</string>
+    <string name="review_toast_feedback_submitted">Đã gửi phản hồi thành công. Xin cảm ơn!</string>
+
+    <string name="label_network_type">Loại mạng</string>
+    <string name="label_limit_period">Chu kỳ giới hạn</string>
+    <string name="label_daily_wifi">Wi-Fi hàng ngày</string>
+    <string name="label_daily_mobile">Di động hàng ngày</string>
+    <string name="label_monthly_wifi">Wi-Fi hàng tháng</string>
+    <string name="label_monthly_mobile">Di động hàng tháng</string>
+    <string name="label_custom_wifi">Wi-Fi tùy chỉnh</string>
+    <string name="label_custom_mobile">Di động tùy chỉnh</string>
+    <string name="settings_traffic_threshold_subtitle">Cấu hình tốc độ và khoảng thời gian cảnh báo</string>
+    <string name="whats_new_custom_limits_title">Giới hạn theo khoảng thời gian</string>
+    <string name="whats_new_custom_limits_desc">Bây giờ bạn có thể đặt giới hạn dung lượng theo khoảng ngày cụ thể trên cả mạng Di động và Wi-Fi.</string>
+    <string name="whats_new_reset_day_title">Ngày làm mới hàng tháng</string>
+    <string name="whats_new_reset_day_desc">Hỗ trợ chu kỳ cước tùy chỉnh. Chọn một ngày trong tháng để làm mới lưu lượng.</string>
+
+    <string name="label_daily_wifi_limit">Giới hạn Wi-Fi hàng ngày</string>
+    <string name="label_monthly_wifi_limit">Giới hạn Wi-Fi hàng tháng</string>
+    <string name="label_daily_mobile_limit">Giới hạn Di động hàng ngày</string>
+    <string name="label_monthly_mobile_limit">Giới hạn Di động hàng tháng</string>
+    <string name="label_custom_wifi_limit">Giới hạn Wi-Fi tùy chỉnh</string>
+    <string name="label_custom_mobile_limit">Giới hạn Di động tùy chỉnh</string>
+    <string name="label_unknown">Không xác định</string>
+    <string name="desc_configure_limit_format">Cấu hình giới hạn cho gói %1$s của bạn.</string>
+    <string name="label_select_date">Chọn ngày</string>
+    <string name="btn_configure">Cấu hình</string>
+    <string name="label_selected_count">Đã chọn %1$d</string>
+    <string name="label_app_limits_pending">Giới hạn ứng dụng đang chờ</string>
+    <string name="cd_clear_selection">Xóa lựa chọn</string>
+    <string name="title_configure_limits">Cấu hình giới hạn</string>
+    <string name="desc_configure_limits_count">Cấu hình giới hạn cho %1$d ứng dụng đã chọn.</string>
+    <string name="title_global_settings">Cài đặt chung</string>
+    <string name="desc_global_settings_subtitle">Đặt loại mạng và chu kỳ cơ sở cho tất cả ứng dụng đã chọn.</string>
+    <string name="title_default_limits">Giới hạn mặc định (Điền nhanh)</string>
+    <string name="desc_default_limits_subtitle">Thiết lập giá trị này sẽ tự động điền vào danh sách ứng dụng bên dưới.</string>
+    <string name="title_individual_app_limits">Giới hạn từng ứng dụng</string>
+    <string name="desc_individual_app_limits_subtitle">Tùy chỉnh loại mạng, chu kỳ hoặc giá trị giới hạn cho từng ứng dụng.</string>
+
+    <!-- Widgets Screen -->
+    <string name="title_homescreen_widgets">Tiện ích màn hình chính</string>
+    <string name="title_customize_add_widgets">Tùy chỉnh &amp; Thêm tiện ích</string>
+    <string name="desc_widgets_instruction">Thay đổi các tùy chọn bên dưới để tùy chỉnh giao diện tiện ích tức thì.</string>
+    <string name="label_available_widgets">TIỆN ÍCH CÓ SẴN</string>
+    <string name="title_daily_usage_widget">Tiện ích sử dụng hàng ngày</string>
+    <string name="desc_daily_usage_widget_size">4x1 Gọn / 4x2 Hàng ngày</string>
+    <string name="title_monthly_usage_widget">Tiện ích sử dụng hàng tháng</string>
+    <string name="desc_monthly_usage_widget_size">4x1 Gọn / 4x2 Hàng tháng</string>
+    <string name="label_todays_usage_caps">SỬ DỤNG HÔM NAY</string>
+    <string name="title_todays_data_widget">Tiện ích dữ liệu hôm nay</string>
+    <string name="desc_todays_data_size">2x2 Tiến trình hình tròn</string>
+    <string name="label_todays_data_caps">DỮ LIỆU HÔM NAY</string>
+    <string name="title_daily_limit_widget">Tiện ích giới hạn mạng hàng ngày</string>
+    <string name="desc_detailed_status_size">4x2 Trạng thái chi tiết</string>
+    <string name="label_daily_limit_caps">GIỚI HẠN MẠNG HÀNG NGÀY</string>
+    <string name="title_monthly_limit_widget">Tiện ích giới hạn mạng hàng tháng</string>
+    <string name="label_monthly_limit_caps">GIỚI HẠN MẠNG HÀNG THÁNG</string>
+    <string name="title_custom_limit_widget">Tiện ích giới hạn mạng tùy chỉnh</string>
+    <string name="label_custom_limit_caps">GIỚI HẠN MẠNG TÙY CHỈNH</string>
+    <string name="title_speed_monitor_widget">Tiện ích giám sát tốc độ</string>
+    <string name="desc_live_graphs_size">4x2 Biểu đồ trực tiếp</string>
+    <string name="label_speed_monitor_caps">GIÁM SÁT TỐC ĐỘ</string>
+    <string name="label_download_caps">TẢI XUỐNG</string>
+    <string name="label_upload_caps">TẢI LÊN</string>
+    <string name="btn_add">Thêm</string>
+    <string name="msg_widget_pin_failed">Trình khởi chạy của bạn không hỗ trợ thêm tiện ích trực tiếp.</string>
+    <string name="msg_widget_pin_api_error">Tính năng này yêu cầu Android 8.0 trở lên.</string>
+
+    <!-- App Updates -->
+    <string name="title_update_available">Có bản cập nhật mới</string>
+    <string name="desc_update_available">Phiên bản mới của FlowBytes (%1$s) đã sẵn sàng tải xuống.</string>
+    <string name="btn_update">Cập nhật</string>
+    <string name="btn_ignore_version">Bỏ qua phiên bản</string>
+    <string name="btn_later">Để sau</string>
+    <string name="label_release_notes">GHI CHÚ BẢN CẮP NHẬT</string>
+    <string name="settings_auto_check_updates">Tự động kiểm tra bản cập nhật</string>
+    <string name="settings_auto_check_updates_desc">Tìm phiên bản mới khi khởi động</string>
+    <string name="settings_check_updates">Kiểm tra bản cập nhật</string>
+    <string name="settings_check_updates_desc">Đảm bảo ứng dụng của bạn luôn chạy phiên bản mới nhất</string>
+    <string name="toast_app_up_to_date">FlowBytes đã là bản mới nhất!</string>
+    <string name="toast_update_check_failed">Không thể kiểm tra bản cập nhật. Vui lòng thử lại sau.</string>
+    <string name="toast_checking_updates">Đang kiểm tra bản cập nhật...</string>
+
+    <!-- Strings extracted from Kotlin files -->
+    <string name="msg_usage_stats_permission_disabled">Quyền truy cập dữ liệu bị tắt. Nhấn để cấp quyền.</string>
+    <string name="msg_notification_permission_disabled">Quyền thông báo bị tắt. Nhấn để cấp quyền.</string>
+    <string name="label_widget_settings_caps">CÀI ĐẶT TIỆN ÍCH</string>
+    <string name="option_update_interval_manual">Chỉ thủ công / Tắt</string>
+    <string name="option_update_interval_hour">1 Giờ</string>
+    <string name="option_update_interval_hours">%1$d Giờ</string>
+    <string name="option_update_interval_minutes">%1$d Phút</string>
+    <string name="label_update_interval">Tần suất cập nhật</string>
+    <string name="desc_update_interval_format">Tần suất cập nhật ứng dụng chạy nền: %1$s</string>
+    <string name="title_select_update_interval">Chọn tần suất cập nhật</string>
+    <string name="cd_manage_widgets">Quản lý tiện ích</string>
+    <string name="cd_switch_to_input_mode">Chuyển sang chế độ nhập</string>
+    <string name="cd_switch_to_picker_mode">Chuyển sang chế độ chọn</string>
+    <string name="msg_billing_service_not_ready">Dịch vụ thanh toán chưa sẵn sàng. Vui lòng thử lại sau.</string>
+    <string name="msg_billing_error_format">Lỗi thanh toán Google Play (Mã: %1$s)</string>
+    <string name="vpn_session_name">Chặn ứng dụng FlowBytes</string>
+    <string name="msg_product_details_not_found">Không tìm thấy chi tiết sản phẩm. Hãy đảm bảo ứng dụng được cài từ Google Play.</string>
+    <string name="widget_title_network_limit">Giới hạn mạng</string>
+    <string name="widget_title_speed_monitor">Giám sát tốc độ</string>
+    <string name="widget_title_todays_data">Dữ liệu hôm nay</string>
+    <string name="desc_download_speed_graph">Biểu đồ tốc độ tải xuống</string>
+    <string name="desc_upload_speed_graph">Biểu đồ tốc độ tải lên</string>
+    <string name="cd_previous">Trước</string>
+    <string name="cd_next">Sau</string>
+    <string name="label_limit_prefix">Giới hạn: %1$s</string>
+    <string name="unit_secs">Giây</string>
+    <string name="unit_mins">Phút</string>
+    <string name="unit_hours">Giờ</string>
+    <string name="unit_min_short">Phút</string>
+    <string name="unit_sec_short">Giây</string>
+</resources>

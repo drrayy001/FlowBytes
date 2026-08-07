@@ -1,0 +1,445 @@
+<resources>
+    <string name="app_name">FlowBytes</string>
+
+    <!-- Screen Titles -->
+    <string name="title_app_usage">Penggunaan Aplikasi</string>
+    <string name="title_settings">Pengaturan</string>
+    <string name="title_home">Beranda</string>
+    <string name="title_limits">Batas Paket</string>
+    <string name="title_alerts">Riwayat Peringatan</string>
+    <string name="label_usage">Penggunaan</string>
+    <string name="label_plans">Paket</string>
+    <string name="label_alerts">Peringatan</string>
+
+    <!-- Accessibility Descriptions -->
+    <string name="cd_back">Kembali</string>
+    <string name="cd_pull_to_refresh">Tarik ke bawah untuk memperbarui data</string>
+    <string name="cd_clear_search">Hapus pencarian</string>
+    <string name="cd_prev_date">Tanggal Sebelumnya</string>
+    <string name="cd_next_date">Tanggal Berikutnya</string>
+    <string name="cd_toggle_filters">Beralih Filter</string>
+    <string name="cd_app_icon">Ikon Aplikasi</string>
+    <string name="desc_download">Kecepatan unduh</string>
+    <string name="desc_upload">Kecepatan unggah</string>
+    <string name="desc_combined">Kecepatan total</string>
+    <string name="desc_mobile_data">Penggunaan data seluler</string>
+    <string name="desc_wifi">Penggunaan Wi-Fi</string>
+
+    <!-- Home Screen -->
+    <string name="label_today_colon">Hari Ini:</string>
+    <string name="label_separator">|</string>
+    <string name="label_download">Unduh</string>
+    <string name="label_upload">Unggah</string>
+    <string name="label_this_month">Bulan Ini</string>
+    <string name="label_usage_breakdown">Aktivitas Mingguan</string>
+    <string name="label_mobile">Seluler</string>
+    <string name="label_wifi">Wi-Fi</string>
+    <string name="label_combined">Kombinasi</string>
+    <string name="label_todays_usage">Penggunaan hari ini</string>
+    <string name="label_usage_summary">Ringkasan Penggunaan</string>
+    <string name="msg_no_usage_recorded">Belum ada penggunaan data yang tercatat</string>
+
+    <!-- App Usage Screen -->
+    <string name="filter_daily">Harian</string>
+    <string name="filter_monthly">Bulanan</string>
+    <string name="filter_custom">Kustom</string>
+    <string name="filter_mobile_wifi">Seluler &amp; Wi-Fi</string>
+    <string name="filter_mobile_only">Hanya Seluler</string>
+    <string name="filter_wifi_only">Hanya Wi-Fi</string>
+    <string name="btn_ok">OK</string>
+    <string name="btn_cancel">Batal</string>
+    <string name="btn_delete">Hapus</string>
+    <string name="btn_edit">Edit</string>
+    <string name="label_both">Keduanya</string>
+    <string name="label_start_date">Dari</string>
+    <string name="label_end_date">Hingga</string>
+    <string name="title_select_month">Pilih Bulan</string>
+    <string name="label_today">Hari Ini</string>
+    <string name="msg_no_usage_data">Tidak ada data penggunaan untuk filter yang dipilih.</string>
+    <string name="label_wifi_usage">Wi-Fi</string>
+    <string name="label_mobile_usage">Seluler</string>
+    <string name="label_wifi_colon">Wi-Fi:</string>
+    <string name="label_mobile_colon">Seluler:</string>
+    <string name="label_system_apps">Aplikasi sistem</string>
+    <string name="title_system_data_usage">Penggunaan data sistem</string>
+    <string name="label_system_processes">Proses sistem</string>
+    <string name="label_tethering">Penambatan &amp; Hotspot</string>
+    <string name="label_removed_apps">Aplikasi yang dihapus</string>
+    <string name="label_root">Root</string>
+    <string name="label_android_system">Sistem Android</string>
+    <string name="label_dns_resolver">DNS Resolver</string>
+    <string name="label_mdns_responder">mDNS Responder</string>
+    <string name="label_media_service">Layanan Media</string>
+    <string name="label_system_update">Pembaruan Sistem</string>
+
+    <string name="tile_monitoring_on">Pemantauan AKTIF</string>
+    <string name="tile_monitoring_off">Pemantauan NONAKTIF</string>
+
+    <!-- Settings: General -->
+    <string name="settings_section_general">Umum</string>
+    <string name="settings_monitoring_toggle">Aktifkan Pemantauan</string>
+    <string name="settings_monitoring_desc">Pantau kecepatan jaringan dan penggunaan data secara real-time</string>
+    <string name="settings_reset_time">Waktu Reset</string>
+    <string name="settings_reset_time_desc">Waktu untuk memulai siklus pemantauan baru</string>
+    <string name="settings_speed_unit">Satuan Kecepatan</string>
+    <string name="settings_speed_unit_desc">Pilih antara Byte per detik (B/s) atau Bit per detik (bps)</string>
+    <string name="unit_bytes">Byte per detik (B/s)</string>
+    <string name="unit_bits">Bit per detik (bps)</string>
+    <string name="dialog_select_speed_unit_title">Pilih Satuan Kecepatan</string>
+    <string name="dialog_reset_time_title">Atur Waktu Reset</string>
+    <string name="settings_monthly_reset_day">Hari Reset Bulanan</string>
+    <string name="settings_monthly_reset_day_desc">Siklus penagihan direset pada tanggal %d setiap bulan</string>
+    <string name="dialog_reset_day_title">Pilih Tanggal Reset Bulanan</string>
+    <string name="msg_reset_day_explanation">Semua penggunaan data bulanan dan pemberitahuan batas akan mulai dihitung dari tanggal ini.</string>
+
+    <!-- Settings: Notifications & Status Bar -->
+    <string name="settings_section_notifications">Notifikasi &amp; Bilah Status</string>
+    <string name="settings_show_daily_usage">Tampilkan Notifikasi</string>
+    <string name="settings_daily_usage_desc">Tampilkan kecepatan real-time dan penggunaan di area notifikasi</string>
+    <string name="settings_notification_content">Konten Notifikasi</string>
+    <string name="option_speed_only">Hanya Kecepatan</string>
+    <string name="option_daily_only">Hanya Statistik Harian</string>
+    <string name="option_both">Kecepatan &amp; Statistik Harian</string>
+    <string name="settings_high_priority">Prioritas Tinggi</string>
+    <string name="settings_high_priority_desc">Jaga indikator kecepatan tetap terlihat di bagian atas notifikasi</string>
+    <string name="settings_hide_offline">Sembunyikan Saat Offline</string>
+    <string name="settings_hide_offline_desc">Sembunyikan indikator kecepatan secara otomatis saat terputus</string>
+
+    <string name="settings_section_widget">Widget Layar Utama</string>
+    <string name="settings_widget_show_speed">Tampilkan Kecepatan</string>
+    <string name="settings_widget_show_speed_desc">Tampilkan kecepatan unduh dan unggah di widget</string>
+    <string name="settings_widget_usage_type">Tampilan Penggunaan Widget</string>
+
+    <!-- Settings: Alerts & Limits -->
+    <string name="settings_section_alerts">Peringatan &amp; Batas</string>
+    <string name="settings_data_alerts">Peringatan Data Tinggi</string>
+    <string name="settings_data_alerts_desc">Dapatkan notifikasi saat aplikasi menggunakan data latar belakang secara berlebihan</string>
+    <string name="settings_mobile_limit">Batas Data Seluler</string>
+    <string name="settings_wifi_limit">Batas Data Wi-Fi</string>
+
+    <string name="label_plan_duration">Durasi Paket</string>
+    <string name="msg_alert_muted">Peringatan Disedapkan</string>
+    <string name="title_select_plan_type">Pilih Jenis Paket</string>
+    <string name="settings_indicator_size">Ukuran Ikon</string>
+
+    <!-- Settings: Appearance -->
+    <string name="settings_section_appearance">Tampilan</string>
+    <string name="settings_app_theme">Tema Aplikasi</string>
+    <string name="dialog_select_theme_title">Pilih Tema</string>
+    <string name="theme_system">Sistem</string>
+    <string name="theme_light">Terang</string>
+    <string name="theme_dark">Gelap</string>
+    <string name="settings_material_you">Material You</string>
+    <string name="settings_material_you_desc">Gunakan warna aksen sistem</string>
+    <string name="settings_accent_color">Warna Aksen</string>
+    <string name="settings_accent_color_desc">Pilih warna utama kustom</string>
+    <string name="settings_amoled_mode">Mode AMOLED</string>
+    <string name="settings_amoled_mode_desc">Latar belakang hitam pekat</string>
+    <string name="size_small">Kecil</string>
+    <string name="size_medium">Sedang</string>
+    <string name="size_large">Besar</string>
+    <string name="settings_language">Bahasa</string>
+    <string name="dialog_select_language_title">Pilih Bahasa</string>
+    <string name="language_default">Default Sistem</string>
+    <string name="language_arabic">Arab (العربية)</string>
+    <string name="language_french">Prancis (Français)</string>
+    <string name="language_spanish">Spanyol (Español)</string>
+    <string name="language_german">Jerman (Deutsch)</string>
+    <string name="language_portuguese">Portugis (Português)</string>
+    <string name="language_italian">Italia (Italiano)</string>
+    <string name="language_chinese">Mandarin (中文)</string>
+    <string name="language_hindi">Hindi (हिन्दी)</string>
+    <string name="language_japanese">Jepang (日本語)</string>
+    <string name="language_korean">Korea (한국어)</string>
+    <string name="language_russian">Rusia (Русский)</string>
+    <string name="language_turkish">Turki (Türkçe)</string>
+    <string name="language_indonesian">Bahasa Indonesia</string>
+    <string name="language_vietnamese">Vietnam (Tiếng Việt)</string>
+    <string name="language_polish">Polandia (Polski)</string>
+    <string name="language_ukrainian">Ukraina (Українська)</string>
+
+    <!-- Settings: Support & Feedback -->
+    <string name="settings_section_support">Dukungan &amp; Umpan Balik</string>
+    <string name="settings_rate_app">Beri Nilai FlowBytes</string>
+    <string name="settings_rate_app_desc">Bagikan pengalaman Anda dan bantu kami berkembang</string>
+    <string name="settings_share_app">Bagikan dengan Teman</string>
+    <string name="settings_share_app_desc">Rekomendasikan FlowBytes kepada orang lain</string>
+    <string name="label_share_via">Bagikan melalui</string>
+    <string name="share_text_body">Coba FlowBytes! Pantau penggunaan data Anda secara akurat: https://play.google.com/store/apps/details?id=%1$s</string>
+    <string name="settings_help_feedback">Bantuan &amp; Umpan Balik</string>
+    <string name="settings_help_feedback_desc">Hubungi kami melalui Telegram atau Email</string>
+    <string name="option_telegram">Telegram</string>
+    <string name="desc_telegram">Kirim pesan langsung ke pengembang</string>
+    <string name="option_email">Email</string>
+    <string name="desc_email">Kirim email ke pengembang</string>
+    <string name="option_report_bug">Laporkan Bug / Saran Fitur</string>
+    <string name="desc_report_bug">Buka GitHub Issues untuk melaporkan bug atau meminta fitur</string>
+    <string name="settings_donate">Donasi</string>
+    <string name="settings_donate_desc">Bantu menjaga FlowBytes tetap bebas iklan dan sumber terbuka</string>
+    <string name="dialog_donate_title">Dukung FlowBytes</string>
+    <string name="label_donate_amount_1">Tip Kecil ($1.00)</string>
+    <string name="label_donate_amount_2_5">Pendukung Proyek ($2.50)</string>
+    <string name="label_donate_amount_6">Pelindung Proyek ($6.00)</string>
+    <string name="desc_donate_1">Cara sederhana untuk menunjukkan apresiasi dan mendukung pemeliharaan proyek.</string>
+    <string name="desc_donate_2_5">Membantu mendanai pengembang fitur baru dan peningkatan kinerja.</string>
+    <string name="desc_donate_6">Kontribusi signifikan untuk menjaga FlowBytes tetap sumber terbuka, bebas iklan, dan independen.</string>
+    <string name="msg_donation_success_title">Terima Kasih!</string>
+    <string name="msg_donation_success_body">Dukungan Anda sangat dihargai dan membantu menjaga proyek ini tetap hidup.</string>
+    <string name="msg_donation_cancelled">Donasi dibatalkan.</string>
+    <string name="msg_donation_failed">Donasi gagal: %1$s</string>
+    <string name="snackbar_support_prompt">Suka dengan FlowBytes? Dukung pengembangan bebas iklan kami!</string>
+    <string name="snackbar_support_action">Dukung</string>
+
+    <!-- Settings: About -->
+    <string name="settings_section_about">Tentang</string>
+    <string name="settings_version_label">Versi</string>
+    <string name="settings_view_source">Kode Sumber</string>
+    <string name="settings_view_source_desc">FlowBytes adalah aplikasi sumber terbuka</string>
+    <string name="settings_privacy_policy">Kebijakan Privasi</string>
+    <string name="settings_terms_conditions">Syarat &amp; Ketentuan</string>
+    <string name="settings_licenses">Lisensi Sumber Terbuka</string>
+
+    <!-- Alerts History -->
+    <string name="msg_no_alerts_history">Tidak ada riwayat peringatan ditemukan.</string>
+    <string name="btn_clear_history">Hapus Riwayat</string>
+    <string name="msg_confirm_clear_history">Apakah Anda yakin ingin menghapus riwayat peringatan secara permanen?</string>
+
+    <!-- Code Strings -->
+    <string name="label_advanced_settings">Pengaturan Lanjutan</string>
+    <string name="title_mute_app">Bungkam %s</string>
+    <string name="desc_mute_app">Berhenti menerima peringatan data tinggi untuk aplikasi ini.</string>
+    <string name="btn_mute">Bungkam</string>
+    <string name="title_whats_new">Yang Baru</string>
+    <string name="desc_whats_new">Lihat fitur dan peningkatan terbaru.</string>
+    <string name="btn_done">Selesai</string>
+    <string name="title_vpn_disclosure">Aktifkan Pemblokiran Aplikasi</string>
+    <string name="desc_vpn_disclosure">FlowBytes menggunakan VPN lokal untuk mengelola akses internet bagi aplikasi yang melebihi batas.</string>
+    <string name="msg_vpn_feature_local">100% Lokal: Lalu lintas Anda tidak pernah meninggalkan perangkat Anda.</string>
+    <string name="msg_vpn_feature_privacy">Privasi Utama: Kami tidak pernah mengumpulkan atau melacak data Anda.</string>
+    <string name="msg_vpn_feature_focused">Tersasar: Hanya memengaruhi aplikasi yang Anda pilih untuk dibatasi.</string>
+    <string name="btn_not_now">Nanti Saja</string>
+    <string name="btn_continue">Lanjutkan</string>
+    <string name="title_custom_color">Sesuaikan Warna</string>
+    <string name="btn_apply">Terapkan</string>
+    <string name="btn_get_started">Mulai</string>
+    <string name="btn_skip_for_now">Lewati untuk sekarang</string>
+    <string name="title_welcome">Selamat Datang di FlowBytes</string>
+    <string name="msg_onboarding_desc">Untuk memberikan pelacakan data yang akurat, kami memerlukan beberapa izin.</string>
+    <string name="label_usage_access">Akses Penggunaan</string>
+    <string name="desc_usage_access">Diperlukan untuk melacak penggunaan data per aplikasi.</string>
+    <string name="label_notifications">Notifikasi</string>
+    <string name="desc_notifications">Diperlukan untuk menampilkan kecepatan langsung di bilah status.</string>
+    <string name="label_battery_optimization">Optimasi Baterai</string>
+    <string name="desc_battery_optimization">Diperlukan untuk menjaga pemantau kecepatan tetap berjalan di latar belakang.</string>
+    <string name="label_granted">Diizinkan</string>
+    <string name="btn_grant">Izinkan</string>
+    <string name="title_traffic_settings">Pengaturan Peringatan Data Tinggi</string>
+    <string name="label_speed_threshold">Kecepatan Pemicu</string>
+    <string name="desc_speed_threshold">Peringatan dipicu saat kecepatan jaringan melebihi batas ini.</string>
+    <string name="label_time_above_threshold">Durasi Di Atas Kecepatan</string>
+    <string name="desc_time_above_threshold">Kecepatan harus tetap di atas batas selama durasi ini sebelum memberi notifikasi.</string>
+    <string name="label_alert_cooldown">Jeda Antar Peringatan</string>
+    <string name="desc_alert_cooldown">Waktu tunggu minimum sebelum mengirim peringatan lain.</string>
+    <string name="label_reset_speed_threshold">Kecepatan Reset</string>
+    <string name="desc_reset_speed_threshold">Sistem peringatan direset saat kecepatan turun di bawah tingkat ini.</string>
+    <string name="label_time_below_reset">Durasi Di Bawah Kecepatan Reset</string>
+    <string name="desc_time_below_reset">Kecepatan harus tetap di bawah tingkat reset selama ini untuk menghapus peringatan.</string>
+    <string name="btn_save_config">Simpan</string>
+    <string name="label_app_limits">Batas Aplikasi</string>
+    <string name="filter_all">Semua</string>
+    <string name="label_daily_limits">Batas Harian</string>
+    <string name="label_monthly_limits">Batas Bulanan</string>
+    <string name="label_high_traffic">Lalu Lintas Tinggi</string>
+    <string name="msg_no_alerts_all">Tidak ada peringatan tercatat.</string>
+    <string name="msg_no_alerts_app">Tidak ada peringatan batas aplikasi tercatat.</string>
+    <string name="msg_no_alerts_daily">Tidak ada peringatan batas harian tercatat.</string>
+    <string name="msg_no_alerts_monthly">Tidak ada peringatan batas bulanan tercatat.</string>
+    <string name="msg_no_alerts_traffic">Tidak ada peringatan lalu lintas tinggi tercatat.</string>
+    <string name="label_app_limit_reached">Batas Aplikasi Tercapai</string>
+    <string name="label_daily_limit_reached">Batas Harian Tercapai</string>
+    <string name="label_monthly_limit_reached">Batas Bulanan Tercapai</string>
+    <string name="label_custom_limit_reached">Batas Kustom Tercapai</string>
+    <string name="label_start_date_select">Tanggal Mulai: %s</string>
+    <string name="label_end_date_select">Tanggal Selesai: %s</string>
+    <string name="msg_invalid_date_range">Tanggal Selesai harus sama atau setelah Tanggal Mulai</string>
+    <string name="label_trigger_speed_header">KECEPATAN PEMICU</string>
+    <string name="label_limit_set_header">BATAS DIATUR</string>
+    <string name="label_usage_recorded_header">PENGGUNAAN TERCATAT</string>
+    <string name="msg_no_app_limits">Tidak ada batas aplikasi yang dikonfigurasi.</string>
+    <string name="desc_restrict_app_subtitle">Tambahkan aplikasi untuk mulai mengelola penggunaan datanya.</string>
+    <string name="cd_add_app_limit">Tambah batas aplikasi</string>
+    <string name="label_block_apps">Firewall</string>
+    <string name="desc_block_apps">Memblokir akses internet saat batas terlampaui</string>
+    <string name="msg_firewall_enabled">Firewall diaktifkan</string>
+    <string name="msg_firewall_disabled">Firewall dinonaktifkan</string>
+    <string name="title_edit_app_limit">Edit Batas Aplikasi</string>
+    <string name="btn_create_app_limit">Buat Batas</string>
+    <string name="label_app_limit_selection">Batas Aplikasi</string>
+    <string name="desc_app_limit_selection">Atur pembatasan untuk aplikasi tertentu</string>
+    <string name="title_delete_limit">Hapus Batas</string>
+    <string name="msg_confirm_delete_limit">Apakah Anda yakin ingin menghapus batas untuk %s?</string>
+    <string name="msg_no_apps_found">Aplikasi tidak ditemukan.</string>
+    <string name="placeholder_search_apps">Cari Aplikasi</string>
+    <string name="title_select_application">Pilih Aplikasi</string>
+    <string name="title_configure_limit">Konfigurasi Batas</string>
+    <string name="title_general_limits">Paket Sistem</string>
+    <string name="btn_add_plan">Tambah Paket</string>
+    <string name="btn_add_app_limit">Tambah Batas Aplikasi</string>
+    <string name="msg_no_restricted_apps">Tidak Ada Aplikasi Dibatasi</string>
+    <string name="desc_restrict_app_placeholder">Batasi aplikasi tertentu untuk tidak menggunakan data di latar belakang.</string>
+    <string name="label_inactive">Nonaktif</string>
+    <string name="cd_delete_plan">Hapus Paket</string>
+    <string name="label_configure_network_plan">Konfigurasi Paket Jaringan</string>
+    <string name="desc_prevent_overages">Cegah kelebihan penggunaan jaringan.</string>
+    <string name="msg_no_general_limits">Tidak ada paket sistem yang dikonfigurasi.</string>
+    <string name="desc_add_general_limit_subtitle">Atur paket data seluruh perangkat agar tetap terkendali.</string>
+    <string name="label_general_limit_selection">Paket Sistem</string>
+    <string name="desc_general_limit_selection">Konfigurasi batas data harian seluruh perangkat</string>
+    <string name="title_choose_limit_type">Pilih Jenis Batas</string>
+
+    <!-- Notification Strings -->
+    <string name="status_not_supported">Pemantauan kecepatan tidak didukung di perangkat ini</string>
+    <string name="channel_speed_monitor_name">Pemantau Kecepatan</string>
+    <string name="channel_speed_monitor_desc">Indikator kecepatan jaringan real-time</string>
+    <string name="channel_usage_alerts_name">Peringatan Data Tinggi</string>
+    <string name="channel_usage_alerts_desc">Notifikasi untuk ambang batas data</string>
+    <string name="notification_high_usage_app_msg">%1$s menggunakan data secara signifikan: %2$s (%3$s terpakai).</string>
+    <string name="notification_high_usage_title">Penggunaan Data Tinggi</string>
+    <string name="notification_summary_title">Peringatan Data Tinggi</string>
+    <string name="notification_summary_msg">Ketuk untuk melihat riwayat peringatan data tinggi Anda.</string>
+    <string name="notification_summary_text">Peringatan FlowBytes</string>
+    <string name="notification_app_limit_msg">%1$s telah mencapai batas data %2$s.</string>
+    <string name="notification_app_limit_title">Batas %s Tercapai</string>
+    <string name="msg_reached_limit">Anda telah mencapai batas %1$s %2$s (%3$s terpakai).</string>
+    <string name="btn_silence">Bungkam</string>
+
+    <!-- Badges -->
+    <string name="badge_limit_reached">Batas Tercapai</string>
+    <string name="badge_blocked">Diblokir</string>
+
+    <!-- App Review Dialog -->
+    <string name="review_dialog_title">Suka Menggunakan FlowBytes?</string>
+    <string name="review_dialog_description">Jika FlowBytes bermanfaat bagi Anda, luangkan waktu sejenak untuk memberi nilai! Ini membantu kami berkembang dan menjaga aplikasi tetap bebas iklan.</string>
+    <string name="review_later">Nanti</string>
+    <string name="review_never">Jangan Pernah</string>
+    <string name="review_submit_feedback">Kirim Umpan Balik</string>
+    <string name="review_rate_on_play_store">Beri Nilai di Play Store</string>
+    <string name="review_feedback_title">Bantu Kami Berkembang</string>
+    <string name="review_feedback_description">Kami mohon maaf jika Anda kurang puas. Beri tahu kami bagaimana kami dapat membuat FlowBytes lebih baik bagi Anda.</string>
+    <string name="review_feedback_placeholder">Masukkan saran atau umpan balik Anda di sini&#8230;</string>
+    <string name="review_play_store_title">Terima kasih atas penilaian Anda!</string>
+    <string name="review_play_store_description">Kami sangat menghargai jika Anda dapat menulis ulasan singkat di Google Play. Itu sangat membantu!</string>
+    <string name="review_toast_feedback_submitted">Umpan balik berhasil dikirim. Terima kasih!</string>
+
+    <string name="label_network_type">Jenis Jaringan</string>
+    <string name="label_limit_period">Periode Batas</string>
+    <string name="label_daily_wifi">Wi-Fi Harian</string>
+    <string name="label_daily_mobile">Seluler Harian</string>
+    <string name="label_monthly_wifi">Wi-Fi Bulanan</string>
+    <string name="label_monthly_mobile">Seluler Bulanan</string>
+    <string name="label_custom_wifi">Wi-Fi Kustom</string>
+    <string name="label_custom_mobile">Seluler Kustom</string>
+    <string name="settings_traffic_threshold_subtitle">Konfigurasi batas kecepatan dan durasi peringatan</string>
+    <string name="whats_new_custom_limits_title">Batas Rentang Tanggal Kustom</string>
+    <string name="whats_new_custom_limits_desc">Anda sekarang dapat mengatur batas data untuk rentang tanggal tertentu pada jaringan Seluler dan Wi-Fi.</string>
+    <string name="whats_new_reset_day_title">Hari Reset Bulanan</string>
+    <string name="whats_new_reset_day_desc">Dukungan untuk siklus penagihan kustom. Pilih tanggal tertentu setiap bulan untuk mereset penggunaan Anda.</string>
+
+    <string name="label_daily_wifi_limit">Batas Wi-Fi Harian</string>
+    <string name="label_monthly_wifi_limit">Batas Wi-Fi Bulanan</string>
+    <string name="label_daily_mobile_limit">Batas Seluler Harian</string>
+    <string name="label_monthly_mobile_limit">Batas Seluler Bulanan</string>
+    <string name="label_custom_wifi_limit">Batas Wi-Fi Kustom</string>
+    <string name="label_custom_mobile_limit">Batas Seluler Kustom</string>
+    <string name="label_unknown">Tidak Diketahui</string>
+    <string name="desc_configure_limit_format">Konfigurasi batas untuk paket %1$s Anda.</string>
+    <string name="label_select_date">Pilih Tanggal</string>
+    <string name="btn_configure">Konfigurasi</string>
+    <string name="label_selected_count">%1$d dipilih</string>
+    <string name="label_app_limits_pending">Batas aplikasi tertunda</string>
+    <string name="cd_clear_selection">Hapus Pilihan</string>
+    <string name="title_configure_limits">Konfigurasi Batas</string>
+    <string name="desc_configure_limits_count">Konfigurasi batas untuk %1$d aplikasi yang dipilih.</string>
+    <string name="title_global_settings">Pengaturan Global</string>
+    <string name="desc_global_settings_subtitle">Atur jenis jaringan dasar dan periode untuk semua aplikasi yang dipilih.</string>
+    <string name="title_default_limits">Batas Default (Isi Cepat)</string>
+    <string name="desc_default_limits_subtitle">Mengatur ini akan mengisi otomatis semua pengedit aplikasi di bawah ini.</string>
+    <string name="title_individual_app_limits">Batas Aplikasi Individual</string>
+    <string name="desc_individual_app_limits_subtitle">Sesuaikan jenis jaringan, periode, atau nilai batas untuk setiap aplikasi.</string>
+
+    <!-- Widgets Screen -->
+    <string name="title_homescreen_widgets">Widget Layar Utama</string>
+    <string name="title_customize_add_widgets">Sesuaikan &amp; Tambah Widget</string>
+    <string name="desc_widgets_instruction">Ubah opsi di bawah untuk menyesuaikan semua gaya widget secara langsung.</string>
+    <string name="label_available_widgets">WIDGET TERSEDIA</string>
+    <string name="title_daily_usage_widget">Widget Penggunaan Harian</string>
+    <string name="desc_daily_usage_widget_size">4x1 Kompak / 4x2 Harian</string>
+    <string name="title_monthly_usage_widget">Widget Penggunaan Bulanan</string>
+    <string name="desc_monthly_usage_widget_size">4x1 Kompak / 4x2 Bulanan</string>
+    <string name="label_todays_usage_caps">PENGGUNAAN HARI INI</string>
+    <string name="title_todays_data_widget">Widget Data Hari Ini</string>
+    <string name="desc_todays_data_size">2x2 Kemajuan Melingkar</string>
+    <string name="label_todays_data_caps">DATA HARI INI</string>
+    <string name="title_daily_limit_widget">Widget Batas Jaringan Harian</string>
+    <string name="desc_detailed_status_size">4x2 Status Detail</string>
+    <string name="label_daily_limit_caps">BATAS JARINGAN HARIAN</string>
+    <string name="title_monthly_limit_widget">Widget Batas Jaringan Bulanan</string>
+    <string name="label_monthly_limit_caps">BATAS JARINGAN BULANAN</string>
+    <string name="title_custom_limit_widget">Widget Batas Jaringan Kustom</string>
+    <string name="label_custom_limit_caps">BATAS JARINGAN KUSTOM</string>
+    <string name="title_speed_monitor_widget">Widget Pemantau Kecepatan</string>
+    <string name="desc_live_graphs_size">4x2 Grafik Langsung</string>
+    <string name="label_speed_monitor_caps">PEMANTAU KECEPATAN</string>
+    <string name="label_download_caps">UNDUH</string>
+    <string name="label_upload_caps">UNGGAH</string>
+    <string name="btn_add">Tambah</string>
+    <string name="msg_widget_pin_failed">Menambahkan widget secara langsung tidak didukung oleh peluncur Anda.</string>
+    <string name="msg_widget_pin_api_error">Fitur ini memerlukan Android 8.0 atau lebih baru.</string>
+
+    <!-- App Updates -->
+    <string name="title_update_available">Pembaruan Tersedia</string>
+    <string name="desc_update_available">Versi baru FlowBytes (%1$s) siap diunduh.</string>
+    <string name="btn_update">Perbarui</string>
+    <string name="btn_ignore_version">Abaikan Versi</string>
+    <string name="btn_later">Nanti</string>
+    <string name="label_release_notes">CATATAN RILIS</string>
+    <string name="settings_auto_check_updates">Cek Pembaruan Otomatis</string>
+    <string name="settings_auto_check_updates_desc">Cari versi baru saat aplikasi dibuka</string>
+    <string name="settings_check_updates">Periksa Pembaruan</string>
+    <string name="settings_check_updates_desc">Pastikan aplikasi Anda menjalankan versi terbaru</string>
+    <string name="toast_app_up_to_date">FlowBytes sudah terbarui!</string>
+    <string name="toast_update_check_failed">Gagal memeriksa pembaruan. Silakan coba lagi nanti.</string>
+    <string name="toast_checking_updates">Memeriksa pembaruan...</string>
+
+    <!-- Strings extracted from Kotlin files -->
+    <string name="msg_usage_stats_permission_disabled">Izin statistik penggunaan dinonaktifkan. Ketuk untuk mengizinkan.</string>
+    <string name="msg_notification_permission_disabled">Izin notifikasi dinonaktifkan. Ketuk untuk mengizinkan.</string>
+    <string name="label_widget_settings_caps">PENGATURAN WIDGET</string>
+    <string name="option_update_interval_manual">Hanya Manual / Dinonaktifkan</string>
+    <string name="option_update_interval_hour">1 Jam</string>
+    <string name="option_update_interval_hours">%1$d Jam</string>
+    <string name="option_update_interval_minutes">%1$d Menit</string>
+    <string name="label_update_interval">Interval Pembaruan</string>
+    <string name="desc_update_interval_format">Frekuensi pembaruan latar belakang: %1$s</string>
+    <string name="title_select_update_interval">Pilih Interval Pembaruan</string>
+    <string name="cd_manage_widgets">Kelola Widget</string>
+    <string name="cd_switch_to_input_mode">Beralih ke mode input</string>
+    <string name="cd_switch_to_picker_mode">Beralih ke mode pemilih</string>
+    <string name="msg_billing_service_not_ready">Layanan penagihan belum siap. Coba lagi sebentar lagi.</string>
+    <string name="msg_billing_error_format">Kesalahan Google Play Billing (Kode: %1$s)</string>
+    <string name="vpn_session_name">Blokir FlowBytes</string>
+    <string name="msg_product_details_not_found">Detail produk tidak ditemukan. Pastikan aplikasi diinstal dari Google Play.</string>
+    <string name="widget_title_network_limit">Batas Jaringan</string>
+    <string name="widget_title_speed_monitor">Pemantau Kecepatan</string>
+    <string name="widget_title_todays_data">Data Hari Ini</string>
+    <string name="desc_download_speed_graph">Grafik Kecepatan Unduh</string>
+    <string name="desc_upload_speed_graph">Grafik Kecepatan Unggah</string>
+    <string name="cd_previous">Sebelumnya</string>
+    <string name="cd_next">Berikutnya</string>
+    <string name="label_limit_prefix">Batas: %1$s</string>
+    <string name="unit_secs">Det</string>
+    <string name="unit_mins">Min</string>
+    <string name="unit_hours">Jam</string>
+    <string name="unit_min_short">Min</string>
+    <string name="unit_sec_short">Det</string>
+</resources>

@@ -48,7 +48,12 @@ fun LanguageDialog(
             LanguageOption(stringResource(R.string.language_hindi), "hi"),
             LanguageOption(stringResource(R.string.language_japanese), "ja"),
             LanguageOption(stringResource(R.string.language_korean), "ko"),
-            LanguageOption(stringResource(R.string.language_russian), "ru")
+            LanguageOption(stringResource(R.string.language_russian), "ru"),
+            LanguageOption(stringResource(R.string.language_turkish), "tr"),
+            LanguageOption(stringResource(R.string.language_indonesian), "id"),
+            LanguageOption(stringResource(R.string.language_vietnamese), "vi"),
+            LanguageOption(stringResource(R.string.language_polish), "pl"),
+            LanguageOption(stringResource(R.string.language_ukrainian), "uk")
         )
 
         Scaffold(

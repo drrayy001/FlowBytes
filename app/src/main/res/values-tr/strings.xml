@@ -1,0 +1,445 @@
+<resources>
+    <string name="app_name">FlowBytes</string>
+
+    <!-- Screen Titles -->
+    <string name="title_app_usage">Uygulama Kullanımı</string>
+    <string name="title_settings">Ayarlar</string>
+    <string name="title_home">Ana Sayfa</string>
+    <string name="title_limits">Plan Limitleri</string>
+    <string name="title_alerts">Uyarı Geçmişi</string>
+    <string name="label_usage">Kullanım</string>
+    <string name="label_plans">Planlar</string>
+    <string name="label_alerts">Uyarılar</string>
+
+    <!-- Accessibility Descriptions -->
+    <string name="cd_back">Geri git</string>
+    <string name="cd_pull_to_refresh">Kullanım verilerini yenilemek için aşağı çekin</string>
+    <string name="cd_clear_search">Aramayı temizle</string>
+    <string name="cd_prev_date">Önceki Tarih</string>
+    <string name="cd_next_date">Sonraki Tarih</string>
+    <string name="cd_toggle_filters">Filtreleri Değiştir</string>
+    <string name="cd_app_icon">Uygulama Simgesi</string>
+    <string name="desc_download">İndirme hızı</string>
+    <string name="desc_upload">Yükleme hızı</string>
+    <string name="desc_combined">Toplam hız</string>
+    <string name="desc_mobile_data">Mobil veri kullanımı</string>
+    <string name="desc_wifi">Wi-Fi kullanımı</string>
+
+    <!-- Home Screen -->
+    <string name="label_today_colon">Bugün:</string>
+    <string name="label_separator">|</string>
+    <string name="label_download">İndirme</string>
+    <string name="label_upload">Yükleme</string>
+    <string name="label_this_month">Bu Ay</string>
+    <string name="label_usage_breakdown">Haftalık Etkinlik</string>
+    <string name="label_mobile">Mobil</string>
+    <string name="label_wifi">Wi-Fi</string>
+    <string name="label_combined">Toplam</string>
+    <string name="label_todays_usage">Bugünün kullanımı</string>
+    <string name="label_usage_summary">Kullanım Özeti</string>
+    <string name="msg_no_usage_recorded">Henüz veri kullanımı kaydedilmedi</string>
+
+    <!-- App Usage Screen -->
+    <string name="filter_daily">Günlük</string>
+    <string name="filter_monthly">Aylık</string>
+    <string name="filter_custom">Özel</string>
+    <string name="filter_mobile_wifi">Mobil &amp; Wi-Fi</string>
+    <string name="filter_mobile_only">Yalnızca Mobil</string>
+    <string name="filter_wifi_only">Yalnızca Wi-Fi</string>
+    <string name="btn_ok">Tamam</string>
+    <string name="btn_cancel">İptal</string>
+    <string name="btn_delete">Sil</string>
+    <string name="btn_edit">Düzenle</string>
+    <string name="label_both">Her İkisi</string>
+    <string name="label_start_date">Başlangıç</string>
+    <string name="label_end_date">Bitiş</string>
+    <string name="title_select_month">Ay Seçin</string>
+    <string name="label_today">Bugün</string>
+    <string name="msg_no_usage_data">Seçilen filtre için kullanım verisi bulunamadı.</string>
+    <string name="label_wifi_usage">Wi-Fi</string>
+    <string name="label_mobile_usage">Mobil</string>
+    <string name="label_wifi_colon">Wi-Fi:</string>
+    <string name="label_mobile_colon">Mobil:</string>
+    <string name="label_system_apps">Sistem uygulamaları</string>
+    <string name="title_system_data_usage">Sistem veri kullanımı</string>
+    <string name="label_system_processes">Sistem işlemleri</string>
+    <string name="label_tethering">İnternet Paylaşımı &amp; Erişim Noktası</string>
+    <string name="label_removed_apps">Kaldırılan uygulamalar</string>
+    <string name="label_root">Root</string>
+    <string name="label_android_system">Android Sistemi</string>
+    <string name="label_dns_resolver">DNS Çözümleyici</string>
+    <string name="label_mdns_responder">mDNS Yanıtlayıcı</string>
+    <string name="label_media_service">Medya Servisi</string>
+    <string name="label_system_update">Sistem Güncellemesi</string>
+
+    <string name="tile_monitoring_on">İzleme AÇIK</string>
+    <string name="tile_monitoring_off">İzleme KAPALI</string>
+
+    <!-- Settings: General -->
+    <string name="settings_section_general">Genel</string>
+    <string name="settings_monitoring_toggle">İzlemeyi Etkinleştir</string>
+    <string name="settings_monitoring_desc">Ağ hızını ve veri kullanımını gerçek zamanlı izleyin</string>
+    <string name="settings_reset_time">Sıfırlama Saati</string>
+    <string name="settings_reset_time_desc">Yeni bir izleme döngüsünün başlayacağı gün saati</string>
+    <string name="settings_speed_unit">Hız Birimi</string>
+    <string name="settings_speed_unit_desc">Saniye başına Bayt (B/s) veya Saniye başına Bit (bps) seçin</string>
+    <string name="unit_bytes">Saniye başına Bayt (B/s)</string>
+    <string name="unit_bits">Saniye başına Bit (bps)</string>
+    <string name="dialog_select_speed_unit_title">Hız Birimi Seçin</string>
+    <string name="dialog_reset_time_title">Sıfırlama Saatini Ayarla</string>
+    <string name="settings_monthly_reset_day">Aylık Sıfırlama Günü</string>
+    <string name="settings_monthly_reset_day_desc">Fatura döngüsü ayın %d. gününde sıfırlanır</string>
+    <string name="dialog_reset_day_title">Ayın Sıfırlama Gününü Seçin</string>
+    <string name="msg_reset_day_explanation">Tüm aylık veri kullanımı ve limit bildirimleri ayın bu gününden itibaren sayılmaya başlar.</string>
+
+    <!-- Settings: Notifications & Status Bar -->
+    <string name="settings_section_notifications">Bildirimler &amp; Durum Çubuğu</string>
+    <string name="settings_show_daily_usage">Bildirimi Göster</string>
+    <string name="settings_daily_usage_desc">Bildirim alanında anlık hızları ve kullanımı göster</string>
+    <string name="settings_notification_content">Bildirim İçeriği</string>
+    <string name="option_speed_only">Yalnızca Hız</string>
+    <string name="option_daily_only">Yalnızca Günlük İstatistikler</string>
+    <string name="option_both">Hız &amp; Günlük İstatistikler</string>
+    <string name="settings_high_priority">Yüksek Öncelik</string>
+    <string name="settings_high_priority_desc">Hız göstergesini bildirimlerinizin üst kısmında görünür tutun</string>
+    <string name="settings_hide_offline">Çevrimdışıyken Gizle</string>
+    <string name="settings_hide_offline_desc">Bağlantı kesildiğinde hız göstergesini otomatik gizle</string>
+
+    <string name="settings_section_widget">Ana Ekran Araç Takımı</string>
+    <string name="settings_widget_show_speed">Hızı Göster</string>
+    <string name="settings_widget_show_speed_desc">Araç takımında gerçek zamanlı indirme ve yükleme hızlarını gösterin</string>
+    <string name="settings_widget_usage_type">Araç Takımı Kullanım Görünümü</string>
+
+    <!-- Settings: Alerts & Limits -->
+    <string name="settings_section_alerts">Uyarılar &amp; Limitler</string>
+    <string name="settings_data_alerts">Yüksek Veri Uyarıları</string>
+    <string name="settings_data_alerts_desc">Uygulamalar arka planda aşırı veri tükettiğinde bildirim alın</string>
+    <string name="settings_mobile_limit">Mobil Veri Limiti</string>
+    <string name="settings_wifi_limit">Wi-Fi Veri Limiti</string>
+
+    <string name="label_plan_duration">Plan Süresi</string>
+    <string name="msg_alert_muted">Uyarı Sessize Alındı</string>
+    <string name="title_select_plan_type">Plan Türünü Seçin</string>
+    <string name="settings_indicator_size">Simge Boyutu</string>
+
+    <!-- Settings: Appearance -->
+    <string name="settings_section_appearance">Görünüm</string>
+    <string name="settings_app_theme">Uygulama Teması</string>
+    <string name="dialog_select_theme_title">Tema Seçin</string>
+    <string name="theme_system">Sistem</string>
+    <string name="theme_light">Açık</string>
+    <string name="theme_dark">Koyu</string>
+    <string name="settings_material_you">Material You</string>
+    <string name="settings_material_you_desc">Sistem vurgu renklerini kullan</string>
+    <string name="settings_accent_color">Vurgu Rengi</string>
+    <string name="settings_accent_color_desc">Özel bir birincil renk seçin</string>
+    <string name="settings_amoled_mode">AMOLED Modu</string>
+    <string name="settings_amoled_mode_desc">Tamamen siyah arka plan</string>
+    <string name="size_small">Küçük</string>
+    <string name="size_medium">Orta</string>
+    <string name="size_large">Büyük</string>
+    <string name="settings_language">Dil</string>
+    <string name="dialog_select_language_title">Dil Seçin</string>
+    <string name="language_default">Sistem Varsayılanı</string>
+    <string name="language_arabic">Arapça (العربية)</string>
+    <string name="language_french">Fransızca (Français)</string>
+    <string name="language_spanish">İspanyolca (Español)</string>
+    <string name="language_german">Almanca (Deutsch)</string>
+    <string name="language_portuguese">Portekizce (Português)</string>
+    <string name="language_italian">İtalyanca (Italiano)</string>
+    <string name="language_chinese">Çince (中文)</string>
+    <string name="language_hindi">Hintçe (हिन्दी)</string>
+    <string name="language_japanese">Japonca (日本語)</string>
+    <string name="language_korean">Korece (한국어)</string>
+    <string name="language_russian">Rusça (Русский)</string>
+    <string name="language_turkish">Türkçe</string>
+    <string name="language_indonesian">Endonezce (Bahasa Indonesia)</string>
+    <string name="language_vietnamese">Vietnamca (Tiếng Việt)</string>
+    <string name="language_polish">Lehçe (Polski)</string>
+    <string name="language_ukrainian">Ukraynaca (Українська)</string>
+
+    <!-- Settings: Support & Feedback -->
+    <string name="settings_section_support">Destek &amp; Geri Bildirim</string>
+    <string name="settings_rate_app">FlowBytes\'ı Değerlendirin</string>
+    <string name="settings_rate_app_desc">Deneyiminizi paylaşın ve gelişmemize yardımcı olun</string>
+    <string name="settings_share_app">Arkadaşlarınla Paylaş</string>
+    <string name="settings_share_app_desc">FlowBytes\'ı başkalarına tavsiye edin</string>
+    <string name="label_share_via">Şununla paylaş</string>
+    <string name="share_text_body">FlowBytes\'a göz atın! Veri kullanımınızı doğru bir şekilde izleyin: https://play.google.com/store/apps/details?id=%1$s</string>
+    <string name="settings_help_feedback">Yardım &amp; Geri Bildirim</string>
+    <string name="settings_help_feedback_desc">Telegram veya E-posta ile bize ulaşın</string>
+    <string name="option_telegram">Telegram</string>
+    <string name="desc_telegram">Geliştiriciye doğrudan mesaj gönderin</string>
+    <string name="option_email">E-posta</string>
+    <string name="desc_email">Geliştiriciye e-posta gönderin</string>
+    <string name="option_report_bug">Hata Bildir / Özellik Öner</string>
+    <string name="desc_report_bug">Hata bildirmek veya özellik istemek için GitHub Issues açın</string>
+    <string name="settings_donate">Bağış Yap</string>
+    <string name="settings_donate_desc">FlowBytes\'ın reklamsız ve açık kaynak kalmasına katkıda bulunun</string>
+    <string name="dialog_donate_title">FlowBytes\'ı Destekleyin</string>
+    <string name="label_donate_amount_1">Küçük Bahşiş ($1.00)</string>
+    <string name="label_donate_amount_2_5">Proje Destekçisi ($2.50)</string>
+    <string name="label_donate_amount_6">Proje Hamisi ($6.00)</string>
+    <string name="desc_donate_1">Takdirinizi göstermenin ve projenin sürdürülmesini desteklemenin basit bir yolu.</string>
+    <string name="desc_donate_2_5">Yeni özelliklerin geliştirilmesini ve performans iyileştirmelerini destekler.</string>
+    <string name="desc_donate_6">FlowBytes\'ın açık kaynak, reklamsız ve bağımsız kalmasına büyük bir katkı.</string>
+    <string name="msg_donation_success_title">Teşekkür Ederiz!</string>
+    <string name="msg_donation_success_body">Desteğiniz bizim için çok değerli ve projenin yaşamasına yardımcı oluyor.</string>
+    <string name="msg_donation_cancelled">Bağış iptal edildi.</string>
+    <string name="msg_donation_failed">Bağış başarısız oldu: %1$s</string>
+    <string name="snackbar_support_prompt">FlowBytes hoşunuza gitti mi? Reklamsız geliştirmemizi destekleyin!</string>
+    <string name="snackbar_support_action">Destek Ol</string>
+
+    <!-- Settings: About -->
+    <string name="settings_section_about">Hakkında</string>
+    <string name="settings_version_label">Sürüm</string>
+    <string name="settings_view_source">Kaynak Kodu</string>
+    <string name="settings_view_source_desc">FlowBytes açık kaynaklıdır</string>
+    <string name="settings_privacy_policy">Gizlilik Politikası</string>
+    <string name="settings_terms_conditions">Şartlar &amp; Koşullar</string>
+    <string name="settings_licenses">Açık Kaynak Lisansları</string>
+
+    <!-- Alerts History -->
+    <string name="msg_no_alerts_history">Uyarı geçmişi bulunamadı.</string>
+    <string name="btn_clear_history">Geçmişi Temizle</string>
+    <string name="msg_confirm_clear_history">Uyarı geçmişinizi kalıcı olarak silmek istediğinizden emin misiniz?</string>
+
+    <!-- Code Strings -->
+    <string name="label_advanced_settings">Gelişmiş Ayarlar</string>
+    <string name="title_mute_app">%s Sessize Al</string>
+    <string name="desc_mute_app">Bu uygulama için yüksek veri uyarıları almayı durdurun.</string>
+    <string name="btn_mute">Sessize Al</string>
+    <string name="title_whats_new">Neler Yeni</string>
+    <string name="desc_whats_new">En son özellikleri ve iyileştirmeleri inceleyin.</string>
+    <string name="btn_done">Tamamlandı</string>
+    <string name="title_vpn_disclosure">Uygulama Engellemeyi Etkinleştir</string>
+    <string name="desc_vpn_disclosure">FlowBytes, limitlerini aşan uygulamaların internet erişimini yönetmek için yerel bir VPN kullanır.</string>
+    <string name="msg_vpn_feature_local">%100 Yerel: Trafiğiniz asla cihazınızdan dışarı çıkmaz.</string>
+    <string name="msg_vpn_feature_privacy">Önce Gizlilik: Verilerinizi asla toplamıyoruz veya izlemiyoruz.</string>
+    <string name="msg_vpn_feature_focused">Hedefli: Yalnızca sınırlamayı seçtiğiniz uygulamaları etkiler.</string>
+    <string name="btn_not_now">Şimdi Değil</string>
+    <string name="btn_continue">Devam Et</string>
+    <string name="title_custom_color">Rengi Özelleştir</string>
+    <string name="btn_apply">Uygula</string>
+    <string name="btn_get_started">Başlayın</string>
+    <string name="btn_skip_for_now">Şimdilik Atla</string>
+    <string name="title_welcome">FlowBytes\'a Hoş Geldiniz</string>
+    <string name="msg_onboarding_desc">Doğru veri takibi ve canlı hız izleme sağlamak için birkaç izne ihtiyacımız var.</string>
+    <string name="label_usage_access">Kullanım Erişimi</string>
+    <string name="desc_usage_access">Uygulama başına veri kullanımını izlemek için gereklidir.</string>
+    <string name="label_notifications">Bildirimler</string>
+    <string name="desc_notifications">Durum çubuğunda canlı hızı göstermek için gereklidir.</string>
+    <string name="label_battery_optimization">Pil Optimizasyonu</string>
+    <string name="desc_battery_optimization">Hız izleyicinin arka planda çalışmasını sağlamak için gereklidir.</string>
+    <string name="label_granted">İzin Verildi</string>
+    <string name="btn_grant">İzin Ver</string>
+    <string name="title_traffic_settings">Yüksek Veri Uyarısı Ayarları</string>
+    <string name="label_speed_threshold">Tetikleme Hızı</string>
+    <string name="desc_speed_threshold">Ağ hızı bu sınırı aştığında uyarı tetiklenir.</string>
+    <string name="label_time_above_threshold">Hız Üzerindeki Süre</string>
+    <string name="desc_time_above_threshold">Bildirim gönderilmeden önce hızın bu sınırın üzerinde kalması gereken süre.</string>
+    <string name="label_alert_cooldown">Uyarılar Arası Süre</string>
+    <string name="desc_alert_cooldown">Başka bir uyarı gönderilmeden önce beklenecek minimum süre.</string>
+    <string name="label_reset_speed_threshold">Sıfırlama Hızı</string>
+    <string name="desc_reset_speed_threshold">Hız bu seviyenin altına düştüğünde uyarı sistemi sıfırlanır.</string>
+    <string name="label_time_below_reset">Sıfırlama Hızı Altındaki Süre</string>
+    <string name="desc_time_below_reset">Uyarının temizlenmesi için hızın sıfırlama seviyesinin altında kalması gereken süre.</string>
+    <string name="btn_save_config">Kaydet</string>
+    <string name="label_app_limits">Uygulama Limitleri</string>
+    <string name="filter_all">Tümü</string>
+    <string name="label_daily_limits">Günlük Limitler</string>
+    <string name="label_monthly_limits">Aylık Limitler</string>
+    <string name="label_high_traffic">Yüksek Trafik</string>
+    <string name="msg_no_alerts_all">Kayıtlı uyarı yok.</string>
+    <string name="msg_no_alerts_app">Kayıtlı uygulama limiti uyarısı yok.</string>
+    <string name="msg_no_alerts_daily">Kayıtlı günlük limit uyarısı yok.</string>
+    <string name="msg_no_alerts_monthly">Kayıtlı aylık limit uyarısı yok.</string>
+    <string name="msg_no_alerts_traffic">Kayıtlı yüksek trafik uyarısı yok.</string>
+    <string name="label_app_limit_reached">Uygulama Limitine Ulaşıldı</string>
+    <string name="label_daily_limit_reached">Günlük Limite Ulaşıldı</string>
+    <string name="label_monthly_limit_reached">Aylık Limite Ulaşıldı</string>
+    <string name="label_custom_limit_reached">Özel Limite Ulaşıldı</string>
+    <string name="label_start_date_select">Başlangıç Tarihi: %s</string>
+    <string name="label_end_date_select">Bitiş Tarihi: %s</string>
+    <string name="msg_invalid_date_range">Bitiş Tarihi Başlangıç Tarihinde veya sonrasında olmalıdır</string>
+    <string name="label_trigger_speed_header">TETİKLEME HIZI</string>
+    <string name="label_limit_set_header">AYARLANAN LİMİT</string>
+    <string name="label_usage_recorded_header">KAYDEDİLEN KULLANIM</string>
+    <string name="msg_no_app_limits">Yapılandırılmış uygulama limiti yok.</string>
+    <string name="desc_restrict_app_subtitle">Veri kullanımını yönetmeye başlamak için bir uygulama ekleyin.</string>
+    <string name="cd_add_app_limit">Uygulama limiti ekle</string>
+    <string name="label_block_apps">Güvenlik Duvarı</string>
+    <string name="desc_block_apps">Limitler aşıldığında internet erişimini engeller</string>
+    <string name="msg_firewall_enabled">Güvenlik duvarı etkinleştirildi</string>
+    <string name="msg_firewall_disabled">Güvenlik duvarı devre dışı bırakıldı</string>
+    <string name="title_edit_app_limit">Uygulama Limitini Düzenle</string>
+    <string name="btn_create_app_limit">Limit Oluştur</string>
+    <string name="label_app_limit_selection">Uygulama Limiti</string>
+    <string name="desc_app_limit_selection">Belirli bir uygulama için kısıtlamalar ayarlayın</string>
+    <string name="title_delete_limit">Limiti Sil</string>
+    <string name="msg_confirm_delete_limit">%s için limiti kaldırmak istediğinizden emin misiniz?</string>
+    <string name="msg_no_apps_found">Uygulama bulunamadı.</string>
+    <string name="placeholder_search_apps">Uygulamalarda Ara</string>
+    <string name="title_select_application">Uygulama Seçin</string>
+    <string name="title_configure_limit">Limiti Yapılandır</string>
+    <string name="title_general_limits">Sistem Planları</string>
+    <string name="btn_add_plan">Plan Ekle</string>
+    <string name="btn_add_app_limit">Uygulama Limiti Ekle</string>
+    <string name="msg_no_restricted_apps">Kısıtlanmış Uygulama Yok</string>
+    <string name="desc_restrict_app_placeholder">Belirli uygulamaların arka planda veri kullanmasını kısıtlayın.</string>
+    <string name="label_inactive">Pasif</string>
+    <string name="cd_delete_plan">Planı Sil</string>
+    <string name="label_configure_network_plan">Ağ Planını Yapılandır</string>
+    <string name="desc_prevent_overages">Ağ kullanımı aşımlarını önleyin.</string>
+    <string name="msg_no_general_limits">Yapılandırılmış sistem planı yok.</string>
+    <string name="desc_add_general_limit_subtitle">Kontrolü elinizde tutmak için cihaz genelinde bir veri planı ayarlayın.</string>
+    <string name="label_general_limit_selection">Sistem Planı</string>
+    <string name="desc_general_limit_selection">Cihaz genelinde günlük veri limitlerini yapılandırın</string>
+    <string name="title_choose_limit_type">Limit Türünü Seçin</string>
+
+    <!-- Notification Strings -->
+    <string name="status_not_supported">Hız izleme bu cihazda desteklenmiyor</string>
+    <string name="channel_speed_monitor_name">Hız İzleyici</string>
+    <string name="channel_speed_monitor_desc">Gerçek zamanlı ağ hızı göstergeleri</string>
+    <string name="channel_usage_alerts_name">Yüksek Veri Uyarıları</string>
+    <string name="channel_usage_alerts_desc">Veri limiti eşikleri için bildirimler</string>
+    <string name="notification_high_usage_app_msg">%1$s önemli miktarda veri tüketiyor: %2$s (%3$s kullanıldı).</string>
+    <string name="notification_high_usage_title">Yüksek Veri Kullanımı</string>
+    <string name="notification_summary_title">Yüksek Veri Uyarıları</string>
+    <string name="notification_summary_msg">Yüksek veri uyarı geçmişinizi görüntülemek için dokunun.</string>
+    <string name="notification_summary_text">FlowBytes Uyarıları</string>
+    <string name="notification_app_limit_msg">%1$s, %2$s veri limitine ulaştı.</string>
+    <string name="notification_app_limit_title">%s Limitine Ulaşıldı</string>
+    <string name="msg_reached_limit">%1$s %2$s limitine ulaştınız (%3$s tüketildi).</string>
+    <string name="btn_silence">Sessize Al</string>
+
+    <!-- Badges -->
+    <string name="badge_limit_reached">Limite Ulaşıldı</string>
+    <string name="badge_blocked">Engellendi</string>
+
+    <!-- App Review Dialog -->
+    <string name="review_dialog_title">FlowBytes Hoşunuza Gitti mi?</string>
+    <string name="review_dialog_description">FlowBytes\'ı faydalı buluyorsanız, lütfen bizi değerlendirmek için bir dakikanızı ayırın! Bu gelişmemize ve uygulamayı reklamsız tutmamıza yardımcı olur.</string>
+    <string name="review_later">Daha Sonra</string>
+    <string name="review_never">Asla</string>
+    <string name="review_submit_feedback">Geri Bildirim Gönder</string>
+    <string name="review_rate_on_play_store">Play Store\'da Değerlendirin</string>
+    <string name="review_feedback_title">Gelişmemize Yardımcı Olun</string>
+    <string name="review_feedback_description">Tam olarak memnun kalmadığınız için üzgünüz. FlowBytes\'ı sizin için nasıl daha iyi hale getirebileceğimizi lütfen bize bildirin.</string>
+    <string name="review_feedback_placeholder">Önerilerinizi veya geri bildiriminizi buraya girin&#8230;</string>
+    <string name="review_play_store_title">Değerlendirmeniz için teşekkür ederiz!</string>
+    <string name="review_play_store_description">Google Play\'de kısa bir inceleme yazabilirseniz çok seviniriz. Gerçekten çok yardımcı olur!</string>
+    <string name="review_toast_feedback_submitted">Geri bildirim başarıyla gönderildi. Teşekkür ederiz!</string>
+
+    <string name="label_network_type">Ağ Türü</string>
+    <string name="label_limit_period">Limit Dönemi</string>
+    <string name="label_daily_wifi">Günlük Wi-Fi</string>
+    <string name="label_daily_mobile">Günlük Mobil</string>
+    <string name="label_monthly_wifi">Aylık Wi-Fi</string>
+    <string name="label_monthly_mobile">Aylık Mobil</string>
+    <string name="label_custom_wifi">Özel Wi-Fi</string>
+    <string name="label_custom_mobile">Özel Mobil</string>
+    <string name="settings_traffic_threshold_subtitle">Uyarılar için hız ve süre limitlerini yapılandırın</string>
+    <string name="whats_new_custom_limits_title">Özel Tarih Aralığı Limitleri</string>
+    <string name="whats_new_custom_limits_desc">Artık hem Mobil hem de Wi-Fi ağlarında belirli tarih aralıkları için veri limitleri ayarlayabilirsiniz.</string>
+    <string name="whats_new_reset_day_title">Aylık Sıfırlama Günü</string>
+    <string name="whats_new_reset_day_desc">Özel fatura döngüleri desteği. Kullanımınızın sıfırlanması için ayın belirli bir gününü seçin.</string>
+
+    <string name="label_daily_wifi_limit">Günlük Wi-Fi Limiti</string>
+    <string name="label_monthly_wifi_limit">Aylık Wi-Fi Limiti</string>
+    <string name="label_daily_mobile_limit">Günlük Mobil Limit</string>
+    <string name="label_monthly_mobile_limit">Aylık Mobil Limit</string>
+    <string name="label_custom_wifi_limit">Özel Wi-Fi Limiti</string>
+    <string name="label_custom_mobile_limit">Özel Mobil Limit</string>
+    <string name="label_unknown">Bilinmeyen</string>
+    <string name="desc_configure_limit_format">%1$s planınız için limiti yapılandırın.</string>
+    <string name="label_select_date">Tarih Seçin</string>
+    <string name="btn_configure">Yapılandır</string>
+    <string name="label_selected_count">%1$d seçildi</string>
+    <string name="label_app_limits_pending">Bekleyen uygulama limitleri</string>
+    <string name="cd_clear_selection">Seçimi Temizle</string>
+    <string name="title_configure_limits">Limitleri Yapılandır</string>
+    <string name="desc_configure_limits_count">%1$d seçilen uygulama için limitleri yapılandırın.</string>
+    <string name="title_global_settings">Genel Ayarlar</string>
+    <string name="desc_global_settings_subtitle">Tüm seçili uygulamalar için temel ağ türünü ve dönemini ayarlayın.</string>
+    <string name="title_default_limits">Varsayılan Limitler (Hızlı Doldur)</string>
+    <string name="desc_default_limits_subtitle">Bunları ayarlamak aşağıdaki tüm uygulama düzenleyicilerini otomatik doldurur.</string>
+    <string name="title_individual_app_limits">Bireysel Uygulama Limitleri</string>
+    <string name="desc_individual_app_limits_subtitle">Her uygulama için ağ türlerini, dönemlerini veya limit değerlerini özelleştirin.</string>
+
+    <!-- Widgets Screen -->
+    <string name="title_homescreen_widgets">Ana Ekran Araç Takımları</string>
+    <string name="title_customize_add_widgets">Araç Takımlarını Özelleştir &amp; Ekle</string>
+    <string name="desc_widgets_instruction">Tüm araç takımı stillerini anında özelleştirmek için aşağıdaki seçenekleri değiştirin.</string>
+    <string name="label_available_widgets">MEVCUT ARAÇ TAKIMLARI</string>
+    <string name="title_daily_usage_widget">Günlük Kullanım Araç Takımı</string>
+    <string name="desc_daily_usage_widget_size">4x1 Kompakt / 4x2 Günlük</string>
+    <string name="title_monthly_usage_widget">Aylık Kullanım Araç Takımı</string>
+    <string name="desc_monthly_usage_widget_size">4x1 Kompakt / 4x2 Aylık</string>
+    <string name="label_todays_usage_caps">BUGÜNÜN KULLANIMI</string>
+    <string name="title_todays_data_widget">Bugünün Veri Araç Takımı</string>
+    <string name="desc_todays_data_size">2x2 Dairesel İlerleme</string>
+    <string name="label_todays_data_caps">BUGÜNÜN VERİSİ</string>
+    <string name="title_daily_limit_widget">Günlük Ağ Limiti Araç Takımı</string>
+    <string name="desc_detailed_status_size">4x2 Detaylı Durum</string>
+    <string name="label_daily_limit_caps">GÜNLÜK AĞ LİMİTİ</string>
+    <string name="title_monthly_limit_widget">Aylık Ağ Limiti Araç Takımı</string>
+    <string name="label_monthly_limit_caps">AYLIK AĞ LİMİTİ</string>
+    <string name="title_custom_limit_widget">Özel Ağ Limiti Araç Takımı</string>
+    <string name="label_custom_limit_caps">ÖZEL AĞ LİMİTİ</string>
+    <string name="title_speed_monitor_widget">Hız İzleyici Araç Takımı</string>
+    <string name="desc_live_graphs_size">4x2 Canlı Grafikler</string>
+    <string name="label_speed_monitor_caps">HIZ İZLEYİCİ</string>
+    <string name="label_download_caps">İNDİRME</string>
+    <string name="label_upload_caps">YÜKLEME</string>
+    <string name="btn_add">Ekle</string>
+    <string name="msg_widget_pin_failed">Araç takımlarının doğrudan eklenmesi başlatıcınız tarafından desteklenmiyor.</string>
+    <string name="msg_widget_pin_api_error">Bu özellik Android 8.0 veya üzerini gerektirir.</string>
+
+    <!-- App Updates -->
+    <string name="title_update_available">Güncelleme Mevcut</string>
+    <string name="desc_update_available">FlowBytes\'ın yeni bir sürümü (%1$s) indirilmeye hazır.</string>
+    <string name="btn_update">Güncelle</string>
+    <string name="btn_ignore_version">Sürümü Yoksay</string>
+    <string name="btn_later">Daha Sonra</string>
+    <string name="label_release_notes">SÜRÜM NOTLARI</string>
+    <string name="settings_auto_check_updates">Otomatik Güncelleme Kontrolü</string>
+    <string name="settings_auto_check_updates_desc">Başlangıçta yeni sürümleri kontrol et</string>
+    <string name="settings_check_updates">Güncellemeleri Kontrol Et</string>
+    <string name="settings_check_updates_desc">Uygulamanızın en son sürümü çalıştırdığından emin olun</string>
+    <string name="toast_app_up_to_date">FlowBytes güncel!</string>
+    <string name="toast_update_check_failed">Güncellemeler kontrol edilemedi. Lütfen daha sonra tekrar deneyin.</string>
+    <string name="toast_checking_updates">Güncellemeler kontrol ediliyor...</string>
+
+    <!-- Strings extracted from Kotlin files -->
+    <string name="msg_usage_stats_permission_disabled">Kullanım istatistikleri izni devre dışı. İzin vermek için dokunun.</string>
+    <string name="msg_notification_permission_disabled">Bildirim izni devre dışı. İzin vermek için dokunun.</string>
+    <string name="label_widget_settings_caps">ARAÇ TAKIMI AYARLARI</string>
+    <string name="option_update_interval_manual">Yalnızca Manuel / Devre Dışı</string>
+    <string name="option_update_interval_hour">1 Saat</string>
+    <string name="option_update_interval_hours">%1$d Saat</string>
+    <string name="option_update_interval_minutes">%1$d Dakika</string>
+    <string name="label_update_interval">Güncelleme Sıklığı</string>
+    <string name="desc_update_interval_format">Arka plan güncelleme sıklığı: %1$s</string>
+    <string name="title_select_update_interval">Güncelleme Sıklığını Seçin</string>
+    <string name="cd_manage_widgets">Araç Takımlarını Yönet</string>
+    <string name="cd_switch_to_input_mode">Giriş moduna geç</string>
+    <string name="cd_switch_to_picker_mode">Seçici moduna geç</string>
+    <string name="msg_billing_service_not_ready">Faturalandırma servisi hazır değil. Birazdan tekrar deneyin.</string>
+    <string name="msg_billing_error_format">Google Play Faturalandırma hatası (Kod: %1$s)</string>
+    <string name="vpn_session_name">FlowBytes Engelleme</string>
+    <string name="msg_product_details_not_found">Ürün detayları bulunamadı. Uygulamanın Google Play\'den yüklendiğinden emin olun.</string>
+    <string name="widget_title_network_limit">Ağ Limiti</string>
+    <string name="widget_title_speed_monitor">Hız İzleyici</string>
+    <string name="widget_title_todays_data">Bugünün Verisi</string>
+    <string name="desc_download_speed_graph">İndirme Hızı Grafiği</string>
+    <string name="desc_upload_speed_graph">Yükleme Hızı Grafiği</string>
+    <string name="cd_previous">Önceki</string>
+    <string name="cd_next">Sonraki</string>
+    <string name="label_limit_prefix">Limit: %1$s</string>
+    <string name="unit_secs">Sn</string>
+    <string name="unit_mins">Dak</string>
+    <string name="unit_hours">Saat</string>
+    <string name="unit_min_short">Dak</string>
+    <string name="unit_sec_short">Sn</string>
+</resources>

@@ -1,0 +1,445 @@
+<resources>
+    <string name="app_name">FlowBytes</string>
+
+    <!-- Screen Titles -->
+    <string name="title_app_usage">Zużycie aplikacji</string>
+    <string name="title_settings">Ustawienia</string>
+    <string name="title_home">Główna</string>
+    <string name="title_limits">Limity planu</string>
+    <string name="title_alerts">Historia alertów</string>
+    <string name="label_usage">Zużycie</string>
+    <string name="label_plans">Plany</string>
+    <string name="label_alerts">Alerty</string>
+
+    <!-- Accessibility Descriptions -->
+    <string name="cd_back">Wstecz</string>
+    <string name="cd_pull_to_refresh">Przeciągnij w dół, aby odświeżyć dane</string>
+    <string name="cd_clear_search">Wyczyść wyszukiwanie</string>
+    <string name="cd_prev_date">Poprzednia data</string>
+    <string name="cd_next_date">Następna data</string>
+    <string name="cd_toggle_filters">Przełącz filtry</string>
+    <string name="cd_app_icon">Ikona aplikacji</string>
+    <string name="desc_download">Prędkość pobierania</string>
+    <string name="desc_upload">Prędkość wysyłania</string>
+    <string name="desc_combined">Łączna prędkość</string>
+    <string name="desc_mobile_data">Zużycie danych komórkowych</string>
+    <string name="desc_wifi">Zużycie Wi-Fi</string>
+
+    <!-- Home Screen -->
+    <string name="label_today_colon">Dzisiaj:</string>
+    <string name="label_separator">|</string>
+    <string name="label_download">Pobieranie</string>
+    <string name="label_upload">Wysyłanie</string>
+    <string name="label_this_month">W tym miesiącu</string>
+    <string name="label_usage_breakdown">Aktywność tygodniowa</string>
+    <string name="label_mobile">Komórkowe</string>
+    <string name="label_wifi">Wi-Fi</string>
+    <string name="label_combined">Łącznie</string>
+    <string name="label_todays_usage">Dzisiejsze zużycie</string>
+    <string name="label_usage_summary">Podsumowanie zużycia</string>
+    <string name="msg_no_usage_recorded">Brak zarejestrowanego zużycia danych</string>
+
+    <!-- App Usage Screen -->
+    <string name="filter_daily">Dziennie</string>
+    <string name="filter_monthly">Miesięcznie</string>
+    <string name="filter_custom">Niestandardowe</string>
+    <string name="filter_mobile_wifi">Komórkowe i Wi-Fi</string>
+    <string name="filter_mobile_only">Tylko komórkowe</string>
+    <string name="filter_wifi_only">Tylko Wi-Fi</string>
+    <string name="btn_ok">OK</string>
+    <string name="btn_cancel">Anuluj</string>
+    <string name="btn_delete">Usuń</string>
+    <string name="btn_edit">Edytuj</string>
+    <string name="label_both">Oba</string>
+    <string name="label_start_date">Od</string>
+    <string name="label_end_date">Do</string>
+    <string name="title_select_month">Wybierz miesiąc</string>
+    <string name="label_today">Dzisiaj</string>
+    <string name="msg_no_usage_data">Brak danych zużycia dla wybranego filtra.</string>
+    <string name="label_wifi_usage">Wi-Fi</string>
+    <string name="label_mobile_usage">Komórkowe</string>
+    <string name="label_wifi_colon">Wi-Fi:</string>
+    <string name="label_mobile_colon">Komórkowe:</string>
+    <string name="label_system_apps">Aplikacje systemowe</string>
+    <string name="title_system_data_usage">Zużycie danych systemowych</string>
+    <string name="label_system_processes">Procesy systemowe</string>
+    <string name="label_tethering">Tethering i punkt dostępowy</string>
+    <string name="label_removed_apps">Usunięte aplikacje</string>
+    <string name="label_root">Root</string>
+    <string name="label_android_system">System Android</string>
+    <string name="label_dns_resolver">DNS Resolver</string>
+    <string name="label_mdns_responder">mDNS Responder</string>
+    <string name="label_media_service">Usługi multimedialne</string>
+    <string name="label_system_update">Aktualizacja systemu</string>
+
+    <string name="tile_monitoring_on">Monitorowanie WŁĄCZONE</string>
+    <string name="tile_monitoring_off">Monitorowanie WYŁĄCZONE</string>
+
+    <!-- Settings: General -->
+    <string name="settings_section_general">Ogólne</string>
+    <string name="settings_monitoring_toggle">Włącz monitorowanie</string>
+    <string name="settings_monitoring_desc">Śledź prędkość sieci i zużycie danych w czasie rzeczywistym</string>
+    <string name="settings_reset_time">Czas resetu</string>
+    <string name="settings_reset_time_desc">Godzina rozpoczęcia nowego cyklu śledzenia</string>
+    <string name="settings_speed_unit">Jednostka prędkości</string>
+    <string name="settings_speed_unit_desc">Wybierz między bajtami na sekundę (B/s) a bitami na sekundę (bps)</string>
+    <string name="unit_bytes">Bajty na sekundę (B/s)</string>
+    <string name="unit_bits">Bity na sekundę (bps)</string>
+    <string name="dialog_select_speed_unit_title">Wybierz jednostkę prędkości</string>
+    <string name="dialog_reset_time_title">Ustaw czas resetu</string>
+    <string name="settings_monthly_reset_day">Dzień miesięcznego resetu</string>
+    <string name="settings_monthly_reset_day_desc">Cykl rozliczeniowy resetuje się %d. dnia miesiąca</string>
+    <string name="dialog_reset_day_title">Wybierz dzień resetu w miesiącu</string>
+    <string name="msg_reset_day_explanation">Wszystkie miesięczne dane i powiadomienia o limitach będą naliczane od tego dnia miesiąca.</string>
+
+    <!-- Settings: Notifications & Status Bar -->
+    <string name="settings_section_notifications">Powiadomienia i pasek stanu</string>
+    <string name="settings_show_daily_usage">Pokaż powiadomienie</string>
+    <string name="settings_daily_usage_desc">Wyświetlaj aktualną prędkość i zużycie w obszarze powiadomień</string>
+    <string name="settings_notification_content">Zawartość powiadomienia</string>
+    <string name="option_speed_only">Tylko prędkość</string>
+    <string name="option_daily_only">Tylko statystyki dzienne</string>
+    <string name="option_both">Prędkość i statystyki dzienne</string>
+    <string name="settings_high_priority">Wysoki priorytet</string>
+    <string name="settings_high_priority_desc">Utrzymuj wskaźnik prędkości na górze listy powiadomień</string>
+    <string name="settings_hide_offline">Ukryj w trybie offline</string>
+    <string name="settings_hide_offline_desc">Automatycznie ukrywaj wskaźnik po rozłączeniu z siecią</string>
+
+    <string name="settings_section_widget">Widżet ekranu głównego</string>
+    <string name="settings_widget_show_speed">Pokaż prędkość</string>
+    <string name="settings_widget_show_speed_desc">Wyświetlaj prędkość pobierania i wysyłania na widżecie</string>
+    <string name="settings_widget_usage_type">Wyświetlanie zużycia na widżecie</string>
+
+    <!-- Settings: Alerts & Limits -->
+    <string name="settings_section_alerts">Alerty i limity</string>
+    <string name="settings_data_alerts">Alerty wysokiego zużycia</string>
+    <string name="settings_data_alerts_desc">Otrzymuj powiadomienia, gdy aplikacje zużywają zbyt dużo danych w tle</string>
+    <string name="settings_mobile_limit">Limit danych komórkowych</string>
+    <string name="settings_wifi_limit">Limit danych Wi-Fi</string>
+
+    <string name="label_plan_duration">Czas trwania planu</string>
+    <string name="msg_alert_muted">Alert wyciszony</string>
+    <string name="title_select_plan_type">Wybierz typ planu</string>
+    <string name="settings_indicator_size">Rozmiar ikony</string>
+
+    <!-- Settings: Appearance -->
+    <string name="settings_section_appearance">Wygląd</string>
+    <string name="settings_app_theme">Motyw aplikacji</string>
+    <string name="dialog_select_theme_title">Wybierz motyw</string>
+    <string name="theme_system">Systemowy</string>
+    <string name="theme_light">Jasny</string>
+    <string name="theme_dark">Ciemny</string>
+    <string name="settings_material_you">Material You</string>
+    <string name="settings_material_you_desc">Używaj akcentów kolorystycznych systemu</string>
+    <string name="settings_accent_color">Kolor akcentu</string>
+    <string name="settings_accent_color_desc">Wybierz niestandardowy kolor główny</string>
+    <string name="settings_amoled_mode">Tryb AMOLED</string>
+    <string name="settings_amoled_mode_desc">Głębokie czarne tło</string>
+    <string name="size_small">Mały</string>
+    <string name="size_medium">Średni</string>
+    <string name="size_large">Duży</string>
+    <string name="settings_language">Język</string>
+    <string name="dialog_select_language_title">Wybierz język</string>
+    <string name="language_default">Domyślny systemu</string>
+    <string name="language_arabic">Arabski (العربية)</string>
+    <string name="language_french">Francuski (Français)</string>
+    <string name="language_spanish">Hiszpański (Español)</string>
+    <string name="language_german">Niemiecki (Deutsch)</string>
+    <string name="language_portuguese">Portugalski (Português)</string>
+    <string name="language_italian">Włoski (Italiano)</string>
+    <string name="language_chinese">Chiński (中文)</string>
+    <string name="language_hindi">Hindi (हिन्दी)</string>
+    <string name="language_japanese">Japoński (日本語)</string>
+    <string name="language_korean">Koreański (한국어)</string>
+    <string name="language_russian">Rosyjski (Русский)</string>
+    <string name="language_turkish">Turecki (Türkçe)</string>
+    <string name="language_indonesian">Indonezyjski (Bahasa Indonesia)</string>
+    <string name="language_vietnamese">Wietnamski (Tiếng Việt)</string>
+    <string name="language_polish">Polski</string>
+    <string name="language_ukrainian">Ukraiński (Українська)</string>
+
+    <!-- Settings: Support & Feedback -->
+    <string name="settings_section_support">Wsparcie i opinie</string>
+    <string name="settings_rate_app">Oceń FlowBytes</string>
+    <string name="settings_rate_app_desc">Podziel się swoją opinią i pomóż nam się rozwijać</string>
+    <string name="settings_share_app">Udostępnij znajomym</string>
+    <string name="settings_share_app_desc">Poleć FlowBytes innym użytkownikom</string>
+    <string name="label_share_via">Udostępnij przez</string>
+    <string name="share_text_body">Sprawdź FlowBytes! Dokładnie śledź zużycie danych: https://play.google.com/store/apps/details?id=%1$s</string>
+    <string name="settings_help_feedback">Pomoc i opinie</string>
+    <string name="settings_help_feedback_desc">Skontaktuj się z nami przez Telegram lub e-mail</string>
+    <string name="option_telegram">Telegram</string>
+    <string name="desc_telegram">Napisz bezpośrednio do dewelopera</string>
+    <string name="option_email">E-mail</string>
+    <string name="desc_email">Wyślij wiadomość e-mail do dewelopera</string>
+    <string name="option_report_bug">Zgłoś błąd / Zaproponuj funkcję</string>
+    <string name="desc_report_bug">Otwórz GitHub Issues, aby zgłosić błąd lub nową funkcję</string>
+    <string name="settings_donate">Wspomóż projekt</string>
+    <string name="settings_donate_desc">Pomóż utrzymać FlowBytes bez reklam i jako open source</string>
+    <string name="dialog_donate_title">Wesprzyj FlowBytes</string>
+    <string name="label_donate_amount_1">Mały napiwek ($1.00)</string>
+    <string name="label_donate_amount_2_5">Wspierający projekt ($2.50)</string>
+    <string name="label_donate_amount_6">Patron projektu ($6.00)</string>
+    <string name="desc_donate_1">Prosty sposób na wyraz uznania i wsparcie utrzymania projektu.</string>
+    <string name="desc_donate_2_5">Pomaga w finansowaniu nowych funkcji i optymalizacji wydajności.</string>
+    <string name="desc_donate_6">Znaczący wkład w utrzymanie niezależności i braku reklam w aplikacji.</string>
+    <string name="msg_donation_success_title">Dziękujemy!</string>
+    <string name="msg_donation_success_body">Twoje wsparcie jest dla nas bardzo ważne i pomaga utrzymać projekt.</string>
+    <string name="msg_donation_cancelled">Wsparcie zostało anulowane.</string>
+    <string name="msg_donation_failed">Nie udało się przekazać wsparcia: %1$s</string>
+    <string name="snackbar_support_prompt">Podoba Ci się FlowBytes? Wesprzyj rozwój bez reklam!</string>
+    <string name="snackbar_support_action">Wesprzyj</string>
+
+    <!-- Settings: About -->
+    <string name="settings_section_about">O aplikacji</string>
+    <string name="settings_version_label">Wersja</string>
+    <string name="settings_view_source">Kod źródłowy</string>
+    <string name="settings_view_source_desc">FlowBytes jest projektem open source</string>
+    <string name="settings_privacy_policy">Polityka prywatności</string>
+    <string name="settings_terms_conditions">Regulamin i warunki</string>
+    <string name="settings_licenses">Licencje open source</string>
+
+    <!-- Alerts History -->
+    <string name="msg_no_alerts_history">Brak historii alertów.</string>
+    <string name="btn_clear_history">Wyczyść historię</string>
+    <string name="msg_confirm_clear_history">Czy na pewno chcesz trwale usunąć historię alertów?</string>
+
+    <!-- Code Strings -->
+    <string name="label_advanced_settings">Ustawienia zaawansowane</string>
+    <string name="title_mute_app">Wycisz %s</string>
+    <string name="desc_mute_app">Przestań otrzymywać alerty o wysokim zużyciu danych dla tej aplikacji.</string>
+    <string name="btn_mute">Wycisz</string>
+    <string name="title_whats_new">Co nowego</string>
+    <string name="desc_whats_new">Zobacz najnowsze funkcje i ulepszenia.</string>
+    <string name="btn_done">Gotowe</string>
+    <string name="title_vpn_disclosure">Włącz blokowanie aplikacji</string>
+    <string name="desc_vpn_disclosure">FlowBytes używa lokalnego VPN do zarządzania dostępem do Internetu dla aplikacji przekraczających limity.</string>
+    <string name="msg_vpn_feature_local">100% lokalnie: Twój ruch nigdy nie opuszcza urządzenia.</string>
+    <string name="msg_vpn_feature_privacy">Prywatność przede wszystkim: Nie zbieramy ani nie śledzimy Twoich danych.</string>
+    <string name="msg_vpn_feature_focused">Precyzyjne: Wpływa tylko na aplikacje wybrana przez Ciebie.</string>
+    <string name="btn_not_now">Nie teraz</string>
+    <string name="btn_continue">Kontynuuj</string>
+    <string name="title_custom_color">Dostosuj kolor</string>
+    <string name="btn_apply">Zastosuj</string>
+    <string name="btn_get_started">Rozpocznij</string>
+    <string name="btn_skip_for_now">Pomiń na razie</string>
+    <string name="title_welcome">Witaj w FlowBytes</string>
+    <string name="msg_onboarding_desc">Aby zapewnić dokładne śledzenie danych, potrzebujemy kilku uprawnień.</string>
+    <string name="label_usage_access">Dostęp do zużycia</string>
+    <string name="desc_usage_access">Wymagane do śledzenia zużycia danych według aplikacji.</string>
+    <string name="label_notifications">Powiadomienia</string>
+    <string name="desc_notifications">Wymagane do wyświetlania aktualnej prędkości na pasku stanu.</string>
+    <string name="label_battery_optimization">Optymalizacja baterii</string>
+    <string name="desc_battery_optimization">Wymagane do utrzymania monitora prędkości działającego w tle.</string>
+    <string name="label_granted">Przyznano</string>
+    <string name="btn_grant">Przyznaj</string>
+    <string name="title_traffic_settings">Ustawienia alertów wysokiego zużycia</string>
+    <string name="label_speed_threshold">Prędkość aktywacji</string>
+    <string name="desc_speed_threshold">Alert jest wyzwalany, gdy prędkość sieci przekroczy ten limit.</string>
+    <string name="label_time_above_threshold">Czas utrzymywania prędkości</string>
+    <string name="desc_time_above_threshold">Prędkość musi utrzymywać się powyżej limitu przez ten czas przed powiadomieniem.</string>
+    <string name="label_alert_cooldown">Czas między alertami</string>
+    <string name="desc_alert_cooldown">Minimalny czas oczekiwania przed wysłaniem kolejnego alertu.</string>
+    <string name="label_reset_speed_threshold">Prędkość resetowania</string>
+    <string name="desc_reset_speed_threshold">System alertów resetuje się, gdy prędkość spadnie poniżej tego poziomu.</string>
+    <string name="label_time_below_reset">Czas poniżej prędkości resetu</string>
+    <string name="desc_time_below_reset">Prędkość musi pozostać poniżej poziomu resetu przez ten czas, aby wyczyścić alert.</string>
+    <string name="btn_save_config">Zapisz</string>
+    <string name="label_app_limits">Limity aplikacji</string>
+    <string name="filter_all">Wszystkie</string>
+    <string name="label_daily_limits">Limity dzienne</string>
+    <string name="label_monthly_limits">Limity miesięczne</string>
+    <string name="label_high_traffic">Wysoki ruch</string>
+    <string name="msg_no_alerts_all">Brak zarejestrowanych alertów.</string>
+    <string name="msg_no_alerts_app">Brak alertów limitów aplikacji.</string>
+    <string name="msg_no_alerts_daily">Brak alertów limitów dziennych.</string>
+    <string name="msg_no_alerts_monthly">Brak alertów limitów miesięcznych.</string>
+    <string name="msg_no_alerts_traffic">Brak alertów wysokiego ruchu.</string>
+    <string name="label_app_limit_reached">Osiągnięto limit aplikacji</string>
+    <string name="label_daily_limit_reached">Osiągnięto limit dzienny</string>
+    <string name="label_monthly_limit_reached">Osiągnięto limit miesięczny</string>
+    <string name="label_custom_limit_reached">Osiągnięto limit niestandardowy</string>
+    <string name="label_start_date_select">Data początkowa: %s</string>
+    <string name="label_end_date_select">Data końcowa: %s</string>
+    <string name="msg_invalid_date_range">Data końcowa musi być równa lub późniejsza niż data początkowa</string>
+    <string name="label_trigger_speed_header">PRĘDKOŚĆ AKTYWACJI</string>
+    <string name="label_limit_set_header">USTAWIONY LIMIT</string>
+    <string name="label_usage_recorded_header">ZAREJESTROWANE ZUŻYCIE</string>
+    <string name="msg_no_app_limits">Brak skonfigurowanych limitów aplikacji.</string>
+    <string name="desc_restrict_app_subtitle">Dodaj aplikację, aby zacząć zarządzać jej zużyciem danych.</string>
+    <string name="cd_add_app_limit">Dodaj limit aplikacji</string>
+    <string name="label_block_apps">Zapora sieciowa (Firewall)</string>
+    <string name="desc_block_apps">Blokuje dostęp do Internetu po przekroczeniu limitów</string>
+    <string name="msg_firewall_enabled">Zapora sieciowa włączona</string>
+    <string name="msg_firewall_disabled">Zapora sieciowa wyłączona</string>
+    <string name="title_edit_app_limit">Edytuj limit aplikacji</string>
+    <string name="btn_create_app_limit">Utwórz limit</string>
+    <string name="label_app_limit_selection">Limit aplikacji</string>
+    <string name="desc_app_limit_selection">Ustaw ograniczenia dla określonej aplikacji</string>
+    <string name="title_delete_limit">Usuń limit</string>
+    <string name="msg_confirm_delete_limit">Czy na pewno chcesz usunąć limit dla %s?</string>
+    <string name="msg_no_apps_found">Nie znaleziono aplikacji.</string>
+    <string name="placeholder_search_apps">Szukaj aplikacji</string>
+    <string name="title_select_application">Wybierz aplikację</string>
+    <string name="title_configure_limit">Skonfiguruj limit</string>
+    <string name="title_general_limits">Plany systemowe</string>
+    <string name="btn_add_plan">Dodaj plan</string>
+    <string name="btn_add_app_limit">Dodaj limit aplikacji</string>
+    <string name="msg_no_restricted_apps">Brak ograniczonych aplikacji</string>
+    <string name="desc_restrict_app_placeholder">Ogranicz wybranym aplikacjom możliwość korzystania z danych w tle.</string>
+    <string name="label_inactive">Nieaktywny</string>
+    <string name="cd_delete_plan">Usuń plan</string>
+    <string name="label_configure_network_plan">Skonfiguruj plan sieciowy</string>
+    <string name="desc_prevent_overages">Zapobiegaj przekraczaniu limitów danych.</string>
+    <string name="msg_no_general_limits">Brak skonfigurowanych planów systemowych.</string>
+    <string name="desc_add_general_limit_subtitle">Ustaw plan danych dla całego urządzenia, aby zachować kontrolę.</string>
+    <string name="label_general_limit_selection">Plan systemowy</string>
+    <string name="desc_general_limit_selection">Skonfiguruj dzienne limity danych dla całego urządzenia</string>
+    <string name="title_choose_limit_type">Wybierz typ limitu</string>
+
+    <!-- Notification Strings -->
+    <string name="status_not_supported">Monitorowanie prędkości nie jest obsługiwane na tym urządzeniu</string>
+    <string name="channel_speed_monitor_name">Monitor prędkości</string>
+    <string name="channel_speed_monitor_desc">Wskaźniki prędkości sieci w czasie rzeczywistym</string>
+    <string name="channel_usage_alerts_name">Alerty wysokiego zużycia</string>
+    <string name="channel_usage_alerts_desc">Powiadomienia o przekroczeniu progów zużycia danych</string>
+    <string name="notification_high_usage_app_msg">%1$s zużywa znaczną ilość danych: %2$s (zużyto %3$s).</string>
+    <string name="notification_high_usage_title">Wysokie zużycie danych</string>
+    <string name="notification_summary_title">Alerty wysokiego zużycia</string>
+    <string name="notification_summary_msg">Dotknij, aby wyświetlić historię alertów.</string>
+    <string name="notification_summary_text">Alerty FlowBytes</string>
+    <string name="notification_app_limit_msg">%1$s osiągnęła swój limit danych %2$s.</string>
+    <string name="notification_app_limit_title">Osiągnięto limit %s</string>
+    <string name="msg_reached_limit">Osiągnięto limit %1$s %2$s (zużyto %3$s).</string>
+    <string name="btn_silence">Wycisz</string>
+
+    <!-- Badges -->
+    <string name="badge_limit_reached">Osiągnięto limit</string>
+    <string name="badge_blocked">Zablokowano</string>
+
+    <!-- App Review Dialog -->
+    <string name="review_dialog_title">Podoba Ci się FlowBytes?</string>
+    <string name="review_dialog_description">Jeśli uważasz FlowBytes za przydatną aplikację, poświęć chwilę na jej ocenę! Pomaga nam to w rozwoju i utrzymaniu braku reklam.</string>
+    <string name="review_later">Później</string>
+    <string name="review_never">Nigdy</string>
+    <string name="review_submit_feedback">Wyślij opinię</string>
+    <string name="review_rate_on_play_store">Oceń w Play Store</string>
+    <string name="review_feedback_title">Pomóż nam się ulepszać</string>
+    <string name="review_feedback_description">Przykro nam, że nie jesteś w pełni zadowolony. Daj nam znać, co możemy ulepszyć.</string>
+    <string name="review_feedback_placeholder">Wpisz swoje sugestie tutaj&#8230;</string>
+    <string name="review_play_store_title">Dziękujemy za ocenę!</string>
+    <string name="review_play_store_description">Będziemy wdzięczni za napisanie krótkiej opinii w Sklepie Google Play!</string>
+    <string name="review_toast_feedback_submitted">Opinia została pomyślnie wysłana. Dziękujemy!</string>
+
+    <string name="label_network_type">Typ sieci</string>
+    <string name="label_limit_period">Okres limitu</string>
+    <string name="label_daily_wifi">Dzienne Wi-Fi</string>
+    <string name="label_daily_mobile">Dzienne dane komórkowe</string>
+    <string name="label_monthly_wifi">Miesięczne Wi-Fi</string>
+    <string name="label_monthly_mobile">Miesięczne dane komórkowe</string>
+    <string name="label_custom_wifi">Niestandardowe Wi-Fi</string>
+    <string name="label_custom_mobile">Niestandardowe dane komórkowe</string>
+    <string name="settings_traffic_threshold_subtitle">Skonfiguruj limity prędkości i czasu dla alertów</string>
+    <string name="whats_new_custom_limits_title">Niestandardowe zakresy dat</string>
+    <string name="whats_new_custom_limits_desc">Możesz teraz ustawiać limity danych dla określonych zakresów dat w sieciach komórkowych i Wi-Fi.</string>
+    <string name="whats_new_reset_day_title">Dzień miesięcznego resetu</string>
+    <string name="whats_new_reset_day_desc">Obsługa niestandardowych cykli rozliczeniowych. Wybierz konkretny dzień miesiąca do resetowania zużycia.</string>
+
+    <string name="label_daily_wifi_limit">Dzienny limit Wi-Fi</string>
+    <string name="label_monthly_wifi_limit">Miesięczny limit Wi-Fi</string>
+    <string name="label_daily_mobile_limit">Dzienny limit danych komórkowych</string>
+    <string name="label_monthly_mobile_limit">Miesięczny limit danych komórkowych</string>
+    <string name="label_custom_wifi_limit">Niestandardowy limit Wi-Fi</string>
+    <string name="label_custom_mobile_limit">Niestandardowy limit danych komórkowych</string>
+    <string name="label_unknown">Nieznany</string>
+    <string name="desc_configure_limit_format">Skonfiguruj limit dla swojego planu %1$s.</string>
+    <string name="label_select_date">Wybierz datę</string>
+    <string name="btn_configure">Skonfiguruj</string>
+    <string name="label_selected_count">Wybrano: %1$d</string>
+    <string name="label_app_limits_pending">Oczekujące limity aplikacji</string>
+    <string name="cd_clear_selection">Wyczyść wybór</string>
+    <string name="title_configure_limits">Skonfiguruj limity</string>
+    <string name="desc_configure_limits_count">Skonfiguruj limity dla %1$d wybranych aplikacji.</string>
+    <string name="title_global_settings">Ustawienia globalne</string>
+    <string name="desc_global_settings_subtitle">Ustaw podstawowy typ sieci i okres dla wszystkich wybranych aplikacji.</string>
+    <string name="title_default_limits">Domyślne limity (Szybkie wypełnianie)</string>
+    <string name="desc_default_limits_subtitle">Ustawienie tego automatycznie wypełni pola poniżej.</string>
+    <string name="title_individual_app_limits">Indywidualne limity aplikacji</string>
+    <string name="desc_individual_app_limits_subtitle">Dostosuj typy sieci, okresy lub wartości limitów dla każdej aplikacji.</string>
+
+    <!-- Widgets Screen -->
+    <string name="title_homescreen_widgets">Widżety ekranu głównego</string>
+    <string name="title_customize_add_widgets">Dostosuj i dodaj widżety</string>
+    <string name="desc_widgets_instruction">Przełącz opcje poniżej, aby błyskawicznie dostosować style widżetów.</string>
+    <string name="label_available_widgets">DOSTĘPNE WIDŻETY</string>
+    <string name="title_daily_usage_widget">Widżet dziennego zużycia</string>
+    <string name="desc_daily_usage_widget_size">4x1 Kompaktowy / 4x2 Dzienny</string>
+    <string name="title_monthly_usage_widget">Widżet miesięcznego zużycia</string>
+    <string name="desc_monthly_usage_widget_size">4x1 Kompaktowy / 4x2 Miesięczny</string>
+    <string name="label_todays_usage_caps">DZISIEJSZE ZUŻYCIE</string>
+    <string name="title_todays_data_widget">Widżet dzisiejszych danych</string>
+    <string name="desc_todays_data_size">2x2 Okrągły postęp</string>
+    <string name="label_todays_data_caps">DZISIEJSZE DANE</string>
+    <string name="title_daily_limit_widget">Widżet dziennego limitu sieci</string>
+    <string name="desc_detailed_status_size">4x2 Szczegółowy stan</string>
+    <string name="label_daily_limit_caps">DZIENNY LIMIT SIECI</string>
+    <string name="title_monthly_limit_widget">Widżet miesięcznego limitu sieci</string>
+    <string name="label_monthly_limit_caps">MIESIĘCZNY LIMIT SIECI</string>
+    <string name="title_custom_limit_widget">Widżet niestandardowego limitu sieci</string>
+    <string name="label_custom_limit_caps">NIESTANDARDOWY LIMIT SIECI</string>
+    <string name="title_speed_monitor_widget">Widżet monitora prędkości</string>
+    <string name="desc_live_graphs_size">4x2 Wykresy na żywo</string>
+    <string name="label_speed_monitor_caps">MONITOR PRĘDKOŚCI</string>
+    <string name="label_download_caps">POBIERANIE</string>
+    <string name="label_upload_caps">WYSYŁANIE</string>
+    <string name="btn_add">Dodaj</string>
+    <string name="msg_widget_pin_failed">Dodawanie widżetów bezpośrednio nie jest obsługiwane przez Twój program uruchamiający.</string>
+    <string name="msg_widget_pin_api_error">Ta funkcja wymaga systemu Android 8.0 lub nowszego.</string>
+
+    <!-- App Updates -->
+    <string name="title_update_available">Dostępna aktualizacja</string>
+    <string name="desc_update_available">Nowa wersja FlowBytes (%1$s) jest gotowa do pobrania.</string>
+    <string name="btn_update">Aktualizuj</string>
+    <string name="btn_ignore_version">Ignoruj wersję</string>
+    <string name="btn_later">Później</string>
+    <string name="label_release_notes">INFORMACJE O WERSJI</string>
+    <string name="settings_auto_check_updates">Automatyczne sprawdzanie aktualizacji</string>
+    <string name="settings_auto_check_updates_desc">Szukaj nowych wersji przy uruchomieniu</string>
+    <string name="settings_check_updates">Sprawdź aktualizacje</string>
+    <string name="settings_check_updates_desc">Upewnij się, że korzystasz z najnowszej wersji</string>
+    <string name="toast_app_up_to_date">FlowBytes jest aktualny!</string>
+    <string name="toast_update_check_failed">Nie udało się sprawdzić aktualizacji. Spróbuj ponownie później.</string>
+    <string name="toast_checking_updates">Sprawdzanie aktualizacji...</string>
+
+    <!-- Strings extracted from Kotlin files -->
+    <string name="msg_usage_stats_permission_disabled">Uprawnienie do statystyk zużycia jest wyłączone. Dotknij, aby przyznać.</string>
+    <string name="msg_notification_permission_disabled">Uprawnienie do powiadomień jest wyłączone. Dotknij, aby przyznać.</string>
+    <string name="label_widget_settings_caps">USTAWIENIA WIDŻETÓW</string>
+    <string name="option_update_interval_manual">Tylko ręcznie / Wyłączone</string>
+    <string name="option_update_interval_hour">1 Godzina</string>
+    <string name="option_update_interval_hours">%1$d Godzin</string>
+    <string name="option_update_interval_minutes">%1$d Minut</string>
+    <string name="label_update_interval">Częstotliwość aktualizacji</string>
+    <string name="desc_update_interval_format">Częstotliwość aktualizacji w tle: %1$s</string>
+    <string name="title_select_update_interval">Wybierz częstotliwość aktualizacji</string>
+    <string name="cd_manage_widgets">Zarządzaj widżetami</string>
+    <string name="cd_switch_to_input_mode">Przełącz na tryb wprowadzania</string>
+    <string name="cd_switch_to_picker_mode">Przełącz na tryb wyboru</string>
+    <string name="msg_billing_service_not_ready">Usługa płatności nie jest gotowa. Spróbuj ponownie za chwilę.</string>
+    <string name="msg_billing_error_format">Błąd płatności Google Play (Kod: %1$s)</string>
+    <string name="vpn_session_name">Blokada FlowBytes</string>
+    <string name="msg_product_details_not_found">Nie znaleziono szczegółów produktu. Upewnij się, że aplikacja została zainstalowana z Google Play.</string>
+    <string name="widget_title_network_limit">Limit sieci</string>
+    <string name="widget_title_speed_monitor">Monitor prędkości</string>
+    <string name="widget_title_todays_data">Dzisiejsze dane</string>
+    <string name="desc_download_speed_graph">Wykres prędkości pobierania</string>
+    <string name="desc_upload_speed_graph">Wykres prędkości wysyłania</string>
+    <string name="cd_previous">Poprzedni</string>
+    <string name="cd_next">Następny</string>
+    <string name="label_limit_prefix">Limit: %1$s</string>
+    <string name="unit_secs">Sek</string>
+    <string name="unit_mins">Min</string>
+    <string name="unit_hours">Godz</string>
+    <string name="unit_min_short">Min</string>
+    <string name="unit_sec_short">Sek</string>
+</resources>

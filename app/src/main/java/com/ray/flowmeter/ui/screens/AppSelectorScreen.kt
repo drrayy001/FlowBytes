@@ -8,7 +8,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -29,6 +29,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
 import com.ray.flowmeter.R
+import com.ray.flowmeter.ui.theme.StaggeredEntrance
+import com.ray.flowmeter.ui.theme.bounceClick
 import com.ray.flowmeter.ui.viewmodels.AppLimitsViewModel
 import androidx.compose.foundation.BorderStroke
 import com.ray.flowmeter.data.AppLimit
@@ -171,7 +173,7 @@ fun AppPickerScreen(
                                 modifier = Modifier.fillMaxSize(),
                                 contentPadding = PaddingValues(bottom = 100.dp)
                             ) {
-                                items(filtered, key = { it.packageName }) { app ->
+                                itemsIndexed(filtered, key = { _, it -> it.packageName }) { index, app ->
                                     val appIcon by produceState<Drawable?>(
                                         initialValue = null,
                                         key1 = app.packageName
@@ -180,65 +182,67 @@ fun AppPickerScreen(
                                     }
                                     val isSelected = selectedApps.contains(app)
 
-                                    ListItem(
-                                        headlineContent = {
-                                            Text(
-                                                text = app.name,
-                                                fontWeight = FontWeight.Bold
-                                            )
-                                        },
-                                        supportingContent = {
-                                            Text(
-                                                text = app.packageName,
-                                                style = MaterialTheme.typography.bodySmall,
-                                                maxLines = 1,
-                                                overflow = TextOverflow.Ellipsis
-                                            )
-                                        },
-                                        leadingContent = {
-                                            Surface(
-                                                shape = CircleShape,
-                                                color = MaterialTheme.colorScheme.surfaceContainerHigh,
-                                                modifier = Modifier.size(48.dp)
-                                            ) {
-                                                Box(modifier = Modifier.padding(8.dp)) {
-                                                    if (appIcon != null) {
-                                                        Image(
-                                                            bitmap = appIcon!!.toBitmap().asImageBitmap(),
-                                                            contentDescription = null,
-                                                            modifier = Modifier.fillMaxSize()
-                                                        )
-                                                    } else {
-                                                        Icon(
-                                                            Icons.Rounded.Apps,
-                                                            contentDescription = null,
-                                                            tint = MaterialTheme.colorScheme.primary,
-                                                            modifier = Modifier.fillMaxSize()
-                                                        )
+                                    StaggeredEntrance(index = index) {
+                                        ListItem(
+                                            headlineContent = {
+                                                Text(
+                                                    text = app.name,
+                                                    fontWeight = FontWeight.Bold
+                                                )
+                                            },
+                                            supportingContent = {
+                                                Text(
+                                                    text = app.packageName,
+                                                    style = MaterialTheme.typography.bodySmall,
+                                                    maxLines = 1,
+                                                    overflow = TextOverflow.Ellipsis
+                                                )
+                                            },
+                                            leadingContent = {
+                                                Surface(
+                                                    shape = CircleShape,
+                                                    color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                                                    modifier = Modifier.size(48.dp)
+                                                ) {
+                                                    Box(modifier = Modifier.padding(8.dp)) {
+                                                        if (appIcon != null) {
+                                                            Image(
+                                                                bitmap = appIcon!!.toBitmap().asImageBitmap(),
+                                                                contentDescription = null,
+                                                                modifier = Modifier.fillMaxSize()
+                                                            )
+                                                        } else {
+                                                            Icon(
+                                                                Icons.Rounded.Apps,
+                                                                contentDescription = null,
+                                                                tint = MaterialTheme.colorScheme.primary,
+                                                                modifier = Modifier.fillMaxSize()
+                                                            )
+                                                        }
                                                     }
                                                 }
-                                            }
-                                        },
-                                        trailingContent = {
-                                            Checkbox(
-                                                checked = isSelected,
-                                                onCheckedChange = { checked ->
-                                                    if (checked) {
-                                                        selectedApps.add(app)
-                                                    } else {
-                                                        selectedApps.remove(app)
+                                            },
+                                            trailingContent = {
+                                                Checkbox(
+                                                    checked = isSelected,
+                                                    onCheckedChange = { checked ->
+                                                        if (checked) {
+                                                            selectedApps.add(app)
+                                                        } else {
+                                                            selectedApps.remove(app)
+                                                        }
                                                     }
+                                                )
+                                            },
+                                            modifier = Modifier.clickable {
+                                                if (isSelected) {
+                                                    selectedApps.remove(app)
+                                                } else {
+                                                    selectedApps.add(app)
                                                 }
-                                            )
-                                        },
-                                        modifier = Modifier.clickable {
-                                            if (isSelected) {
-                                                selectedApps.remove(app)
-                                            } else {
-                                                selectedApps.add(app)
                                             }
-                                        }
-                                    )
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -247,81 +251,83 @@ fun AppPickerScreen(
 
                 // Modern Floating Dock
                 if (selectedApps.isNotEmpty()) {
-                    Box(
-                        modifier = Modifier
-                            .align(Alignment.BottomCenter)
-                            .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom))
-                            .padding(horizontal = 24.dp, vertical = 16.dp)
-                    ) {
-                        Card(
-                            shape = RoundedCornerShape(24.dp),
-                            colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
-                            ),
-                            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-                            border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.15f))
+                    StaggeredEntrance {
+                        Box(
+                            modifier = Modifier
+                                .align(Alignment.BottomCenter)
+                                .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom))
+                                .padding(horizontal = 24.dp, vertical = 16.dp)
                         ) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 16.dp, vertical = 10.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
+                            Card(
+                                shape = RoundedCornerShape(24.dp),
+                                colors = CardDefaults.cardColors(
+                                    containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+                                ),
+                                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+                                border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.15f))
                             ) {
                                 Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    modifier = Modifier.weight(1f)
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 16.dp, vertical = 10.dp),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    IconButton(
-                                        onClick = { selectedApps.clear() },
-                                        colors = IconButtonDefaults.iconButtonColors(
-                                            containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                                            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
-                                        ),
-                                        modifier = Modifier.size(36.dp)
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        modifier = Modifier.weight(1f)
                                     ) {
-                                        Icon(
-                                            Icons.Rounded.Close,
-                                            contentDescription = stringResource(R.string.cd_clear_selection),
-                                            modifier = Modifier.size(18.dp)
-                                        )
+                                        IconButton(
+                                            onClick = { selectedApps.clear() },
+                                            colors = IconButtonDefaults.iconButtonColors(
+                                                containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                                                contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                                            ),
+                                            modifier = Modifier.size(36.dp)
+                                        ) {
+                                            Icon(
+                                                Icons.Rounded.Close,
+                                                contentDescription = stringResource(R.string.cd_clear_selection),
+                                                modifier = Modifier.size(18.dp)
+                                            )
+                                        }
+                                        Spacer(modifier = Modifier.width(12.dp))
+                                        Column {
+                                            Text(
+                                                text = stringResource(R.string.label_selected_count, selectedApps.size),
+                                                style = MaterialTheme.typography.titleSmall,
+                                                fontWeight = FontWeight.Bold,
+                                                color = MaterialTheme.colorScheme.onSurface,
+                                                maxLines = 1,
+                                                overflow = TextOverflow.Ellipsis
+                                            )
+                                            Text(
+                                                text = stringResource(R.string.label_app_limits_pending),
+                                                style = MaterialTheme.typography.bodySmall,
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                                maxLines = 1,
+                                                overflow = TextOverflow.Ellipsis
+                                            )
+                                        }
                                     }
                                     Spacer(modifier = Modifier.width(12.dp))
-                                    Column {
+                                    Button(
+                                        onClick = { isConfigSheetOpen = true },
+                                        shape = RoundedCornerShape(16.dp),
+                                        colors = ButtonDefaults.buttonColors(
+                                            containerColor = MaterialTheme.colorScheme.primary,
+                                            contentColor = MaterialTheme.colorScheme.onPrimary
+                                        ),
+                                        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 10.dp),
+                                        modifier = Modifier.wrapContentWidth()
+                                    ) {
                                         Text(
-                                            text = stringResource(R.string.label_selected_count, selectedApps.size),
-                                            style = MaterialTheme.typography.titleSmall,
+                                            text = stringResource(R.string.btn_configure),
                                             fontWeight = FontWeight.Bold,
-                                            color = MaterialTheme.colorScheme.onSurface,
                                             maxLines = 1,
-                                            overflow = TextOverflow.Ellipsis
-                                        )
-                                        Text(
-                                            text = stringResource(R.string.label_app_limits_pending),
-                                            style = MaterialTheme.typography.bodySmall,
-                                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                            maxLines = 1,
-                                            overflow = TextOverflow.Ellipsis
+                                            softWrap = false
                                         )
                                     }
-                                }
-                                Spacer(modifier = Modifier.width(12.dp))
-                                Button(
-                                    onClick = { isConfigSheetOpen = true },
-                                    shape = RoundedCornerShape(16.dp),
-                                    colors = ButtonDefaults.buttonColors(
-                                        containerColor = MaterialTheme.colorScheme.primary,
-                                        contentColor = MaterialTheme.colorScheme.onPrimary
-                                    ),
-                                    contentPadding = PaddingValues(horizontal = 20.dp, vertical = 10.dp),
-                                    modifier = Modifier.wrapContentWidth()
-                                ) {
-                                    Text(
-                                        text = stringResource(R.string.btn_configure),
-                                        fontWeight = FontWeight.Bold,
-                                        maxLines = 1,
-                                        softWrap = false
-                                    )
                                 }
                             }
                         }

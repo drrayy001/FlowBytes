@@ -30,6 +30,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.ray.flowmeter.ui.theme.StaggeredEntrance
 import com.ray.flowmeter.ui.theme.bounceClick
 import kotlin.math.*
 
@@ -81,14 +82,18 @@ fun AccentColorDialog(
                     .padding(bottom = 40.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = stringResource(R.string.title_custom_color),
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.ExtraBold,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.fillMaxWidth().padding(bottom = 20.dp),
-                    textAlign = TextAlign.Center
-                )
+                StaggeredEntrance(index = 0) {
+                    Text(
+                        text = stringResource(R.string.title_custom_color),
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 20.dp),
+                        textAlign = TextAlign.Center
+                    )
+                }
 
                 val presets = listOf(
                     Color(0xFF0056D2),
@@ -100,133 +105,151 @@ fun AccentColorDialog(
                     Color(0xFF00796B),
                 )
                 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 24.dp),
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    presets.forEach { presetColor ->
-                        Surface(
-                            modifier = Modifier
-                                .size(32.dp)
-                                .bounceClick {
-                                    val hsv = FloatArray(3)
-                                    android.graphics.Color.colorToHSV(presetColor.toArgb(), hsv)
-                                    hue = hsv[0]
-                                    saturation = hsv[1]
-                                    value = hsv[2]
-                                },
-                            shape = CircleShape,
-                            color = presetColor,
-                            border = if (pickedColor == presetColor) BorderStroke(2.dp, MaterialTheme.colorScheme.onSurface) else null
-                        ) {}
-                    }
-                }
-
-                Surface(
-                    color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
-                    shape = RoundedCornerShape(24.dp),
-                    modifier = Modifier.padding(bottom = 24.dp)
-                ) {
+                StaggeredEntrance(index = 1) {
                     Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp)
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 24.dp),
+                        horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        Surface(
-                            shape = CircleShape,
-                            color = pickedColor,
-                            border = BorderStroke(2.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)),
-                            modifier = Modifier.size(36.dp)
-                        ) {}
-
-                        Spacer(modifier = Modifier.width(16.dp))
-
-                        BasicTextField(
-                            value = hexText,
-                            onValueChange = {
-                                val formatted = if (it.startsWith("#")) it else "#$it"
-                                if (formatted.length <= 7) {
-                                    hexText = formatted.uppercase()
-                                    formatted.toColor()?.let { color ->
+                        presets.forEach { presetColor ->
+                            Surface(
+                                modifier = Modifier
+                                    .size(32.dp)
+                                    .bounceClick {
                                         val hsv = FloatArray(3)
-                                        android.graphics.Color.colorToHSV(color.toArgb(), hsv)
+                                        android.graphics.Color.colorToHSV(presetColor.toArgb(), hsv)
                                         hue = hsv[0]
                                         saturation = hsv[1]
                                         value = hsv[2]
-                                    }
-                                }
-                            },
-                            textStyle = MaterialTheme.typography.bodyLarge.copy(
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.onSurface,
-                                letterSpacing = 1.sp,
-                                textAlign = TextAlign.Center
-                            ),
-                            singleLine = true,
-                            keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Characters),
-                            modifier = Modifier.width(110.dp)
-                        )
+                                    },
+                                shape = CircleShape,
+                                color = presetColor,
+                                border = if (pickedColor == presetColor) BorderStroke(
+                                    2.dp,
+                                    MaterialTheme.colorScheme.onSurface
+                                ) else null
+                            ) {}
+                        }
                     }
                 }
 
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(bottom = 28.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    ColorWheel(
-                        hue = hue,
-                        saturation = saturation,
-                        modifier = Modifier.size(200.dp),
-                        onColorChanged = { h, s ->
-                            hue = h
-                            saturation = s
-                        }
-                    )
-                    
-                    Spacer(modifier = Modifier.width(24.dp))
-                    
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.height(200.dp)
+                StaggeredEntrance(index = 2) {
+                    Surface(
+                        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                        shape = RoundedCornerShape(24.dp),
+                        modifier = Modifier.padding(bottom = 24.dp)
                     ) {
-                        Text(
-                            "B",
-                            style = MaterialTheme.typography.labelMedium,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        BrightnessSlider(
-                            value = value,
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center,
+                            modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp)
+                        ) {
+                            Surface(
+                                shape = CircleShape,
+                                color = pickedColor,
+                                border = BorderStroke(
+                                    2.dp,
+                                    MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
+                                ),
+                                modifier = Modifier.size(36.dp)
+                            ) {}
+
+                            Spacer(modifier = Modifier.width(16.dp))
+
+                            BasicTextField(
+                                value = hexText,
+                                onValueChange = {
+                                    val formatted = if (it.startsWith("#")) it else "#$it"
+                                    if (formatted.length <= 7) {
+                                        hexText = formatted.uppercase()
+                                        formatted.toColor()?.let { color ->
+                                            val hsv = FloatArray(3)
+                                            android.graphics.Color.colorToHSV(color.toArgb(), hsv)
+                                            hue = hsv[0]
+                                            saturation = hsv[1]
+                                            value = hsv[2]
+                                        }
+                                    }
+                                },
+                                textStyle = MaterialTheme.typography.bodyLarge.copy(
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.onSurface,
+                                    letterSpacing = 1.sp,
+                                    textAlign = TextAlign.Center
+                                ),
+                                singleLine = true,
+                                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Characters),
+                                modifier = Modifier.width(110.dp)
+                            )
+                        }
+                    }
+                }
+
+                StaggeredEntrance(index = 3) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 28.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        ColorWheel(
                             hue = hue,
                             saturation = saturation,
-                            onValueChange = { value = it },
-                            modifier = Modifier.weight(1f).width(40.dp)
+                            modifier = Modifier.size(200.dp),
+                            onColorChanged = { h, s ->
+                                hue = h
+                                saturation = s
+                            }
                         )
+
+                        Spacer(modifier = Modifier.width(24.dp))
+
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.height(200.dp)
+                        ) {
+                            Text(
+                                "B",
+                                style = MaterialTheme.typography.labelMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            BrightnessSlider(
+                                value = value,
+                                hue = hue,
+                                saturation = saturation,
+                                onValueChange = { value = it },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .width(40.dp)
+                            )
+                        }
                     }
                 }
 
-                Surface(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(52.dp)
-                        .bounceClick {
-                            onSelect(pickedColor.toArgb().toLong() and 0xFFFFFFFFL)
-                            onDismiss()
-                        },
-                    shape = RoundedCornerShape(16.dp),
-                    color = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary
-                ) {
-                    Box(contentAlignment = Alignment.Center) {
-                        Text(
-                            text = stringResource(R.string.btn_apply),
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold
-                        )
+                StaggeredEntrance(index = 4) {
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(52.dp)
+                            .bounceClick {
+                                onSelect(pickedColor.toArgb().toLong() and 0xFFFFFFFFL)
+                                onDismiss()
+                            },
+                        shape = RoundedCornerShape(16.dp),
+                        color = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
+                    ) {
+                        Box(contentAlignment = Alignment.Center) {
+                            Text(
+                                text = stringResource(R.string.btn_apply),
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
                     }
                 }
             }

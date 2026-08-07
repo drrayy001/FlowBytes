@@ -12,6 +12,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -294,32 +295,34 @@ fun AppLimitsScreen(
                     }
                 }
             } else {
-                items(activePlansList) { plan ->
+                itemsIndexed(activePlansList) { index, plan ->
                     Box(modifier = Modifier.padding(horizontal = 20.dp)) {
-                        SystemPlanCard(
-                            title = plan.title,
-                            usage = plan.usage,
-                            limit = plan.limit,
-                            enabled = plan.enabled,
-                            isWifi = plan.isWifi,
-                            subtitle = plan.subtitle,
-                            onToggle = plan.onToggle,
-                            onCardClick = { viewModel.configuringGeneralLimitType = plan.type },
-                            onDelete = {
-                                val title = plan.title
-                                val pType = plan.type
-                                val limitVal = plan.limit
-                                val netType = if (plan.isWifi) "wifi" else "mobile"
-                                val periodType = if (pType.startsWith("daily")) "daily" else if (pType.startsWith("monthly")) "monthly" else "custom"
-                                limitToDelete = AppLimit(
-                                    packageName = "system.${netType}.${periodType}",
-                                    appName = title,
-                                    dataLimit = limitVal,
-                                    limitType = periodType,
-                                    networkType = netType
-                                )
-                            }
-                        )
+                        StaggeredEntrance(index = index) {
+                            SystemPlanCard(
+                                title = plan.title,
+                                usage = plan.usage,
+                                limit = plan.limit,
+                                enabled = plan.enabled,
+                                isWifi = plan.isWifi,
+                                subtitle = plan.subtitle,
+                                onToggle = plan.onToggle,
+                                onCardClick = { viewModel.configuringGeneralLimitType = plan.type },
+                                onDelete = {
+                                    val title = plan.title
+                                    val pType = plan.type
+                                    val limitVal = plan.limit
+                                    val netType = if (plan.isWifi) "wifi" else "mobile"
+                                    val periodType = if (pType.startsWith("daily")) "daily" else if (pType.startsWith("monthly")) "monthly" else "custom"
+                                    limitToDelete = AppLimit(
+                                        packageName = "system.${netType}.${periodType}",
+                                        appName = title,
+                                        dataLimit = limitVal,
+                                        limitType = periodType,
+                                        networkType = netType
+                                    )
+                                }
+                            )
+                        }
                     }
                 }
             }
@@ -362,9 +365,9 @@ fun AppLimitsScreen(
                     )
                 }
             } else {
-                items(appLimits.asReversed()) { limit ->
+                itemsIndexed(appLimits.asReversed()) { index, limit ->
                     Box(modifier = Modifier.padding(horizontal = 20.dp)) {
-                        StaggeredEntrance {
+                        StaggeredEntrance(index = activePlansList.size + index) {
                             AppLimitItem(
                                 limit = limit,
                                 onToggle = { enabled -> viewModel.updateAppLimit(limit.copy(isEnabled = enabled)) },

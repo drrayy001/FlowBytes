@@ -18,6 +18,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
 import com.ray.flowmeter.R
+import com.ray.flowmeter.ui.theme.StaggeredEntrance
 import com.ray.flowmeter.ui.theme.bounceClick
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -84,139 +85,163 @@ fun TrafficSettingsDialog(
                     .padding(bottom = 40.dp)
                     .verticalScroll(rememberScrollState())
             ) {
-                Text(
-                    text = stringResource(R.string.title_traffic_settings),
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.ExtraBold,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.padding(bottom = 16.dp)
-                )
+                StaggeredEntrance(index = 0) {
+                    Text(
+                        text = stringResource(R.string.title_traffic_settings),
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.padding(bottom = 16.dp)
+                    )
+                }
 
-                OutlinedTextField(
-                    value = speedInput,
-                    onValueChange = { speedInput = it.filter { char -> char.isDigit() } },
-                    label = { Text(stringResource(R.string.label_speed_threshold)) },
-                    supportingText = { Text(stringResource(R.string.desc_speed_threshold)) },
-                    trailingIcon = {
-                        UnitSelector(
-                            selectedUnit = speedUnit,
-                            units = listOf("MB/s", "KB/s"),
-                            onUnitSelected = { speedUnit = it }
-                        )
-                    },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
-                    shape = RoundedCornerShape(12.dp)
-                )
+                StaggeredEntrance(index = 1) {
+                    OutlinedTextField(
+                        value = speedInput,
+                        onValueChange = { speedInput = it.filter { char -> char.isDigit() } },
+                        label = { Text(stringResource(R.string.label_speed_threshold)) },
+                        supportingText = { Text(stringResource(R.string.desc_speed_threshold)) },
+                        trailingIcon = {
+                            UnitSelector(
+                                selectedUnit = speedUnit,
+                                units = listOf("MB/s", "KB/s"),
+                                onUnitSelected = { speedUnit = it }
+                            )
+                        },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp),
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                }
 
-                OutlinedTextField(
-                    value = timeInput,
-                    onValueChange = { timeInput = it.filter { char -> char.isDigit() } },
-                    label = { Text(stringResource(R.string.label_time_above_threshold)) },
-                    supportingText = { Text(stringResource(R.string.desc_time_above_threshold)) },
-                    trailingIcon = {
-                        UnitSelector(
-                            selectedUnit = timeUnit,
-                            units = listOf("Min", "Sec"),
-                            onUnitSelected = { timeUnit = it }
-                        )
-                    },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
-                    shape = RoundedCornerShape(12.dp)
-                )
+                StaggeredEntrance(index = 2) {
+                    OutlinedTextField(
+                        value = timeInput,
+                        onValueChange = { timeInput = it.filter { char -> char.isDigit() } },
+                        label = { Text(stringResource(R.string.label_time_above_threshold)) },
+                        supportingText = { Text(stringResource(R.string.desc_time_above_threshold)) },
+                        trailingIcon = {
+                            UnitSelector(
+                                selectedUnit = timeUnit,
+                                units = listOf("Min", "Sec"),
+                                onUnitSelected = { timeUnit = it }
+                            )
+                        },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp),
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                }
 
-                OutlinedTextField(
-                    value = cooldownInput,
-                    onValueChange = { cooldownInput = it.filter { char -> char.isDigit() } },
-                    label = { Text(stringResource(R.string.label_alert_cooldown)) },
-                    supportingText = { Text(stringResource(R.string.desc_alert_cooldown)) },
-                    trailingIcon = {
-                        UnitSelector(
-                            selectedUnit = cooldownUnit,
-                            units = listOf("Min", "Sec"),
-                            onUnitSelected = { cooldownUnit = it }
-                        )
-                    },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
-                    shape = RoundedCornerShape(12.dp)
-                )
+                StaggeredEntrance(index = 3) {
+                    OutlinedTextField(
+                        value = cooldownInput,
+                        onValueChange = { cooldownInput = it.filter { char -> char.isDigit() } },
+                        label = { Text(stringResource(R.string.label_alert_cooldown)) },
+                        supportingText = { Text(stringResource(R.string.desc_alert_cooldown)) },
+                        trailingIcon = {
+                            UnitSelector(
+                                selectedUnit = cooldownUnit,
+                                units = listOf("Min", "Sec"),
+                                onUnitSelected = { cooldownUnit = it }
+                            )
+                        },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp),
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                }
 
-                OutlinedTextField(
-                    value = resetSpeedInput,
-                    onValueChange = { resetSpeedInput = it.filter { char -> char.isDigit() } },
-                    label = { Text(stringResource(R.string.label_reset_speed_threshold)) },
-                    supportingText = { Text(stringResource(R.string.desc_reset_speed_threshold)) },
-                    trailingIcon = {
-                        UnitSelector(
-                            selectedUnit = resetSpeedUnit,
-                            units = listOf("MB/s", "KB/s"),
-                            onUnitSelected = { resetSpeedUnit = it }
-                        )
-                    },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
-                    shape = RoundedCornerShape(12.dp)
-                )
+                StaggeredEntrance(index = 4) {
+                    OutlinedTextField(
+                        value = resetSpeedInput,
+                        onValueChange = { resetSpeedInput = it.filter { char -> char.isDigit() } },
+                        label = { Text(stringResource(R.string.label_reset_speed_threshold)) },
+                        supportingText = { Text(stringResource(R.string.desc_reset_speed_threshold)) },
+                        trailingIcon = {
+                            UnitSelector(
+                                selectedUnit = resetSpeedUnit,
+                                units = listOf("MB/s", "KB/s"),
+                                onUnitSelected = { resetSpeedUnit = it }
+                            )
+                        },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp),
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                }
 
-                OutlinedTextField(
-                    value = resetTimeInput,
-                    onValueChange = { resetTimeInput = it.filter { char -> char.isDigit() } },
-                    label = { Text(stringResource(R.string.label_time_below_reset)) },
-                    supportingText = { Text(stringResource(R.string.desc_time_below_reset)) },
-                    trailingIcon = {
-                        UnitSelector(
-                            selectedUnit = resetTimeUnit,
-                            units = listOf("Min", "Sec"),
-                            onUnitSelected = { resetTimeUnit = it }
-                        )
-                    },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
-                    shape = RoundedCornerShape(12.dp)
-                )
+                StaggeredEntrance(index = 5) {
+                    OutlinedTextField(
+                        value = resetTimeInput,
+                        onValueChange = { resetTimeInput = it.filter { char -> char.isDigit() } },
+                        label = { Text(stringResource(R.string.label_time_below_reset)) },
+                        supportingText = { Text(stringResource(R.string.desc_time_below_reset)) },
+                        trailingIcon = {
+                            UnitSelector(
+                                selectedUnit = resetTimeUnit,
+                                units = listOf("Min", "Sec"),
+                                onUnitSelected = { resetTimeUnit = it }
+                            )
+                        },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp),
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                Surface(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(52.dp)
-                        .bounceClick {
-                            val sVal = speedInput.toLongOrNull() ?: 1L
-                            val sMultiplier = if (speedUnit == "MB/s") 1_000_000L else 1_000L
-                            
-                            val tVal = timeInput.toLongOrNull() ?: 60L
-                            val tMultiplier = if (timeUnit == "Min") 60000L else 1000L
+                StaggeredEntrance(index = 6) {
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(52.dp)
+                            .bounceClick {
+                                val sVal = speedInput.toLongOrNull() ?: 1L
+                                val sMultiplier = if (speedUnit == "MB/s") 1_000_000L else 1_000L
 
-                            val cVal = cooldownInput.toLongOrNull() ?: 10L
-                            val cMultiplier = if (cooldownUnit == "Min") 60000L else 1000L
+                                val tVal = timeInput.toLongOrNull() ?: 60L
+                                val tMultiplier = if (timeUnit == "Min") 60000L else 1000L
 
-                            val rtVal = resetTimeInput.toLongOrNull() ?: 5L
-                            val rtMultiplier = if (resetTimeUnit == "Min") 60000L else 1000L
-                            
-                            val rsVal = resetSpeedInput.toLongOrNull() ?: 200L
-                            val rsMultiplier = if (resetSpeedUnit == "MB/s") 1_000_000L else 1_000L
+                                val cVal = cooldownInput.toLongOrNull() ?: 10L
+                                val cMultiplier = if (cooldownUnit == "Min") 60000L else 1000L
 
-                            onSave(
-                                sVal * sMultiplier,
-                                tVal * tMultiplier,
-                                cVal * cMultiplier,
-                                rtVal * rtMultiplier,
-                                rsVal * rsMultiplier
+                                val rtVal = resetTimeInput.toLongOrNull() ?: 5L
+                                val rtMultiplier = if (resetTimeUnit == "Min") 60000L else 1000L
+
+                                val rsVal = resetSpeedInput.toLongOrNull() ?: 200L
+                                val rsMultiplier = if (resetSpeedUnit == "MB/s") 1_000_000L else 1_000L
+
+                                onSave(
+                                    sVal * sMultiplier,
+                                    tVal * tMultiplier,
+                                    cVal * cMultiplier,
+                                    rtVal * rtMultiplier,
+                                    rsVal * rsMultiplier
+                                )
+                            },
+                        shape = RoundedCornerShape(16.dp),
+                        color = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
+                    ) {
+                        Box(contentAlignment = Alignment.Center) {
+                            Text(
+                                stringResource(R.string.btn_save_config),
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold
                             )
-                        },
-                    shape = RoundedCornerShape(16.dp),
-                    color = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary
-                ) {
-                    Box(contentAlignment = Alignment.Center) {
-                        Text(
-                            stringResource(R.string.btn_save_config),
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold
-                        )
+                        }
                     }
                 }
             }

@@ -28,7 +28,6 @@ import com.ray.flowmeter.R
 import com.ray.flowmeter.ui.components.SettingsGroup
 import com.ray.flowmeter.ui.components.SettingsItem
 import com.ray.flowmeter.ui.dialogs.*
-import com.ray.flowmeter.ui.theme.StaggeredEntrance
 import com.ray.flowmeter.ui.theme.ThemeMode
 import com.ray.flowmeter.ui.viewmodels.SettingsViewModel
 import java.time.LocalTime
@@ -159,569 +158,554 @@ fun SettingsScreen(
             .fillMaxSize()
             .verticalScroll(scrollState)
     ) {
-        StaggeredEntrance {
-            SettingsGroup(title = stringResource(R.string.settings_section_general)) {
-                SettingsItem(
-                    icon = Icons.Rounded.DataUsage,
-                    title = stringResource(R.string.settings_monitoring_toggle),
-                    subtitle = stringResource(R.string.settings_monitoring_desc),
-                    trailingContent = {
-                        Switch(
-                            checked = monitoringEnabled == true,
-                            onCheckedChange = { checked ->
-                                if (checked) {
-                                    val hasUsageStats = PermissionHelper.hasUsageAccess(context)
-                                    if (!hasUsageStats) {
-                                        val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
-                                        usageAccessLauncher.launch(intent)
-                                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
-                                        androidx.core.content.ContextCompat.checkSelfPermission(context, android.Manifest.permission.POST_NOTIFICATIONS) != android.content.pm.PackageManager.PERMISSION_GRANTED
-                                    ) {
-                                        notificationPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
-                                    } else {
-                                        viewModel.toggleMonitoring(true)
-                                    }
+        SettingsGroup(title = stringResource(R.string.settings_section_general), staggerIndex = 0) {
+            SettingsItem(
+                icon = Icons.Rounded.DataUsage,
+                title = stringResource(R.string.settings_monitoring_toggle),
+                subtitle = stringResource(R.string.settings_monitoring_desc),
+                trailingContent = {
+                    Switch(
+                        checked = monitoringEnabled == true,
+                        onCheckedChange = { checked ->
+                            if (checked) {
+                                val hasUsageStats = PermissionHelper.hasUsageAccess(context)
+                                if (!hasUsageStats) {
+                                    val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
+                                    usageAccessLauncher.launch(intent)
+                                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                                    androidx.core.content.ContextCompat.checkSelfPermission(context, android.Manifest.permission.POST_NOTIFICATIONS) != android.content.pm.PackageManager.PERMISSION_GRANTED
+                                ) {
+                                    notificationPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
                                 } else {
-                                    viewModel.toggleMonitoring(false)
+                                    viewModel.toggleMonitoring(true)
                                 }
-                            },
-                            enabled = monitoringEnabled != null,
-                            colors = switchColors,
-                            thumbContent = { thumbContent(monitoringEnabled == true) }
-                        )
-                    }
-                )
-                SettingsItem(
-                    icon = Icons.Rounded.Schedule,
-                    title = stringResource(R.string.settings_reset_time),
-                    subtitle = "${stringResource(R.string.settings_reset_time_desc)} (${
-                        LocalTime.of(resetTimeHour, resetTimeMinute)
-                            .format(DateTimeFormatter.ofPattern("hh:mm a", Locale.ENGLISH))
-                            .replace("a.m.", "AM")
-                            .replace("p.m.", "PM")
-                            .replace("am", "AM")
-                            .replace("pm", "PM")
-                            .uppercase(Locale.ENGLISH)
-                    })",
-                    onClick = { showResetTimeDialog = true }
-                )
-                SettingsItem(
-                    icon = Icons.Rounded.CalendarMonth,
-                    title = stringResource(R.string.settings_monthly_reset_day),
-                    subtitle = stringResource(R.string.settings_monthly_reset_day_desc, monthlyResetDay),
-                    onClick = { showResetDayDialog = true }
-                )
-                SettingsItem(
-                    icon = Icons.Rounded.Speed,
-                    title = stringResource(R.string.settings_speed_unit),
-                    subtitle = if (speedUnit == "BYTES") stringResource(R.string.unit_bytes) else stringResource(R.string.unit_bits),
-                    onClick = { showSpeedUnitDialog = true }
-                )
-            }
-        }
-
-        StaggeredEntrance {
-            SettingsGroup(title = stringResource(R.string.settings_section_appearance)) {
-                SettingsItem(
-                    icon = Icons.Rounded.Palette,
-                    title = stringResource(R.string.settings_app_theme),
-                    subtitle = when (themeMode) {
-                        ThemeMode.LIGHT -> stringResource(R.string.theme_light)
-                        ThemeMode.DARK -> stringResource(R.string.theme_dark)
-                        else -> stringResource(R.string.theme_system)
-                    },
-                    onClick = { showThemeDialog = true }
-                )
-
-                SettingsItem(
-                    icon = Icons.Rounded.AutoAwesome,
-                    title = stringResource(R.string.settings_material_you),
-                    subtitle = stringResource(R.string.settings_material_you_desc),
-                    trailingContent = {
-                        Switch(
-                            checked = useMaterialYou,
-                            onCheckedChange = { viewModel.setUseMaterialYou(it) },
-                            colors = switchColors,
-                            thumbContent = { thumbContent(useMaterialYou) }
-                        )
-                    }
-                )
-
-                if (!useMaterialYou) {
-                    SettingsItem(
-                        icon = Icons.Rounded.ColorLens,
-                        title = stringResource(R.string.settings_accent_color),
-                        subtitle = stringResource(R.string.settings_accent_color_desc),
-                        onClick = { showAccentColorDialog = true },
-                        trailingContent = {
-                            Box(
-                                modifier = Modifier
-                                    .size(24.dp)
-                                    .background(
-                                        color = accentColor?.let { Color(it) } ?: MaterialTheme.colorScheme.primary,
-                                        shape = CircleShape
-                                    )
-                            )
-                        }
-                    )
-                }
-
-                if (isDark) {
-                    SettingsItem(
-                        icon = Icons.Rounded.DarkMode,
-                        title = stringResource(R.string.settings_amoled_mode),
-                        subtitle = stringResource(R.string.settings_amoled_mode_desc),
-                        trailingContent = {
-                            Switch(
-                                checked = useAmoled,
-                                onCheckedChange = { viewModel.setUseAmoled(it) },
-                                colors = switchColors,
-                                thumbContent = { thumbContent(useAmoled) }
-                            )
-                        }
-                    )
-                }
-
-                SettingsItem(
-                    icon = Icons.Rounded.FormatSize,
-                    title = stringResource(R.string.settings_indicator_size),
-                    subtitle = when {
-                        notificationIconScale < 1.25f -> stringResource(R.string.size_small)
-                        notificationIconScale > 1.32f -> stringResource(R.string.size_large)
-                        else -> stringResource(R.string.size_medium)
-                    },
-                    onClick = { showIconScaleDialog = true }
-                )
-
-                SettingsItem(
-                    icon = Icons.Rounded.Language,
-                    title = stringResource(R.string.settings_language),
-                    subtitle = when (languageCode) {
-                        "ar" -> stringResource(R.string.language_arabic)
-                        "fr" -> stringResource(R.string.language_french)
-                        "es" -> stringResource(R.string.language_spanish)
-                        "de" -> stringResource(R.string.language_german)
-                        "pt" -> stringResource(R.string.language_portuguese)
-                        "it" -> stringResource(R.string.language_italian)
-                        "zh" -> stringResource(R.string.language_chinese)
-                        "hi" -> stringResource(R.string.language_hindi)
-                        "ja" -> stringResource(R.string.language_japanese)
-                        "ko" -> stringResource(R.string.language_korean)
-                        "ru" -> stringResource(R.string.language_russian)
-                        "tr" -> stringResource(R.string.language_turkish)
-                        "id" -> stringResource(R.string.language_indonesian)
-                        "vi" -> stringResource(R.string.language_vietnamese)
-                        "pl" -> stringResource(R.string.language_polish)
-                        "uk" -> stringResource(R.string.language_ukrainian)
-                        else -> stringResource(R.string.language_default)
-                    },
-                    onClick = { showLanguageDialog = true }
-                )
-            }
-        }
-
-        StaggeredEntrance {
-            SettingsGroup(title = stringResource(R.string.settings_section_notifications)) {
-                SettingsItem(
-                    icon = Icons.Rounded.Notifications,
-                    title = stringResource(R.string.settings_show_daily_usage),
-                    subtitle = stringResource(R.string.settings_daily_usage_desc),
-                    trailingContent = {
-                        Switch(
-                            checked = showNotification,
-                            onCheckedChange = { viewModel.toggleNotification(it) },
-                            enabled = monitoringEnabled == true,
-                            colors = switchColors,
-                            thumbContent = { thumbContent(showNotification) }
-                        )
-                    }
-                )
-                if (showNotification) {
-                    SettingsItem(
-                        icon = Icons.Rounded.Dashboard,
-                        title = stringResource(R.string.settings_notification_content),
-                        subtitle = when (notificationContentType) {
-                            "SPEED" -> stringResource(R.string.option_speed_only)
-                            "DAILY" -> stringResource(R.string.option_daily_only)
-                            else -> stringResource(R.string.option_both)
-                        },
-                        onClick = if (monitoringEnabled == true) { { showNotificationContentDialog = true } } else null
-                    )
-                }
-                SettingsItem(
-                    icon = Icons.Rounded.NotificationImportant,
-                    title = stringResource(R.string.settings_high_priority),
-                    subtitle = stringResource(R.string.settings_high_priority_desc),
-                    trailingContent = {
-                        Switch(
-                            checked = highPriorityNotification,
-                            onCheckedChange = { viewModel.setHighPriorityNotification(it) },
-                            enabled = monitoringEnabled == true,
-                            colors = switchColors,
-                            thumbContent = { thumbContent(highPriorityNotification) }
-                        )
-                    }
-                )
-                SettingsItem(
-                    icon = Icons.Rounded.WifiTethering,
-                    title = stringResource(R.string.settings_hide_offline),
-                    subtitle = stringResource(R.string.settings_hide_offline_desc),
-                    trailingContent = {
-                        Switch(
-                            checked = showOnlyWhenConnected,
-                            onCheckedChange = { viewModel.setShowOnlyWhenConnected(it) },
-                            enabled = monitoringEnabled == true,
-                            colors = switchColors,
-                            thumbContent = { thumbContent(showOnlyWhenConnected) }
-                        )
-                    }
-                )
-            }
-        }
-
-
-
-        StaggeredEntrance {
-            SettingsGroup(title = stringResource(R.string.settings_section_alerts)) {
-                SettingsItem(
-                    icon = Icons.Rounded.WarningAmber,
-                    title = stringResource(R.string.settings_data_alerts),
-                    subtitle = stringResource(R.string.settings_data_alerts_desc),
-                    trailingContent = {
-                        Switch(
-                            checked = highTrafficDetectionEnabled,
-                            onCheckedChange = { viewModel.setHighTrafficDetectionEnabled(it) },
-                            enabled = monitoringEnabled == true,
-                            colors = switchColors,
-                            thumbContent = { thumbContent(highTrafficDetectionEnabled) }
-                        )
-                    }
-                )
-
-                if (highTrafficDetectionEnabled) {
-                    SettingsItem(
-                        icon = Icons.Rounded.Tune,
-                        title = stringResource(R.string.label_advanced_settings),
-                        subtitle = stringResource(R.string.settings_traffic_threshold_subtitle),
-                        onClick = { showTrafficSettingsDialog = true }
-                    )
-                }
-
-                SettingsItem(
-                    icon = Icons.Rounded.Security,
-                    title = stringResource(R.string.label_block_apps),
-                    subtitle = stringResource(R.string.desc_block_apps),
-                    trailingContent = {
-                        Switch(
-                            checked = appBlockingMasterEnabled == true,
-                            onCheckedChange = {
-                                if (it && !vpnDisclosureAccepted) {
-                                    showVpnDisclosure = true
-                                } else {
-                                    viewModel.toggleAppBlockingMaster(it)
-                                }
-                            },
-                            colors = switchColors,
-                            thumbContent = { thumbContent(appBlockingMasterEnabled == true) }
-                        )
-                    }
-                )
-            }
-        }
-
-        StaggeredEntrance {
-            SettingsGroup(title = stringResource(R.string.settings_section_support)) {
-                SettingsItem(
-                    icon = Icons.Rounded.Star,
-                    title = stringResource(R.string.settings_rate_app),
-                    subtitle = stringResource(R.string.settings_rate_app_desc),
-                    onClick = {
-                        viewModel.markAsReviewed()
-                        val intent = Intent(Intent.ACTION_VIEW, "market://details?id=${context.packageName}".toUri())
-                        val activity = context.findActivity()
-                        val targetContext = activity ?: context
-                        if (targetContext !is Activity) {
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        }
-                        try {
-                            targetContext.startActivity(intent)
-                        } catch (_: Exception) {
-                            val webIntent = Intent(Intent.ACTION_VIEW, "https://play.google.com/store/apps/details?id=${context.packageName}".toUri())
-                            if (targetContext !is Activity) {
-                                webIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            } else {
+                                viewModel.toggleMonitoring(false)
                             }
-                            try {
-                                targetContext.startActivity(webIntent)
-                            } catch (_: Exception) {}
-                        }
-                    }
-                )
-                SettingsItem(
-                    icon = Icons.Rounded.Share,
-                    title = stringResource(R.string.settings_share_app),
-                    subtitle = stringResource(R.string.settings_share_app_desc),
-                    onClick = {
-                        val shareIntent = Intent(Intent.ACTION_SEND).apply {
-                            type = "text/plain"
-                            putExtra(Intent.EXTRA_TEXT, shareTextTemplate)
-                        }
-                        val chooserIntent = Intent.createChooser(shareIntent, shareChooserTitle)
-                        val activity = context.findActivity()
-                        val targetContext = activity ?: context
-                        if (targetContext !is Activity) {
-                            chooserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        }
-                        try {
-                            targetContext.startActivity(chooserIntent)
-                        } catch (_: Exception) {}
-                    }
-                )
-                SettingsItem(
-                    icon = Icons.Rounded.SupportAgent,
-                    title = stringResource(R.string.settings_help_feedback),
-                    subtitle = stringResource(R.string.settings_help_feedback_desc),
-                    onClick = { showHelpFeedbackDialog = true }
-                )
-                SettingsItem(
-                    icon = Icons.Rounded.Favorite,
-                    title = stringResource(R.string.settings_donate),
-                    subtitle = stringResource(R.string.settings_donate_desc),
-                    onClick = onDonateClick
-                )
-            }
+                        },
+                        enabled = monitoringEnabled != null,
+                        colors = switchColors,
+                        thumbContent = { thumbContent(monitoringEnabled == true) }
+                    )
+                }
+            )
+            SettingsItem(
+                icon = Icons.Rounded.Schedule,
+                title = stringResource(R.string.settings_reset_time),
+                subtitle = "${stringResource(R.string.settings_reset_time_desc)} (${
+                    LocalTime.of(resetTimeHour, resetTimeMinute)
+                        .format(DateTimeFormatter.ofPattern("hh:mm a", Locale.ENGLISH))
+                        .replace("a.m.", "AM")
+                        .replace("p.m.", "PM")
+                        .replace("am", "AM")
+                        .replace("pm", "PM")
+                        .uppercase(Locale.ENGLISH)
+                })",
+                onClick = { showResetTimeDialog = true }
+            )
+            SettingsItem(
+                icon = Icons.Rounded.CalendarMonth,
+                title = stringResource(R.string.settings_monthly_reset_day),
+                subtitle = stringResource(R.string.settings_monthly_reset_day_desc, monthlyResetDay),
+                onClick = { showResetDayDialog = true }
+            )
+            SettingsItem(
+                icon = Icons.Rounded.Speed,
+                title = stringResource(R.string.settings_speed_unit),
+                subtitle = if (speedUnit == "BYTES") stringResource(R.string.unit_bytes) else stringResource(R.string.unit_bits),
+                onClick = { showSpeedUnitDialog = true }
+            )
         }
 
-        StaggeredEntrance {
-            SettingsGroup(title = stringResource(R.string.settings_section_about)) {
+        SettingsGroup(title = stringResource(R.string.settings_section_appearance), staggerIndex = 1) {
+            SettingsItem(
+                icon = Icons.Rounded.Palette,
+                title = stringResource(R.string.settings_app_theme),
+                subtitle = when (themeMode) {
+                    ThemeMode.LIGHT -> stringResource(R.string.theme_light)
+                    ThemeMode.DARK -> stringResource(R.string.theme_dark)
+                    else -> stringResource(R.string.theme_system)
+                },
+                onClick = { showThemeDialog = true }
+            )
+
+            SettingsItem(
+                icon = Icons.Rounded.AutoAwesome,
+                title = stringResource(R.string.settings_material_you),
+                subtitle = stringResource(R.string.settings_material_you_desc),
+                trailingContent = {
+                    Switch(
+                        checked = useMaterialYou,
+                        onCheckedChange = { viewModel.setUseMaterialYou(it) },
+                        colors = switchColors,
+                        thumbContent = { thumbContent(useMaterialYou) }
+                    )
+                }
+            )
+
+            if (!useMaterialYou) {
                 SettingsItem(
-                    icon = Icons.Rounded.Shield,
-                    title = stringResource(R.string.settings_privacy_policy),
-                    onClick = { showPrivacyDialog = true }
-                )
-                SettingsItem(
-                    icon = Icons.Rounded.Gavel,
-                    title = stringResource(R.string.settings_terms_conditions),
-                    onClick = { showTermsDialog = true }
-                )
-                SettingsItem(
-                    icon = Icons.Rounded.Description,
-                    title = stringResource(R.string.settings_licenses),
-                    onClick = { showLicensesDialog = true }
-                )
-                SettingsItem(
-                    icon = Icons.Rounded.Code,
-                    title = stringResource(R.string.settings_view_source),
-                    subtitle = stringResource(R.string.settings_view_source_desc),
-                    onClick = {
-                        val intent = Intent(Intent.ACTION_VIEW, "https://github.com/drrayy001/FlowBytes".toUri())
-                        val activity = context.findActivity()
-                        val targetContext = activity ?: context
-                        if (targetContext !is Activity) {
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        }
-                        try {
-                            targetContext.startActivity(intent)
-                        } catch (_: Exception) {}
-                    }
-                )
-                SettingsItem(
-                    icon = Icons.Rounded.CloudDownload,
-                    title = stringResource(R.string.settings_auto_check_updates),
-                    subtitle = stringResource(R.string.settings_auto_check_updates_desc),
+                    icon = Icons.Rounded.ColorLens,
+                    title = stringResource(R.string.settings_accent_color),
+                    subtitle = stringResource(R.string.settings_accent_color_desc),
+                    onClick = { showAccentColorDialog = true },
                     trailingContent = {
-                        Switch(
-                            checked = checkUpdatesAutomatically,
-                            onCheckedChange = { viewModel.setCheckUpdatesAutomatically(it) },
-                            colors = switchColors,
-                            thumbContent = { thumbContent(checkUpdatesAutomatically) }
+                        Box(
+                            modifier = Modifier
+                                .size(24.dp)
+                                .background(
+                                    color = accentColor?.let { Color(it) } ?: MaterialTheme.colorScheme.primary,
+                                    shape = CircleShape
+                                )
                         )
                     }
                 )
+            }
+
+            if (isDark) {
                 SettingsItem(
-                    icon = Icons.Rounded.Update,
-                    title = stringResource(R.string.settings_check_updates),
-                    subtitle = stringResource(R.string.settings_check_updates_desc),
-                    onClick = onCheckForUpdates
-                )
-                SettingsItem(
-                    icon = Icons.Rounded.Info,
-                    title = stringResource(R.string.settings_version_label),
-                    subtitle = versionName,
+                    icon = Icons.Rounded.DarkMode,
+                    title = stringResource(R.string.settings_amoled_mode),
+                    subtitle = stringResource(R.string.settings_amoled_mode_desc),
+                    trailingContent = {
+                        Switch(
+                            checked = useAmoled,
+                            onCheckedChange = { viewModel.setUseAmoled(it) },
+                            colors = switchColors,
+                            thumbContent = { thumbContent(useAmoled) }
+                        )
+                    }
                 )
             }
+
+            SettingsItem(
+                icon = Icons.Rounded.FormatSize,
+                title = stringResource(R.string.settings_indicator_size),
+                subtitle = when {
+                    notificationIconScale < 1.25f -> stringResource(R.string.size_small)
+                    notificationIconScale > 1.32f -> stringResource(R.string.size_large)
+                    else -> stringResource(R.string.size_medium)
+                },
+                onClick = { showIconScaleDialog = true }
+            )
+
+            SettingsItem(
+                icon = Icons.Rounded.Language,
+                title = stringResource(R.string.settings_language),
+                subtitle = when (languageCode) {
+                    "ar" -> stringResource(R.string.language_arabic)
+                    "fr" -> stringResource(R.string.language_french)
+                    "es" -> stringResource(R.string.language_spanish)
+                    "de" -> stringResource(R.string.language_german)
+                    "pt" -> stringResource(R.string.language_portuguese)
+                    "it" -> stringResource(R.string.language_italian)
+                    "zh" -> stringResource(R.string.language_chinese)
+                    "hi" -> stringResource(R.string.language_hindi)
+                    "ja" -> stringResource(R.string.language_japanese)
+                    "ko" -> stringResource(R.string.language_korean)
+                    "ru" -> stringResource(R.string.language_russian)
+                    "tr" -> stringResource(R.string.language_turkish)
+                    "id" -> stringResource(R.string.language_indonesian)
+                    "vi" -> stringResource(R.string.language_vietnamese)
+                    "pl" -> stringResource(R.string.language_polish)
+                    "uk" -> stringResource(R.string.language_ukrainian)
+                    else -> stringResource(R.string.language_default)
+                },
+                onClick = { showLanguageDialog = true }
+            )
+        }
+
+        SettingsGroup(title = stringResource(R.string.settings_section_notifications), staggerIndex = 2) {
+            SettingsItem(
+                icon = Icons.Rounded.Notifications,
+                title = stringResource(R.string.settings_show_daily_usage),
+                subtitle = stringResource(R.string.settings_daily_usage_desc),
+                trailingContent = {
+                    Switch(
+                        checked = showNotification,
+                        onCheckedChange = { viewModel.toggleNotification(it) },
+                        enabled = monitoringEnabled == true,
+                        colors = switchColors,
+                        thumbContent = { thumbContent(showNotification) }
+                    )
+                }
+            )
+            if (showNotification) {
+                SettingsItem(
+                    icon = Icons.Rounded.Dashboard,
+                    title = stringResource(R.string.settings_notification_content),
+                    subtitle = when (notificationContentType) {
+                        "SPEED" -> stringResource(R.string.option_speed_only)
+                        "DAILY" -> stringResource(R.string.option_daily_only)
+                        else -> stringResource(R.string.option_both)
+                    },
+                    onClick = if (monitoringEnabled == true) { { showNotificationContentDialog = true } } else null
+                )
+            }
+            SettingsItem(
+                icon = Icons.Rounded.NotificationImportant,
+                title = stringResource(R.string.settings_high_priority),
+                subtitle = stringResource(R.string.settings_high_priority_desc),
+                trailingContent = {
+                    Switch(
+                        checked = highPriorityNotification,
+                        onCheckedChange = { viewModel.setHighPriorityNotification(it) },
+                        enabled = monitoringEnabled == true,
+                        colors = switchColors,
+                        thumbContent = { thumbContent(highPriorityNotification) }
+                    )
+                }
+            )
+            SettingsItem(
+                icon = Icons.Rounded.WifiTethering,
+                title = stringResource(R.string.settings_hide_offline),
+                subtitle = stringResource(R.string.settings_hide_offline_desc),
+                trailingContent = {
+                    Switch(
+                        checked = showOnlyWhenConnected,
+                        onCheckedChange = { viewModel.setShowOnlyWhenConnected(it) },
+                        enabled = monitoringEnabled == true,
+                        colors = switchColors,
+                        thumbContent = { thumbContent(showOnlyWhenConnected) }
+                    )
+                }
+            )
+        }
+
+        SettingsGroup(title = stringResource(R.string.settings_section_alerts), staggerIndex = 3) {
+            SettingsItem(
+                icon = Icons.Rounded.WarningAmber,
+                title = stringResource(R.string.settings_data_alerts),
+                subtitle = stringResource(R.string.settings_data_alerts_desc),
+                trailingContent = {
+                    Switch(
+                        checked = highTrafficDetectionEnabled,
+                        onCheckedChange = { viewModel.setHighTrafficDetectionEnabled(it) },
+                        enabled = monitoringEnabled == true,
+                        colors = switchColors,
+                        thumbContent = { thumbContent(highTrafficDetectionEnabled) }
+                    )
+                }
+            )
+
+            if (highTrafficDetectionEnabled) {
+                SettingsItem(
+                    icon = Icons.Rounded.Tune,
+                    title = stringResource(R.string.label_advanced_settings),
+                    subtitle = stringResource(R.string.settings_traffic_threshold_subtitle),
+                    onClick = { showTrafficSettingsDialog = true }
+                )
+            }
+
+            SettingsItem(
+                icon = Icons.Rounded.Security,
+                title = stringResource(R.string.label_block_apps),
+                subtitle = stringResource(R.string.desc_block_apps),
+                trailingContent = {
+                    Switch(
+                        checked = appBlockingMasterEnabled == true,
+                        onCheckedChange = {
+                            if (it && !vpnDisclosureAccepted) {
+                                showVpnDisclosure = true
+                            } else {
+                                viewModel.toggleAppBlockingMaster(it)
+                            }
+                        },
+                        colors = switchColors,
+                        thumbContent = { thumbContent(appBlockingMasterEnabled == true) }
+                    )
+                }
+            )
+        }
+
+        SettingsGroup(title = stringResource(R.string.settings_section_support), staggerIndex = 4) {
+            SettingsItem(
+                icon = Icons.Rounded.Star,
+                title = stringResource(R.string.settings_rate_app),
+                subtitle = stringResource(R.string.settings_rate_app_desc),
+                onClick = {
+                    viewModel.markAsReviewed()
+                    val intent = Intent(Intent.ACTION_VIEW, "market://details?id=${context.packageName}".toUri())
+                    val activity = context.findActivity()
+                    val targetContext = activity ?: context
+                    if (targetContext !is Activity) {
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    }
+                    try {
+                        targetContext.startActivity(intent)
+                    } catch (_: Exception) {
+                        val webIntent = Intent(Intent.ACTION_VIEW, "https://play.google.com/store/apps/details?id=${context.packageName}".toUri())
+                        if (targetContext !is Activity) {
+                            webIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        }
+                        try {
+                            targetContext.startActivity(webIntent)
+                        } catch (_: Exception) {}
+                    }
+                }
+            )
+            SettingsItem(
+                icon = Icons.Rounded.Share,
+                title = stringResource(R.string.settings_share_app),
+                subtitle = stringResource(R.string.settings_share_app_desc),
+                onClick = {
+                    val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                        type = "text/plain"
+                        putExtra(Intent.EXTRA_TEXT, shareTextTemplate)
+                    }
+                    val chooserIntent = Intent.createChooser(shareIntent, shareChooserTitle)
+                    val activity = context.findActivity()
+                    val targetContext = activity ?: context
+                    if (targetContext !is Activity) {
+                        chooserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    }
+                    try {
+                        targetContext.startActivity(chooserIntent)
+                    } catch (_: Exception) {}
+                }
+            )
+            SettingsItem(
+                icon = Icons.Rounded.SupportAgent,
+                title = stringResource(R.string.settings_help_feedback),
+                subtitle = stringResource(R.string.settings_help_feedback_desc),
+                onClick = { showHelpFeedbackDialog = true }
+            )
+            SettingsItem(
+                icon = Icons.Rounded.Favorite,
+                title = stringResource(R.string.settings_donate),
+                subtitle = stringResource(R.string.settings_donate_desc),
+                onClick = onDonateClick
+            )
+        }
+
+        SettingsGroup(title = stringResource(R.string.settings_section_about), staggerIndex = 5) {
+            SettingsItem(
+                icon = Icons.Rounded.Shield,
+                title = stringResource(R.string.settings_privacy_policy),
+                onClick = { showPrivacyDialog = true }
+            )
+            SettingsItem(
+                icon = Icons.Rounded.Gavel,
+                title = stringResource(R.string.settings_terms_conditions),
+                onClick = { showTermsDialog = true }
+            )
+            SettingsItem(
+                icon = Icons.Rounded.Description,
+                title = stringResource(R.string.settings_licenses),
+                onClick = { showLicensesDialog = true }
+            )
+            SettingsItem(
+                icon = Icons.Rounded.Code,
+                title = stringResource(R.string.settings_view_source),
+                subtitle = stringResource(R.string.settings_view_source_desc),
+                onClick = {
+                    val intent = Intent(Intent.ACTION_VIEW, "https://github.com/drrayy001/FlowBytes".toUri())
+                    val activity = context.findActivity()
+                    val targetContext = activity ?: context
+                    if (targetContext !is Activity) {
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    }
+                    try {
+                        targetContext.startActivity(intent)
+                    } catch (_: Exception) {}
+                }
+            )
+            SettingsItem(
+                icon = Icons.Rounded.CloudDownload,
+                title = stringResource(R.string.settings_auto_check_updates),
+                subtitle = stringResource(R.string.settings_auto_check_updates_desc),
+                trailingContent = {
+                    Switch(
+                        checked = checkUpdatesAutomatically,
+                        onCheckedChange = { viewModel.setCheckUpdatesAutomatically(it) },
+                        colors = switchColors,
+                        thumbContent = { thumbContent(checkUpdatesAutomatically) }
+                    )
+                }
+            )
+            SettingsItem(
+                icon = Icons.Rounded.Update,
+                title = stringResource(R.string.settings_check_updates),
+                subtitle = stringResource(R.string.settings_check_updates_desc),
+                onClick = onCheckForUpdates
+            )
+            SettingsItem(
+                icon = Icons.Rounded.Info,
+                title = stringResource(R.string.settings_version_label),
+                subtitle = versionName,
+            )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
+    }
 
-        if (showThemeDialog) {
-            ThemeDialog(
-                currentTheme = themeMode,
-                onDismiss = { showThemeDialog = false },
-                onSelect = viewModel::setThemeMode
-            )
+    if (showThemeDialog) {
+        ThemeDialog(
+            currentTheme = themeMode,
+            onDismiss = { showThemeDialog = false },
+            onSelect = viewModel::setThemeMode
+        )
+    }
+
+    if (showNotificationContentDialog) {
+        NotificationContentDialog(
+            currentType = notificationContentType,
+            onDismiss = { showNotificationContentDialog = false },
+            onSelect = viewModel::setNotificationContentType
+        )
+    }
+
+    if (showSpeedUnitDialog) {
+        SpeedUnitDialog(
+            currentUnit = speedUnit,
+            onDismiss = { showSpeedUnitDialog = false },
+            onSelect = viewModel::setSpeedUnit
+        )
+    }
+
+    if (showIconScaleDialog) {
+        IconScaleDialog(
+            currentScale = notificationIconScale,
+            onDismiss = { showIconScaleDialog = false },
+        ) { viewModel.setNotificationIconScale(it) }
+    }
+
+
+
+    if (showLanguageDialog) {
+        LanguageDialog(
+            currentLanguageCode = languageCode,
+            onDismiss = { showLanguageDialog = false },
+            onSelect = viewModel::setLanguage
+        )
+    }
+
+    if (showLicensesDialog) {
+        LegalDialog(
+            title = stringResource(R.string.settings_licenses),
+            content = stringResource(R.string.legal_licenses),
+        ) { showLicensesDialog = false }
+    }
+
+    if (showPrivacyDialog) {
+        LegalDialog(
+            title = stringResource(R.string.settings_privacy_policy),
+            content = stringResource(R.string.legal_privacy_policy),
+        ) { showPrivacyDialog = false }
+    }
+
+    if (showTermsDialog) {
+        LegalDialog(
+            title = stringResource(R.string.settings_terms_conditions),
+            content = stringResource(R.string.legal_terms_conditions),
+        ) { showTermsDialog = false }
+    }
+
+    if (showResetTimeDialog) {
+        ResetTimeDialog(
+            currentHour = resetTimeHour,
+            currentMinute = resetTimeMinute,
+            onDismiss = { showResetTimeDialog = false },
+        ) { hour, minute, _ ->
+            viewModel.setResetTime(hour, minute)
+            showResetTimeDialog = false
         }
+    }
 
-        if (showNotificationContentDialog) {
-            NotificationContentDialog(
-                currentType = notificationContentType,
-                onDismiss = { showNotificationContentDialog = false },
-                onSelect = viewModel::setNotificationContentType
-            )
+    if (showResetDayDialog) {
+        ResetDayDialog(
+            currentDay = monthlyResetDay,
+            onDismiss = { showResetDayDialog = false },
+        ) { day ->
+            viewModel.setMonthlyResetDay(day)
+            showResetDayDialog = false
         }
+    }
 
-        if (showSpeedUnitDialog) {
-            SpeedUnitDialog(
-                currentUnit = speedUnit,
-                onDismiss = { showSpeedUnitDialog = false },
-                onSelect = viewModel::setSpeedUnit
-            )
+
+    if (showTrafficSettingsDialog) {
+        TrafficSettingsDialog(
+            currentSpeed = trafficThresholdSpeed,
+            currentTime = trafficThresholdTime,
+            currentCooldown = trafficAlertCooldown,
+            currentResetTime = trafficResetBelowThresholdTime,
+            currentResetSpeed = trafficResetSpeed,
+            onDismiss = { showTrafficSettingsDialog = false },
+        ) { speed, time, cooldown, resetTime, rSpeed ->
+            viewModel.saveTrafficDetectionSettings(speed, time, cooldown, resetTime, rSpeed)
+            showTrafficSettingsDialog = false
         }
+    }
 
-        if (showIconScaleDialog) {
-            IconScaleDialog(
-                currentScale = notificationIconScale,
-                onDismiss = { showIconScaleDialog = false },
-            ) { viewModel.setNotificationIconScale(it) }
+    if (showVpnDisclosure) {
+        VpnDisclosureDialog(
+            onDismiss = { showVpnDisclosure = false },
+        ) {
+            viewModel.setVpnDisclosureAccepted(accepted = true)
+            viewModel.toggleAppBlockingMaster(enabled = true)
+            showVpnDisclosure = false
         }
+    }
 
-
-
-        if (showLanguageDialog) {
-            LanguageDialog(
-                currentLanguageCode = languageCode,
-                onDismiss = { showLanguageDialog = false },
-                onSelect = viewModel::setLanguage
-            )
-        }
-
-        if (showLicensesDialog) {
-            LegalDialog(
-                title = stringResource(R.string.settings_licenses),
-                content = stringResource(R.string.legal_licenses),
-            ) { showLicensesDialog = false }
-        }
-
-        if (showPrivacyDialog) {
-            LegalDialog(
-                title = stringResource(R.string.settings_privacy_policy),
-                content = stringResource(R.string.legal_privacy_policy),
-            ) { showPrivacyDialog = false }
-        }
-
-        if (showTermsDialog) {
-            LegalDialog(
-                title = stringResource(R.string.settings_terms_conditions),
-                content = stringResource(R.string.legal_terms_conditions),
-            ) { showTermsDialog = false }
-        }
-
-        if (showResetTimeDialog) {
-            ResetTimeDialog(
-                currentHour = resetTimeHour,
-                currentMinute = resetTimeMinute,
-                onDismiss = { showResetTimeDialog = false },
-            ) { hour, minute, _ ->
-                viewModel.setResetTime(hour, minute)
-                showResetTimeDialog = false
-            }
-        }
-
-        if (showResetDayDialog) {
-            ResetDayDialog(
-                currentDay = monthlyResetDay,
-                onDismiss = { showResetDayDialog = false },
-            ) { day ->
-                viewModel.setMonthlyResetDay(day)
-                showResetDayDialog = false
-            }
-        }
-
-
-        if (showTrafficSettingsDialog) {
-            TrafficSettingsDialog(
-                currentSpeed = trafficThresholdSpeed,
-                currentTime = trafficThresholdTime,
-                currentCooldown = trafficAlertCooldown,
-                currentResetTime = trafficResetBelowThresholdTime,
-                currentResetSpeed = trafficResetSpeed,
-                onDismiss = { showTrafficSettingsDialog = false },
-            ) { speed, time, cooldown, resetTime, rSpeed ->
-                viewModel.saveTrafficDetectionSettings(speed, time, cooldown, resetTime, rSpeed)
-                showTrafficSettingsDialog = false
-            }
-        }
-
-        if (showVpnDisclosure) {
-            VpnDisclosureDialog(
-                onDismiss = { showVpnDisclosure = false },
-            ) {
-                viewModel.setVpnDisclosureAccepted(accepted = true)
-                viewModel.toggleAppBlockingMaster(enabled = true)
-                showVpnDisclosure = false
-            }
-        }
-
-        if (showHelpFeedbackDialog) {
-            HelpFeedbackDialog(
-                onDismiss = { showHelpFeedbackDialog = false },
-                onTelegramClick = {
-                    val username = "Rayy_TG"
-                    val telegramAppIntent = Intent(Intent.ACTION_VIEW, "tg://resolve?domain=$username".toUri()).apply {
-                        setPackage("org.telegram.messenger")
-                    }
-                    val activity = context.findActivity()
-                    val targetContext = activity ?: context
+    if (showHelpFeedbackDialog) {
+        HelpFeedbackDialog(
+            onDismiss = { showHelpFeedbackDialog = false },
+            onTelegramClick = {
+                val username = "Rayy_TG"
+                val telegramAppIntent = Intent(Intent.ACTION_VIEW, "tg://resolve?domain=$username".toUri()).apply {
+                    setPackage("org.telegram.messenger")
+                }
+                val activity = context.findActivity()
+                val targetContext = activity ?: context
+                if (targetContext !is Activity) {
+                    telegramAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+                try {
+                    targetContext.startActivity(telegramAppIntent)
+                } catch (_: Exception) {
+                    // Fallback to browser if Telegram app is not installed
+                    val browserIntent = Intent(Intent.ACTION_VIEW, "https://t.me/$username".toUri())
                     if (targetContext !is Activity) {
-                        telegramAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        browserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     }
                     try {
-                        targetContext.startActivity(telegramAppIntent)
-                    } catch (_: Exception) {
-                        // Fallback to browser if Telegram app is not installed
-                        val browserIntent = Intent(Intent.ACTION_VIEW, "https://t.me/$username".toUri())
-                        if (targetContext !is Activity) {
-                            browserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        }
-                        try {
-                            targetContext.startActivity(browserIntent)
-                        } catch (_: Exception) {}
-                    }
-                },
-                onEmailClick = {
-                    val intent = Intent(Intent.ACTION_SENDTO).apply {
-                        data = "mailto:support.rayapps@gmail.com".toUri()
-                        putExtra(Intent.EXTRA_SUBJECT, "Feedback: FlowBytes (v$versionName)")
-                    }
-                    val activity = context.findActivity()
-                    val targetContext = activity ?: context
-                    if (targetContext !is Activity) {
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    }
-                    try {
-                        targetContext.startActivity(intent)
-                    } catch (_: Exception) {}
-                },
-                onReportBugClick = {
-                    val intent = Intent(Intent.ACTION_VIEW, "https://github.com/drrayy001/FlowBytes/issues".toUri())
-                    val activity = context.findActivity()
-                    val targetContext = activity ?: context
-                    if (targetContext !is Activity) {
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    }
-                    try {
-                        targetContext.startActivity(intent)
+                        targetContext.startActivity(browserIntent)
                     } catch (_: Exception) {}
                 }
-            )
-        }
+            },
+            onEmailClick = {
+                val intent = Intent(Intent.ACTION_SENDTO).apply {
+                    data = "mailto:support.rayapps@gmail.com".toUri()
+                    putExtra(Intent.EXTRA_SUBJECT, "Feedback: FlowBytes (v$versionName)")
+                }
+                val activity = context.findActivity()
+                val targetContext = activity ?: context
+                if (targetContext !is Activity) {
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+                try {
+                    targetContext.startActivity(intent)
+                } catch (_: Exception) {}
+            },
+            onReportBugClick = {
+                val intent = Intent(Intent.ACTION_VIEW, "https://github.com/drrayy001/FlowBytes/issues".toUri())
+                val activity = context.findActivity()
+                val targetContext = activity ?: context
+                if (targetContext !is Activity) {
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+                try {
+                    targetContext.startActivity(intent)
+                } catch (_: Exception) {}
+            }
+        )
+    }
 
-        if (showAccentColorDialog) {
-            AccentColorDialog(
-                currentColor = accentColor,
-                onDismiss = { showAccentColorDialog = false },
-            ) { viewModel.setAccentColor(it) }
-        }
-
+    if (showAccentColorDialog) {
+        AccentColorDialog(
+            currentColor = accentColor,
+            onDismiss = { showAccentColorDialog = false },
+        ) { viewModel.setAccentColor(it) }
     }
 }
 

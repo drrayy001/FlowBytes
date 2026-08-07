@@ -3,45 +3,35 @@ package com.ray.flowmeter.ui.theme
 
 import android.app.Activity
 import android.os.Build
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.EaseOutCubic
-import androidx.compose.animation.core.SpringSpec
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.*
+import androidx.compose.animation.core.*
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.ColorScheme
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Typography
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import android.graphics.Color as AndroidColor
 import kotlinx.coroutines.delay
@@ -432,27 +422,86 @@ val LocalStaggerIndex = compositionLocalOf { 0 }
 
 @Composable
 fun StaggeredEntrance(
-    delayStep: Int = 70,
+    index: Int? = null,
+    delayStep: Int = 50,
     content: @Composable () -> Unit,
 ) {
-    val index = LocalStaggerIndex.current
-    var visible by remember { mutableStateOf(false) }
+    val currentIndex = index ?: LocalStaggerIndex.current
+    var animateIn by rememberSaveable(currentIndex) { mutableStateOf(false) }
 
-    LaunchedEffect(Unit) {
-        delay((index * delayStep).toLong())
-        visible = true
+    LaunchedEffect(currentIndex) {
+        if (!animateIn) {
+            // Cap the delay for items deep in a list to ensure they load quickly when scrolling
+            val cappedIndex = minOf(currentIndex, 6)
+            delay((cappedIndex * delayStep).toLong())
+            animateIn = true
+        }
     }
 
-    CompositionLocalProvider(LocalStaggerIndex provides index + 1) {
-        AnimatedVisibility(
-            visible = visible,
-            enter = fadeIn(animationSpec = tween(450)) +
-                    slideInVertically(
-                        initialOffsetY = { it / 3 },
-                        animationSpec = tween(450, easing = EaseOutCubic)
-                    )
+    val alpha by animateFloatAsState(
+        targetValue = if (animateIn) 1f else 0f,
+        animationSpec = tween(durationMillis = 500, easing = LinearOutSlowInEasing),
+        label = "bloomAlpha"
+    )
+
+    val scale by animateFloatAsState(
+        targetValue = if (animateIn) 1f else 0.95f,
+        animationSpec = premiumSpring(),
+        label = "bloomScale"
+    )
+
+    val contentBlock = @Composable {
+        Box(
+            modifier = Modifier.graphicsLayer {
+                this.alpha = alpha
+                this.scaleX = scale
+                this.scaleY = scale
+            }
         ) {
             content()
         }
+    }
+
+    if (index == null) {
+        CompositionLocalProvider(LocalStaggerIndex provides currentIndex + 1) {
+            contentBlock()
+        }
+    } else {
+        contentBlock()
+    }
+}
+
+fun Modifier.shimmer(
+    visible: Boolean = true,
+    shape: androidx.compose.ui.graphics.Shape = RoundedCornerShape(0.dp)
+): Modifier = composed {
+    if (!visible) return@composed this
+
+    var size by remember { mutableStateOf(IntSize.Zero) }
+    val transition = rememberInfiniteTransition(label = "shimmer")
+    val startOffsetX by transition.animateFloat(
+        initialValue = -2 * size.width.toFloat(),
+        targetValue = 2 * size.width.toFloat(),
+        animationSpec = infiniteRepeatable(
+            animation = tween(1200, easing = LinearEasing),
+            repeatMode = RepeatMode.Restart
+        ),
+        label = "shimmerOffset"
+    )
+
+    background(
+        brush = Brush.linearGradient(
+            colors = listOf(
+                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f),
+                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+            ),
+            start = Offset(startOffsetX, 0f),
+            end = Offset(startOffsetX + size.width.toFloat(), size.height.toFloat())
+        ),
+        shape = shape
+    )
+    .onGloballyPositioned {
+        size = it.size
     }
 }

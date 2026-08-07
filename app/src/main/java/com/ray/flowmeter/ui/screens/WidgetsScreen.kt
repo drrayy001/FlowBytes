@@ -124,7 +124,7 @@ fun WidgetsScreen(
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             // Description card
-            StaggeredEntrance {
+            StaggeredEntrance(index = 0) {
                 Card(
                     shape = RoundedCornerShape(24.dp),
                     colors = CardDefaults.cardColors(
@@ -156,7 +156,7 @@ fun WidgetsScreen(
             }
 
             // Widget Settings Section
-            StaggeredEntrance {
+            StaggeredEntrance(index = 1) {
                 Text(
                     text = stringResource(R.string.label_widget_settings_caps),
                     style = MaterialTheme.typography.labelSmall,
@@ -167,7 +167,7 @@ fun WidgetsScreen(
                 )
             }
 
-            StaggeredEntrance {
+            StaggeredEntrance(index = 2) {
                 Card(
                     shape = RoundedCornerShape(24.dp),
                     colors = CardDefaults.cardColors(
@@ -206,7 +206,7 @@ fun WidgetsScreen(
             }
 
             // Widget Previews Section
-            StaggeredEntrance {
+            StaggeredEntrance(index = 3) {
                 Text(
                     text = stringResource(R.string.label_available_widgets),
                     style = MaterialTheme.typography.labelSmall,
@@ -218,7 +218,7 @@ fun WidgetsScreen(
             }
 
             // 1. Daily Usage Widget Preview
-            StaggeredEntrance {
+            StaggeredEntrance(index = 4) {
                 WidgetPreviewCard(
                     title = stringResource(R.string.title_daily_usage_widget),
                     sizeInfo = stringResource(R.string.desc_daily_usage_widget_size),
@@ -251,7 +251,7 @@ fun WidgetsScreen(
             }
 
             // 2. Monthly Usage Widget Preview
-            StaggeredEntrance {
+            StaggeredEntrance(index = 5) {
                 WidgetPreviewCard(
                     title = stringResource(R.string.title_monthly_usage_widget),
                     sizeInfo = stringResource(R.string.desc_monthly_usage_widget_size),
@@ -284,7 +284,7 @@ fun WidgetsScreen(
             }
 
             // 2. Today's Data Widget Preview
-            StaggeredEntrance {
+            StaggeredEntrance(index = 6) {
                 WidgetPreviewCard(
                     title = stringResource(R.string.title_todays_data_widget),
                     sizeInfo = stringResource(R.string.desc_todays_data_size),
@@ -352,7 +352,7 @@ fun WidgetsScreen(
             }
 
             // 3. Daily Network Limit Widget Preview
-            StaggeredEntrance {
+            StaggeredEntrance(index = 7) {
                 WidgetPreviewCard(
                     title = stringResource(R.string.title_daily_limit_widget),
                     sizeInfo = stringResource(R.string.desc_detailed_status_size),
@@ -373,7 +373,7 @@ fun WidgetsScreen(
             }
 
             // 4. Monthly Network Limit Widget Preview
-            StaggeredEntrance {
+            StaggeredEntrance(index = 8) {
                 WidgetPreviewCard(
                     title = stringResource(R.string.title_monthly_limit_widget),
                     sizeInfo = stringResource(R.string.desc_detailed_status_size),
@@ -394,7 +394,7 @@ fun WidgetsScreen(
             }
 
             // 5. Custom Network Limit Widget Preview
-            StaggeredEntrance {
+            StaggeredEntrance(index = 9) {
                 WidgetPreviewCard(
                     title = stringResource(R.string.title_custom_limit_widget),
                     sizeInfo = stringResource(R.string.desc_detailed_status_size),
@@ -415,7 +415,7 @@ fun WidgetsScreen(
             }
 
             // 5. Speed Monitor Widget Preview
-            StaggeredEntrance {
+            StaggeredEntrance(index = 10) {
                 WidgetPreviewCard(
                     title = stringResource(R.string.title_speed_monitor_widget),
                     sizeInfo = stringResource(R.string.desc_live_graphs_size),

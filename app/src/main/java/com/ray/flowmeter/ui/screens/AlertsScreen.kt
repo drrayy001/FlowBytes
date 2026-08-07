@@ -226,8 +226,10 @@ fun AlertsScreen(
                         contentPadding = PaddingValues(bottom = 100.dp),
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        items(alerts, key = { it.id }) { alert ->
-                            AlertItem(alert, speedUnit)
+                        itemsIndexed(alerts, key = { _, alert -> alert.id }) { index, alert ->
+                            StaggeredEntrance(index = index) {
+                                AlertItem(alert, speedUnit)
+                            }
                         }
                     }
                 }

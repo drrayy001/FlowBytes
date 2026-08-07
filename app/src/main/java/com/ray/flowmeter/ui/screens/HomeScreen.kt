@@ -31,6 +31,7 @@ import com.ray.flowmeter.ui.components.ChartType
 import com.ray.flowmeter.ui.components.WeeklyBarChart
 import com.ray.flowmeter.ui.theme.StaggeredEntrance
 import com.ray.flowmeter.ui.theme.bounceClick
+import com.ray.flowmeter.ui.theme.shimmer
 import com.ray.flowmeter.ui.viewmodels.HomeViewModel
 import java.util.Calendar
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -136,78 +137,80 @@ fun HomeScreen(
                     pageSpacing = 12.dp
                 ) { page ->
                     val warningType = warnings[page]
-                    if (warningType == 0) {
-                        Surface(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .bounceClick {
-                                    val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
-                                    usageAccessLauncher.launch(intent)
-                                },
-                            shape = RoundedCornerShape(16.dp),
-                            color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.8f),
-                            border = androidx.compose.foundation.BorderStroke(
-                                1.dp,
-                                MaterialTheme.colorScheme.error.copy(alpha = 0.2f)
-                            )
-                        ) {
-                            Row(
-                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                                verticalAlignment = Alignment.CenterVertically
-                                    .also {
-                                        // Workaround layout hint to avoid compiler warning about unused import
-                                    }
+                    StaggeredEntrance {
+                        if (warningType == 0) {
+                            Surface(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .bounceClick {
+                                        val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
+                                        usageAccessLauncher.launch(intent)
+                                    },
+                                shape = RoundedCornerShape(16.dp),
+                                color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.8f),
+                                border = androidx.compose.foundation.BorderStroke(
+                                    1.dp,
+                                    MaterialTheme.colorScheme.error.copy(alpha = 0.2f)
+                                )
                             ) {
-                                Icon(
-                                    imageVector = Icons.Rounded.WarningAmber,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onErrorContainer,
-                                    modifier = Modifier.size(20.dp)
-                                )
-                                Spacer(modifier = Modifier.width(12.dp))
-                                Text(
-                                    text = stringResource(R.string.msg_usage_stats_permission_disabled),
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.onErrorContainer,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
-                                )
+                                Row(
+                                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                        .also {
+                                            // Workaround layout hint to avoid compiler warning about unused import
+                                        }
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Rounded.WarningAmber,
+                                        contentDescription = null,
+                                        tint = MaterialTheme.colorScheme.onErrorContainer,
+                                        modifier = Modifier.size(20.dp)
+                                    )
+                                    Spacer(modifier = Modifier.width(12.dp))
+                                    Text(
+                                        text = stringResource(R.string.msg_usage_stats_permission_disabled),
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        fontWeight = FontWeight.Bold,
+                                        color = MaterialTheme.colorScheme.onErrorContainer,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+                                }
                             }
-                        }
-                    } else {
-                        Surface(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .bounceClick {
-                                    notificationPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
-                                },
-                            shape = RoundedCornerShape(16.dp),
-                            color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.8f),
-                            border = androidx.compose.foundation.BorderStroke(
-                                1.dp,
-                                MaterialTheme.colorScheme.error.copy(alpha = 0.2f)
-                            )
-                        ) {
-                            Row(
-                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                                verticalAlignment = Alignment.CenterVertically
+                        } else {
+                            Surface(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .bounceClick {
+                                        notificationPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+                                    },
+                                shape = RoundedCornerShape(16.dp),
+                                color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.8f),
+                                border = androidx.compose.foundation.BorderStroke(
+                                    1.dp,
+                                    MaterialTheme.colorScheme.error.copy(alpha = 0.2f)
+                                )
                             ) {
-                                Icon(
-                                    imageVector = Icons.Rounded.Notifications,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onErrorContainer,
-                                    modifier = Modifier.size(20.dp)
-                                )
-                                Spacer(modifier = Modifier.width(12.dp))
-                                Text(
-                                    text = stringResource(R.string.msg_notification_permission_disabled),
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.onErrorContainer,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
-                                )
+                                Row(
+                                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Rounded.Notifications,
+                                        contentDescription = null,
+                                        tint = MaterialTheme.colorScheme.onErrorContainer,
+                                        modifier = Modifier.size(20.dp)
+                                    )
+                                    Spacer(modifier = Modifier.width(12.dp))
+                                    Text(
+                                        text = stringResource(R.string.msg_notification_permission_disabled),
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        fontWeight = FontWeight.Bold,
+                                        color = MaterialTheme.colorScheme.onErrorContainer,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+                                }
                             }
                         }
                     }
@@ -216,29 +219,31 @@ fun HomeScreen(
         }
 
         item {
-            StaggeredEntrance {
-                UsageSummaryCard(
-                    title = stringResource(R.string.label_todays_usage),
-                    totalUsage = viewModel.dailyUsage,
-                    subItems = listOf(
-                        UsageItemData(viewModel.downloadReceived, stringResource(R.string.label_download), MaterialTheme.colorScheme.primary, AppIcons.Download),
-                        UsageItemData(viewModel.uploadSent, stringResource(R.string.label_upload), MaterialTheme.colorScheme.secondary, AppIcons.Upload),
-                        UsageItemData(viewModel.dailyWifiUsage, stringResource(R.string.label_wifi), MaterialTheme.colorScheme.primary, AppIcons.Wifi),
-                        UsageItemData(viewModel.dailyMobileUsage, stringResource(R.string.label_mobile), MaterialTheme.colorScheme.secondary, AppIcons.Mobile)
-                    ),
-                    icon = AppIcons.TodayUsage,
-                    accentColor = MaterialTheme.colorScheme.primary,
-                    onClick = onNavigateToTodayUsage
-                )
-            }
+            UsageSummaryCard(
+                title = stringResource(R.string.label_todays_usage),
+                totalUsage = viewModel.dailyUsage,
+                subItems = listOf(
+                    UsageItemData(viewModel.downloadReceived, stringResource(R.string.label_download), MaterialTheme.colorScheme.primary, AppIcons.Download),
+                    UsageItemData(viewModel.uploadSent, stringResource(R.string.label_upload), MaterialTheme.colorScheme.secondary, AppIcons.Upload),
+                    UsageItemData(viewModel.dailyWifiUsage, stringResource(R.string.label_wifi), MaterialTheme.colorScheme.primary, AppIcons.Wifi),
+                    UsageItemData(viewModel.dailyMobileUsage, stringResource(R.string.label_mobile), MaterialTheme.colorScheme.secondary, AppIcons.Mobile)
+                ),
+                icon = AppIcons.TodayUsage,
+                accentColor = MaterialTheme.colorScheme.primary,
+                onClick = onNavigateToTodayUsage,
+                staggerIndex = 0
+            )
         }
 
 
 
         item {
-            StaggeredEntrance {
+            val isChartLoading = viewModel.weeklyDates.isEmpty()
+            StaggeredEntrance(index = 1) {
                 Card(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .shimmer(visible = isChartLoading, shape = RoundedCornerShape(32.dp)),
                     shape = RoundedCornerShape(32.dp),
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.surfaceContainerLow
@@ -306,19 +311,18 @@ fun HomeScreen(
         }
 
         item {
-            StaggeredEntrance {
-                UsageSummaryCard(
-                    title = stringResource(R.string.label_this_month),
-                    totalUsage = viewModel.monthlyUsage,
-                    subItems = listOf(
-                        UsageItemData(viewModel.monthlyWifiUsage, stringResource(R.string.label_wifi), MaterialTheme.colorScheme.primary, AppIcons.Wifi),
-                        UsageItemData(viewModel.monthlyMobileUsage, stringResource(R.string.label_mobile), MaterialTheme.colorScheme.secondary, AppIcons.Mobile)
-                    ),
-                    icon = AppIcons.ThisMonthUsage,
-                    accentColor = MaterialTheme.colorScheme.primary,
-                    onClick = onNavigateToMonthUsage
-                )
-            }
+            UsageSummaryCard(
+                title = stringResource(R.string.label_this_month),
+                totalUsage = viewModel.monthlyUsage,
+                subItems = listOf(
+                    UsageItemData(viewModel.monthlyWifiUsage, stringResource(R.string.label_wifi), MaterialTheme.colorScheme.primary, AppIcons.Wifi),
+                    UsageItemData(viewModel.monthlyMobileUsage, stringResource(R.string.label_mobile), MaterialTheme.colorScheme.secondary, AppIcons.Mobile)
+                ),
+                icon = AppIcons.ThisMonthUsage,
+                accentColor = MaterialTheme.colorScheme.primary,
+                onClick = onNavigateToMonthUsage,
+                staggerIndex = 2
+            )
         }
     }
 }
@@ -371,23 +375,29 @@ fun UsageSummaryCard(
     accentColor: Color,
     modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(32.dp),
-    onClick: (() -> Unit)? = null
+    onClick: (() -> Unit)? = null,
+    staggerIndex: Int? = null
 ) {
-    Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .then(if (onClick != null) Modifier.bounceClick(onClick = onClick) else Modifier),
-        shape = shape,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerLow
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-        border = androidx.compose.foundation.BorderStroke(
-            1.dp,
-            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)
-        )
-    ) {
-        UsageSummaryContent(title, totalUsage, subItems, icon, accentColor)
+    val isCalculating = totalUsage == "0 B"
+
+    StaggeredEntrance(index = staggerIndex) {
+        Card(
+            modifier = modifier
+                .fillMaxWidth()
+                .then(if (onClick != null) Modifier.bounceClick(onClick = onClick) else Modifier)
+                .shimmer(visible = isCalculating, shape = shape),
+            shape = shape,
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+            ),
+            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+            border = androidx.compose.foundation.BorderStroke(
+                1.dp,
+                MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)
+            )
+        ) {
+            UsageSummaryContent(title, totalUsage, subItems, icon, accentColor)
+        }
     }
 }
 

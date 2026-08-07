@@ -746,12 +746,14 @@ fun AppUsageScreen(
                             }
                             val displayGlobalTotal = displayGlobalDown + displayGlobalUp
 
-                            ModernUsageSummary(
-                                totalUsage = displayGlobalTotal,
-                                downUsage = displayGlobalDown,
-                                upUsage = displayGlobalUp,
-                                modifier = Modifier.padding(horizontal = 0.dp)
-                            )
+                            StaggeredEntrance(index = 0) {
+                                ModernUsageSummary(
+                                    totalUsage = displayGlobalTotal,
+                                    downUsage = displayGlobalDown,
+                                    upUsage = displayGlobalUp,
+                                    modifier = Modifier.padding(horizontal = 0.dp)
+                                )
+                            }
                         }
 
                         val maxUsageBytes = if (filteredAppList.isNotEmpty()) {
@@ -785,14 +787,14 @@ fun AppUsageScreen(
                             itemsIndexed(
                                 items = filteredAppList,
                                 key = { _, it -> it.packageName }
-                            ) { _, appUsage ->
+                            ) { index, appUsage ->
                                 val displayUsage = when (targetStateTriple.third) {
                                     "mobile" -> appUsage.cellUsage
                                     "wifi" -> appUsage.wifiUsage
                                     else -> appUsage.totalUsage
                                 }
 
-                                StaggeredEntrance {
+                                StaggeredEntrance(index = index + 1) {
                                     AppUsageItem(
                                         appUsage = appUsage,
                                         displayUsage = displayUsage,

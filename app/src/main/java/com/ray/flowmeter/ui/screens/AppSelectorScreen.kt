@@ -251,13 +251,13 @@ fun AppPickerScreen(
 
                 // Modern Floating Dock
                 if (selectedApps.isNotEmpty()) {
-                    StaggeredEntrance {
-                        Box(
-                            modifier = Modifier
-                                .align(Alignment.BottomCenter)
-                                .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom))
-                                .padding(horizontal = 24.dp, vertical = 16.dp)
-                        ) {
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom))
+                            .padding(horizontal = 24.dp, vertical = 16.dp)
+                    ) {
+                        StaggeredEntrance {
                             Card(
                                 shape = RoundedCornerShape(24.dp),
                                 colors = CardDefaults.cardColors(

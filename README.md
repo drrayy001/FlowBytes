@@ -36,11 +36,12 @@ Stay in control of your data by downloading FlowBytes from your preferred source
 ## 🚀 Key Features
 
 *   **Real-time Speed Monitoring:** Displays live download and upload speeds in the status bar, persistent notification, and a dedicated **Quick Settings Tile**.
+*   **Home Screen Widgets:** Monitor live network speeds, daily/monthly consumption, and data plan progress directly from your home screen with 6 customizable widgets.
 *   **App Blocking:** Advanced network control using Android's **VPN Service** to automatically restrict internet access for applications that reach their limit.
 *   **High Data Alerts:** Detects sustained high-traffic spikes and background data leaks with customizable speed and duration thresholds.
 *   **Weekly Activity Charts:** Visualize your data consumption with high-precision charts supporting **Soft-Scaling** and filtering by Combined, Wi-Fi, or Mobile data.
 *   **Usage Insight & Forecast:** Get projected data consumption forecasts based on your current habits to stay ahead of your daily limits.
-*   **Comprehensive Data Plans:** Set flexible **Daily and Monthly System Plans** globally or configure granular **App Limits** for specific applications.
+*   **Comprehensive Data Plans:** Set flexible **Daily, Monthly, and Custom Period Plans** globally or configure granular **App Limits** for specific applications.
 *   **Alerts History:** Track all limit breaches and high-traffic detections in a filterable history log with categorized alerts.
 *   **Modern Material 3 UI:** A fluid interface featuring **Material You** dynamic colors, **AMOLED** dark mode, and customizable notification icon scaling.
 *   **Privacy First:** 100% offline. No telemetry, no tracking—all network analysis and storage happen strictly on your device.
@@ -50,8 +51,8 @@ Stay in control of your data by downloading FlowBytes from your preferred source
 ## 📸 Screenshots
 
 <p align="center">
-  <img src="images/screenshot%201.png" width="500" alt="FlowBytes Screenshot 1">
-  <img src="images/screenshot%202.png" width="500" alt="FlowBytes Screenshot 2">
+  <img src="images/screenshot%201.png" alt="FlowBytes Screenshot 1">
+  <img src="images/screenshot%202.png" alt="FlowBytes Screenshot 2">
 </p>
 
 ---
@@ -63,6 +64,7 @@ FlowBytes is built using modern Android standards with a focus on performance an
 *   **Network Sampling:** High-frequency traffic analysis using `NetworkStatsManager` and `TrafficStats` for real-time speed calculation and per-app usage tracking.
 *   **Traffic Management:** Implementation of `VpnService` for on-device traffic interception, enabling precise per-UID internet restriction.
 *   **Background Processing:** Robust `ForegroundService` ensuring continuous monitoring with minimal battery impact and system-wide visibility.
+*   **Home Screen Integration:** Lightweight background widget updates using `AppWidgetProvider` for live speed, usage stats, and data limit progress.
 *   **Reactive UI:** Built entirely with **Jetpack Compose** following **MVVM** architecture, utilizing Kotlin Coroutines and StateFlow for seamless data updates.
 *   **Data Persistence:** Atomic storage of usage history and configuration using **Room Database** and **Jetpack DataStore**.
 *   **Custom Rendering:** Dynamic notification icons and status bar indicators rendered via `Canvas` API for sharp, real-time speed display.
@@ -87,13 +89,14 @@ FlowBytes is built using modern Android standards with a focus on performance an
 1.  **Grant Permissions:** Follow the setup wizard to enable *Usage Access* and *Notifications*.
 2.  **Initialize:** Toggle monitoring from the Home screen or the **Quick Settings Tile**.
 3.  **Configure Data Plans:**
-    *   Go to **Data Plans** to set global **System Plans** (Daily/Monthly).
+    *   Go to **Data Plans** to set global **System Plans** (Daily, Monthly, or Custom Period).
     *   Add specific applications to **App Limits** for granular control and automatic **App Blocking**.
-4.  **Personalize Appearance:**
+4.  **Add Home Screen Widgets:** Choose from 6 customizable widgets (Speed Monitor, Daily/Monthly Usage, Data Limits) to monitor stats directly from your launcher.
+5.  **Personalize Appearance:**
     *   Enable **Material You** in Settings for system-matched colors.
     *   Toggle **AMOLED Mode** for deep blacks on supported screens.
     *   Adjust **Icon Size** for your preferred status bar visibility.
-5.  **Fine-tune Alerts:** Adjust **High Data Alerts** (High Traffic Detection) thresholds in Settings to match your data plan's sensitivity.
+6.  **Fine-tune Alerts:** Adjust **High Data Alerts** (High Traffic Detection) thresholds in Settings to match your data plan's sensitivity.
 
 ---
 

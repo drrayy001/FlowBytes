@@ -207,7 +207,7 @@ fun AppPickerScreen(
                                                     Box(modifier = Modifier.padding(8.dp)) {
                                                         if (appIcon != null) {
                                                             Image(
-                                                                bitmap = appIcon!!.toBitmap().asImageBitmap(),
+                                                                bitmap = appIcon!!.toBitmap(width = 96, height = 96).asImageBitmap(),
                                                                 contentDescription = null,
                                                                 modifier = Modifier.fillMaxSize()
                                                             )
@@ -760,7 +760,7 @@ fun BatchConfigurationContent(
                             Box(Modifier.padding(6.dp)) {
                                 if (appIcon != null) {
                                     Image(
-                                        bitmap = appIcon.toBitmap().asImageBitmap(),
+                                        bitmap = appIcon.toBitmap(width = 96, height = 96).asImageBitmap(),
                                         contentDescription = null,
                                         modifier = Modifier.fillMaxSize()
                                     )
@@ -963,7 +963,7 @@ fun ConfigurationContent(
                     Box(Modifier.padding(10.dp)) {
                         if (appIcon != null) {
                             Image(
-                                bitmap = appIcon.toBitmap().asImageBitmap(),
+                                bitmap = appIcon.toBitmap(width = 96, height = 96).asImageBitmap(),
                                 contentDescription = null,
                                 modifier = Modifier.fillMaxSize()
                             )

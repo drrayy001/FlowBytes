@@ -420,7 +420,7 @@ private fun AlertItem(alert: AppAlert, speedUnit: String) {
             ) {
                 if (appIcon != null) {
                     Image(
-                        bitmap = appIcon.toBitmap().asImageBitmap(),
+                        bitmap = appIcon.toBitmap(width = 96, height = 96).asImageBitmap(),
                         contentDescription = null,
                         modifier = Modifier.size(32.dp),
                         contentScale = ContentScale.Fit

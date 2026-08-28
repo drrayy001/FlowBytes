@@ -76,6 +76,7 @@ data class AppLimit(
     val isWifiBlocked: Boolean = false,
     val isMobileBlocked: Boolean = false,
     val isEnabled: Boolean = true,
+    val isAlwaysBlocked: Boolean = false,
 )
 
 @Dao
@@ -99,7 +100,7 @@ interface AppLimitDao {
     suspend fun getAppLimit(packageName: String): AppLimit?
 }
 
-@Database(entities = [AppAlert::class, AppLimit::class], version = 7, exportSchema = false)
+@Database(entities = [AppAlert::class, AppLimit::class], version = 8, exportSchema = false)
 abstract class FlowMeterDatabase : RoomDatabase() {
     abstract fun appAlertDao(): AppAlertDao
     abstract fun appLimitDao(): AppLimitDao

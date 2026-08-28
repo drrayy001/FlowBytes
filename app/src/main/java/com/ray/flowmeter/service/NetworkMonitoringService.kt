@@ -307,7 +307,8 @@ class NetworkMonitoringService : Service() {
         
         monitorJob = serviceScope.launch {
             while (isActive) {
-                if ((System.currentTimeMillis() - lastUsageQueryTime) > 5000) {
+                val now = System.currentTimeMillis()
+                if ((now - lastUsageQueryTime) > 2000) {
                     updateDailyUsage()
                     checkAppLimits()
                 }
@@ -317,7 +318,7 @@ class NetworkMonitoringService : Service() {
                     delay(1000.milliseconds)
                 } else {
                     // Slow down loop when screen is off to save battery
-                    delay(15000.milliseconds)
+                    delay(10000.milliseconds)
                 }
             }
         }
@@ -1220,18 +1221,33 @@ class NetworkMonitoringService : Service() {
 
         for (limit in limits) {
             try {
-                    if (!limit.isEnabled) {
-                        if (limit.isBlocked || limit.isWifiBlocked || limit.isMobileBlocked) {
-                            appLimitRepository.update(
-                                limit.copy(
-                                    isBlocked = false,
-                                    isWifiBlocked = false,
-                                    isMobileBlocked = false,
-                                ),
-                            )
-                        }
-                        continue
+                if (!limit.isEnabled) {
+                    if (limit.isBlocked || limit.isWifiBlocked || limit.isMobileBlocked) {
+                        appLimitRepository.update(
+                            limit.copy(
+                                isBlocked = false,
+                                isWifiBlocked = false,
+                                isMobileBlocked = false,
+                            ),
+                        )
                     }
+                    continue
+                }
+
+                if (limit.isAlwaysBlocked) {
+                    val wifiOver = limit.networkType == "both" || limit.networkType == "wifi"
+                    val mobileOver = limit.networkType == "both" || limit.networkType == "mobile"
+                    if (limit.isWifiBlocked != wifiOver || limit.isMobileBlocked != mobileOver || !limit.isBlocked) {
+                        appLimitRepository.update(
+                            limit.copy(
+                                isBlocked = true,
+                                isWifiBlocked = wifiOver,
+                                isMobileBlocked = mobileOver
+                            )
+                        )
+                    }
+                    continue
+                }
 
                 calendar.timeInMillis = currentTime
                 if (limit.limitType == "monthly") {
@@ -1275,8 +1291,8 @@ class NetworkMonitoringService : Service() {
                     )
                     
                     if (limit.networkType == "both") {
-                        val wifiOver = (wifiUsage >= limit.wifiDataLimit) && (limit.wifiDataLimit > 0)
-                        val mobileOver = (mobileUsage >= limit.mobileDataLimit) && (limit.mobileDataLimit > 0)
+                        val wifiOver = wifiUsage >= limit.wifiDataLimit
+                        val mobileOver = mobileUsage >= limit.mobileDataLimit
                         
                         if (wifiOver && !limit.isWifiBlocked) {
                             sendAppLimitAlert(updatedLimit.copy(isWifiBlocked = true, networkType = "wifi", dataLimit = limit.wifiDataLimit))
@@ -1287,14 +1303,17 @@ class NetworkMonitoringService : Service() {
                         
                         updatedLimit = updatedLimit.copy(
                             isWifiBlocked = wifiOver,
-                            isMobileBlocked = mobileOver
+                            isMobileBlocked = mobileOver,
+                            isBlocked = wifiOver && mobileOver
                         )
                         appLimitRepository.update(updatedLimit)
                     } else {
-                        if (currentUsage >= limit.dataLimit && !limit.isBlocked) {
+                        val limitThreshold = limit.dataLimit
+                        val isOver = currentUsage >= limitThreshold
+                        if (isOver && !limit.isBlocked) {
                             sendAppLimitAlert(updatedLimit.copy(isBlocked = true))
                             appLimitRepository.update(updatedLimit.copy(isBlocked = true))
-                        } else if (currentUsage < limit.dataLimit && limit.isBlocked) {
+                        } else if (!isOver && limit.isBlocked) {
                             appLimitRepository.update(updatedLimit.copy(isBlocked = false))
                         } else {
                             appLimitRepository.update(updatedLimit)

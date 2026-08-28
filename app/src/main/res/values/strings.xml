@@ -316,6 +316,14 @@
     <!-- Badges -->
     <string name="badge_limit_reached">Limit Reached</string>
     <string name="badge_blocked">Blocked</string>
+    <string name="label_block_internet">Block Internet Completely</string>
+    <string name="desc_block_internet">Prevent this app from accessing any internet traffic</string>
+    <string name="badge_firewall_blocked">Firewall Blocked</string>
+    <string name="label_internet_blocked_status">Internet access blocked by firewall</string>
+    <string name="option_off">Off</string>
+    <string name="option_on">On</string>
+    <string name="option_normal_limit">Normal Limit</string>
+    <string name="option_block_completely">Block Completely</string>
 
     <!-- App Review Dialog -->
     <string name="review_dialog_title">Enjoying FlowBytes?</string>

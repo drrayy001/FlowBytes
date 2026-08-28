@@ -331,31 +331,32 @@ class AppLimitsViewModel(
     ) {
         viewModelScope.launch {
             val existing = repository.getAppLimit(packageName)
+            val isWifiOver = (networkType == "both" && wifiLimitBytes == 0L) || (networkType == "wifi" && limitBytes == 0L)
+            val isMobileOver = (networkType == "both" && mobileLimitBytes == 0L) || (networkType == "mobile" && limitBytes == 0L)
+            val isBlocked = (networkType != "both" && limitBytes == 0L) || (networkType == "both" && isWifiOver && isMobileOver)
+
+            val newLimit = AppLimit(
+                packageName = packageName,
+                appName = appName,
+                dataLimit = limitBytes,
+                limitType = limitType,
+                networkType = networkType,
+                wifiDataLimit = wifiLimitBytes,
+                mobileDataLimit = mobileLimitBytes,
+                currentUsage = existing?.currentUsage ?: 0L,
+                currentWifiUsage = existing?.currentWifiUsage ?: 0L,
+                currentMobileUsage = existing?.currentMobileUsage ?: 0L,
+                isBlocked = isBlocked,
+                isWifiBlocked = isWifiOver,
+                isMobileBlocked = isMobileOver,
+                isEnabled = existing?.isEnabled ?: true,
+                isAlwaysBlocked = false,
+            )
+
             if (existing == null) {
-                repository.insert(
-                    AppLimit(
-                        packageName = packageName,
-                        appName = appName,
-                        dataLimit = limitBytes,
-                        limitType = limitType,
-                        networkType = networkType,
-                        wifiDataLimit = wifiLimitBytes,
-                        mobileDataLimit = mobileLimitBytes,
-                    ),
-                )
+                repository.insert(newLimit)
             } else {
-                repository.update(
-                    existing.copy(
-                        dataLimit = limitBytes,
-                        limitType = limitType,
-                        networkType = networkType,
-                        wifiDataLimit = wifiLimitBytes,
-                        mobileDataLimit = mobileLimitBytes,
-                        isBlocked = false,
-                        isWifiBlocked = false,
-                        isMobileBlocked = false,
-                    ),
-                )
+                repository.update(newLimit)
             }
         }
     }
@@ -364,21 +365,25 @@ class AppLimitsViewModel(
         viewModelScope.launch {
             limits.forEach { limit ->
                 val existing = repository.getAppLimit(limit.packageName)
+                val isWifiOver = (limit.networkType == "both" && limit.wifiDataLimit == 0L) || (limit.networkType == "wifi" && limit.dataLimit == 0L)
+                val isMobileOver = (limit.networkType == "both" && limit.mobileDataLimit == 0L) || (limit.networkType == "mobile" && limit.dataLimit == 0L)
+                val isBlocked = (limit.networkType != "both" && limit.dataLimit == 0L) || (limit.networkType == "both" && isWifiOver && isMobileOver)
+
+                val limitToSave = limit.copy(
+                    currentUsage = existing?.currentUsage ?: 0L,
+                    currentWifiUsage = existing?.currentWifiUsage ?: 0L,
+                    currentMobileUsage = existing?.currentMobileUsage ?: 0L,
+                    isBlocked = isBlocked,
+                    isWifiBlocked = isWifiOver,
+                    isMobileBlocked = isMobileOver,
+                    isEnabled = existing?.isEnabled ?: true,
+                    isAlwaysBlocked = false,
+                )
+
                 if (existing == null) {
-                    repository.insert(limit)
+                    repository.insert(limitToSave)
                 } else {
-                    repository.update(
-                        existing.copy(
-                            dataLimit = limit.dataLimit,
-                            limitType = limit.limitType,
-                            networkType = limit.networkType,
-                            wifiDataLimit = limit.wifiDataLimit,
-                            mobileDataLimit = limit.mobileDataLimit,
-                            isBlocked = false,
-                            isWifiBlocked = false,
-                            isMobileBlocked = false,
-                        ),
-                    )
+                    repository.update(limitToSave)
                 }
             }
         }
@@ -386,7 +391,17 @@ class AppLimitsViewModel(
     
     fun updateAppLimit(appLimit: AppLimit) {
         viewModelScope.launch {
-            repository.update(appLimit)
+            val isWifiOver = (appLimit.networkType == "both" && appLimit.wifiDataLimit == 0L) || (appLimit.networkType == "wifi" && appLimit.dataLimit == 0L)
+            val isMobileOver = (appLimit.networkType == "both" && appLimit.mobileDataLimit == 0L) || (appLimit.networkType == "mobile" && appLimit.dataLimit == 0L)
+            val isBlocked = (appLimit.networkType != "both" && appLimit.dataLimit == 0L) || (appLimit.networkType == "both" && isWifiOver && isMobileOver) || appLimit.isBlocked
+
+            val updated = appLimit.copy(
+                isBlocked = isBlocked,
+                isWifiBlocked = isWifiOver || appLimit.isWifiBlocked,
+                isMobileBlocked = isMobileOver || appLimit.isMobileBlocked,
+                isAlwaysBlocked = false,
+            )
+            repository.update(updated)
         }
     }
 

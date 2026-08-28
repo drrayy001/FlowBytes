@@ -137,6 +137,10 @@ fun AppLimitEditScreen(
                         val mobileValue = mobileLimitInput.toLongOrNull() ?: 0L
                         val mobileMultiplier = if (mobileLimitUnit == "GB") 1024L * 1024L * 1024L else 1024L * 1024L
 
+                        val isWifiOver = (networkType == "both" && wifiValue == 0L) || (networkType == "wifi" && value == 0L)
+                        val isMobileOver = (networkType == "both" && mobileValue == 0L) || (networkType == "mobile" && value == 0L)
+                        val isBlocked = (networkType != "both" && value == 0L) || (networkType == "both" && isWifiOver && isMobileOver)
+
                         onConfirm(
                             limit.copy(
                                 dataLimit = value * multiplier,
@@ -144,9 +148,10 @@ fun AppLimitEditScreen(
                                 networkType = networkType,
                                 wifiDataLimit = wifiValue * wifiMultiplier,
                                 mobileDataLimit = mobileValue * mobileMultiplier,
-                                isBlocked = false,
-                                isWifiBlocked = false,
-                                isMobileBlocked = false,
+                                isAlwaysBlocked = false,
+                                isBlocked = isBlocked,
+                                isWifiBlocked = isWifiOver,
+                                isMobileBlocked = isMobileOver,
                             )
                         )
                     }

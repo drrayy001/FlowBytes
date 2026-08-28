@@ -257,15 +257,28 @@ class AppBlockVpnService : VpnService() {
                     if (systemLimitExceeded) {
                         VpnBlockConfig(blockAll = true, blockedApps = emptyList())
                     } else {
+                        val isWifi = networkType == NetworkCapabilities.TRANSPORT_WIFI
+                        val isMobile = networkType == NetworkCapabilities.TRANSPORT_CELLULAR
+
                         val blockedApps = limits.filter { limit ->
-                            limit.isEnabled && when (limit.networkType) {
-                                "wifi" -> limit.isBlocked && (networkType == NetworkCapabilities.TRANSPORT_WIFI)
-                                "mobile" -> limit.isBlocked && (networkType == NetworkCapabilities.TRANSPORT_CELLULAR)
-                                "both" -> {
-                                    (limit.isWifiBlocked && (networkType == NetworkCapabilities.TRANSPORT_WIFI)) ||
-                                    (limit.isMobileBlocked && (networkType == NetworkCapabilities.TRANSPORT_CELLULAR))
+                            if (!limit.isEnabled) return@filter false
+
+                            if (limit.isAlwaysBlocked) {
+                                return@filter when (limit.networkType) {
+                                    "wifi" -> isWifi
+                                    "mobile" -> isMobile
+                                    else -> isWifi || isMobile
                                 }
-                                else -> limit.isBlocked
+                            }
+
+                            when (limit.networkType) {
+                                "wifi" -> isWifi && (limit.isBlocked || limit.wifiDataLimit == 0L || limit.dataLimit == 0L)
+                                "mobile" -> isMobile && (limit.isBlocked || limit.mobileDataLimit == 0L || limit.dataLimit == 0L)
+                                "both" -> {
+                                    (isWifi && (limit.isWifiBlocked || limit.wifiDataLimit == 0L)) ||
+                                    (isMobile && (limit.isMobileBlocked || limit.mobileDataLimit == 0L))
+                                }
+                                else -> limit.isBlocked || limit.dataLimit == 0L
                             }
                         }.map { it.packageName }.toList()
                         VpnBlockConfig(blockAll = false, blockedApps = blockedApps)
@@ -298,6 +311,13 @@ class AppBlockVpnService : VpnService() {
                 .setSession(getString(R.string.vpn_session_name))
                 .addAddress("10.0.0.2", 32)
                 .addRoute("0.0.0.0", 0)
+
+            try {
+                builder.addAddress("fd00::2", 128)
+                builder.addRoute("::", 0)
+            } catch (e: Exception) {
+                Log.w("AppBlockVpnService", "IPv6 VPN route setup skipped: ${e.message}")
+            }
 
             if (blockAll) {
                 builder.addDisallowedApplication("com.ray.flowmeter")

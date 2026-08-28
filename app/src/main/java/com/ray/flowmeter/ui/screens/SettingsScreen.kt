@@ -147,6 +147,7 @@ fun SettingsScreen(
     var showResetTimeDialog by remember { mutableStateOf(false) }
     var showResetDayDialog by remember { mutableStateOf(false) }
     var showHelpFeedbackDialog by remember { mutableStateOf(false) }
+    var showMoreAppsDialog by remember { mutableStateOf(false) }
 
     var showTrafficSettingsDialog by remember { mutableStateOf(false) }
     var showVpnDisclosure by remember { mutableStateOf(false) }
@@ -482,6 +483,12 @@ fun SettingsScreen(
                 onClick = { showHelpFeedbackDialog = true }
             )
             SettingsItem(
+                icon = Icons.Rounded.GridView,
+                title = stringResource(R.string.settings_more_apps),
+                subtitle = stringResource(R.string.settings_more_apps_desc),
+                onClick = { showMoreAppsDialog = true }
+            )
+            SettingsItem(
                 icon = Icons.Rounded.Favorite,
                 title = stringResource(R.string.settings_donate),
                 subtitle = stringResource(R.string.settings_donate_desc),
@@ -662,7 +669,7 @@ fun SettingsScreen(
         HelpFeedbackDialog(
             onDismiss = { showHelpFeedbackDialog = false },
             onTelegramClick = {
-                val username = "Rayy_TG"
+                val username = "rayylabs"
                 val telegramAppIntent = Intent(Intent.ACTION_VIEW, "tg://resolve?domain=$username".toUri()).apply {
                     setPackage("org.telegram.messenger")
                 }
@@ -686,7 +693,7 @@ fun SettingsScreen(
             },
             onEmailClick = {
                 val intent = Intent(Intent.ACTION_SENDTO).apply {
-                    data = "mailto:support.rayapps@gmail.com".toUri()
+                    data = "mailto:support.rayylabs@gmail.com".toUri()
                     putExtra(Intent.EXTRA_SUBJECT, "Feedback: FlowBytes (v$versionName)")
                 }
                 val activity = context.findActivity()
@@ -708,6 +715,41 @@ fun SettingsScreen(
                 try {
                     targetContext.startActivity(intent)
                 } catch (_: Exception) {}
+            }
+        )
+    }
+
+    if (showMoreAppsDialog) {
+        MoreAppsDialog(
+            onDismiss = { showMoreAppsDialog = false },
+            onAppClick = { app ->
+                if (app.isSoon) {
+                    android.widget.Toast.makeText(
+                        context,
+                        context.getString(R.string.msg_app_in_development),
+                        android.widget.Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    val uri = "market://details?id=${app.packageName}".toUri()
+                    val intent = Intent(Intent.ACTION_VIEW, uri)
+                    val activity = context.findActivity()
+                    val targetContext = activity ?: context
+                    if (targetContext !is Activity) {
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    }
+                    try {
+                        targetContext.startActivity(intent)
+                    } catch (_: Exception) {
+                        val webUrl = app.playStoreUrl ?: "https://play.google.com/store/apps/details?id=${app.packageName}"
+                        val webIntent = Intent(Intent.ACTION_VIEW, webUrl.toUri())
+                        if (targetContext !is Activity) {
+                            webIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        }
+                        try {
+                            targetContext.startActivity(webIntent)
+                        } catch (_: Exception) {}
+                    }
+                }
             }
         )
     }

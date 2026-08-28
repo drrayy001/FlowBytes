@@ -157,15 +157,29 @@
     <string name="label_share_via">共有方法</string>
     <string name="share_text_body">FlowBytesをチェック！正確にデータ使用量を追跡できます： https://play.google.com/store/apps/details?id=%1$s</string>
     <string name="settings_help_feedback">ヘルプとフィードバック</string>
-    <string name="settings_help_feedback_desc">Telegramまたはメールで問い合わせる</string>
+    <string name="settings_help_feedback_desc">Telegramで最新情報を受け取るか、メールでお問い合わせ</string>
     <string name="option_telegram">Telegram</string>
-    <string name="desc_telegram">開発者に直接メッセージを送る</string>
+    <string name="desc_telegram">Telegramで最新情報を受け取る</string>
     <string name="option_email">メール</string>
     <string name="desc_email">開発者にメールを送る</string>
     <string name="option_report_bug">バグを報告 / 機能を提案</string>
     <string name="desc_report_bug">GitHub Issuesを開いてバグの報告や機能のリクエストを行う</string>
     <string name="settings_donate">寄付</string>
     <string name="settings_donate_desc">広告なし・オープンソースの継続にご協力ください</string>
+    <string name="settings_more_apps">その他のアプリ</string>
+    <string name="settings_more_apps_desc">開発者による他のアプリを見る</string>
+    <string name="dialog_more_apps_title">その他のアプリ</string>
+    <string name="dialog_more_apps_desc">生産性とカスタマイズのために作られたツールを見る</string>
+    <string name="app_mookup_title">Mookup</string>
+    <string name="app_mookup_desc">デバイスモックアップ＆美しいスクリーンショット作成</string>
+    <string name="app_glancebar_title">GlanceBar</string>
+    <string name="app_glancebar_desc">動的通知ウィジェット＆ステータスバーツール</string>
+    <string name="app_texpander_title">Texpander</string>
+    <string name="app_texpander_desc">スマートテキスト展開＆タイピング効率化ツール</string>
+    <string name="badge_in_development">開発中</string>
+    <string name="msg_app_in_development">Mookupは現在開発中です。お楽しみに！</string>
+    <string name="btn_view_app">表示</string>
+    <string name="btn_soon_app">近日公開</string>
     <string name="dialog_donate_title">FlowBytesをサポート</string>
     <string name="label_donate_amount_1">少額のチップ ($1.00)</string>
     <string name="label_donate_amount_2_5">プロジェクトサポーター ($2.50)</string>
@@ -333,7 +347,7 @@
     <string name="whats_new_reset_day_desc">カスタムの請求サイクルをサポートしました。使用量がリセットされる日を自由に選択できます。</string>
     <string name="feedback_email_subject">FlowBytes フィードバック - 星 %1$d 個</string>
 
-    <string name="legal_privacy_policy">プライバシーポリシー\n発効日：2026年4月29日\n\nFlowBytes（以下「本アプリ」）の開発者は、本アプリを無料で提供します。本アプリは現状有姿で提供され、いかなる保証もありません。\n\n1. 情報の収集と利用\nFlowBytesは、デバイスのネットワーク速度とデータ使用量（Wi-Fiおよびモバイル通信）を監視し、インターネット利用の管理を支援します。監視、データ使用量の計算、およびブロックのアクションはすべてデバイス内でローカルに実行されます。以下を含む個人データを収集、保存、または送信することはありません：\n- 閲覧履歴\n- ネットワーク通信の内容\n- IPアドレス\n- 個人を特定できる情報\n\n2. 必要な権限\n正しく機能するために、本アプリは以下の権限を必要とします：\n- 使用状況へのアクセス（ネットワーク統計）：NetworkStatsManagerおよびTrafficStatsを介してネットワーク使用統計にアクセスし、ダウンロード/アップロード速度の計算およびアプリごとのデータ使用量を追跡するために使用します。\n- フォアグラウンドサービス：通知バーにリアルタイムのネットワーク速度を表示し、継続的な監視を確保するために、バックグラウンドでサービスを実行することを許可します。\n- VPNサービス（ローカルVPN）：制限を超えたアプリのインターネットアクセスを管理するためにローカルVPNを使用します。このVPNは100%ローカルであり、通信データがデバイスの外に出ることや、開発者が傍受することはありません。\n\nこれらの権限を通じてアクセスされるすべてのデータはデバイス内に留まり、本アプリ内の監視および制御機能を提供するためだけに利用されます。\n\n3. 第三者サービス\n本アプリは、個人を特定するために利用される情報を収集する第三者サービス、分析ツール、または広告ネットワークを使用していません。\n\n4. セキュリティ\nすべてのデータ処理はデバイス内でローカルに実行されるため、開発者側からのデータ漏洩のリスクは最小限です。ただし、電子的な保存方法やインターネット経由の送信方法に完全に安全なものはなく、絶対的なセキュリティを保証することはできません。\n\n5. 子供のプライバシー\n本サービスは13歳未満の方を対象としていません。13歳未満の子供から個人を特定できる情報を意図的に収集することはありません。\n\n6. プライバシーポリシーの変更\nプライバシーポリシーは随時更新されることがあります。変更はこのページに掲載されます。定期的にこのページを確認することをお勧めします。\n\n7. お問い合わせ\n本プライバシーポリシーに関するご質問やご提案がある場合は、以下までご連絡ください：\nメール： support.rayapps@gmail.com</string>
+    <string name="legal_privacy_policy">プライバシーポリシー\n発効日：2026年4月29日\n\nFlowBytes（以下「本アプリ」）の開発者は、本アプリを無料で提供します。本アプリは現状有姿で提供され、いかなる保証もありません。\n\n1. 情報の収集と利用\nFlowBytesは、デバイスのネットワーク速度とデータ使用量（Wi-Fiおよびモバイル通信）を監視し、インターネット利用の管理を支援します。監視、データ使用量の計算、およびブロックのアクションはすべてデバイス内でローカルに実行されます。以下を含む個人データを収集、保存、または送信することはありません：\n- 閲覧履歴\n- ネットワーク通信の内容\n- IPアドレス\n- 個人を特定できる情報\n\n2. 必要な権限\n正しく機能するために、本アプリは以下の権限を必要とします：\n- 使用状況へのアクセス（ネットワーク統計）：NetworkStatsManagerおよびTrafficStatsを介してネットワーク使用統計にアクセスし、ダウンロード/アップロード速度の計算およびアプリごとのデータ使用量を追跡するために使用します。\n- フォアグラウンドサービス：通知バーにリアルタイムのネットワーク速度を表示し、継続的な監視を確保するために、バックグラウンドでサービスを実行することを許可します。\n- VPNサービス（ローカルVPN）：制限を超えたアプリのインターネットアクセスを管理するためにローカルVPNを使用します。このVPNは100%ローカルであり、通信データがデバイスの外に出ることや、開発者が傍受することはありません。\n\nこれらの権限を通じてアクセスされるすべてのデータはデバイス内に留まり、本アプリ内の監視および制御機能を提供するためだけに利用されます。\n\n3. 第三者サービス\n本アプリは、個人を特定するために利用される情報を収集する第三者サービス、分析ツール、または広告ネットワークを使用していません。\n\n4. セキュリティ\nすべてのデータ処理はデバイス内でローカルに実行されるため、開発者側からのデータ漏洩のリスクは最小限です。ただし、電子的な保存方法やインターネット経由の送信方法に完全に安全なものはなく、絶対的なセキュリティを保証することはできません。\n\n5. 子供のプライバシー\n本サービスは13歳未満の方を対象としていません。13歳未満の子供から個人を特定できる情報を意図的に収集することはありません。\n\n6. プライバシーポリシーの変更\nプライバシーポリシーは随時更新されることがあります。変更はこのページに掲載されます。定期的にこのページを確認することをお勧めします。\n\n7. お問い合わせ\n本プライバシーポリシーに関するご質問やご提案がある場合は、以下までご連絡ください：\nメール： support.rayylabs@gmail.com</string>
     <string name="legal_terms_conditions">利用規約\n\n1. 規約への同意\nFlowBytesを利用することで、本規約に同意したものとみなされます。同意いただけない場合は、アプリを利用しないでください。\n\n2. サービス免責事項\nFlowBytesは情報提供を目的としてネットワーク統計を提供します。正確を期しておりますが、速度計測やデータ使用量の計算は推定値であり、通信事業者の公式な記録とは異なる場合があります。\n\n3. バッテリーとパフォーマンス\n本アプリは通信監視のためにバックグラウンドで動作します。効率化されていますが、バッテリー消費にわずかな影響を与える可能性があります。\n\n4. 責任の制限\n本アプリの利用に起因するデータの超過、データの紛失、またはデバイスの問題について、開発者は一切の責任を負いません。</string>
     <string name="legal_licenses">オープンソースライセンス\n\n- Jetpack Compose: Apache License 2.0\n- Kotlin Coroutines: Apache License 2.0\n- Android Jetpack Libraries (Room, DataStore, Lifecycle): Apache License 2.0\n- Material Components for Android: Apache License 2.0\n- Kotlin Standard Library: Apache License 2.0\n\n本ソフトウェアは、いかなる保証もなく「現状有姿」で提供されます。</string>
 

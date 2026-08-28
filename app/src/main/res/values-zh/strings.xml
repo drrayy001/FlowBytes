@@ -157,15 +157,29 @@
     <string name="label_share_via">分享方式</string>
     <string name="share_text_body">向您推荐 FlowBytes！它可以帮您精准监控和管理您的网络流量使用：https://play.google.com/store/apps/details?id=%1$s</string>
     <string name="settings_help_feedback">帮助与反馈</string>
-    <string name="settings_help_feedback_desc">通过 Telegram 或电子邮件联系我们</string>
+    <string name="settings_help_feedback_desc">在 Telegram 获取最新动态或通过电子邮件联系我们</string>
     <string name="option_telegram">Telegram</string>
-    <string name="desc_telegram">直接向开发者发送消息</string>
+    <string name="desc_telegram">在 Telegram 获取最新动态</string>
     <string name="option_email">电子邮件</string>
     <string name="desc_email">向开发者发送电子邮件</string>
     <string name="option_report_bug">报告错误 / 建议功能</string>
     <string name="desc_report_bug">打开 GitHub Issues 以报告错误或请求新功能</string>
     <string name="settings_donate">赞助支持</string>
     <string name="settings_donate_desc">赞助我们以支持 FlowBytes 保持无广告且完全开源</string>
+    <string name="settings_more_apps">更多应用</string>
+    <string name="settings_more_apps_desc">探索开发者的其他应用程序</string>
+    <string name="dialog_more_apps_title">更多应用</string>
+    <string name="dialog_more_apps_desc">探索更多专为高效与个性化定制打造的实用工具</string>
+    <string name="app_mookup_title">Mookup</string>
+    <string name="app_mookup_desc">设备样机模型与精美截图生成工具</string>
+    <string name="app_glancebar_title">GlanceBar</string>
+    <string name="app_glancebar_desc">灵动通知小组件与状态栏工具</string>
+    <string name="app_texpander_title">Texpander</string>
+    <string name="app_texpander_desc">智能文本扩展与高效输入生产力工具</string>
+    <string name="badge_in_development">开发中</string>
+    <string name="msg_app_in_development">Mookup 目前正在积极开发中，敬请期待！</string>
+    <string name="btn_view_app">查看</string>
+    <string name="btn_soon_app">即将推出</string>
     <string name="dialog_donate_title">赞助 FlowBytes</string>
     <string name="label_donate_amount_1">微薄支持 ($1.00)</string>
     <string name="label_donate_amount_2_5">项目支持者 ($2.50)</string>
@@ -333,7 +347,7 @@
     <string name="whats_new_reset_day_desc">支持自定义的每月月结账日。自由选择当月流量统计计费周期的重置日期。</string>
     <string name="feedback_email_subject">FlowBytes 反馈 - %1$d 星评级</string>
 
-    <string name="legal_privacy_policy" formatted="false">隐私政策\n生效日期：2026年4月29日\n\n我，FlowBytes（下称“本应用”）的开发者，免费提供本应用。本应用按“原样”提供，且不提供任何形式的担保或保证。\n\n1. 信息收集与使用\nFlowBytes 会监控您设备的网络速度和流量使用情况（Wi-Fi 和蜂窝网络），以帮助您掌控网络。所有监控、流量计算以及拦截操作均在您的设备本地处理。我们绝对不会收集、存储或传输您的任何个人数据，包括：\n- 网页浏览历史记录\n- 网络流量传输内容\n- IP 地址\n- 任何其他个人身份信息\n\n2. 所需的特殊权限\n为保证功能正常运作，本应用需要您授予以下特殊权限：\n- 应用使用情况访问权限（网络状态统计）：用于访问系统底层的流量使用情况数据（通过 NetworkStatsManager 和 TrafficStats），以此计算下载/上传速度并按应用统计每日/每月的流量消耗数据。\n- 前台服务权限：允许本应用在后台运行系统服务，以便在系统通知栏中实时刷新网络速度指示器并维持连续的流量监控。\n- VPN 服务权限（本地虚拟网络）：FlowBytes 会使用系统 VPN 框架在本地建立流量拦截服务，以便拦截已超出限额的网络流量访问。此 VPN 服务 100% 在您设备本地独立运行；流量绝不会上传至外部，我们也绝不会拦截窃听您的隐私内容。\n\n通过上述权限访问的所有数据都将安全地保留在您的设备本地，并且仅用于提供本应用内置的监控与控制功能。\n\n3. 第三方服务与 SDK\n本应用不接入任何可能收集您的个人身份信息的第三方数据分析服务、广告联盟 SDK 或推送跟踪组件。\n\n4. 数据安全保障\n由于所有的流量计算和拦截都完全在您设备本地独立完成，因此我们这边不存在任何服务器端泄露数据的隐私风险。但考虑到互联网和电子存储环境的局限性，我们无法做出绝对零风险的数据安全承诺。\n\n5. 儿童隐私保护\n本应用不面向 13 岁以下的儿童。我们绝不会有意收集 13 岁以下儿童的任何个人身份信息。\n\n6. 隐私政策的更新\n我们可能会随时更新本隐私政策。任何更新都将在此页面公布。建议您定期查看此页面以了解最新的隐私条款。\n\n7. 联系我们\n如果您对本隐私政策有任何疑问或改进建议，可以通过以下方式与我们取得联系：\n电子邮件：support.rayapps@gmail.com</string>
+    <string name="legal_privacy_policy" formatted="false">隐私政策\n生效日期：2026年4月29日\n\n我，FlowBytes（下称“本应用”）的开发者，免费提供本应用。本应用按“原样”提供，且不提供任何形式的担保或保证。\n\n1. 信息收集与使用\nFlowBytes 会监控您设备的网络速度和流量使用情况（Wi-Fi 和蜂窝网络），以帮助您掌控网络。所有监控、流量计算以及拦截操作均在您的设备本地处理。我们绝对不会收集、存储或传输您的任何个人数据，包括：\n- 网页浏览历史记录\n- 网络流量传输内容\n- IP 地址\n- 任何其他个人身份信息\n\n2. 所需的特殊权限\n为保证功能正常运作，本应用需要您授予以下特殊权限：\n- 应用使用情况访问权限（网络状态统计）：用于访问系统底层的流量使用情况数据（通过 NetworkStatsManager 和 TrafficStats），以此计算下载/上传速度并按应用统计每日/每月的流量消耗数据。\n- 前台服务权限：允许本应用在后台运行系统服务，以便在系统通知栏中实时刷新网络速度指示器并维持连续的流量监控。\n- VPN 服务权限（本地虚拟网络）：FlowBytes 会使用系统 VPN 框架在本地建立流量拦截服务，以便拦截已超出限额的网络流量访问。此 VPN 服务 100% 在您设备本地独立运行；流量绝不会上传至外部，我们也绝不会拦截窃听您的隐私内容。\n\n通过上述权限访问的所有数据都将安全地保留在您的设备本地，并且仅用于提供本应用内置的监控与控制功能。\n\n3. 第三方服务与 SDK\n本应用不接入任何可能收集您的个人身份信息的第三方数据分析服务、广告联盟 SDK 或推送跟踪组件。\n\n4. 数据安全保障\n由于所有的流量计算和拦截都完全在您设备本地独立完成，因此我们这边不存在任何服务器端泄露数据的隐私风险。但考虑到互联网和电子存储环境的局限性，我们无法做出绝对零风险的数据安全承诺。\n\n5. 儿童隐私保护\n本应用不面向 13 岁以下的儿童。我们绝不会有意收集 13 岁以下儿童的任何个人身份信息。\n\n6. 隐私政策的更新\n我们可能会随时更新本隐私政策。任何更新都将在此页面公布。建议您定期查看此页面以了解最新的隐私条款。\n\n7. 联系我们\n如果您对本隐私政策有任何疑问或改进建议，可以通过以下方式与我们取得联系：\n电子邮件：support.rayylabs@gmail.com</string>
     <string name="legal_terms_conditions">服务条款\n\n1. 条款的接受与同意\n一旦您开始使用 FlowBytes，即表示您已阅读并完全同意遵守本服务条款。如果您不同意这些条款，请立即停止使用并卸载本应用。\n\n2. 服务与免责声明\nFlowBytes 提供的网速统计和流量消耗数据仅供参考。虽然我们极力确保统计数据的准确性，但网速测量和流量计算可能会受系统广播延迟等因素影响而存在一定偏差，其结果不能作为与您的运营商官方账单对账的最终凭据。\n\n3. 电池能耗与整机性能\n本应用需要运行后台监控服务来测量网络带宽。虽然我们已对后台服务运行时的功耗做出了最大程度的算法优化，但在部分设备上它仍可能会对电池能耗造成极其细微的影响。\n\n4. 责任限制与索赔免除\n对于因使用本应用（或因其流量统计存在偏差等原因）而造成的任何超出套餐外的额外扣费、数据丢失或设备故障，开发者概不承担任何直接或间接的赔偿责任。</string>
     <string name="legal_licenses">开源许可声明\n\n- Jetpack Compose: Apache License 2.0\n- Kotlin Coroutines: Apache License 2.0\n- Android Jetpack Libraries (Room, DataStore, Lifecycle): Apache License 2.0\n- Material Components for Android: Apache License 2.0\n- Kotlin Standard Library: Apache License 2.0\n\n本软件按“原样”提供，不提供任何明示或暗示的保证。</string>
 

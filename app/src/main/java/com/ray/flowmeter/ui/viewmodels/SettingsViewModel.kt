@@ -65,6 +65,12 @@ class SettingsViewModel(
     val useAmoled: StateFlow<Boolean> = repository.useAmoled
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), initialValue = initialAmoled)
 
+    val themeTransitionKind: StateFlow<String> = repository.themeTransitionKind
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), "WIPE_RIGHT")
+
+    val screenTransitionKind: StateFlow<String> = repository.screenTransitionKind
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), "FADE")
+
     val showNotification: StateFlow<Boolean> = repository.showNotification
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), initialValue = true)
 
@@ -164,6 +170,18 @@ class SettingsViewModel(
     fun setUseAmoled(enabled: Boolean) {
         viewModelScope.launch {
             repository.setUseAmoled(enabled)
+        }
+    }
+
+    fun setThemeTransitionKind(kind: String) {
+        viewModelScope.launch {
+            repository.setThemeTransitionKind(kind)
+        }
+    }
+
+    fun setScreenTransitionKind(kind: String) {
+        viewModelScope.launch {
+            repository.setScreenTransitionKind(kind)
         }
     }
 

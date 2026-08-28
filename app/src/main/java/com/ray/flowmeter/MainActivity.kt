@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -52,6 +53,8 @@ import com.ray.flowmeter.ui.screens.Destination
 import com.ray.flowmeter.ui.screens.MainScreen
 import com.ray.flowmeter.ui.screens.OnboardingScreen
 import com.ray.flowmeter.ui.theme.FlowMeterTheme
+import com.ray.flowmeter.ui.theme.ThemeTransitionContainer
+import com.ray.flowmeter.ui.theme.ThemeTransitionKind
 import com.ray.flowmeter.ui.viewmodels.AlertsViewModel
 import com.ray.flowmeter.ui.viewmodels.AppLimitsViewModel
 import com.ray.flowmeter.ui.viewmodels.AppUsageViewModel
@@ -132,7 +135,31 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
+
+        splashScreen.setOnExitAnimationListener { splashScreenViewProvider ->
+            val iconView = splashScreenViewProvider.iconView
+            val splashView = splashScreenViewProvider.view
+
+            iconView.animate()
+                .scaleX(1.15f)
+                .scaleY(1.15f)
+                .alpha(0f)
+                .setDuration(250L)
+                .setInterpolator(android.view.animation.AccelerateInterpolator())
+                .start()
+
+            splashView.animate()
+                .alpha(0f)
+                .setDuration(250L)
+                .setInterpolator(android.view.animation.AccelerateInterpolator())
+                .withEndAction {
+                    splashScreenViewProvider.remove()
+                }
+                .start()
+        }
+
         // Lay out UI components edge-to-edge behind system status/navigation bars.
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
@@ -414,140 +441,144 @@ class MainActivity : ComponentActivity() {
                             }
                         }
 
-                        FlowMeterTheme(
-                            themeMode = themeMode,
-                            useMaterialYou = useMaterialYou,
-                            useAmoled = useAmoled,
-                            accentColor = accentColor,
+                        ThemeTransitionContainer(
+                            defaultKind = ThemeTransitionKind.WIPE_RIGHT
                         ) {
-                            androidx.compose.material3.Surface(
-                                modifier = Modifier.fillMaxSize(),
-                                color = androidx.compose.material3.MaterialTheme.colorScheme.background
+                            FlowMeterTheme(
+                                themeMode = themeMode,
+                                useMaterialYou = useMaterialYou,
+                                useAmoled = useAmoled,
+                                accentColor = accentColor,
                             ) {
-                                if (onboardingCompleted == true) {
-                                    val (currentIntent, setCurrentIntent) = remember { mutableStateOf(intent) }
+                                androidx.compose.material3.Surface(
+                                    modifier = Modifier.fillMaxSize(),
+                                    color = androidx.compose.material3.MaterialTheme.colorScheme.background
+                                ) {
+                                    if (onboardingCompleted == true) {
+                                        val (currentIntent, setCurrentIntent) = remember { mutableStateOf(intent) }
 
-                                    // Listen for resume lifecycle events to update current intent (e.g. user clicked notification while app is running).
-                                    val lifecycleOwner = LocalLifecycleOwner.current
-                                    DisposableEffect(lifecycleOwner) {
-                                        val observer = LifecycleEventObserver { _, event ->
-                                            if (event == Lifecycle.Event.ON_RESUME) {
-                                                if (currentIntent != intent) {
-                                                    setCurrentIntent(intent)
-                                                }
-                                            }
-                                        }
-                                        lifecycleOwner.lifecycle.addObserver(observer)
-                                        onDispose {
-                                            lifecycleOwner.lifecycle.removeObserver(observer)
-                                        }
-                                    }
-
-                                    // --- Notification Extra / Deep Link Handling ---
-                                    val navigateToAlerts = currentIntent?.getBooleanExtra(NetworkMonitoringService.EXTRA_NAVIGATE_TO_ALERTS, false) ?: false
-                                    val navigateToLimits = currentIntent?.getBooleanExtra(NetworkMonitoringService.EXTRA_NAVIGATE_TO_LIMITS, false) ?: false
-
-                                    val initialDestination = when {
-                                        navigateToLimits -> Destination.Limits
-                                        navigateToAlerts -> Destination.Alerts
-                                        else -> Destination.Home
-                                    }
-
-                                    val muteAppName = currentIntent?.getStringExtra(NetworkMonitoringService.EXTRA_MUTE_APP_NAME)
-                                    val dismissNotificationId = currentIntent?.getIntExtra(NetworkMonitoringService.EXTRA_DISMISS_NOTIFICATION_ID, -1) ?: -1
-                                    val isIgnoreAction = currentIntent?.action == NetworkMonitoringService.ACTION_IGNORE_APP
-
-                                    // Process incoming intent actions (such as clicking "Ignore App" directly from an alert notification).
-                                    LaunchedEffect(currentIntent) {
-                                        if (muteAppName != null) {
-                                            if (isIgnoreAction) {
-                                                if (dismissNotificationId != -1) {
-                                                    try {
-                                                        val manager = getSystemService(android.app.NotificationManager::class.java)
-                                                        manager?.cancel(dismissNotificationId)
-                                                    } catch (e: Exception) {
-                                                        Log.e("MainActivity", "Failed to cancel notification", e)
+                                        // Listen for resume lifecycle events to update current intent (e.g. user clicked notification while app is running).
+                                        val lifecycleOwner = LocalLifecycleOwner.current
+                                        DisposableEffect(lifecycleOwner) {
+                                            val observer = LifecycleEventObserver { _, event ->
+                                                if (event == Lifecycle.Event.ON_RESUME) {
+                                                    if (currentIntent != intent) {
+                                                        setCurrentIntent(intent)
                                                     }
                                                 }
                                             }
-                                            alertsViewModel.onMuteRequested(muteAppName)
-
-                                            // Clear extras to avoid re-triggering the action if the activity is recreated.
-                                            intent.removeExtra(NetworkMonitoringService.EXTRA_MUTE_APP_NAME)
-                                            intent.removeExtra(NetworkMonitoringService.EXTRA_DISMISS_NOTIFICATION_ID)
-                                            if (intent.action == NetworkMonitoringService.ACTION_IGNORE_APP) {
-                                                intent.action = null
-                                            }
-
-                                            setCurrentIntent(null)
-                                        }
-                                    }
-
-                                    MainScreen(
-                                        homeViewModel = homeViewModel,
-                                        appUsageViewModel = appUsageViewModel,
-                                        alertsViewModel = alertsViewModel,
-                                        appLimitsViewModel = appLimitsViewModel,
-                                        settingsViewModel = settingsViewModel,
-                                        initialDestination = initialDestination,
-                                        onCheckForUpdates = {
-                                            Toast.makeText(context, R.string.toast_checking_updates, Toast.LENGTH_SHORT).show()
-                                            appUpdateHelper.checkForUpdates { result ->
-                                                when (result) {
-                                                    is UpdateResult.PlayStoreUpdateAvailable -> {
-                                                        @Suppress("DEPRECATION")
-                                                        appUpdateManager?.startUpdateFlowForResult(
-                                                            result.appUpdateInfo,
-                                                            AppUpdateType.FLEXIBLE,
-                                                            this@MainActivity,
-                                                            UPDATE_REQUEST_CODE
-                                                        )
-                                                    }
-                                                    is UpdateResult.GitHubUpdateAvailable -> {
-                                                        setGitHubUpdate(result)
-                                                    }
-                                                    is UpdateResult.NoUpdateAvailable -> {
-                                                        Toast.makeText(context, R.string.toast_app_up_to_date, Toast.LENGTH_SHORT).show()
-                                                    }
-                                                    is UpdateResult.Error -> {
-                                                        Toast.makeText(context, R.string.toast_update_check_failed, Toast.LENGTH_SHORT).show()
-                                                    }
-                                                }
+                                            lifecycleOwner.lifecycle.addObserver(observer)
+                                            onDispose {
+                                                lifecycleOwner.lifecycle.removeObserver(observer)
                                             }
                                         }
-                                    )
 
-                                    if (showChangelog) {
-                                        ChangelogDialog { setShowChangelog(false) }
-                                    }
+                                        // --- Notification Extra / Deep Link Handling ---
+                                        val navigateToAlerts = currentIntent?.getBooleanExtra(NetworkMonitoringService.EXTRA_NAVIGATE_TO_ALERTS, false) ?: false
+                                        val navigateToLimits = currentIntent?.getBooleanExtra(NetworkMonitoringService.EXTRA_NAVIGATE_TO_LIMITS, false) ?: false
 
-                                    if (gitHubUpdate != null) {
-                                        UpdateDialog(
-                                            tagName = gitHubUpdate.tag,
-                                            releaseNotes = gitHubUpdate.releaseNotes,
-                                            onDismiss = { setGitHubUpdate(null) },
-                                            onIgnore = {
-                                                lifecycleScope.launch {
-                                                    repository.setIgnoredUpdateVersion(gitHubUpdate.tag)
+                                        val initialDestination = when {
+                                            navigateToLimits -> Destination.Limits
+                                            navigateToAlerts -> Destination.Alerts
+                                            else -> Destination.Home
+                                        }
+
+                                        val muteAppName = currentIntent?.getStringExtra(NetworkMonitoringService.EXTRA_MUTE_APP_NAME)
+                                        val dismissNotificationId = currentIntent?.getIntExtra(NetworkMonitoringService.EXTRA_DISMISS_NOTIFICATION_ID, -1) ?: -1
+                                        val isIgnoreAction = currentIntent?.action == NetworkMonitoringService.ACTION_IGNORE_APP
+
+                                        // Process incoming intent actions (such as clicking "Ignore App" directly from an alert notification).
+                                        LaunchedEffect(currentIntent) {
+                                            if (muteAppName != null) {
+                                                if (isIgnoreAction) {
+                                                    if (dismissNotificationId != -1) {
+                                                        try {
+                                                            val manager = getSystemService(android.app.NotificationManager::class.java)
+                                                            manager?.cancel(dismissNotificationId)
+                                                        } catch (e: Exception) {
+                                                            Log.e("MainActivity", "Failed to cancel notification", e)
+                                                        }
+                                                    }
                                                 }
-                                                setGitHubUpdate(null)
-                                            },
-                                            onUpdate = {
-                                                val updateIntent = Intent(Intent.ACTION_VIEW, Uri.parse(gitHubUpdate.downloadUrl))
-                                                try {
-                                                    startActivity(updateIntent)
-                                                } catch (_: Exception) {}
-                                                setGitHubUpdate(null)
+                                                alertsViewModel.onMuteRequested(muteAppName)
+
+                                                // Clear extras to avoid re-triggering the action if the activity is recreated.
+                                                intent.removeExtra(NetworkMonitoringService.EXTRA_MUTE_APP_NAME)
+                                                intent.removeExtra(NetworkMonitoringService.EXTRA_DISMISS_NOTIFICATION_ID)
+                                                if (intent.action == NetworkMonitoringService.ACTION_IGNORE_APP) {
+                                                    intent.action = null
+                                                }
+
+                                                setCurrentIntent(null)
+                                            }
+                                        }
+
+                                        MainScreen(
+                                            homeViewModel = homeViewModel,
+                                            appUsageViewModel = appUsageViewModel,
+                                            alertsViewModel = alertsViewModel,
+                                            appLimitsViewModel = appLimitsViewModel,
+                                            settingsViewModel = settingsViewModel,
+                                            initialDestination = initialDestination,
+                                            onCheckForUpdates = {
+                                                Toast.makeText(context, R.string.toast_checking_updates, Toast.LENGTH_SHORT).show()
+                                                appUpdateHelper.checkForUpdates { result ->
+                                                    when (result) {
+                                                        is UpdateResult.PlayStoreUpdateAvailable -> {
+                                                            @Suppress("DEPRECATION")
+                                                            appUpdateManager?.startUpdateFlowForResult(
+                                                                result.appUpdateInfo,
+                                                                AppUpdateType.FLEXIBLE,
+                                                                this@MainActivity,
+                                                                UPDATE_REQUEST_CODE
+                                                            )
+                                                        }
+                                                        is UpdateResult.GitHubUpdateAvailable -> {
+                                                            setGitHubUpdate(result)
+                                                        }
+                                                        is UpdateResult.NoUpdateAvailable -> {
+                                                            Toast.makeText(context, R.string.toast_app_up_to_date, Toast.LENGTH_SHORT).show()
+                                                        }
+                                                        is UpdateResult.Error -> {
+                                                            Toast.makeText(context, R.string.toast_update_check_failed, Toast.LENGTH_SHORT).show()
+                                                        }
+                                                    }
+                                                }
                                             }
                                         )
-                                    }
 
-                                } else {
-                                    OnboardingScreen(
-                                        onComplete = {
-                                            onboardingViewModel.completeOnboarding()
-                                        },
-                                    )
+                                        if (showChangelog) {
+                                            ChangelogDialog { setShowChangelog(false) }
+                                        }
+
+                                        if (gitHubUpdate != null) {
+                                            UpdateDialog(
+                                                tagName = gitHubUpdate.tag,
+                                                releaseNotes = gitHubUpdate.releaseNotes,
+                                                onDismiss = { setGitHubUpdate(null) },
+                                                onIgnore = {
+                                                    lifecycleScope.launch {
+                                                        repository.setIgnoredUpdateVersion(gitHubUpdate.tag)
+                                                    }
+                                                    setGitHubUpdate(null)
+                                                },
+                                                onUpdate = {
+                                                    val updateIntent = Intent(Intent.ACTION_VIEW, Uri.parse(gitHubUpdate.downloadUrl))
+                                                    try {
+                                                        startActivity(updateIntent)
+                                                    } catch (_: Exception) {}
+                                                    setGitHubUpdate(null)
+                                                }
+                                            )
+                                        }
+
+                                    } else {
+                                        OnboardingScreen(
+                                            onComplete = {
+                                                onboardingViewModel.completeOnboarding()
+                                            },
+                                        )
+                                    }
                                 }
                             }
                         }

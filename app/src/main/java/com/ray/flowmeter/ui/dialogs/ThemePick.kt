@@ -11,7 +11,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.layout.boundsInRoot
+import androidx.compose.ui.layout.onGloballyPositioned
 import com.ray.flowmeter.R
+import com.ray.flowmeter.ui.theme.LocalThemeTransition
 import com.ray.flowmeter.ui.theme.bounceClick
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -22,6 +26,7 @@ fun ThemeDialog(
     onSelect: (String) -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val themeTransition = LocalThemeTransition.current
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
@@ -50,12 +55,24 @@ fun ThemeDialog(
 
                 themeOptions.forEach { mode ->
                     val isSelected = currentTheme.equals(mode, ignoreCase = true)
+                    var itemCenter by remember { mutableStateOf(Offset.Zero) }
+
                     Surface(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 4.dp)
+                            .onGloballyPositioned { coordinates ->
+                                val bounds = coordinates.boundsInRoot()
+                                itemCenter = bounds.center
+                            }
                             .bounceClick {
-                                onSelect(mode)
+                                if (!isSelected) {
+                                    themeTransition.startTransition(origin = itemCenter) {
+                                        onSelect(mode)
+                                    }
+                                } else {
+                                    onSelect(mode)
+                                }
                                 onDismiss()
                             },
                         shape = RoundedCornerShape(20.dp),

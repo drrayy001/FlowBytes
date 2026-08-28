@@ -40,7 +40,12 @@ import kotlin.time.Duration.Companion.seconds
 import com.ray.flowmeter.R
 import com.ray.flowmeter.data.UserPreferencesRepository
 import com.ray.flowmeter.ui.screens.WidgetsScreen
+import com.ray.flowmeter.ui.theme.LocalThemeTransition
 import com.ray.flowmeter.ui.theme.StaggeredEntrance
+import com.ray.flowmeter.ui.theme.ThemeTransitionKind
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.layout.boundsInRoot
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.material3.adaptive.layout.calculatePaneScaffoldDirective
 import androidx.compose.material3.adaptive.navigation3.rememberListDetailSceneStrategy
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
@@ -103,6 +108,20 @@ fun MainScreen(
 
     val backStack = remember { mutableStateListOf(initialDestination) }
     val currentDestination = backStack.last()
+    val themeTransition = LocalThemeTransition.current
+
+    fun navigateTo(destination: Destination, origin: Offset? = null, onBeforeNav: (() -> Unit)? = null) {
+        if (currentDestination == destination) return
+        themeTransition.startTransition(
+            origin = origin,
+            kind = ThemeTransitionKind.FADE,
+            durationMs = 350
+        ) {
+            onBeforeNav?.invoke()
+            backStack.clear()
+            backStack.add(destination)
+        }
+    }
 
     var activeLayoutDestination by remember { mutableStateOf(initialDestination) }
     LaunchedEffect(currentDestination) {
@@ -211,11 +230,15 @@ fun MainScreen(
     LaunchedEffect(appLimitsViewModel.isPickerOpen) {
         if (appLimitsViewModel.isPickerOpen) {
             if (currentDestination != Destination.AppPicker) {
-                backStack.add(Destination.AppPicker)
+                themeTransition.startTransition(kind = ThemeTransitionKind.FADE, durationMs = 350) {
+                    backStack.add(Destination.AppPicker)
+                }
             }
         } else {
             if (currentDestination == Destination.AppPicker) {
-                backStack.removeLastOrNull()
+                themeTransition.startTransition(kind = ThemeTransitionKind.FADE, durationMs = 350) {
+                    backStack.removeLastOrNull()
+                }
             }
         }
     }
@@ -223,11 +246,15 @@ fun MainScreen(
     LaunchedEffect(homeViewModel.isWidgetsOpen) {
         if (homeViewModel.isWidgetsOpen) {
             if (currentDestination != Destination.Widgets) {
-                backStack.add(Destination.Widgets)
+                themeTransition.startTransition(kind = ThemeTransitionKind.FADE, durationMs = 350) {
+                    backStack.add(Destination.Widgets)
+                }
             }
         } else {
             if (currentDestination == Destination.Widgets) {
-                backStack.removeLastOrNull()
+                themeTransition.startTransition(kind = ThemeTransitionKind.FADE, durationMs = 350) {
+                    backStack.removeLastOrNull()
+                }
             }
         }
     }
@@ -247,7 +274,9 @@ fun MainScreen(
                     modifier = Modifier.graphicsLayer { alpha = navRailAlpha }
                 ) {
                     Spacer(modifier = Modifier.weight(1f))
+                    var railHomeCenter by remember { mutableStateOf(Offset.Zero) }
                     NavigationRailItem(
+                        modifier = Modifier.onGloballyPositioned { railHomeCenter = it.boundsInRoot().center },
                         icon = {
                             Icon(
                                 imageVector = if (activeLayoutDestination == Destination.Home) Icons.Filled.Home else Icons.Outlined.Home,
@@ -256,14 +285,11 @@ fun MainScreen(
                         },
                         label = { Text(stringResource(R.string.title_home), maxLines = 1, overflow = TextOverflow.Ellipsis) },
                         selected = activeLayoutDestination == Destination.Home,
-                        onClick = {
-                            if (currentDestination != Destination.Home) {
-                                backStack.clear()
-                                backStack.add(Destination.Home)
-                            }
-                        }
+                        onClick = { navigateTo(Destination.Home, railHomeCenter) }
                     )
+                    var railUsageCenter by remember { mutableStateOf(Offset.Zero) }
                     NavigationRailItem(
+                        modifier = Modifier.onGloballyPositioned { railUsageCenter = it.boundsInRoot().center },
                         icon = {
                             Icon(
                                 imageVector = if (activeLayoutDestination == Destination.Usage) Icons.Filled.Assessment else Icons.Outlined.Assessment,
@@ -272,14 +298,11 @@ fun MainScreen(
                         },
                         label = { Text(stringResource(R.string.label_usage), maxLines = 1, overflow = TextOverflow.Ellipsis) },
                         selected = activeLayoutDestination == Destination.Usage,
-                        onClick = {
-                            if (currentDestination != Destination.Usage) {
-                                backStack.clear()
-                                backStack.add(Destination.Usage)
-                            }
-                        }
+                        onClick = { navigateTo(Destination.Usage, railUsageCenter) }
                     )
+                    var railAlertsCenter by remember { mutableStateOf(Offset.Zero) }
                     NavigationRailItem(
+                        modifier = Modifier.onGloballyPositioned { railAlertsCenter = it.boundsInRoot().center },
                         icon = {
                             Icon(
                                 imageVector = if (activeLayoutDestination == Destination.Alerts) Icons.Filled.Notifications else Icons.Outlined.Notifications,
@@ -288,14 +311,11 @@ fun MainScreen(
                         },
                         label = { Text(stringResource(R.string.label_alerts), maxLines = 1, overflow = TextOverflow.Ellipsis) },
                         selected = activeLayoutDestination == Destination.Alerts,
-                        onClick = {
-                            if (currentDestination != Destination.Alerts) {
-                                backStack.clear()
-                                backStack.add(Destination.Alerts)
-                            }
-                        }
+                        onClick = { navigateTo(Destination.Alerts, railAlertsCenter) }
                     )
+                    var railLimitsCenter by remember { mutableStateOf(Offset.Zero) }
                     NavigationRailItem(
+                        modifier = Modifier.onGloballyPositioned { railLimitsCenter = it.boundsInRoot().center },
                         icon = {
                             Icon(
                                 imageVector = if (activeLayoutDestination == Destination.Limits) Icons.Filled.Security else Icons.Outlined.Security,
@@ -304,14 +324,11 @@ fun MainScreen(
                         },
                         label = { Text(stringResource(R.string.title_limits), maxLines = 1, overflow = TextOverflow.Ellipsis) },
                         selected = activeLayoutDestination == Destination.Limits,
-                        onClick = {
-                            if (currentDestination != Destination.Limits) {
-                                backStack.clear()
-                                backStack.add(Destination.Limits)
-                            }
-                        }
+                        onClick = { navigateTo(Destination.Limits, railLimitsCenter) }
                     )
+                    var railSettingsCenter by remember { mutableStateOf(Offset.Zero) }
                     NavigationRailItem(
+                        modifier = Modifier.onGloballyPositioned { railSettingsCenter = it.boundsInRoot().center },
                         icon = {
                             Icon(
                                 imageVector = if (activeLayoutDestination == Destination.Settings) Icons.Filled.Settings else Icons.Outlined.Settings,
@@ -320,12 +337,7 @@ fun MainScreen(
                         },
                         label = { Text(stringResource(R.string.title_settings), maxLines = 1, overflow = TextOverflow.Ellipsis) },
                         selected = activeLayoutDestination == Destination.Settings,
-                        onClick = {
-                            if (currentDestination != Destination.Settings) {
-                                backStack.clear()
-                                backStack.add(Destination.Settings)
-                            }
-                        }
+                        onClick = { navigateTo(Destination.Settings, railSettingsCenter) }
                     )
                     Spacer(modifier = Modifier.weight(1f))
                 }
@@ -389,9 +401,17 @@ fun MainScreen(
                                     )
 
                                     if (activeLayoutDestination == Destination.Home) {
+                                        var widgetsBtnCenter by remember { mutableStateOf(Offset.Zero) }
                                         IconButton(
+                                            modifier = Modifier.onGloballyPositioned { widgetsBtnCenter = it.boundsInRoot().center },
                                             onClick = {
-                                                homeViewModel.isWidgetsOpen = true
+                                                themeTransition.startTransition(
+                                                    origin = widgetsBtnCenter,
+                                                    kind = ThemeTransitionKind.FADE,
+                                                    durationMs = 350
+                                                ) {
+                                                    homeViewModel.isWidgetsOpen = true
+                                                }
                                             },
                                             colors = IconButtonDefaults.iconButtonColors(
                                                 containerColor = Color.Transparent
@@ -558,7 +578,9 @@ fun MainScreen(
                         containerColor = MaterialTheme.colorScheme.surfaceContainer,
                         modifier = Modifier.graphicsLayer { alpha = bottomBarAlpha }
                     ) {
+                    var navHomeCenter by remember { mutableStateOf(Offset.Zero) }
                     NavigationBarItem(
+                        modifier = Modifier.onGloballyPositioned { navHomeCenter = it.boundsInRoot().center },
                         icon = {
                             Icon(
                                 imageVector = if (activeLayoutDestination == Destination.Home) Icons.Filled.Home else Icons.Outlined.Home,
@@ -567,14 +589,11 @@ fun MainScreen(
                         },
                         label = { Text(stringResource(R.string.title_home), maxLines = 1, overflow = TextOverflow.Ellipsis) },
                         selected = activeLayoutDestination == Destination.Home,
-                        onClick = {
-                            if (currentDestination != Destination.Home) {
-                                backStack.clear()
-                                backStack.add(Destination.Home)
-                            }
-                        }
+                        onClick = { navigateTo(Destination.Home, navHomeCenter) }
                     )
+                    var navUsageCenter by remember { mutableStateOf(Offset.Zero) }
                     NavigationBarItem(
+                        modifier = Modifier.onGloballyPositioned { navUsageCenter = it.boundsInRoot().center },
                         icon = {
                             Icon(
                                 imageVector = if (activeLayoutDestination == Destination.Usage) Icons.Filled.Assessment else Icons.Outlined.Assessment,
@@ -583,14 +602,11 @@ fun MainScreen(
                         },
                         label = { Text(stringResource(R.string.label_usage), maxLines = 1, overflow = TextOverflow.Ellipsis) },
                         selected = activeLayoutDestination == Destination.Usage,
-                        onClick = {
-                            if (currentDestination != Destination.Usage) {
-                                backStack.clear()
-                                backStack.add(Destination.Usage)
-                            }
-                        }
+                        onClick = { navigateTo(Destination.Usage, navUsageCenter) }
                     )
+                    var navLimitsCenter by remember { mutableStateOf(Offset.Zero) }
                     NavigationBarItem(
+                        modifier = Modifier.onGloballyPositioned { navLimitsCenter = it.boundsInRoot().center },
                         icon = {
                             Icon(
                                 imageVector = if (activeLayoutDestination == Destination.Limits) Icons.Filled.Timer else Icons.Outlined.Timer,
@@ -599,14 +615,11 @@ fun MainScreen(
                         },
                         label = { Text(stringResource(R.string.label_plans), maxLines = 1, overflow = TextOverflow.Ellipsis) },
                         selected = activeLayoutDestination == Destination.Limits,
-                        onClick = {
-                            if (currentDestination != Destination.Limits) {
-                                backStack.clear()
-                                backStack.add(Destination.Limits)
-                            }
-                        }
+                        onClick = { navigateTo(Destination.Limits, navLimitsCenter) }
                     )
+                    var navAlertsCenter by remember { mutableStateOf(Offset.Zero) }
                     NavigationBarItem(
+                        modifier = Modifier.onGloballyPositioned { navAlertsCenter = it.boundsInRoot().center },
                         icon = {
                             Icon(
                                 imageVector = if (activeLayoutDestination == Destination.Alerts) Icons.Filled.Notifications else Icons.Outlined.Notifications,
@@ -615,14 +628,11 @@ fun MainScreen(
                         },
                         label = { Text(stringResource(R.string.label_alerts), maxLines = 1, overflow = TextOverflow.Ellipsis) },
                         selected = activeLayoutDestination == Destination.Alerts,
-                        onClick = {
-                            if (currentDestination != Destination.Alerts) {
-                                backStack.clear()
-                                backStack.add(Destination.Alerts)
-                            }
-                        }
+                        onClick = { navigateTo(Destination.Alerts, navAlertsCenter) }
                     )
+                    var navSettingsCenter by remember { mutableStateOf(Offset.Zero) }
                     NavigationBarItem(
+                        modifier = Modifier.onGloballyPositioned { navSettingsCenter = it.boundsInRoot().center },
                         icon = {
                             Icon(
                                 imageVector = if (activeLayoutDestination == Destination.Settings) Icons.Filled.Settings else Icons.Outlined.Settings,
@@ -631,12 +641,7 @@ fun MainScreen(
                         },
                         label = { Text(stringResource(R.string.title_settings), maxLines = 1, overflow = TextOverflow.Ellipsis) },
                         selected = activeLayoutDestination == Destination.Settings,
-                        onClick = {
-                            if (currentDestination != Destination.Settings) {
-                                backStack.clear()
-                                backStack.add(Destination.Settings)
-                            }
-                        }
+                        onClick = { navigateTo(Destination.Settings, navSettingsCenter) }
                     )
                 }
                 }
@@ -666,22 +671,55 @@ fun MainScreen(
 
                     when {
                         targetDest == Destination.Widgets || targetDest == Destination.AppPicker -> {
-                            (scaleIn(initialScale = 0.88f, animationSpec = tween(500, easing = EaseOutCubic)) +
-                             fadeIn(animationSpec = tween(400)) +
-                             slideInVertically(initialOffsetY = { it / 8 }, animationSpec = tween(500, easing = EaseOutCubic))
+                            (scaleIn(initialScale = 0.85f, animationSpec = tween(450, easing = EaseOutCubic)) +
+                             fadeIn(animationSpec = tween(350)) +
+                             slideInVertically(initialOffsetY = { it / 6 }, animationSpec = tween(450, easing = EaseOutCubic))
                             ).togetherWith(
-                                fadeOut(animationSpec = tween(400))
+                                scaleOut(targetScale = 0.95f, animationSpec = tween(350)) +
+                                fadeOut(animationSpec = tween(300))
                             )
                         }
                         initialDest == Destination.Widgets || initialDest == Destination.AppPicker -> {
-                            fadeIn(animationSpec = tween(400)) togetherWith (
-                                scaleOut(targetScale = 0.88f, animationSpec = tween(500, easing = EaseOutCubic)) +
-                                fadeOut(animationSpec = tween(400)) +
-                                slideOutVertically(targetOffsetY = { it / 8 }, animationSpec = tween(500, easing = EaseOutCubic))
+                            (fadeIn(animationSpec = tween(350)) +
+                             scaleIn(initialScale = 0.95f, animationSpec = tween(350))
+                            ).togetherWith(
+                                scaleOut(targetScale = 0.85f, animationSpec = tween(400, easing = EaseOutCubic)) +
+                                fadeOut(animationSpec = tween(300)) +
+                                slideOutVertically(targetOffsetY = { it / 6 }, animationSpec = tween(400, easing = EaseOutCubic))
                             )
                         }
                         else -> {
-                            fadeIn(animationSpec = tween(220)) togetherWith fadeOut(animationSpec = tween(220))
+                            val initIdx = when (initialDest) {
+                                Destination.Home -> 0
+                                Destination.Usage -> 1
+                                Destination.Limits -> 2
+                                Destination.Alerts -> 3
+                                Destination.Settings -> 4
+                                else -> 0
+                            }
+                            val targetIdx = when (targetDest) {
+                                Destination.Home -> 0
+                                Destination.Usage -> 1
+                                Destination.Limits -> 2
+                                Destination.Alerts -> 3
+                                Destination.Settings -> 4
+                                else -> 0
+                            }
+                            val isForward = targetIdx >= initIdx
+                            val sign = if (isForward) 1 else -1
+
+                            (slideInHorizontally(
+                                initialOffsetX = { sign * it / 5 },
+                                animationSpec = tween(350, easing = EaseOutCubic)
+                            ) + fadeIn(animationSpec = tween(280)) +
+                             scaleIn(initialScale = 0.96f, animationSpec = tween(350, easing = EaseOutCubic))
+                            ).togetherWith(
+                                slideOutHorizontally(
+                                    targetOffsetX = { -sign * it / 5 },
+                                    animationSpec = tween(350, easing = EaseOutCubic)
+                                ) + fadeOut(animationSpec = tween(250)) +
+                                scaleOut(targetScale = 0.96f, animationSpec = tween(350, easing = EaseOutCubic))
+                            )
                         }
                     }
                 },
@@ -690,22 +728,22 @@ fun MainScreen(
                         Destination.Home -> NavEntry(key) {
                             HomeScreen(
                                 viewModel = homeViewModel,
-                                onNavigateToUsage = { date ->
-                                    backStack.clear()
-                                    backStack.add(Destination.Usage)
-                                    appUsageViewModel.isViewingSystemApps = false
-                                    appUsageViewModel.loadAppUsageForDate(date.timeInMillis)
+                                onNavigateToUsage = { date, origin ->
+                                    navigateTo(Destination.Usage, origin) {
+                                        appUsageViewModel.isViewingSystemApps = false
+                                        appUsageViewModel.loadAppUsageForDate(date.timeInMillis)
+                                    }
                                 },
-                                onNavigateToTodayUsage = {
-                                    backStack.clear()
-                                    backStack.add(Destination.Usage)
-                                    appUsageViewModel.isViewingSystemApps = false
-                                    appUsageViewModel.loadAppUsageForDate(System.currentTimeMillis())
+                                onNavigateToTodayUsage = { origin ->
+                                    navigateTo(Destination.Usage, origin) {
+                                        appUsageViewModel.isViewingSystemApps = false
+                                        appUsageViewModel.loadAppUsageForDate(System.currentTimeMillis())
+                                    }
                                 },
-                                onNavigateToMonthUsage = {
-                                    backStack.clear()
-                                    backStack.add(Destination.Usage)
-                                    appUsageViewModel.isViewingSystemApps = false
+                                onNavigateToMonthUsage = { origin ->
+                                    navigateTo(Destination.Usage, origin) {
+                                        appUsageViewModel.isViewingSystemApps = false
+                                    }
                                 },
                                 modifier = Modifier.fillMaxSize().padding(lastStablePadding).nestedScroll(homeScrollBehavior.nestedScrollConnection)
                             )

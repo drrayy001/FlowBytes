@@ -18,18 +18,21 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.res.stringResource
-import androidx.core.graphics.toColorInt
-import com.ray.flowmeter.R
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.boundsInRoot
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.graphics.toColorInt
+import com.ray.flowmeter.R
+import com.ray.flowmeter.ui.theme.LocalThemeTransition
 import com.ray.flowmeter.ui.theme.StaggeredEntrance
 import com.ray.flowmeter.ui.theme.bounceClick
 import kotlin.math.*
@@ -42,6 +45,7 @@ fun AccentColorDialog(
     onSelect: (Long?) -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val themeTransition = LocalThemeTransition.current
     
     val initialHsv = remember(currentColor) {
         val hsv = FloatArray(3)
@@ -231,12 +235,18 @@ fun AccentColorDialog(
                 }
 
                 StaggeredEntrance(index = 4) {
+                    var btnCenter by remember { mutableStateOf(Offset.Zero) }
                     Surface(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(52.dp)
+                            .onGloballyPositioned { coordinates ->
+                                btnCenter = coordinates.boundsInRoot().center
+                            }
                             .bounceClick {
-                                onSelect(pickedColor.toArgb().toLong() and 0xFFFFFFFFL)
+                                themeTransition.startTransition(origin = btnCenter) {
+                                    onSelect(pickedColor.toArgb().toLong() and 0xFFFFFFFFL)
+                                }
                                 onDismiss()
                             },
                         shape = RoundedCornerShape(16.dp),

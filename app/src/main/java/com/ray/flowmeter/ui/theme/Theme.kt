@@ -426,49 +426,7 @@ fun StaggeredEntrance(
     delayStep: Int = 50,
     content: @Composable () -> Unit,
 ) {
-    val currentIndex = index ?: LocalStaggerIndex.current
-    var animateIn by rememberSaveable(currentIndex) { mutableStateOf(false) }
-
-    LaunchedEffect(currentIndex) {
-        if (!animateIn) {
-            // Cap the delay for items deep in a list to ensure they load quickly when scrolling
-            val cappedIndex = minOf(currentIndex, 6)
-            delay((cappedIndex * delayStep).toLong())
-            animateIn = true
-        }
-    }
-
-    val alpha by animateFloatAsState(
-        targetValue = if (animateIn) 1f else 0f,
-        animationSpec = tween(durationMillis = 500, easing = LinearOutSlowInEasing),
-        label = "bloomAlpha"
-    )
-
-    val scale by animateFloatAsState(
-        targetValue = if (animateIn) 1f else 0.95f,
-        animationSpec = premiumSpring(),
-        label = "bloomScale"
-    )
-
-    val contentBlock = @Composable {
-        Box(
-            modifier = Modifier.graphicsLayer {
-                this.alpha = alpha
-                this.scaleX = scale
-                this.scaleY = scale
-            }
-        ) {
-            content()
-        }
-    }
-
-    if (index == null) {
-        CompositionLocalProvider(LocalStaggerIndex provides currentIndex + 1) {
-            contentBlock()
-        }
-    } else {
-        contentBlock()
-    }
+    content()
 }
 
 fun Modifier.shimmer(

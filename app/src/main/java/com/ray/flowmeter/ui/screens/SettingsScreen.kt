@@ -28,7 +28,9 @@ import com.ray.flowmeter.R
 import com.ray.flowmeter.ui.components.SettingsGroup
 import com.ray.flowmeter.ui.components.SettingsItem
 import com.ray.flowmeter.ui.dialogs.*
+import com.ray.flowmeter.ui.theme.LocalThemeTransition
 import com.ray.flowmeter.ui.theme.ThemeMode
+import com.ray.flowmeter.ui.theme.ThemeTransitionKind
 import com.ray.flowmeter.ui.viewmodels.SettingsViewModel
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -65,6 +67,7 @@ fun SettingsScreen(
         }
     }
 
+    val themeTransition = LocalThemeTransition.current
     val monitoringEnabled by viewModel.monitoringEnabled.collectAsState()
     val themeMode by viewModel.themeMode.collectAsState()
     val useMaterialYou by viewModel.useMaterialYou.collectAsState()
@@ -236,7 +239,11 @@ fun SettingsScreen(
                 trailingContent = {
                     Switch(
                         checked = useMaterialYou,
-                        onCheckedChange = { viewModel.setUseMaterialYou(it) },
+                        onCheckedChange = { checked ->
+                            themeTransition.startTransition {
+                                viewModel.setUseMaterialYou(checked)
+                            }
+                        },
                         colors = switchColors,
                         thumbContent = { thumbContent(useMaterialYou) }
                     )
@@ -270,7 +277,11 @@ fun SettingsScreen(
                     trailingContent = {
                         Switch(
                             checked = useAmoled,
-                            onCheckedChange = { viewModel.setUseAmoled(it) },
+                            onCheckedChange = { checked ->
+                                themeTransition.startTransition {
+                                    viewModel.setUseAmoled(checked)
+                                }
+                            },
                             colors = switchColors,
                             thumbContent = { thumbContent(useAmoled) }
                         )

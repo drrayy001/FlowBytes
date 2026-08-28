@@ -21,6 +21,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.layout.boundsInRoot
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -39,8 +42,8 @@ object AppIcons {
     val Upload = Icons.Rounded.ArrowUpward
     val Wifi = Icons.Rounded.Wifi
     val Mobile = Icons.Rounded.SignalCellularAlt
-    val ChartMain = Icons.Rounded.BarChart
     val Filter = Icons.Rounded.FilterList
+    val ChartMain = Icons.Rounded.BarChart
 }
 
 enum class ChartType {
@@ -71,7 +74,7 @@ fun WeeklyBarChart(
     wifiData: List<Float>,
     yLabels: List<String>,
     selectedType: ChartType,
-    onDayClick: (Calendar) -> Unit,
+    onDayClick: (Calendar, Offset?) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val animationProgress = remember { Animatable(0f) }
@@ -162,14 +165,18 @@ fun WeeklyBarChart(
                 days.forEachIndexed { index, day ->
                     val isToday = day == todayStr
 
+                    var barCenter by remember { mutableStateOf(Offset.Zero) }
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
                             .fillMaxHeight()
                             .weight(1f)
                             .clip(RoundedCornerShape(12.dp))
+                            .onGloballyPositioned { coordinates ->
+                                barCenter = coordinates.boundsInRoot().center
+                            }
                             .bounceClick {
-                                dates.getOrNull(index)?.let { onDayClick(it) }
+                                dates.getOrNull(index)?.let { onDayClick(it, barCenter) }
                             }
                     ) {
                         Box(

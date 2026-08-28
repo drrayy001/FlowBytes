@@ -18,7 +18,6 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
-import android.graphics.drawable.Icon
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.graphics.withScale
@@ -105,8 +104,6 @@ class NetworkMonitoringService : Service() {
     private var hasAlertedCustomData = false
     private var hasAlertedCustomWifi = false
 
-    private var iconBitmap: Bitmap? = null
-    private var iconCanvas: Canvas? = null
     private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = Color.WHITE
         textAlign = Paint.Align.CENTER
@@ -246,9 +243,6 @@ class NetworkMonitoringService : Service() {
         lastTxBytes = TrafficStats.getTotalTxBytes()
         lastTime = System.currentTimeMillis()
 
-        iconBitmap = createBitmap(64, 64)
-        iconCanvas = Canvas(iconBitmap!!)
-
         val filter = IntentFilter().apply {
             addAction(Intent.ACTION_SCREEN_ON)
             addAction(Intent.ACTION_SCREEN_OFF)
@@ -331,8 +325,6 @@ class NetworkMonitoringService : Service() {
         isRunning = false
         monitorJob?.cancel()
         serviceJob.cancel()
-        iconBitmap?.recycle()
-        iconBitmap = null
         try {
             unregisterReceiver(screenStateReceiver)
         } catch (_: Exception) {}
@@ -836,13 +828,13 @@ class NetworkMonitoringService : Service() {
         }
     }
 
-    private fun createSpeedIcon(speedText: String): Icon? {
-        val bitmap = iconBitmap ?: return null
-        val canvas = iconCanvas ?: return null
+    private fun createSpeedIcon(speedText: String): IconCompat? {
+        if (speedText.isBlank()) return null
 
-        bitmap.eraseColor(Color.TRANSPARENT)
+        return try {
+            val bitmap = createBitmap(64, 64)
+            val canvas = Canvas(bitmap)
 
-        if (speedText.isNotBlank()) {
             val parts = speedText.split(" ")
             val valueStr = parts[0]
             val unitStr = if (parts.size > 1) parts[1] else ""
@@ -860,9 +852,12 @@ class NetworkMonitoringService : Service() {
                 textPaint.textSize = 20f
                 canvas.drawText(unitStr, xPos, 52f, textPaint)
             }
-        }
 
-        return Icon.createWithBitmap(bitmap)
+            IconCompat.createWithBitmap(bitmap)
+        } catch (e: Exception) {
+            Log.e("NetworkMonitoringService", "Failed to create speed icon", e)
+            null
+        }
     }
 
     private fun createNotification(customLayout: RemoteViews, iconText: String): Notification {
@@ -894,9 +889,9 @@ class NetworkMonitoringService : Service() {
             .setPriority(if (highPriority) NotificationCompat.PRIORITY_MAX else NotificationCompat.PRIORITY_LOW)
             .setSilent(true)
 
-        val icon = createSpeedIcon(iconText)
-        if (icon != null) {
-            builder.setSmallIcon(IconCompat.createFromIcon(this, icon))
+        val speedIcon = createSpeedIcon(iconText)
+        if (speedIcon != null) {
+            builder.setSmallIcon(speedIcon)
         } else {
             builder.setSmallIcon(R.drawable.ic_launcher_foreground)
         }

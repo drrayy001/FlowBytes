@@ -252,6 +252,24 @@ class NetworkMonitoringService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         // Ignore app actions are handled in MainActivity's intent callbacks.
+        if (!isForeground) {
+            val initialLayout = RemoteViews(packageName, R.layout.notification_compact_speed)
+            initialLayout.setTextViewText(R.id.text_down, "0 KB/s")
+            initialLayout.setTextViewText(R.id.text_combined, "0 KB/s")
+            initialLayout.setTextViewText(R.id.text_up, "0 KB/s")
+            initialLayout.setViewVisibility(R.id.layout_usage, View.GONE)
+
+            safeStartForeground(createNotification(initialLayout, "0 KB/s"))
+            isForeground = true
+
+            serviceScope.launch {
+                updateDailyUsage()
+                delay(300.milliseconds)
+                updateStats(force = true)
+            }
+        }
+
+        // Ignore app actions are handled in MainActivity's intent callbacks.
         if (intent?.action == ACTION_IGNORE_APP) {
             return START_STICKY
         }
@@ -264,30 +282,6 @@ class NetworkMonitoringService : Service() {
                 ignoredApps[appName] = System.currentTimeMillis() + durationMs
             }
             return START_STICKY
-        }
-
-        if (isForeground) {
-            startMonitoring()
-            return START_STICKY
-        }
-
-        val initialLayout = RemoteViews(packageName, R.layout.notification_compact_speed)
-        initialLayout.setTextViewText(R.id.text_down, "0 KB/s")
-        initialLayout.setTextViewText(R.id.text_combined, "0 KB/s")
-        initialLayout.setTextViewText(R.id.text_up, "0 KB/s")
-        initialLayout.setViewVisibility(R.id.layout_usage, View.GONE)
-
-        try {
-            safeStartForeground(createNotification(initialLayout, "0 KB/s"))
-            isForeground = true
-            
-            serviceScope.launch {
-                updateDailyUsage()
-                delay(300.milliseconds)
-                updateStats(force = true)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
 
         cancelNetworkWakeup()
@@ -779,8 +773,6 @@ class NetworkMonitoringService : Service() {
     private fun createNotificationChannel() {
         val manager = getSystemService(NotificationManager::class.java) ?: return
 
-        val currentChannelId = if (highPriority) "SPEED_METER_V7_HIGH" else "SPEED_METER_V7_DEFAULT"
-
         try {
             listOf(
                 CHANNEL_ACTIVE, "${CHANNEL_ACTIVE}_HIGH", "${CHANNEL_ACTIVE}_LOW",
@@ -791,22 +783,30 @@ class NetworkMonitoringService : Service() {
                 "SPEED_METER_V6_HIGH", "SPEED_METER_V6_DEFAULT",
             ).forEach { manager.deleteNotificationChannel(it) }
 
-            val importance = if (highPriority) {
-                NotificationManager.IMPORTANCE_MAX
-            } else {
-                NotificationManager.IMPORTANCE_LOW
-            }
-
-            val activeChannel = NotificationChannel(
-                currentChannelId,
-                getString(R.string.channel_speed_monitor_name),
-                importance,
+            val highChannel = NotificationChannel(
+                "SPEED_METER_V7_HIGH",
+                "${getString(R.string.channel_speed_monitor_name)} (High Priority)",
+                NotificationManager.IMPORTANCE_MAX,
             ).apply {
                 setShowBadge(false)
                 setSound(null, null)
                 enableLights(false)
                 enableVibration(false)
-                setBypassDnd(highPriority)
+                setBypassDnd(true)
+                lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+                description = getString(R.string.channel_speed_monitor_desc)
+            }
+
+            val defaultChannel = NotificationChannel(
+                "SPEED_METER_V7_DEFAULT",
+                getString(R.string.channel_speed_monitor_name),
+                NotificationManager.IMPORTANCE_LOW,
+            ).apply {
+                setShowBadge(false)
+                setSound(null, null)
+                enableLights(false)
+                enableVibration(false)
+                setBypassDnd(false)
                 lockscreenVisibility = Notification.VISIBILITY_PUBLIC
                 description = getString(R.string.channel_speed_monitor_desc)
             }
@@ -821,7 +821,8 @@ class NetworkMonitoringService : Service() {
                 lightColor = Color.RED
             }
 
-            manager.createNotificationChannel(activeChannel)
+            manager.createNotificationChannel(highChannel)
+            manager.createNotificationChannel(defaultChannel)
             manager.createNotificationChannel(alertChannel)
         } catch (e: Exception) {
             Log.e("NetworkMonitoringService", "Failed to create/delete notification channels", e)
@@ -912,7 +913,12 @@ class NetworkMonitoringService : Service() {
     private fun safeStartForeground(notification: Notification) {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-                startForeground(NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
+                try {
+                    startForeground(NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
+                } catch (e: Exception) {
+                    Log.w("NetworkMonitoringService", "startForeground with SPECIAL_USE failed, falling back", e)
+                    startForeground(NOTIFICATION_ID, notification)
+                }
             } else {
                 startForeground(NOTIFICATION_ID, notification)
             }

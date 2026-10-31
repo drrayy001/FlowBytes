@@ -1,0 +1,429 @@
+diff -ruN a/app/src/main/java/com/ray/flowmeter/data/Saved.kt b/app/src/main/java/com/ray/flowmeter/data/Saved.kt
+--- a/app/src/main/java/com/ray/flowmeter/data/Saved.kt	2026-10-31 00:26:38.956001713 +0000
++++ b/app/src/main/java/com/ray/flowmeter/data/Saved.kt	2026-10-31 00:26:38.961213402 +0000
+@@ -22,6 +22,9 @@
+ import androidx.room.Room
+ import androidx.room.RoomDatabase
+ import androidx.room.Update
++import androidx.room.migration.Migration
++import androidx.sqlite.db.SupportSQLiteDatabase
++import java.util.Calendar
+ import kotlinx.coroutines.flow.Flow
+ import kotlinx.coroutines.flow.catch
+ import kotlinx.coroutines.flow.distinctUntilChanged
+@@ -77,7 +80,30 @@
+     val isMobileBlocked: Boolean = false,
+     val isEnabled: Boolean = true,
+     val isAlwaysBlocked: Boolean = false,
+-)
++    // Weekly block schedule. scheduleDays is a bitmask: bit 0 = Monday ... bit 6 = Sunday.
++    // Times are minutes since midnight; if end < start, the block runs overnight.
++    val scheduleEnabled: Boolean = false,
++    val scheduleDays: Int = 127,
++    val scheduleStartMin: Int = 22 * 60,
++    val scheduleEndMin: Int = 7 * 60,
++) {
++    // True when [now] falls inside this app's block schedule.
++    fun isScheduleActive(now: Calendar): Boolean {
++        if (!scheduleEnabled) return false
++        val minutes = now.get(Calendar.HOUR_OF_DAY) * 60 + now.get(Calendar.MINUTE)
++        val today = (now.get(Calendar.DAY_OF_WEEK) + 5) % 7 // Monday = 0 ... Sunday = 6
++        val yesterday = (today + 6) % 7
++        fun dayOn(d: Int) = ((scheduleDays shr d) and 1) == 1
++        return when {
++            scheduleStartMin == scheduleEndMin -> dayOn(today) // whole day
++            scheduleStartMin < scheduleEndMin ->
++                dayOn(today) && minutes >= scheduleStartMin && minutes < scheduleEndMin
++            else -> // overnight window
++                (dayOn(today) && minutes >= scheduleStartMin) ||
++                    (dayOn(yesterday) && minutes < scheduleEndMin)
++        }
++    }
++}
+ 
+ @Dao
+ interface AppLimitDao {
+@@ -100,7 +126,7 @@
+     suspend fun getAppLimit(packageName: String): AppLimit?
+ }
+ 
+-@Database(entities = [AppAlert::class, AppLimit::class], version = 8, exportSchema = false)
++@Database(entities = [AppAlert::class, AppLimit::class], version = 9, exportSchema = false)
+ abstract class FlowMeterDatabase : RoomDatabase() {
+     abstract fun appAlertDao(): AppAlertDao
+     abstract fun appLimitDao(): AppLimitDao
+@@ -109,6 +135,16 @@
+         @Volatile
+         private var INSTANCE: FlowMeterDatabase? = null
+ 
++        // Adds the schedule columns without wiping existing limits and alerts.
++        private val MIGRATION_8_9 = object : Migration(8, 9) {
++            override fun migrate(db: SupportSQLiteDatabase) {
++                db.execSQL("ALTER TABLE app_limits ADD COLUMN scheduleEnabled INTEGER NOT NULL DEFAULT 0")
++                db.execSQL("ALTER TABLE app_limits ADD COLUMN scheduleDays INTEGER NOT NULL DEFAULT 127")
++                db.execSQL("ALTER TABLE app_limits ADD COLUMN scheduleStartMin INTEGER NOT NULL DEFAULT 1320")
++                db.execSQL("ALTER TABLE app_limits ADD COLUMN scheduleEndMin INTEGER NOT NULL DEFAULT 420")
++            }
++        }
++
+         fun getDatabase(context: Context): FlowMeterDatabase {
+             return INSTANCE ?: synchronized(this) {
+                 val instance = Room.databaseBuilder(
+@@ -116,6 +152,7 @@
+                     FlowMeterDatabase::class.java,
+                     "flowmeter_database"
+                 )
++                    .addMigrations(MIGRATION_8_9)
+                     .fallbackToDestructiveMigration(dropAllTables = true)
+                     .build()
+                 INSTANCE = instance
+diff -ruN a/app/src/main/java/com/ray/flowmeter/service/Vpn.kt b/app/src/main/java/com/ray/flowmeter/service/Vpn.kt
+--- a/app/src/main/java/com/ray/flowmeter/service/Vpn.kt	2026-10-31 00:26:38.956120890 +0000
++++ b/app/src/main/java/com/ray/flowmeter/service/Vpn.kt	2026-10-31 00:26:38.961316462 +0000
+@@ -250,7 +250,7 @@
+                 userPrefs.appBlockingMasterEnabled,
+                 currentNetworkType,
+                 tickerFlow
+-            ) { limits, masterEnabled, networkType, _ ->
++            ) { limits, masterEnabled, networkType, now ->
+                 if (!masterEnabled) null
+                 else {
+                     val systemLimitExceeded = isSystemPlanLimitExceeded(networkType)
+@@ -260,9 +260,19 @@
+                         val isWifi = networkType == NetworkCapabilities.TRANSPORT_WIFI
+                         val isMobile = networkType == NetworkCapabilities.TRANSPORT_CELLULAR
+ 
++                        val cal = Calendar.getInstance().apply { timeInMillis = now }
+                         val blockedApps = limits.filter { limit ->
+                             if (!limit.isEnabled) return@filter false
+ 
++                            // Scheduled block: cut internet during the chosen days and hours.
++                            if (limit.isScheduleActive(cal)) {
++                                return@filter when (limit.networkType) {
++                                    "wifi" -> isWifi
++                                    "mobile" -> isMobile
++                                    else -> isWifi || isMobile
++                                }
++                            }
++
+                             if (limit.isAlwaysBlocked) {
+                                 return@filter when (limit.networkType) {
+                                     "wifi" -> isWifi
+diff -ruN a/app/src/main/java/com/ray/flowmeter/ui/screens/AppBlockRulesSection.kt b/app/src/main/java/com/ray/flowmeter/ui/screens/AppBlockRulesSection.kt
+--- a/app/src/main/java/com/ray/flowmeter/ui/screens/AppBlockRulesSection.kt	1970-01-01 00:00:00.000000000 +0000
++++ b/app/src/main/java/com/ray/flowmeter/ui/screens/AppBlockRulesSection.kt	2026-10-31 00:26:38.962343347 +0000
+@@ -0,0 +1,190 @@
++// Per-app blocking rules shown in the limit editor: an "always block" switch
++// and a weekly schedule (days of the week plus start and end time).
++package com.ray.flowmeter.ui.screens
++
++import android.text.format.DateFormat
++import androidx.compose.foundation.layout.Arrangement
++import androidx.compose.foundation.layout.Column
++import androidx.compose.foundation.layout.ExperimentalLayoutApi
++import androidx.compose.foundation.layout.FlowRow
++import androidx.compose.foundation.layout.Row
++import androidx.compose.foundation.layout.Spacer
++import androidx.compose.foundation.layout.fillMaxWidth
++import androidx.compose.foundation.layout.height
++import androidx.compose.foundation.layout.padding
++import androidx.compose.foundation.layout.width
++import androidx.compose.material3.AlertDialog
++import androidx.compose.material3.ExperimentalMaterial3Api
++import androidx.compose.material3.FilterChip
++import androidx.compose.material3.MaterialTheme
++import androidx.compose.material3.OutlinedButton
++import androidx.compose.material3.Switch
++import androidx.compose.material3.Text
++import androidx.compose.material3.TextButton
++import androidx.compose.material3.TimePicker
++import androidx.compose.material3.rememberTimePickerState
++import androidx.compose.runtime.Composable
++import androidx.compose.runtime.getValue
++import androidx.compose.runtime.mutableStateOf
++import androidx.compose.runtime.remember
++import androidx.compose.runtime.setValue
++import androidx.compose.ui.Alignment
++import androidx.compose.ui.Modifier
++import androidx.compose.ui.platform.LocalContext
++import androidx.compose.ui.res.stringResource
++import androidx.compose.ui.text.font.FontWeight
++import androidx.compose.ui.unit.dp
++import com.ray.flowmeter.R
++import java.time.DayOfWeek
++import java.time.format.TextStyle
++import java.util.Locale
++
++@OptIn(ExperimentalLayoutApi::class)
++@Composable
++fun AppBlockRulesSection(
++    alwaysBlocked: Boolean,
++    onAlwaysBlockedChange: (Boolean) -> Unit,
++    scheduleEnabled: Boolean,
++    onScheduleEnabledChange: (Boolean) -> Unit,
++    scheduleDays: Int,
++    onScheduleDaysChange: (Int) -> Unit,
++    startMin: Int,
++    onStartChange: (Int) -> Unit,
++    endMin: Int,
++    onEndChange: (Int) -> Unit,
++) {
++    var pickingStart by remember { mutableStateOf(false) }
++    var pickingEnd by remember { mutableStateOf(false) }
++
++    Column(modifier = Modifier.fillMaxWidth().padding(top = 24.dp)) {
++        Text(
++            text = stringResource(R.string.block_rules_title),
++            style = MaterialTheme.typography.titleMedium,
++            fontWeight = FontWeight.Bold,
++        )
++        Spacer(Modifier.height(8.dp))
++
++        RuleSwitchRow(
++            title = stringResource(R.string.block_always_title),
++            description = stringResource(R.string.block_always_desc),
++            checked = alwaysBlocked,
++            onCheckedChange = onAlwaysBlockedChange,
++        )
++
++        RuleSwitchRow(
++            title = stringResource(R.string.block_schedule_title),
++            description = stringResource(R.string.block_schedule_desc),
++            checked = scheduleEnabled,
++            onCheckedChange = onScheduleEnabledChange,
++        )
++
++        if (scheduleEnabled) {
++            Spacer(Modifier.height(8.dp))
++            // Bit 0 = Monday ... bit 6 = Sunday.
++            FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
++                for (day in 0..6) {
++                    val selected = ((scheduleDays shr day) and 1) == 1
++                    FilterChip(
++                        selected = selected,
++                        onClick = { onScheduleDaysChange(scheduleDays xor (1 shl day)) },
++                        label = {
++                            Text(DayOfWeek.of(day + 1).getDisplayName(TextStyle.SHORT, Locale.getDefault()))
++                        },
++                    )
++                }
++            }
++            Spacer(Modifier.height(8.dp))
++            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
++                OutlinedButton(onClick = { pickingStart = true }) {
++                    Text(stringResource(R.string.block_schedule_from, formatMinutes(startMin)))
++                }
++                OutlinedButton(onClick = { pickingEnd = true }) {
++                    Text(stringResource(R.string.block_schedule_to, formatMinutes(endMin)))
++                }
++            }
++            Spacer(Modifier.height(8.dp))
++            Text(
++                text = stringResource(R.string.block_schedule_note),
++                style = MaterialTheme.typography.bodySmall,
++                color = MaterialTheme.colorScheme.onSurfaceVariant,
++            )
++        }
++    }
++
++    if (pickingStart) {
++        TimeDialog(
++            initialMinutes = startMin,
++            onDismiss = { pickingStart = false },
++            onConfirm = {
++                onStartChange(it)
++                pickingStart = false
++            },
++        )
++    }
++    if (pickingEnd) {
++        TimeDialog(
++            initialMinutes = endMin,
++            onDismiss = { pickingEnd = false },
++            onConfirm = {
++                onEndChange(it)
++                pickingEnd = false
++            },
++        )
++    }
++}
++
++@Composable
++private fun RuleSwitchRow(
++    title: String,
++    description: String,
++    checked: Boolean,
++    onCheckedChange: (Boolean) -> Unit,
++) {
++    Row(
++        modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp),
++        verticalAlignment = Alignment.CenterVertically,
++    ) {
++        Column(modifier = Modifier.weight(1f)) {
++            Text(title, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
++            Text(
++                description,
++                style = MaterialTheme.typography.bodySmall,
++                color = MaterialTheme.colorScheme.onSurfaceVariant,
++            )
++        }
++        Spacer(Modifier.width(12.dp))
++        Switch(checked = checked, onCheckedChange = onCheckedChange)
++    }
++}
++
++@OptIn(ExperimentalMaterial3Api::class)
++@Composable
++private fun TimeDialog(
++    initialMinutes: Int,
++    onDismiss: () -> Unit,
++    onConfirm: (Int) -> Unit,
++) {
++    val is24Hour = DateFormat.is24HourFormat(LocalContext.current)
++    val state = rememberTimePickerState(
++        initialHour = initialMinutes / 60,
++        initialMinute = initialMinutes % 60,
++        is24Hour = is24Hour,
++    )
++    AlertDialog(
++        onDismissRequest = onDismiss,
++        confirmButton = {
++            TextButton(onClick = { onConfirm(state.hour * 60 + state.minute) }) {
++                Text(stringResource(android.R.string.ok))
++            }
++        },
++        dismissButton = {
++            TextButton(onClick = onDismiss) {
++                Text(stringResource(android.R.string.cancel))
++            }
++        },
++        text = { TimePicker(state = state) },
++    )
++}
++
++private fun formatMinutes(minutes: Int): String =
++    String.format(Locale.getDefault(), "%02d:%02d", minutes / 60, minutes % 60)
+diff -ruN a/app/src/main/java/com/ray/flowmeter/ui/screens/AppLimitEditScreen.kt b/app/src/main/java/com/ray/flowmeter/ui/screens/AppLimitEditScreen.kt
+--- a/app/src/main/java/com/ray/flowmeter/ui/screens/AppLimitEditScreen.kt	2026-10-31 00:26:38.956452029 +0000
++++ b/app/src/main/java/com/ray/flowmeter/ui/screens/AppLimitEditScreen.kt	2026-10-31 00:26:38.961741437 +0000
+@@ -55,6 +55,12 @@
+         mutableStateOf(if ((limit.mobileDataLimit >= 1024L * 1024L * 1024L) && (limit.mobileDataLimit % (1024L * 1024L * 1024L) == 0L)) "GB" else "MB")
+     }
+ 
++    val (alwaysBlocked, setAlwaysBlocked) = remember(limit) { mutableStateOf(limit.isAlwaysBlocked) }
++    val (scheduleEnabled, setScheduleEnabled) = remember(limit) { mutableStateOf(limit.scheduleEnabled) }
++    val (scheduleDays, setScheduleDays) = remember(limit) { mutableStateOf(limit.scheduleDays) }
++    val (scheduleStart, setScheduleStart) = remember(limit) { mutableStateOf(limit.scheduleStartMin) }
++    val (scheduleEnd, setScheduleEnd) = remember(limit) { mutableStateOf(limit.scheduleEndMin) }
++
+     val context = LocalContext.current
+     val appIcon = remember(limit.packageName) {
+         try {
+@@ -126,6 +132,20 @@
+                     mobileLimitUnit = mobileLimitUnit,
+                     onMobileLimitUnitChange = setMobileLimitUnit,
+                     confirmButtonText = stringResource(R.string.btn_save_config),
++                    extraContent = {
++                        AppBlockRulesSection(
++                            alwaysBlocked = alwaysBlocked,
++                            onAlwaysBlockedChange = setAlwaysBlocked,
++                            scheduleEnabled = scheduleEnabled,
++                            onScheduleEnabledChange = setScheduleEnabled,
++                            scheduleDays = scheduleDays,
++                            onScheduleDaysChange = setScheduleDays,
++                            startMin = scheduleStart,
++                            onStartChange = setScheduleStart,
++                            endMin = scheduleEnd,
++                            onEndChange = setScheduleEnd,
++                        )
++                    },
+                     onCancel = onBack,
+                     onConfirm = {
+                         val value = limitInput.toLongOrNull() ?: 0L
+@@ -141,17 +161,27 @@
+                         val isMobileOver = (networkType == "both" && mobileValue == 0L) || (networkType == "mobile" && value == 0L)
+                         val isBlocked = (networkType != "both" && value == 0L) || (networkType == "both" && isWifiOver && isMobileOver)
+ 
++                        // With a schedule, blocking is decided by the schedule and not by a 0 data limit,
++                        // so empty limits are stored as "unlimited" (1 TB) to avoid blocking all day.
++                        val useSchedule = scheduleEnabled && !alwaysBlocked
++                        val unlimited = 1024L * 1024L * 1024L * 1024L
++                        fun bound(bytes: Long) = if (useSchedule && bytes == 0L) unlimited else bytes
++
+                         onConfirm(
+                             limit.copy(
+-                                dataLimit = value * multiplier,
++                                dataLimit = bound(value * multiplier),
+                                 limitType = limitType,
+                                 networkType = networkType,
+-                                wifiDataLimit = wifiValue * wifiMultiplier,
+-                                mobileDataLimit = mobileValue * mobileMultiplier,
+-                                isAlwaysBlocked = false,
+-                                isBlocked = isBlocked,
+-                                isWifiBlocked = isWifiOver,
+-                                isMobileBlocked = isMobileOver,
++                                wifiDataLimit = bound(wifiValue * wifiMultiplier),
++                                mobileDataLimit = bound(mobileValue * mobileMultiplier),
++                                isAlwaysBlocked = alwaysBlocked,
++                                isBlocked = if (useSchedule) false else isBlocked,
++                                isWifiBlocked = if (useSchedule) false else isWifiOver,
++                                isMobileBlocked = if (useSchedule) false else isMobileOver,
++                                scheduleEnabled = scheduleEnabled,
++                                scheduleDays = scheduleDays,
++                                scheduleStartMin = scheduleStart,
++                                scheduleEndMin = scheduleEnd,
+                             )
+                         )
+                     }
+diff -ruN a/app/src/main/java/com/ray/flowmeter/ui/screens/AppSelectorScreen.kt b/app/src/main/java/com/ray/flowmeter/ui/screens/AppSelectorScreen.kt
+--- a/app/src/main/java/com/ray/flowmeter/ui/screens/AppSelectorScreen.kt	2026-10-31 00:26:38.956464253 +0000
++++ b/app/src/main/java/com/ray/flowmeter/ui/screens/AppSelectorScreen.kt	2026-10-31 00:26:38.961758008 +0000
+@@ -978,6 +978,7 @@
+     mobileLimitUnit: String = "MB",
+     onMobileLimitUnitChange: (String) -> Unit = {},
+     confirmButtonText: String = stringResource(R.string.btn_create_app_limit),
++    extraContent: @Composable () -> Unit = {},
+     onCancel: () -> Unit = {},
+     onConfirm: () -> Unit
+ ) {
+@@ -1053,6 +1054,8 @@
+             onMobileLimitUnitChange = onMobileLimitUnitChange
+         )
+ 
++        extraContent()
++
+         Spacer(modifier = Modifier.height(24.dp))
+ 
+         Row(
+diff -ruN a/app/src/main/res/values/strings.xml b/app/src/main/res/values/strings.xml
+--- a/app/src/main/res/values/strings.xml	2026-10-31 00:26:38.958527738 +0000
++++ b/app/src/main/res/values/strings.xml	2026-10-31 00:26:38.963692740 +0000
+@@ -491,4 +491,12 @@
+     <string name="unit_hours">Hours</string>
+     <string name="unit_min_short">Min</string>
+     <string name="unit_sec_short">Sec</string>
++    <string name="block_rules_title">Blocking rules</string>
++    <string name="block_always_title">Always block internet</string>
++    <string name="block_always_desc">Cuts this app off from the internet at all times. Useful for offline games that only use it to load ads.</string>
++    <string name="block_schedule_title">Block on a schedule</string>
++    <string name="block_schedule_desc">Cuts internet only on the days and hours you choose.</string>
++    <string name="block_schedule_from">From %1$s</string>
++    <string name="block_schedule_to">Until %1$s</string>
++    <string name="block_schedule_note">If the end time is earlier than the start, the block runs overnight. Rules only apply while app blocking is turned on.</string>
+ </resources>
+diff -ruN a/app/src/main/res/values-es/strings.xml b/app/src/main/res/values-es/strings.xml
+--- a/app/src/main/res/values-es/strings.xml	2026-10-31 00:26:38.958096267 +0000
++++ b/app/src/main/res/values-es/strings.xml	2026-10-31 00:26:38.963243457 +0000
+@@ -458,4 +458,12 @@
+     <string name="unit_hours">Horas</string>
+     <string name="unit_min_short">Min</string>
+     <string name="unit_sec_short">Seg</string>
++    <string name="block_rules_title">Reglas de bloqueo</string>
++    <string name="block_always_title">Bloquear internet siempre</string>
++    <string name="block_always_desc">Deja esta app sin internet en todo momento. Sirve para juegos sin conexión que solo la usan para cargar anuncios.</string>
++    <string name="block_schedule_title">Bloquear en un horario</string>
++    <string name="block_schedule_desc">Corta el internet solo los días y las horas que elijas.</string>
++    <string name="block_schedule_from">Desde las %1$s</string>
++    <string name="block_schedule_to">Hasta las %1$s</string>
++    <string name="block_schedule_note">Si la hora final es anterior a la inicial, el bloqueo sigue durante la noche. Las reglas solo funcionan con el bloqueo de apps activado.</string>
+ </resources>
